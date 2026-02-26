@@ -3,7 +3,7 @@ import pandas as pd
 import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
 import os
-import subprocess
+
 
 # ─────────────────────────────────────────
 # CONFIG
@@ -12,9 +12,18 @@ BASE_URL = "https://www.macrocenter.com.tr/rest/products/search"
 PAGE_SIZE = 100
 MAX_WORKERS = 5
 
-data_dir = "Datas/Markets/Macrocenter"  # Repo yapısına uygun
+# 1. Mevcut dosyanın (scrape_macrocenter.py) konumunu al
+current_script_path = os.path.abspath(__file__)
+
+# 2. 'Codes/Markets/Macrocenter' klasöründen 3 seviye yukarı çıkarak ana proje klasörüne ulaş
+# PythonProject/Codes/Markets/Macrocenter -> PythonProject
+base_project_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(current_script_path))))
+
+# 3. Yolları bu ana dizine göre birleştir
+data_dir = os.path.join(base_project_dir, "Datas", "Markets", "Macrocenter")
 os.makedirs(data_dir, exist_ok=True)
-OUTPUT_FILE = f"Datas/Markets/Macrocenter/macrocenter_prices_{time.strftime('%Y-%m-%d')}.csv"
+
+OUTPUT_FILE = os.path.join(data_dir, f"macrocenter_prices_{time.strftime('%Y-%m-%d')}.csv")
 
 HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
