@@ -6780,6 +6780,21 @@
     "product_url": "https://www.sariyermarket.com/frico-gouda-kelle-kimyonlu-kg"
   },
   {
+    "id": "38332",
+    "sku": "12647",
+    "name": "Frico Gouda Kelle Sade Kg",
+    "brand": "",
+    "category": "Şarküteri, Süt, Kahvaltılık",
+    "category_id": "%c5%9farkuteri-sut-kahvalt%c4%b1l%c4%b1k",
+    "regular_price": 1895.0,
+    "shown_price": 1895.0,
+    "discount_rate": 0,
+    "unit": "",
+    "status": "IN_STOCK",
+    "image_url": "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",
+    "product_url": "https://www.sariyermarket.com/frico-gouda-kelle-sade-kg"
+  },
+  {
     "id": "38330",
     "sku": "12645",
     "name": "Frico Sade Füme Peynir Kg",
@@ -43680,21 +43695,6 @@
     "product_url": "https://www.sariyermarket.com/nutella-biscuits-t12-166gr-"
   },
   {
-    "id": "78710",
-    "sku": "56075",
-    "name": "Nutella Biscuits T12 166Gr",
-    "brand": "",
-    "category": "Gıda, Şekerleme",
-    "category_id": "g%c4%b1da-%c5%9fekerleme",
-    "regular_price": 279.9,
-    "shown_price": 279.9,
-    "discount_rate": 0,
-    "unit": "",
-    "status": "IN_STOCK",
-    "image_url": "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",
-    "product_url": "https://www.sariyermarket.com/nutella-biscuits-t12-166gr"
-  },
-  {
     "id": "66106",
     "sku": "45299",
     "name": "Nutella B-Ready 132gr",
@@ -52993,21 +52993,6 @@
     "status": "IN_STOCK",
     "image_url": "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",
     "product_url": "https://www.sariyermarket.com/ulker-ikram-kremali-biskuvi-findikli-84-gr"
-  },
-  {
-    "id": "79002",
-    "sku": "56370",
-    "name": "Ülker İkram Kremalı Bisküvi Fındıklı 84 Gr",
-    "brand": "",
-    "category": "Gıda, Şekerleme",
-    "category_id": "g%c4%b1da-%c5%9fekerleme",
-    "regular_price": 65.0,
-    "shown_price": 65.0,
-    "discount_rate": 0,
-    "unit": "",
-    "status": "IN_STOCK",
-    "image_url": "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",
-    "product_url": "https://www.sariyermarket.com/ulker-ikram-kremali-biskuvi-findikli-84-gr-"
   },
   {
     "id": "73403",
