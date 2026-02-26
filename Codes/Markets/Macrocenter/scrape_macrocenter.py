@@ -129,13 +129,5 @@ def main():
     else:
         print("Hic urun bulunamadi.")
 
-
-def git_push():
-    subprocess.run(["git", "pull", "research", "master", "--no-rebase"])
-    subprocess.run(["git", "add", "Datas/Markets/Macrocenter/"])
-    subprocess.run(["git", "commit", "-m", f"Macrocenter data {time.strftime('%Y-%m-%d')}"])
-    subprocess.run(["git", "push", "research", "master"])
-
 if __name__ == "__main__":
     main()
-    git_push()
