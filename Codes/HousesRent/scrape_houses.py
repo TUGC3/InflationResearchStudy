@@ -7,22 +7,19 @@ from bs4 import BeautifulSoup
 import undetected_chromedriver as uc
 
 # Configuration
-# HEAVY_BRACKETS: 23 micro-brackets for massive cities to avoid the 1,000 limit
+# HEAVY_BRACKETS: 17 micro-brackets for massive cities to avoid the 1,000 limit
 HEAVY_BRACKETS = [
-    (0, 9999), (10000, 10999), (11000, 11999), (12000, 12999),
-    (13000, 13999), (14000, 14999), (15000, 15999), (16000, 16999),
+    (0, 11999), (12000, 13999), (14000, 14999), (15000, 15999), (16000, 16999),
     (17000, 17999), (18000, 18999), (19000, 19999), (20000, 20999),
-    (21000, 21999), (22000, 22999), (23000, 24999), (25000, 27499),
-    (27500, 29999), (30000, 34999), (35000, 39999), (40000, 49999),
-    (50000, 74999), (75000, 149999), (150000, 9999999)
+    (21000, 22999), (23000, 24999), (25000, 26999),
+    (27000, 29999), (30000, 34999), (35000, 39999), (40000, 49999),
+    (50000, 9999999)
 ]
 
-# LIGHT_BRACKETS: Just 3 wide brackets for smaller cities to complete the scrape in seconds
-# We use 3 instead of 1 just in case a smaller city slightly exceeds 1,000 total listings.
+# LIGHT_BRACKETS: Just 5 wide brackets for smaller cities to complete the scrape in seconds
+# We use 5 instead of 1 just in case a smaller city slightly exceeds 1,000 total listings.
 LIGHT_BRACKETS = [
-    (0, 15000),
-    (15001, 25000),
-    (25001, 9999999)
+    (0, 10000), (10001, 15000), (15001, 20000), (20001, 25000), (25001, 9999999)
 ]
 
 # Map the cities to their specific folder names AND their required bracket strategy
