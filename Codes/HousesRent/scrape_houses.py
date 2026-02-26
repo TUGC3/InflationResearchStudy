@@ -48,7 +48,7 @@ def save_to_csv_incremental(folder_name, data_batch):
     today_str = datetime.now().strftime("%Y-%m-%d")
     target_dir = os.path.join(DATA_BASE_DIR, folder_name)
     os.makedirs(target_dir, exist_ok=True)
-    file_path = os.path.join(target_dir, f"{today_str}.csv")
+    file_path = os.path.join(target_dir, f"{folder_name}_{today_str}.csv")
 
     # Check if file exists to decide whether to write headers
     file_exists = os.path.isfile(file_path)
@@ -151,7 +151,7 @@ def main():
         # Delete old test files to prevent duplicates
         today_str = datetime.now().strftime("%Y-%m-%d")
         for city_data in CITIES.values():
-            file_path = os.path.join(DATA_BASE_DIR, city_data['folder'], f"{today_str}.csv")
+            file_path = os.path.join(DATA_BASE_DIR, city_data['folder'], f"{city_data['folder']}_{today_str}.csv")
             if os.path.exists(file_path):
                 os.remove(file_path)
                 print(f"Removed old test file: {file_path}")
