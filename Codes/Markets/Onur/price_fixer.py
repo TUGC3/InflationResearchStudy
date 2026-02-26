@@ -5,7 +5,7 @@ from typing import Optional
 
 
 DATA_DIR = r"C:\Users\EXCALIBUR\OneDrive\Masaüstü\AI201\InflationResearchStudy\Datas\Markets\Onur"
-#change price to float from string, ı dont need it from now on.
+#change price to float from string
 
 def _normalize_numeric_string(text: str) -> Optional[str]:
     match = re.search(r"[-+]?\d[\d\.,]*", text)
