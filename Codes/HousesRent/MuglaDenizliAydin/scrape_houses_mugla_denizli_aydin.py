@@ -49,6 +49,7 @@ def scrape_city(driver, city_url_name, folder_name):
 
         soup = BeautifulSoup(driver.page_source, "html.parser")
         listings = soup.select("#searchResultsTable tbody tr.searchResultsItem")
+        room_index = resolve_rooms_index(soup)
 
         # CAPTCHA / LOGIN check
         if not listings:
@@ -95,7 +96,7 @@ def scrape_city(driver, city_url_name, folder_name):
                 )
 
                 attributes = row.select(".searchResultsAttributeValue")
-                rooms = attributes[0].text.strip() if len(attributes) > 0 else "N/A"
+                rooms = extract_rooms(attributes, room_index)
 
                 if price is not None and district != "N/A":
                     all_scraped_data.append(
@@ -118,6 +119,30 @@ def scrape_city(driver, city_url_name, folder_name):
 
     if all_scraped_data:
         save_to_csv(folder_name, all_scraped_data)
+
+
+def resolve_rooms_index(soup):
+    """Find the index of the 'Oda Sayisi' column in the results table."""
+    headers = [
+        th.get_text(strip=True)
+        for th in soup.select("#searchResultsTable thead th.searchResultsAttributeHeader")
+    ]
+    for idx, header in enumerate(headers):
+        header_norm = header.lower().replace("ı", "i")
+        if "oda" in header_norm:
+            return idx
+    return None
+
+
+def extract_rooms(attributes, room_index):
+    """Extract room count using the column index; fallback to best guess."""
+    if room_index is not None and len(attributes) > room_index:
+        return attributes[room_index].text.strip()
+    if len(attributes) > 1:
+        return attributes[1].text.strip()
+    if len(attributes) == 1:
+        return attributes[0].text.strip()
+    return "N/A"
 
 
 def save_to_csv(folder_name, data):
