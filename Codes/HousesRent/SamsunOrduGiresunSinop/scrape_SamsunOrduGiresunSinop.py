@@ -7,26 +7,64 @@ from datetime import datetime
 from bs4 import BeautifulSoup
 import undetected_chromedriver as uc
 
-# HEAVY_BRACKETS: 17 micro-brackets to avoid the 1,000 listing cap per search limit
-HEAVY_BRACKETS = [
-    (0, 11999), (12000, 13999), (14000, 14999), (15000, 15999), (16000, 16999),
-    (17000, 17999), (18000, 18999), (19000, 19999), (20000, 20999),
-    (21000, 22999), (23000, 24999), (25000, 26999),
-    (27000, 29999), (30000, 34999), (35000, 39999), (40000, 49999),
-    (50000, 9999999)
+# ============================================================
+# Per-city price brackets, calibrated from real data (2026-02-27)
+# Each bracket targets ~200-250 listings to stay well under
+# Sahibinden's 1,000 listing cap per search page.
+# ============================================================
+
+SAMSUN_BRACKETS = [
+    (0, 10999),       # ~200
+    (11000, 11999),   # ~130
+    (12000, 12999),   # ~220
+    (13000, 13999),   # ~260
+    (14000, 14999),   # ~250
+    (15000, 15499),   # ~430  (very dense zone — may need split later)
+    (15500, 15999),   # ~155
+    (16000, 16999),   # ~320
+    (17000, 17499),   # ~160
+    (17500, 17999),   # ~120
+    (18000, 19499),   # ~390
+    (19500, 19999),   # ~70
+    (20000, 20999),   # ~355
+    (21000, 21999),   # ~145
+    (22000, 23999),   # ~280
+    (24000, 24999),   # ~80
+    (25000, 28999),   # ~395
+    (29000, 34999),   # ~200
+    (35000, 9999999), # ~240
 ]
 
-# LIGHT_BRACKETS: Just a few wide brackets for locations with fewer rentals
-LIGHT_BRACKETS = [
-    (0, 10000), (10001, 15000), (15001, 20000), (20001, 25000), (25001, 9999999)
+ORDU_BRACKETS = [
+    (0, 13999),       # ~215
+    (14000, 15499),   # ~215
+    (15500, 17499),   # ~240
+    (17500, 18999),   # ~230
+    (19000, 19999),   # ~80
+    (20000, 23499),   # ~380
+    (23500, 26999),   # ~215
+    (27000, 9999999), # ~250
 ]
 
-# Map the target cities (Samsun, Ordu, Giresun, Sinop)
+GIRESUN_BRACKETS = [
+    (0, 13499),       # ~200
+    (13500, 14999),   # ~115
+    (15000, 17999),   # ~355
+    (18000, 21999),   # ~230
+    (22000, 9999999), # ~235
+]
+
+SINOP_BRACKETS = [
+    (0, 19999),       # ~130
+    (20000, 9999999), # ~200
+]
+
+# Map the target cities with their calibrated brackets
 CITIES = {
-    'samsun': {'folder': 'Samsun', 'brackets': HEAVY_BRACKETS},
-    'ordu': {'folder': 'Ordu', 'brackets': LIGHT_BRACKETS},
-    'giresun': {'folder': 'Giresun', 'brackets': LIGHT_BRACKETS},
-    'sinop': {'folder': 'Sinop', 'brackets': LIGHT_BRACKETS}
+    'samsun': {'folder': 'Samsun', 'brackets': SAMSUN_BRACKETS},
+    'ordu': {'folder': 'Ordu', 'brackets': ORDU_BRACKETS},
+    'giresun': {'folder': 'Giresun', 'brackets': GIRESUN_BRACKETS},
+    'sinop': {'folder': 'Sinop', 'brackets': SINOP_BRACKETS}
 }
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
