@@ -74,6 +74,26 @@ DATA_BASE_DIR = os.path.abspath(os.path.join(SCRIPT_DIR, "../../../Datas/HousesR
 # Counter for unique profile directories
 _profile_counter = 0
 
+def _detect_chrome_version():
+    """Auto-detect installed Chrome major version to avoid driver mismatch."""
+    import subprocess
+    for cmd in [
+        ["google-chrome", "--version"],
+        ["google-chrome-stable", "--version"],
+        ["/Applications/Google Chrome.app/Contents/MacOS/Google Chrome", "--version"],
+        ["chromium-browser", "--version"],
+    ]:
+        try:
+            out = subprocess.check_output(cmd, stderr=subprocess.DEVNULL).decode().strip()
+            # e.g. "Google Chrome 145.0.7632.116"
+            ver = int(out.split()[-1].split(".")[0])
+            print(f"🔍 Detected Chrome version: {ver}")
+            return ver
+        except Exception:
+            continue
+    print("⚠️ Could not detect Chrome version, letting UC auto-detect.")
+    return None
+
 def setup_driver():
     """Creates a fresh Chrome instance with a brand new profile to avoid login locks."""
     global _profile_counter
@@ -87,7 +107,11 @@ def setup_driver():
     options.add_argument('--no-sandbox')
     options.add_argument('--disable-dev-shm-usage')
 
-    driver = uc.Chrome(options=options)
+    chrome_ver = _detect_chrome_version()
+    if chrome_ver:
+        driver = uc.Chrome(options=options, version_main=chrome_ver)
+    else:
+        driver = uc.Chrome(options=options)
     print(f"🚀 New Chrome instance #{_profile_counter} started.")
     return driver
 
