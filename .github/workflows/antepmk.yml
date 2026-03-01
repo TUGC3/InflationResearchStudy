@@ -1,0 +1,35 @@
+name: Daily House Rent Scraper (Antep, Maras, Kilis)
+
+on:
+  schedule:
+    - cron: '0 3 * * *'
+  workflow_dispatch:
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.GH_TOKEN }}
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+          
+      - name: Install dependencies
+        run: |
+          pip install -r Codes/HousesRent/Antep_Maras_Kilis/requirements.txt
+          
+      - name: Run scraper
+        run: |
+          python Codes/HousesRent/Antep_Maras_Kilis/antep_maras_kilis.py
+          
+      - name: Commit and push
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@github.com"
+          git add Datas/HousesRent/
+          git diff --quiet && git diff --staged --quiet || git commit -m "Daily house data: $(date +'%Y-%m-%d')"
+          git push

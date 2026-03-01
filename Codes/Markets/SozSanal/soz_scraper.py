@@ -37,6 +37,7 @@ def fetch_soup(url: str) -> BeautifulSoup:
     return BeautifulSoup(r.text, "html.parser")
 
 
+
 def category_url(path_id: int, page: int = 1) -> str:
     if page == 1:
         return f"{BASE_URL}/hesabim?path={path_id}"

@@ -8,71 +8,57 @@ from bs4 import BeautifulSoup
 import undetected_chromedriver as uc
 
 # ============================================================
-# Per-city price brackets, calibrated from real data (2026-02-27)
-# Each bracket targets ~200-250 listings to stay well under
-# Sahibinden's 1,000 listing cap per search page.
+# Per-city price brackets
+# Calibrated estimates for SE Turkey rental market (2026)
+# These cities have lower avg. rents than coastal cities.
+# Re-calibrate after first real scrape if any bracket >1000 listings.
 # ============================================================
 
-SAMSUN_BRACKETS = [
-    (0, 10999),       # ~200
-    (11000, 11999),   # ~130
-    (12000, 12999),   # ~220
-    (13000, 13999),   # ~260
-    (14000, 14999),   # ~250
-    (15000, 15499),   # ~430  (very dense zone — may need split later)
-    (15500, 15999),   # ~155
-    (16000, 16999),   # ~320
-    (17000, 17499),   # ~160
-    (17500, 17999),   # ~120
-    (18000, 19499),   # ~390
-    (19500, 19999),   # ~70
-    (20000, 20999),   # ~355
-    (21000, 21999),   # ~145
-    (22000, 23999),   # ~280
-    (24000, 24999),   # ~80
-    (25000, 28999),   # ~395
-    (29000, 34999),   # ~200
-    (35000, 9999999), # ~240
+DIYARBAKIR_BRACKETS = [
+    (0, 7999),          # budget segment
+    (8000, 9999),
+    (10000, 11999),
+    (12000, 13999),
+    (14000, 15999),
+    (16000, 17999),
+    (18000, 19999),
+    (20000, 22999),
+    (23000, 26999),
+    (27000, 9999999),   # premium segment
 ]
 
-ORDU_BRACKETS = [
-    (0, 13999),       # ~215
-    (14000, 15499),   # ~215
-    (15500, 17499),   # ~240
-    (17500, 18999),   # ~230
-    (19000, 19999),   # ~80
-    (20000, 23499),   # ~380
-    (23500, 26999),   # ~215
-    (27000, 9999999), # ~250
+SANLIURFA_BRACKETS = [
+    (0, 6999),
+    (7000, 8999),
+    (9000, 10999),
+    (11000, 12999),
+    (13000, 14999),
+    (15000, 17499),
+    (17500, 19999),
+    (20000, 24999),
+    (25000, 9999999),
 ]
 
-GIRESUN_BRACKETS = [
-    (0, 13499),       # ~200
-    (13500, 14999),   # ~115
-    (15000, 17999),   # ~355
-    (18000, 21999),   # ~230
-    (22000, 9999999), # ~235
+MARDIN_BRACKETS = [
+    (0, 7999),
+    (8000, 10999),
+    (11000, 13999),
+    (14000, 17999),
+    (18000, 22999),
+    (23000, 9999999),
 ]
 
-SINOP_BRACKETS = [
-    (0, 19999),       # ~130
-    (20000, 9999999), # ~200
-]
-
-# Map the target cities with their calibrated brackets
 CITIES = {
-    'samsun': {'folder': 'Samsun', 'brackets': SAMSUN_BRACKETS},
-    'ordu': {'folder': 'Ordu', 'brackets': ORDU_BRACKETS},
-    'giresun': {'folder': 'Giresun', 'brackets': GIRESUN_BRACKETS},
-    'sinop': {'folder': 'Sinop', 'brackets': SINOP_BRACKETS}
+    'diyarbakir': {'folder': 'Diyarbakir', 'brackets': DIYARBAKIR_BRACKETS},
+    'sanliurfa':  {'folder': 'Sanliurfa',  'brackets': SANLIURFA_BRACKETS},
+    'mardin':     {'folder': 'Mardin',     'brackets': MARDIN_BRACKETS},
 }
 
-SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-# Relative path points to Datas/HousesRent/ (3 levels up from Codes/HousesRent/SamsunOrduGiresunSinop)
+SCRIPT_DIR    = os.path.dirname(os.path.abspath(__file__))
 DATA_BASE_DIR = os.path.abspath(os.path.join(SCRIPT_DIR, "../../../Datas/HousesRent/"))
 
-# Counter for unique profile directories
 _profile_counter = 0
+
 
 def _detect_chrome_version():
     """Auto-detect installed Chrome major version to avoid driver mismatch."""
@@ -85,7 +71,6 @@ def _detect_chrome_version():
     ]:
         try:
             out = subprocess.check_output(cmd, stderr=subprocess.DEVNULL).decode().strip()
-            # e.g. "Google Chrome 145.0.7632.116"
             ver = int(out.split()[-1].split(".")[0])
             print(f"🔍 Detected Chrome version: {ver}")
             return ver
@@ -94,16 +79,16 @@ def _detect_chrome_version():
     print("⚠️ Could not detect Chrome version, letting UC auto-detect.")
     return None
 
+
 def setup_driver():
-    """Creates a fresh Chrome instance with a brand new profile to avoid login locks."""
+    """Creates a fresh Chrome instance with a brand-new profile."""
     global _profile_counter
     _profile_counter += 1
-    
+
     options = uc.ChromeOptions()
-    # Each new driver gets a unique profile dir so Sahibinden can't track the session
     profile_path = os.path.join(SCRIPT_DIR, f"SeleniumProfile_{_profile_counter}")
     options.add_argument(f"--user-data-dir={profile_path}")
-    # Only use headless if explicitly requested (e.g. CI). Headed mode bypasses Cloudflare better.
+
     if os.environ.get('HEADLESS', '').lower() in ('1', 'true', 'yes'):
         options.add_argument('--headless=new')
     options.add_argument('--no-sandbox')
@@ -114,52 +99,47 @@ def setup_driver():
         driver = uc.Chrome(options=options, version_main=chrome_ver)
     else:
         driver = uc.Chrome(options=options)
+
     print(f"🚀 New Chrome instance #{_profile_counter} started.")
     return driver
 
+
 def close_driver(driver):
-    """Safely closes a Chrome instance."""
     try:
         driver.quit()
     except Exception:
         pass
     print("🔒 Chrome instance closed.")
 
+
 def is_waiting_page(page_source):
-    """Detects Sahibinden's Cloudflare 'please wait' challenge (resolves itself)."""
     lower = page_source.lower()
-    wait_signals = [
-        "bir dakika lütfen",  # "Please wait a moment"
-        "lütfen bekleyiniz",  # "Please wait"
-    ]
-    return any(s in lower for s in wait_signals)
+    return any(s in lower for s in ["bir dakika lütfen", "lütfen bekleyiniz", "just a moment", "challenge-error-text", "cf-challenge"])
+
 
 def is_login_page(page_source):
-    """Detects if Sahibinden is showing an actual login/captcha page (needs Chrome restart)."""
     lower = page_source.lower()
     login_signals = [
-        "giriş yap",         # "Log in" button/page
-        "üye girişi",        # "Member login"
+        "giriş yap",
+        "üye girişi",
         "captcha",
-        "güvenlik doğrulama", # "Security verification"
-        "robot olmadığınızı", # "Verify you're not a robot"
+        "güvenlik doğrulama",
+        "robot olmadığınızı",
     ]
-    # Make sure the page is actually a login form, not just a normal page with a login link
-    # Check for multiple strong signals or a dedicated login form
     strong_hits = sum(1 for s in login_signals if s in lower)
     return strong_hits >= 1 and "searchresultstable" not in lower
 
+
 def wait_for_challenge(driver, url, max_wait=20):
-    """Waits for a Cloudflare-style challenge to resolve. Returns True if resolved."""
     print(f"⏳ Waiting for challenge page to resolve (up to {max_wait}s)...")
     for i in range(max_wait // 2):
         time.sleep(2)
-        page = driver.page_source
-        if not is_waiting_page(page):
+        if not is_waiting_page(driver.page_source):
             print(f"✅ Challenge resolved after ~{(i+1)*2}s")
             return True
     print("⏰ Challenge did not resolve in time.")
     return False
+
 
 def save_to_csv_incremental(folder_name, data_batch):
     today_str = datetime.now().strftime("%Y-%m-%d")
@@ -168,7 +148,6 @@ def save_to_csv_incremental(folder_name, data_batch):
     file_path = os.path.join(target_dir, f"{today_str}.csv")
 
     file_exists = os.path.isfile(file_path)
-
     with open(file_path, mode='a', newline='', encoding='utf-8') as file:
         writer = csv.DictWriter(file, fieldnames=["District", "Rooms", "Price"])
         if not file_exists:
@@ -177,32 +156,34 @@ def save_to_csv_incremental(folder_name, data_batch):
 
     print(f"✅ Appended {len(data_batch)} records to {file_path}")
 
+
 def scrape_city(driver, city_url_name, folder_name, brackets):
     print(f"\n{'='*50}")
     print(f"STARTING FULL SCRAPE FOR: {folder_name.upper()}")
     print(f"{'='*50}")
 
     for min_price, max_price in brackets:
-        print(f"\n>>> Targeting Price Range: {min_price} TL to {max_price} TL")
-        
+        print(f"\n>>> Price Range: {min_price} TL - {max_price} TL")
+
         bracket_data = []
         page_num = 1
-        
-        url = f"https://www.sahibinden.com/kiralik/{city_url_name}?pagingSize=50&price_min={min_price}&price_max={max_price}"
+
+        url = (
+            f"https://www.sahibinden.com/kiralik/{city_url_name}"
+            f"?pagingSize=50&price_min={min_price}&price_max={max_price}"
+        )
         driver.get(url)
 
         while True:
             time.sleep(random.uniform(2.5, 4.5))
-            
             page_source = driver.page_source
-            
-            # --- STAGE 1: Handle Cloudflare waiting page (resolves itself) ---
+
+            # Stage 1: Cloudflare waiting page
             if is_waiting_page(page_source):
                 resolved = wait_for_challenge(driver, url)
                 if resolved:
                     page_source = driver.page_source
                 else:
-                    # Challenge didn't resolve, restart Chrome
                     print("🔄 Challenge stuck. Restarting Chrome...")
                     close_driver(driver)
                     time.sleep(random.uniform(5, 10))
@@ -213,80 +194,75 @@ def scrape_city(driver, city_url_name, folder_name, brackets):
                     if is_waiting_page(page_source):
                         wait_for_challenge(driver, url)
                         page_source = driver.page_source
-            
-            # --- STAGE 2: Handle actual login/captcha walls ---
+
+            # Stage 2: Login / CAPTCHA wall
             if is_login_page(page_source):
-                print("🔄 Login/CAPTCHA page detected! Restarting Chrome...")
+                print("🔄 Login/CAPTCHA detected! Restarting Chrome...")
                 close_driver(driver)
                 time.sleep(random.uniform(5, 10))
                 driver = setup_driver()
                 driver.get(url)
                 time.sleep(random.uniform(4, 7))
                 page_source = driver.page_source
-                
-                # Wait out any challenge on the new instance
+
                 if is_waiting_page(page_source):
                     wait_for_challenge(driver, url)
                     page_source = driver.page_source
-                
-                # If still blocked after restart, skip this bracket
+
                 if is_login_page(page_source):
-                    print("❌ Still blocked after Chrome restart. Skipping this bracket.")
+                    print("❌ Still blocked after Chrome restart. Skipping bracket.")
                     break
-            
+
             soup = BeautifulSoup(page_source, 'html.parser')
             listings = soup.select("#searchResultsTable tbody tr.searchResultsItem")
-            
+
             if not listings:
-                page_source_lower = page_source.lower()
-                if "ilan bulunamadı" in page_source_lower or "bulunamamıştır" in page_source_lower:
-                     print(f"No houses exist between {min_price}-{max_price} TL.")
+                lower = page_source.lower()
+                print(f"🔍 Current URL: {driver.current_url}")
+                print(f"🔍 Page title: {soup.title.string if soup.title else 'N/A'}")
+                print(f"🔍 Page snippet: {page_source[500:1000]}")
+                if "ilan bulunamadı" in lower or "bulunamamıştır" in lower:
+                    print(f"No listings in {min_price}-{max_price} TL range.")
                 else:
-                     print("⚠️ No listings found on this page. Moving to next bracket.")
+                    print("⚠️ No listings found on this page. Moving to next bracket.")
                 break
 
-            print(f"Scraping page {page_num} for bracket {min_price}-{max_price} TL... ({len(listings)} listings)")
+            print(f"Page {page_num} — {len(listings)} listings")
 
             for row in listings:
-                 try:
-                     price_elem = row.select_one(".searchResultsPriceValue")
-                     price = price_elem.text.strip() if price_elem else "N/A"
+                try:
+                    price_elem = row.select_one(".searchResultsPriceValue")
+                    price = price_elem.text.strip() if price_elem else "N/A"
 
-                     location_elem = row.select_one(".searchResultsLocationValue")
-                     district = " / ".join(location_elem.stripped_strings) if location_elem else "N/A"
+                    location_elem = row.select_one(".searchResultsLocationValue")
+                    district = " / ".join(location_elem.stripped_strings) if location_elem else "N/A"
 
-                     attributes = row.select(".searchResultsAttributeValue")
-                     rooms = attributes[1].text.strip() if len(attributes) > 1 else "N/A"
+                    attributes = row.select(".searchResultsAttributeValue")
+                    rooms = attributes[1].text.strip() if len(attributes) > 1 else "N/A"
 
-                     if price != "N/A" and district != "N/A":
-                         bracket_data.append({
-                             "District": district,
-                             "Rooms": rooms,
-                             "Price": price
-                         })
-                 except Exception as e:
-                     print(f"Error parsing a row: {e}")
-                     continue
-                     
+                    if price != "N/A" and district != "N/A":
+                        bracket_data.append({"District": district, "Rooms": rooms, "Price": price})
+                except Exception as e:
+                    print(f"Row parse error: {e}")
+                    continue
+
             if bracket_data:
-                 save_to_csv_incremental(folder_name, bracket_data)
-                 bracket_data = [] # clear for next page
-            
-            # Pagination
+                save_to_csv_incremental(folder_name, bracket_data)
+                bracket_data = []
+
             next_button = soup.find('a', title='Sonraki')
             if next_button and 'href' in next_button.attrs:
-                next_url = "https://www.sahibinden.com" + next_button['href']
-                driver.get(next_url)
+                driver.get("https://www.sahibinden.com" + next_button['href'])
                 page_num += 1
                 time.sleep(random.uniform(2, 4))
             else:
-                print(f"Finished gathering all houses in the {min_price}-{max_price} TL range.")
+                print(f"✅ Finished bracket {min_price}-{max_price} TL.")
                 break
-    
-    return driver  # Return the (possibly new) driver instance
+
+    return driver
+
 
 def cleanup_profiles():
-    """Remove all temporary Selenium profile directories."""
     for item in os.listdir(SCRIPT_DIR):
         if item.startswith("SeleniumProfile_"):
             path = os.path.join(SCRIPT_DIR, item)
@@ -296,16 +272,17 @@ def cleanup_profiles():
             except Exception:
                 pass
 
+
 def main():
     driver = setup_driver()
     try:
-        # Loop through the cities
         for city_url_name, city_data in CITIES.items():
             driver = scrape_city(driver, city_url_name, city_data['folder'], city_data['brackets'])
             time.sleep(3)
     finally:
         close_driver(driver)
         cleanup_profiles()
+
 
 if __name__ == "__main__":
     main()
