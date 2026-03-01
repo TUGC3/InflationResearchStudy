@@ -34,8 +34,7 @@ jobs:
       - name: Run House Rent Scraper
         run: |
           python Codes/HousesRent/DiyarbakirSanliurfaMardin/scrape_diyarbakir_sanliurfa_mardin.py
-        env:
-          CI: "true"
+
 
       - name: Check if CSV files were created
         run: |
