@@ -47,7 +47,7 @@ CATEGORIES = [
 
 # ========== DATA PATH ==========
 # This will create Datas/Markets/Cagri folder in the same directory as the script
-DATA_PATH = Path(__file__).parent.parent.parent.parent / "Datas" / "Markets" / "Cagri"
+DATA_PATH = Path("Datas/Markets/Cagri")
 DATA_PATH.mkdir(parents=True, exist_ok=True)
 
 # ========== FUNCTIONS ==========
