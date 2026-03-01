@@ -2,35 +2,32 @@ name: Daily Cagri Market Scrape
 
 on:
   schedule:
-    # Runs every day at 02:00 UTC (adjust as needed)
     - cron: '0 2 * * *'
-  workflow_dispatch:  # Allows manual trigger
+  workflow_dispatch:
 
 jobs:
   scrape:
     runs-on: ubuntu-latest
-    
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v3
+      - uses: actions/checkout@v3
       
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.10'
-        
-    - name: Install dependencies
-      run: |
-        pip install -r Codes/Markets/Cagri/requirements.txt
-        
-    - name: Run scraper
-      run: |
-        python Codes/Markets/Cagri/cagri_scraper.py
-        
-    - name: Commit and push changes
-      run: |
-        git config --global user.name "github-actions"
-        git config --global user.email "github-actions@github.com"
-        git add Datas/Markets/Cagri/
-        git diff --quiet && git diff --staged --quiet || git commit -m "Daily data update: $(date +'%Y-%m-%d')"
-        git push
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+          
+      - name: Install dependencies
+        run: |
+          pip install -r Codes/Markets/Cagri/requirements.txt
+          
+      - name: Run scraper
+        run: |
+          python Codes/Markets/Cagri/cagri_scraper.py
+          
+      - name: Commit files
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add Datas/Markets/Cagri/
+          git diff --quiet && git diff --staged --quiet || git commit -m "Add daily market data"
+          git push
