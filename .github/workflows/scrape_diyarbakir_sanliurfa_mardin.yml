@@ -48,6 +48,7 @@ jobs:
         run: |
           git config --global user.name "GitHub Action Bot"
           git config --global user.email "action@github.com"
-          git add "Datas/HousesRent/Diyarbakir/" "Datas/HousesRent/Sanliurfa/" "Datas/HousesRent/Mardin/"
+          git add -A
+          git status
           git commit -m "Auto-update daily house rent data (Diyarbakir/Sanliurfa/Mardin) $(date +'%Y-%m-%d')" || exit 0
           git push origin HEAD:${{ github.ref }}
