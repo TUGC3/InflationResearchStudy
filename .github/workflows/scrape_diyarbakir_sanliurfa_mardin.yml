@@ -19,13 +19,15 @@ jobs:
           python-version: "3.11"
 
       - name: Install dependencies
+        working-directory: Codes/HousesRent/DiyarbakirSanliurfaMardin
         run: pip install -r requirements.txt
 
       - name: Install Chrome
         uses: browser-actions/setup-chrome@v1
 
       - name: Run scraper
-        run: python scraper_diyarbakir_sanliurfa_mardin.py
+        working-directory: Codes/HousesRent/DiyarbakirSanliurfaMardin
+        run: python scrape_diyarbakir_sanliurfa_mardin.py
         env:
           CI: "true"
 
@@ -34,5 +36,5 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git add Datas/
-          git diff --cached --quiet || git commit -m "Data: $(date +'%Y-%m-%d') scrape results"
+          git diff --cached --quiet || git commit -m "Data: $(date +'%Y-%m-%d') Diyarbakir-Sanliurfa-Mardin"
           git push
