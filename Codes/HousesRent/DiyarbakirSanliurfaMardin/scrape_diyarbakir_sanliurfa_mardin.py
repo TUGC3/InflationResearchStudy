@@ -37,7 +37,8 @@ def setup_driver():
         profile_path = os.path.join(SCRIPT_DIR, "SeleniumProfile")
         options.add_argument(f"--user-data-dir={profile_path}")
 
-    driver = uc.Chrome(options=options, version_main=None)
+    version = int(os.environ.get("CHROME_VERSION", "0")) or None
+    driver = uc.Chrome(options=options, version_main=version)
     return driver
 
 
