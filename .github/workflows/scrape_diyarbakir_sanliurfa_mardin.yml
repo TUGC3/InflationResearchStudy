@@ -37,6 +37,13 @@ jobs:
         env:
           CI: "true"
 
+      - name: Check if CSV files were created
+        run: |
+          echo "=== Checking for CSV files ==="
+          find Datas/HousesRent/Diyarbakir/ -name "*.csv" 2>/dev/null && echo "✅ Diyarbakir CSVs found" || echo "❌ No Diyarbakir CSVs"
+          find Datas/HousesRent/Sanliurfa/ -name "*.csv" 2>/dev/null && echo "✅ Sanliurfa CSVs found" || echo "❌ No Sanliurfa CSVs"
+          find Datas/HousesRent/Mardin/ -name "*.csv" 2>/dev/null && echo "✅ Mardin CSVs found" || echo "❌ No Mardin CSVs"
+
       - name: Commit and push CSV files
         run: |
           git config --global user.name "GitHub Action Bot"
