@@ -28,12 +28,14 @@ jobs:
 
       - name: Install dependencies
         run: |
+          sudo apt-get install -y xvfb
           python -m pip install --upgrade pip
           pip install undetected-chromedriver beautifulsoup4 setuptools
 
       - name: Run House Rent Scraper
         run: |
-          python Codes/HousesRent/DiyarbakirSanliurfaMardin/scrape_diyarbakir_sanliurfa_mardin.py
+          xvfb-run --auto-servernum --server-args="-screen 0 1920x1080x24" \
+            python Codes/HousesRent/DiyarbakirSanliurfaMardin/scrape_diyarbakir_sanliurfa_mardin.py
 
       - name: Commit and push CSV files
         run: |
