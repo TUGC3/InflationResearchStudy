@@ -5,7 +5,7 @@ import csv
 import datetime
 
 BASE_URL = "https://www.sahibinden.com/kiralik/antalya"
-MAX_PAGES = 550
+MAX_PAGES = 650
 BATCH_SIZE = 50
 month = datetime.datetime.now().month
 day = datetime.datetime.now().day
@@ -94,10 +94,10 @@ async def main():
     all_results = []
 
 
-    for batch_start in range(501, MAX_PAGES + 1, BATCH_SIZE):
+    for batch_start in range(1, MAX_PAGES + 1, BATCH_SIZE):
         batch_end = min(batch_start + BATCH_SIZE - 1, MAX_PAGES)
 
-        if batch_start == 501:
+        if batch_start == 1:
             is_first_run = True
         else:
             is_first_run = False
