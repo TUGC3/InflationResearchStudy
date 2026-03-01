@@ -29,27 +29,16 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install undetected-chromedriver selenium webdriver-manager beautifulsoup4 setuptools
+          pip install undetected-chromedriver beautifulsoup4 setuptools
 
       - name: Run House Rent Scraper
         run: |
           python Codes/HousesRent/DiyarbakirSanliurfaMardin/scrape_diyarbakir_sanliurfa_mardin.py
 
-
-      - name: Check if CSV files were created
-        run: |
-          echo "=== Current directory ==="
-          pwd
-          echo "=== Searching ALL csv files in workspace ==="
-          find /home/runner/work -name "*.csv" 2>/dev/null
-          echo "=== Datas folder contents ==="
-          find Datas/ -type f 2>/dev/null
-
       - name: Commit and push CSV files
         run: |
           git config --global user.name "GitHub Action Bot"
           git config --global user.email "action@github.com"
-          git add -A
-          git status
+          git add "Datas/HousesRent/Diyarbakir/" "Datas/HousesRent/Sanliurfa/" "Datas/HousesRent/Mardin/"
           git commit -m "Auto-update daily house rent data (Diyarbakir/Sanliurfa/Mardin) $(date +'%Y-%m-%d')" || exit 0
           git push origin HEAD:${{ github.ref }}
