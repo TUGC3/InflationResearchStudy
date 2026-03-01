@@ -1,8 +1,3 @@
-"""
-Sahibinden House Rental Scraper
-GitHub: InflationResearchStudy/Codes/HousesRent/Antep_Maras_Kilis/antep_maras_kilis.py
-Data: InflationResearchStudy/Datas/HousesRent/{City}/
-"""
 
 import requests
 from bs4 import BeautifulSoup
@@ -13,7 +8,6 @@ from datetime import datetime
 from pathlib import Path
 import random
 
-# ========== CONFIGURATION ==========
 HEADERS = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
     'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
@@ -23,26 +17,27 @@ HEADERS = {
     'Upgrade-Insecure-Requests': '1',
 }
 
-# Cities and their Sahibinden URLs
+
+BASE_PATH = Path("Datas/HousesRent")
 CITIES = {
     'Antep': {
         'name': 'Gaziantep',
         'url': 'https://www.sahibinden.com/kiralik-daire/gaziantep',
-        'file_path': 'Datas/HousesRent/Antep/Antep.csv'
+        'folder': BASE_PATH / 'Antep'
     },
     'Maras': {
         'name': 'Kahramanmaras',
         'url': 'https://www.sahibinden.com/kiralik-daire/kahramanmaras',
-        'file_path': 'Datas/HousesRent/Maras/Maras.csv'
+        'folder': BASE_PATH / 'Maras'
     },
     'Kilis': {
         'name': 'Kilis',
         'url': 'https://www.sahibinden.com/kiralik-daire/kilis',
-        'file_path': 'Datas/HousesRent/Kilis/Kilis.csv'
+        'folder': BASE_PATH / 'Kilis'
     }
 }
 
-REQUEST_DELAY = 3  # seconds between requests to be respectful
+REQUEST_DELAY = 3  # seconds between requests
 MAX_PAGES = 10  # Maximum pages to scrape per city
 
 def get_soup(url):
@@ -83,7 +78,7 @@ def scrape_city(city_key, city_info):
         if page == 1:
             url = base_url
         else:
-            url = f"{base_url}?pagingOffset={page * 20}&pagingPage={page}"
+            url = f"{base_url}?pagingOffset={(page-1)*20}"
         
         print(f"  Page {page}...")
         
@@ -129,6 +124,8 @@ def scrape_city(city_key, city_info):
                     size_match = re.search(r'(\d+)', size_text)
                     size = int(size_match.group(1)) if size_match else None
                 
+                today_date = datetime.now().strftime('%Y-%m-%d')
+                
                 listing = {
                     'city': city_info['name'],
                     'title': title,
@@ -137,8 +134,8 @@ def scrape_city(city_key, city_info):
                     'rooms': rooms,
                     'size_m2': size,
                     'url': link,
-                    'date': datetime.now().strftime('%Y-%m-%d'),
-                    'time': datetime.now().strftime('%H:%M:%S')
+                    'scrape_date': today_date,
+                    'scrape_time': datetime.now().strftime('%H:%M:%S')
                 }
                 
                 all_listings.append(listing)
@@ -154,37 +151,26 @@ def scrape_city(city_key, city_info):
     return all_listings
 
 def save_city_data(city_key, city_info, listings):
-    """Save data for a specific city"""
+    """Save data for a specific city with date in filename"""
     if not listings:
         print(f"No listings to save for {city_info['name']}")
         return
     
     df = pd.DataFrame(listings)
     
-    # Create directory if it doesn't exist
-    file_path = Path(city_info['file_path'])
-    file_path.parent.mkdir(parents=True, exist_ok=True)
+    # Create folder if it doesn't exist
+    city_info['folder'].mkdir(parents=True, exist_ok=True)
+    
+    # Create filename with date
+    today_date = datetime.now().strftime('%Y-%m-%d')
+    filename = city_info['folder'] / f"{city_key}_{today_date}.csv"
     
     # Save to CSV
-    if file_path.exists():
-        # Append to existing file
-        existing_df = pd.read_csv(file_path, encoding='utf-8-sig')
-        combined = pd.concat([existing_df, df], ignore_index=True)
-        combined = combined.drop_duplicates(subset=['title', 'price_tl', 'date'], keep='last')
-        combined.to_csv(file_path, index=False, encoding='utf-8-sig')
-    else:
-        # Create new file
-        df.to_csv(file_path, index=False, encoding='utf-8-sig')
-    
-    print(f"Saved {len(listings)} listings to {file_path}")
+    df.to_csv(filename, index=False, encoding='utf-8-sig')
+    print(f"Saved: {filename} ({len(listings)} listings)")
 
 def main():
     """Main function"""
-    print("="*50)
-    print("SAHIBINDEN HOUSE RENTAL SCRAPER")
-    print("Gaziantep, Kahramanmaras, Kilis")
-    print(f"Date: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
-    print("="*50)
     
     total_listings = 0
     
@@ -195,7 +181,7 @@ def main():
             total_listings += len(listings)
     
     print(f"\n{'='*50}")
-    print(f"TOTAL: {total_listings} listings scraped")
+    print(f"TOTAL: {total_listings} listings scraped today")
     print("="*50)
 
 if __name__ == "__main__":
