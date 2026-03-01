@@ -1,3 +1,8 @@
+"""
+Sahibinden House Rental Scraper
+GitHub: InflationResearchStudy/Codes/HousesRent/Antep_Maras_Kilis/antep_maras_kilis.py
+Data: InflationResearchStudy/Datas/HousesRent/{City}/{City}_YYYY-MM-DD.csv
+"""
 
 import requests
 from bs4 import BeautifulSoup
@@ -8,6 +13,7 @@ from datetime import datetime
 from pathlib import Path
 import random
 
+# ========== CONFIGURATION ==========
 HEADERS = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
     'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
@@ -17,8 +23,10 @@ HEADERS = {
     'Upgrade-Insecure-Requests': '1',
 }
 
-
+# Base path for GitHub Actions (relative to repo root)
 BASE_PATH = Path("Datas/HousesRent")
+
+# Cities and their Sahibinden URLs
 CITIES = {
     'Antep': {
         'name': 'Gaziantep',
@@ -37,24 +45,33 @@ CITIES = {
     }
 }
 
-REQUEST_DELAY = 3  # seconds between requests
-MAX_PAGES = 10  # Maximum pages to scrape per city
+REQUEST_DELAY = 3
+MAX_PAGES = 3  # Reduced for testing
 
 def get_soup(url):
     """Get BeautifulSoup object from URL"""
     try:
+        print(f"    Fetching: {url}")
         response = requests.get(url, headers=HEADERS, timeout=30)
-        response.raise_for_status()
-        return BeautifulSoup(response.content, 'html.parser')
+        print(f"    Status code: {response.status_code}")
+        
+        if response.status_code == 200:
+            soup = BeautifulSoup(response.content, 'html.parser')
+            # Check if we got a valid page
+            title = soup.find('title')
+            print(f"    Page title: {title.text[:50] if title else 'No title'}")
+            return soup
+        else:
+            print(f"    Error: HTTP {response.status_code}")
+            return None
     except Exception as e:
-        print(f"Error fetching {url}: {e}")
+        print(f"    Error fetching {url}: {e}")
         return None
 
 def extract_price(price_text):
     """Extract numeric price from text"""
     if not price_text:
         return None
-    # Remove TL and non-numeric characters
     price = re.sub(r'[^0-9]', '', price_text)
     return int(price) if price else None
 
@@ -69,7 +86,7 @@ def extract_rooms(room_text):
 
 def scrape_city(city_key, city_info):
     """Scrape rental listings for a specific city"""
-    print(f"\nScraping {city_info['name']}...")
+    print(f"\n📁 Scraping {city_info['name']}...")
     
     all_listings = []
     base_url = city_info['url']
@@ -84,19 +101,42 @@ def scrape_city(city_key, city_info):
         
         soup = get_soup(url)
         if not soup:
+            print(f"  Failed to get page {page}")
             break
         
-        # Find listing items
+        # Try different possible class names
         listings = soup.find_all('tr', {'class': 'searchResultsItem'})
+        print(f"    Found {len(listings)} listings with class 'searchResultsItem'")
         
         if not listings:
-            print(f"  No more listings found")
+            # Try alternative class
+            listings = soup.find_all('tr', {'class': 'search-results-item'})
+            print(f"    Found {len(listings)} listings with class 'search-results-item'")
+        
+        if not listings:
+            # Try to find any table rows that might be listings
+            all_rows = soup.find_all('tr')
+            print(f"    Total rows on page: {len(all_rows)}")
+            
+            # Look for price elements to identify listings
+            price_elements = soup.find_all('div', {'class': re.compile('price')})
+            print(f"    Found {len(price_elements)} price elements")
+            
+            print(f"  No listings found on page {page}")
             break
         
         for item in listings:
             try:
+                # Debug: print item structure
+                if len(all_listings) == 0:
+                    print(f"    Sample item HTML: {str(item)[:200]}...")
+                
                 # Title and link
                 title_elem = item.find('a', {'class': 'classifiedTitle'})
+                if not title_elem:
+                    # Try alternative
+                    title_elem = item.find('a', {'class': 'classified-title'})
+                
                 if not title_elem:
                     continue
                 
@@ -105,11 +145,17 @@ def scrape_city(city_key, city_info):
                 
                 # Price
                 price_elem = item.find('div', {'class': 'searchResultsPriceValue'})
+                if not price_elem:
+                    price_elem = item.find('span', {'class': 'price'})
+                
                 price_text = price_elem.text.strip() if price_elem else None
                 price = extract_price(price_text)
                 
                 # Location/District
                 location_elem = item.find('td', {'class': 'searchResultsLocationValue'})
+                if not location_elem:
+                    location_elem = item.find('td', {'class': 'location'})
+                
                 district = location_elem.text.strip() if location_elem else None
                 
                 # Room count
@@ -140,11 +186,15 @@ def scrape_city(city_key, city_info):
                 
                 all_listings.append(listing)
                 
+                # Show first listing as sample
+                if len(all_listings) == 1:
+                    print(f"    Sample listing: {title[:30]}... - {price} TL")
+                
             except Exception as e:
                 print(f"    Error parsing listing: {e}")
                 continue
         
-        # Random delay to be respectful
+        # Random delay
         time.sleep(REQUEST_DELAY + random.uniform(0, 2))
     
     print(f"  Found {len(all_listings)} listings for {city_info['name']}")
@@ -153,8 +203,8 @@ def scrape_city(city_key, city_info):
 def save_city_data(city_key, city_info, listings):
     """Save data for a specific city with date in filename"""
     if not listings:
-        print(f"No listings to save for {city_info['name']}")
-        return
+        print(f"  ⚠️ No listings to save for {city_info['name']}")
+        return False
     
     df = pd.DataFrame(listings)
     
@@ -167,22 +217,40 @@ def save_city_data(city_key, city_info, listings):
     
     # Save to CSV
     df.to_csv(filename, index=False, encoding='utf-8-sig')
-    print(f"Saved: {filename} ({len(listings)} listings)")
+    print(f"  💾 Saved: {filename} ({len(listings)} listings)")
+    return True
 
 def main():
     """Main function"""
+    print("="*60)
+    print("SAHIBINDEN HOUSE RENTAL SCRAPER")
+    print("Gaziantep, Kahramanmaras, Kilis")
+    print(f"Date: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+    print("="*60)
     
     total_listings = 0
+    successful_cities = 0
     
     for city_key, city_info in CITIES.items():
         listings = scrape_city(city_key, city_info)
         if listings:
-            save_city_data(city_key, city_info, listings)
-            total_listings += len(listings)
+            if save_city_data(city_key, city_info, listings):
+                successful_cities += 1
+                total_listings += len(listings)
     
-    print(f"\n{'='*50}")
-    print(f"TOTAL: {total_listings} listings scraped today")
-    print("="*50)
+    print(f"\n{'='*60}")
+    print(f"SUMMARY:")
+    print(f"  Cities with data: {successful_cities}/3")
+    print(f"  Total listings today: {total_listings}")
+    print(f"  Data folders: {BASE_PATH.absolute()}")
+    print("="*60)
+    
+    # List files created
+    for city_key in CITIES.keys():
+        city_folder = CITIES[city_key]['folder']
+        if city_folder.exists():
+            files = list(city_folder.glob(f"{city_key}_*.csv"))
+            print(f"  {city_key}: {len(files)} files")
 
 if __name__ == "__main__":
     main()
