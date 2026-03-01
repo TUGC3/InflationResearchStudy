@@ -1,48 +1,46 @@
-name: Daily Scraper - Diyarbakir Sanliurfa Mardin
+name: Daily House Rent Scraper (Diyarbakir, Sanliurfa, Mardin)
 
 on:
   schedule:
-    - cron: "0 6 * * *"  # Her gün sabah 06:00 UTC (Türkiye 09:00)
+    - cron: '0 2 * * *'  # Her gün 02:00 UTC (05:00 TSİ)
   workflow_dispatch:
 
 jobs:
-  scrape:
+  scrape_houses:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
 
     steps:
-      - name: Checkout repo
+      - name: Checkout Repository
         uses: actions/checkout@v4
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v4
         with:
-          python-version: "3.11"
-
-      - name: Install dependencies
-        working-directory: Codes/HousesRent/DiyarbakirSanliurfaMardin
-        run: pip install -r requirements.txt
+          python-version: '3.10'
+          cache: 'pip'
 
       - name: Install Chrome
         uses: browser-actions/setup-chrome@v1
+        with:
+          chrome-version: 'stable'
 
-      - name: Get Chrome version
-        id: chrome-version
+      - name: Install dependencies
         run: |
-          VERSION=$(google-chrome --version | grep -oP '\d+' | head -1)
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
-          echo "Chrome major version: $VERSION"
+          python -m pip install --upgrade pip
+          pip install undetected-chromedriver beautifulsoup4 setuptools
 
-      - name: Run scraper
-        working-directory: Codes/HousesRent/DiyarbakirSanliurfaMardin
-        run: python scrape_diyarbakir_sanliurfa_mardin.py
+      - name: Run House Rent Scraper
+        run: |
+          python Codes/HousesRent/DiyarbakirSanliurfaMardin/scrape_diyarbakir_sanliurfa_mardin.py
         env:
           CI: "true"
-          CHROME_VERSION: ${{ steps.chrome-version.outputs.version }}
 
       - name: Commit and push CSV files
         run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add Datas/
-          git diff --cached --quiet || git commit -m "Data: $(date +'%Y-%m-%d') Diyarbakir-Sanliurfa-Mardin"
-          git push
+          git config --global user.name "GitHub Action Bot"
+          git config --global user.email "action@github.com"
+          git add "Datas/HousesRent/Diyarbakir/" "Datas/HousesRent/Sanliurfa/" "Datas/HousesRent/Mardin/"
+          git commit -m "Auto-update daily house rent data (Diyarbakir/Sanliurfa/Mardin) $(date +'%Y-%m-%d')" || exit 0
+          git push origin HEAD:${{ github.ref }}
