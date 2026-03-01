@@ -114,7 +114,7 @@ def close_driver(driver):
 
 def is_waiting_page(page_source):
     lower = page_source.lower()
-    return any(s in lower for s in ["bir dakika lütfen", "lütfen bekleyiniz"])
+    return any(s in lower for s in ["bir dakika lütfen", "lütfen bekleyiniz", "just a moment", "challenge-error-text", "cf-challenge"])
 
 
 def is_login_page(page_source):
