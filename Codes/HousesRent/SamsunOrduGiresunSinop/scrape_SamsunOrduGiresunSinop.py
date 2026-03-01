@@ -103,7 +103,9 @@ def setup_driver():
     # Each new driver gets a unique profile dir so Sahibinden can't track the session
     profile_path = os.path.join(SCRIPT_DIR, f"SeleniumProfile_{_profile_counter}")
     options.add_argument(f"--user-data-dir={profile_path}")
-    options.add_argument('--headless=new')  # required for CI and background runs
+    # Only use headless if explicitly requested (e.g. CI). Headed mode bypasses Cloudflare better.
+    if os.environ.get('HEADLESS', '').lower() in ('1', 'true', 'yes'):
+        options.add_argument('--headless=new')
     options.add_argument('--no-sandbox')
     options.add_argument('--disable-dev-shm-usage')
 
