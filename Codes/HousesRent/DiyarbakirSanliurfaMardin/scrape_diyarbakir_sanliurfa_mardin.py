@@ -81,39 +81,24 @@ def _detect_chrome_version():
 
 
 def setup_driver():
-    """Creates a fresh Chrome instance. Uses selenium+webdriver-manager in CI, uc locally."""
+    """Creates a fresh Chrome instance with a brand-new profile."""
     global _profile_counter
     _profile_counter += 1
 
-    IS_CI = os.environ.get("CI", "false").lower() == "true"
+    options = uc.ChromeOptions()
+    profile_path = os.path.join(SCRIPT_DIR, f"SeleniumProfile_{_profile_counter}")
+    options.add_argument(f"--user-data-dir={profile_path}")
 
-    if IS_CI:
-        from selenium import webdriver
-        from selenium.webdriver.chrome.service import Service
-        from selenium.webdriver.chrome.options import Options
-        from webdriver_manager.chrome import ChromeDriverManager
+    if os.environ.get('HEADLESS', '').lower() in ('1', 'true', 'yes'):
+        options.add_argument('--headless=new')
+    options.add_argument('--no-sandbox')
+    options.add_argument('--disable-dev-shm-usage')
 
-        options = Options()
-        options.add_argument("--headless=new")
-        options.add_argument("--no-sandbox")
-        options.add_argument("--disable-dev-shm-usage")
-        options.add_argument("--disable-gpu")
-        options.add_argument("--window-size=1920,1080")
-
-        service = Service(ChromeDriverManager().install())
-        driver = webdriver.Chrome(service=service, options=options)
+    chrome_ver = _detect_chrome_version()
+    if chrome_ver:
+        driver = uc.Chrome(options=options, version_main=chrome_ver)
     else:
-        options = uc.ChromeOptions()
-        profile_path = os.path.join(SCRIPT_DIR, f"SeleniumProfile_{_profile_counter}")
-        options.add_argument(f"--user-data-dir={profile_path}")
-        options.add_argument('--no-sandbox')
-        options.add_argument('--disable-dev-shm-usage')
-
-        chrome_ver = _detect_chrome_version()
-        if chrome_ver:
-            driver = uc.Chrome(options=options, version_main=chrome_ver)
-        else:
-            driver = uc.Chrome(options=options)
+        driver = uc.Chrome(options=options)
 
     print(f"🚀 New Chrome instance #{_profile_counter} started.")
     return driver
@@ -233,6 +218,9 @@ def scrape_city(driver, city_url_name, folder_name, brackets):
 
             if not listings:
                 lower = page_source.lower()
+                print(f"🔍 Current URL: {driver.current_url}")
+                print(f"🔍 Page title: {soup.title.string if soup.title else 'N/A'}")
+                print(f"🔍 Page snippet: {page_source[500:1000]}")
                 if "ilan bulunamadı" in lower or "bulunamamıştır" in lower:
                     print(f"No listings in {min_price}-{max_price} TL range.")
                 else:
