@@ -3,7 +3,7 @@ name: Daily Scraper - Diyarbakir Sanliurfa Mardin
 on:
   schedule:
     - cron: "0 6 * * *"  # Her gün sabah 06:00 UTC (Türkiye 09:00)
-  workflow_dispatch:       # Manuel tetikleme butonu
+  workflow_dispatch:
 
 jobs:
   scrape:
@@ -25,11 +25,19 @@ jobs:
       - name: Install Chrome
         uses: browser-actions/setup-chrome@v1
 
+      - name: Get Chrome version
+        id: chrome-version
+        run: |
+          VERSION=$(google-chrome --version | grep -oP '\d+' | head -1)
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "Chrome major version: $VERSION"
+
       - name: Run scraper
         working-directory: Codes/HousesRent/DiyarbakirSanliurfaMardin
         run: python scrape_diyarbakir_sanliurfa_mardin.py
         env:
           CI: "true"
+          CHROME_VERSION: ${{ steps.chrome-version.outputs.version }}
 
       - name: Commit and push CSV files
         run: |
