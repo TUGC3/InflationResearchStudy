@@ -2,7 +2,7 @@ name: Daily House Rent Scraper (Diyarbakir, Sanliurfa, Mardin)
 
 on:
   schedule:
-    - cron: '0 2 * * *'
+    - cron: '0 1 * * *'
   workflow_dispatch:
 
 jobs:
