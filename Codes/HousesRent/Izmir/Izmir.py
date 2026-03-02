@@ -26,7 +26,8 @@ def scrape_all_izmir_districts():
 
     print("Starting the headless browser...")
     # Removed version_main so it dynamically uses the GitHub runner's Chrome version
-    driver = uc.Chrome(options=options)
+    # GitHub runner şu an 145 sürümünde olduğu için versiyonu sabitliyoruz
+    driver = uc.Chrome(options=options, version_main=145)
 
     all_extracted_data = []
 
