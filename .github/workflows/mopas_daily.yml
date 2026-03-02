@@ -42,4 +42,5 @@ jobs:
         git config --global user.email "action@github.com"
         git add "Datas/Markets/Mopas/"
         git commit -m "Auto-update daily prices CSV for Mopaş" || exit 0
-        git push origin HEAD:${{ github.ref }}
+        git pull origin master --rebase
+        git push origin HEAD:master
