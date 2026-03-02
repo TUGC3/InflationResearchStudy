@@ -125,8 +125,8 @@ def scrape_entire_market():
         today_date = datetime.now().strftime("%Y-%m-%d")
         
         # Create a specific 'mopas' folder inside Datas/Markets
-        os.makedirs("Datas/Markets/mopas", exist_ok=True)
-        filename = f"Datas/Markets/mopas/mopas_prices_{today_date}.csv"
+        os.makedirs("Datas/Markets/Mopas", exist_ok=True)
+        filename = f"Datas/Markets/Mopas/mopas_prices_{today_date}.csv"
 
         df.to_csv(filename, index=False, encoding='utf-8-sig')
 
