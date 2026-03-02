@@ -1,4 +1,4 @@
-name: Günlük Veri Kazıma ve Klasöre Kaydetme
+name: Daily Arden Scraper
 
 on:
   schedule:
