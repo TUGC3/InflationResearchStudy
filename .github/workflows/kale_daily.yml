@@ -4,31 +4,37 @@ on:
   schedule:
     # Her gece Türkiye saatiyle 04:30'da çalışır (UTC 01:30)
     - cron: '30 1 * * *'
-  workflow_dispatch: 
+  workflow_dispatch:
+
 jobs:
-  build:
+  scrape_and_upload:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write 
+
     steps:
-      - name: Checkout Repo
+      - name: Checkout Repository
         uses: actions/checkout@v4
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v4
         with:
           python-version: '3.10'
+          cache: 'pip'
 
-      - name: Install Dependencies
+      - name: Install dependencies
         run: |
+          python -m pip install --upgrade pip
           pip install selenium webdriver-manager
 
-      - name: Run Kale Scraper
-
-        run: python Codes/Markets/Kale/kale_scraper.py
-
-      - name: Commit and Push Data
+      - name: Run scraper
         run: |
-          git config --local user.email "github-actions[bot]@users.noreply.github.com"
-          git config --local user.name "github-actions[bot]"
-          git add Datas/Markets/Kale/
-          git commit -m "Auto-update Kale data: $(date +'%Y-%m-%d')" || echo "No changes"
-          git push
+          python Codes/Markets/Kale/kale_scraper.py
+
+      - name: Commit and Push changes
+        run: |
+          git config --global user.name "GitHub Action"
+          git config --global user.email "action@github.com"          
+          git add Datas/Markets/Kale/*.csv
+          git commit -m "Auto-update: Kale product data for $(date +'%Y-%m-%d')" || exit 0
+          git push origin HEAD:${{ github.ref_name }}
