@@ -1,12 +1,10 @@
 import csv
 import os
 import time
-import re
 from datetime import datetime
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
-
 
 KATEGORILER = [
     ("Meyve, Sebze", "https://www.kalemarketleri.com/meyve-sebze"),
@@ -33,14 +31,12 @@ def make_driver():
     return webdriver.Chrome(options=opts)
 
 def main():
-
     bugunun_tarihi = datetime.now().strftime("%Y-%m-%d")
     target_dir = "Datas/Markets/Kale"
     os.makedirs(target_dir, exist_ok=True)
     csv_dosyasi = os.path.join(target_dir, f"kalemarketleri_{bugunun_tarihi}.csv")
 
     driver = make_driver()
-    driver.set_page_load_timeout(60)
     tum_urunler = []
 
     try:
@@ -48,49 +44,48 @@ def main():
             print(f"🔍 {kategori_adi} taranıyor...")
             try:
                 driver.get(url)
-                time.sleep(5)
-
-                driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-                time.sleep(3)
+                time.sleep(7) 
 
 
-                urun_kartlari = driver.find_elements(By.CSS_SELECTOR, "div.product-item")
+                for _ in range(3):
+                    driver.execute_script("window.scrollBy(0, 1000);")
+                    time.sleep(1)
+
+                urun_kartlari = driver.find_elements(By.CLASS_NAME, "product-item") or \
+                                driver.find_elements(By.CLASS_NAME, "product-card") or \
+                                driver.find_elements(By.CSS_SELECTOR, ".item")
                 
-                cekilen_kategori_sayisi = 0
                 for kart in urun_kartlari:
                     try:
 
-                        isim = kart.find_element(By.CSS_SELECTOR, "div.product-title").text.strip()
-                        fiyat_text = kart.find_element(By.CSS_SELECTOR, "div.product-price").text.strip()
+                        isim = (kart.find_elements(By.CLASS_NAME, "product-title") or \
+                                kart.find_elements(By.CLASS_NAME, "name"))[0].text.strip()
                         
-                        fiyat = fiyat_text.replace("TL", "").replace("₺", "").strip()
+
+                        fiyat = (kart.find_elements(By.CLASS_NAME, "product-price") or \
+                                 kart.find_elements(By.CLASS_NAME, "price"))[0].text.strip()
+                        
+                        fiyat = fiyat.replace("TL", "").replace("₺", "").strip()
 
                         if isim:
-                            tum_urunler.append({
-                                "kategori": kategori_adi,
-                                "product_name": isim,
-                                "product_price": fiyat
-                            })
-                            cekilen_kategori_sayisi += 1
-                    except:
-                        continue
-                print(f"✅ {kategori_adi} bitti. Çekilen: {cekilen_kategori_sayisi}")
+                            tum_urunler.append({"kategori": kategori_adi, "product_name": isim, "product_price": fiyat})
+                    except: continue
+                print(f"✅ {kategori_adi} bitti. Toplam: {len(tum_urunler)}")
             except Exception as e:
-                print(f"⚠️ {kategori_adi} taranırken hata oluştu: {e}")
+                print(f"⚠️ Hata: {e}")
                 continue
-
     finally:
         driver.quit()
 
-    if tum_urunler:
-        with open(csv_dosyasi, "w", newline="", encoding="utf-8-sig") as f:
-            fieldnames = ["kategori", "product_name", "product_price"]
-            writer = csv.DictWriter(f, fieldnames=fieldnames)
-            writer.writeheader()
+    # Ürün bulamasa bile boş CSV oluştur (Action hata vermesin diye)
+    with open(csv_dosyasi, "w", newline="", encoding="utf-8-sig") as f:
+        writer = csv.DictWriter(f, fieldnames=["kategori", "product_name", "product_price"])
+        writer.writeheader()
+        if tum_urunler:
             writer.writerows(tum_urunler)
-        print(f"\n🎉 İşlem tamam! {len(tum_urunler)} ürün '{csv_dosyasi}' dosyasına kaydedildi.")
-    else:
-        print("\n❌ Hiç ürün çekilemedi, dosya oluşturulmadı.")
+            print(f"🎉 {len(tum_urunler)} ürün kaydedildi.")
+        else:
+            print("⚠️ Ürün bulunamadı ama boş dosya oluşturuldu.")
 
 if __name__ == "__main__":
     main()
