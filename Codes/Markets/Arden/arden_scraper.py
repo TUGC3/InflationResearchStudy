@@ -1,24 +1,24 @@
 import time
 import csv
 import os
-from datetime import datetime 
+from datetime import datetime
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait, Select
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.chrome.options import Options 
+from selenium.webdriver.chrome.options import Options
 
-
+# --- HEADLESS AYARLARI ---
 chrome_options = Options()
-chrome_options.add_argument("--headless")
+chrome_options.add_argument("--headless") 
 chrome_options.add_argument("--no-sandbox")
 chrome_options.add_argument("--disable-dev-shm-usage")
 chrome_options.add_argument("--window-size=1920,1080")
+chrome_options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36")
 
 driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
-# maximize_window yerine yukarıda window-size belirlediö, headless için daha garanti.
 wait = WebDriverWait(driver, 20)
 
 KATEGORILER = [
@@ -78,6 +78,7 @@ def scroll_to_bottom():
             break
         onceki = yeni
 
+
 def son_sayfa_numarasini_al():
     try:
         driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
@@ -90,7 +91,7 @@ def son_sayfa_numarasini_al():
                 numara = int(span.text.strip())
                 numaralar.append(numara)
             except:
-                continue
+                continue 
 
         son = max(numaralar) if numaralar else 1
         print(f"  🔍 Bulunan sayfalar: {numaralar} → Son: {son}")
@@ -187,12 +188,16 @@ try:
 
             print(f"{len(bulunanlar)} ürün, {len(yeni)} yeni | Toplam: {len(tum_urunler)}")
 
-    # --- TARİHLİ DOSYA KAYDI BURADA ---
-    if not os.path.exists('data'):
-        os.makedirs('data')
+    #KAYIT VE DOSYALAMA BÖLÜMÜ (GÜNCELLENDİ)
+    
+    # os.getcwd() ana dizini verir. Veriler ana dizindeki 'data' klasörüne gider.
+    data_klasoru = os.path.join(os.getcwd(), 'data')
+    
+    if not os.path.exists(data_klasoru):
+        os.makedirs(data_klasoru)
 
-    tarih = datetime.now().strftime("%Y-%m-%d")
-    dosya_adi = f"data/arden_urunler_{tarih}.csv"
+    tarih_str = datetime.now().strftime("%Y-%m-%d")
+    dosya_adi = os.path.join(data_klasoru, f"arden_urunler_{tarih_str}.csv")
 
     with open(dosya_adi, "w", newline="", encoding="utf-8-sig") as f:
         fieldnames = ["kategori", "isim", "fiyat", "link", "resim"]
@@ -202,7 +207,7 @@ try:
 
     print(f"\n{'='*50}")
     print(f"🎉 TOPLAM ÜRÜN: {len(tum_urunler)}")
-    print(f"💾 {dosya_adi} kaydedildi")
+    print(f"💾 {dosya_adi} başarıyla kaydedildi")
     print(f"{'='*50}")
 
 finally:
