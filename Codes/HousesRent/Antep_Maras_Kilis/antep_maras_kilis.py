@@ -1,206 +1,329 @@
-"""
-Sahibinden House Rental Scraper
-GitHub: InflationResearchStudy/Codes/HousesRent/Antep_Maras_Kilis/antep_maras_kilis.py
-"""
-
-import requests
-from bs4 import BeautifulSoup
-import pandas as pd
-import time
-import re
-from datetime import datetime
-from pathlib import Path
+import csv
+import os
 import random
+import shutil
+import time
+from datetime import datetime
+from typing import Dict, List, Optional, Tuple
 
-# ========== CONFIGURATION ==========
-USER_AGENTS = [
-    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36',
-    'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-    'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/121.0',
-]
+import undetected_chromedriver as uc
+from bs4 import BeautifulSoup
+from selenium.common.exceptions import WebDriverException
 
-def get_headers():
-    """Get random headers for each request"""
-    return {
-        'User-Agent': random.choice(USER_AGENTS),
-        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8',
-        'Accept-Language': 'tr-TR,tr;q=0.9,en;q=0.8',
-        'Accept-Encoding': 'gzip, deflate, br',
-        'Connection': 'keep-alive',
-        'Upgrade-Insecure-Requests': '1',
-        'Sec-Fetch-Dest': 'document',
-        'Sec-Fetch-Mode': 'navigate',
-        'Sec-Fetch-Site': 'none',
-        'Sec-Fetch-User': '?1',
-        'Cache-Control': 'max-age=0',
-    }
 
-# Base path
-BASE_PATH = Path("Datas/HousesRent")
-
-# Cities
-CITIES = {
-    'Antep': {
-        'name': 'Gaziantep',
-        'url': 'https://www.sahibinden.com/kiralik-daire/gaziantep',
-        'folder': BASE_PATH / 'Antep'
-    },
-    'Maras': {
-        'name': 'Kahramanmaras',
-        'url': 'https://www.sahibinden.com/kiralik-daire/kahramanmaras',
-        'folder': BASE_PATH / 'Maras'
-    },
-    'Kilis': {
-        'name': 'Kilis',
-        'url': 'https://www.sahibinden.com/kiralik-daire/kilis',
-        'folder': BASE_PATH / 'Kilis'
-    }
+CITIES: Dict[str, str] = {
+    "maras": "https://www.sahibinden.com/kiralik/kahramanmaras",
+    "antep": "https://www.sahibinden.com/kiralik/gaziantep",
+    "kilis": "https://www.sahibinden.com/kiralik/kilis",
 }
 
-REQUEST_DELAY = 5
-MAX_PAGES = 3
+DATA_GROUP_FOLDER = "maras_antep_kilis"
+HEADLESS = os.environ.get("HEADLESS", "").strip().lower() in {"1", "true", "yes"}
 
-def get_soup(url):
-    """Get BeautifulSoup object with session handling"""
+SLEEP_MIN = 2.5
+SLEEP_MAX = 4.5
+
+BROWSER_MAJOR_VERSION = 145
+
+# Persistent profile so manual verification/cookies stick
+PROFILE_DIR_NAME = "SeleniumProfile_PERSISTENT"
+
+PAGING_SIZE = 50
+MAX_PAGES_PER_BRACKET = 120  # raise a bit; antep can be big
+
+# Default brackets
+PRICE_BRACKETS_DEFAULT: List[Tuple[int, int]] = [
+    (0, 7999),
+    (8000, 9999),
+    (10000, 11999),
+    (12000, 13999),
+    (14000, 15999),
+    (16000, 17999),
+    (18000, 19999),
+    (20000, 22999),
+    (23000, 26999),
+    (27000, 9999999),
+]
+
+# More granular brackets for antep (bigger market)
+PRICE_BRACKETS_antep: List[Tuple[int, int]] = [
+    (0, 9999),
+    (10000, 12999),
+    (13000, 14999),
+    (15000, 16999),
+    (17000, 18999),
+    (19000, 20999),
+    (21000, 22999),
+    (23000, 24999),
+    (25000, 27999),
+    (28000, 31999),
+    (32000, 37999),
+    (38000, 44999),
+    (45000, 54999),
+    (55000, 9999999),
+]
+
+
+# =========================
+# Paths
+# =========================
+
+def repo_root() -> str:
+    return os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../"))
+
+
+def data_dir_for_city(city: str) -> str:
+    return os.path.join(repo_root(), "Datas", "HousesRent", DATA_GROUP_FOLDER, city)
+
+
+# =========================
+# Brave path
+# =========================
+
+def find_brave_exe() -> str:
+    env_brave = os.environ.get("BRAVE_PATH", "").strip()
+    if env_brave and os.path.isfile(env_brave):
+        return env_brave
+
+    candidates = [
+        r"C:\Program Files\BraveSoftware\Brave-Browser\Application\brave.exe",
+        r"C:\Program Files (x86)\BraveSoftware\Brave-Browser\Application\brave.exe",
+        os.path.expandvars(r"%LOCALAPPDATA%\BraveSoftware\Brave-Browser\Application\brave.exe"),
+    ]
+    for p in candidates:
+        if p and os.path.isfile(p):
+            return p
+
+    raise FileNotFoundError("Brave executable not found. Set BRAVE_PATH to your brave.exe full path.")
+
+
+# =========================
+# Driver
+# =========================
+
+def setup_driver() -> uc.Chrome:
+    brave_exe = find_brave_exe()
+
+    options = uc.ChromeOptions()
+    profile_path = os.path.join(os.path.dirname(__file__), PROFILE_DIR_NAME)
+    options.add_argument(f"--user-data-dir={profile_path}")
+
+    options.add_argument("--no-sandbox")
+    options.add_argument("--disable-dev-shm-usage")
+    options.add_argument("--disable-gpu")
+    options.add_argument("--window-size=1400,900")
+
+    # Slightly more "human"
+    options.add_argument("--lang=tr-TR")
+    options.add_argument("--disable-blink-features=AutomationControlled")
+
+    if HEADLESS:
+        options.add_argument("--headless=new")
+
+    return uc.Chrome(
+        options=options,
+        browser_executable_path=brave_exe,
+        version_main=BROWSER_MAJOR_VERSION,
+    )
+
+
+def close_driver(driver: Optional[uc.Chrome]) -> None:
+    if driver is None:
+        return
     try:
-        session = requests.Session()
-        
-        # First visit homepage
-        print(f"    Visiting homepage...")
-        session.get('https://www.sahibinden.com', headers=get_headers(), timeout=30)
-        time.sleep(2)
-        
-        # Then fetch the page
-        print(f"    Fetching: {url}")
-        headers = get_headers()
-        response = session.get(url, headers=headers, timeout=30)
-        print(f"    Status code: {response.status_code}")
-        
-        if response.status_code == 200:
-            return BeautifulSoup(response.content, 'html.parser')
-        else:
-            print(f"    Error: HTTP {response.status_code}")
-            return None
-    except Exception as e:
-        print(f"    Error: {e}")
-        return None
+        driver.quit()
+    except Exception:
+        pass
 
-def extract_price(price_text):
-    if not price_text:
-        return None
-    price = re.sub(r'[^0-9]', '', price_text)
-    return int(price) if price else None
 
-def scrape_city(city_key, city_info):
-    """Scrape rental listings for a specific city"""
-    print(f"\n📁 Scraping {city_info['name']}...")
-    
-    all_listings = []
-    base_url = city_info['url']
-    
-    for page in range(1, MAX_PAGES + 1):
-        if page == 1:
-            url = base_url
-        else:
-            url = f"{base_url}?pagingOffset={(page-1)*20}"
-        
-        print(f"  Page {page}...")
-        
-        soup = get_soup(url)
-        if not soup:
-            print(f"  Failed to get page {page}")
-            continue
-        
-        # Find listings
-        listings = soup.find_all('tr', {'class': 'searchResultsItem'})
-        print(f"    Found {len(listings)} listings")
-        
-        if not listings:
-            print(f"  No listings found on page {page}")
-            break
-        
-        for item in listings:
-            try:
-                # Title
-                title_elem = item.find('a', {'class': 'classifiedTitle'})
-                if not title_elem:
-                    continue
-                
-                title = title_elem.text.strip()
-                link = 'https://www.sahibinden.com' + title_elem.get('href', '')
-                
-                # Price
-                price_elem = item.find('div', {'class': 'searchResultsPriceValue'})
-                price_text = price_elem.text.strip() if price_elem else None
-                price = extract_price(price_text)
-                
-                # District
-                location_elem = item.find('td', {'class': 'searchResultsLocationValue'})
-                district = location_elem.text.strip() if location_elem else None
-                
-                # Rooms
-                room_elem = item.find('span', {'class': 'searchResultsAttributeValue'})
-                rooms = None
-                if room_elem:
-                    room_match = re.search(r'(\d+)\+', room_elem.text.strip())
-                    rooms = int(room_match.group(1)) if room_match else None
-                
-                today_date = datetime.now().strftime('%Y-%m-%d')
-                
-                listing = {
-                    'city': city_info['name'],
-                    'title': title,
-                    'price_tl': price,
-                    'district': district,
-                    'rooms': rooms,
-                    'url': link,
-                    'scrape_date': today_date,
-                }
-                
-                all_listings.append(listing)
-                
-            except Exception as e:
-                print(f"    Error: {e}")
-                continue
-        
-        time.sleep(REQUEST_DELAY)
-    
-    print(f"  ✅ Found {len(all_listings)} listings")
-    return all_listings
+def polite_sleep() -> None:
+    time.sleep(random.uniform(SLEEP_MIN, SLEEP_MAX))
 
-def save_city_data(city_key, city_info, listings):
-    """Save data with date in filename"""
-    if not listings:
+
+# =========================
+# Block detection (table-based)
+# =========================
+
+def is_block_page(html: str) -> bool:
+    soup = BeautifulSoup(html, "html.parser")
+
+    # If listings table exists, not blocked
+    if soup.select_one("#searchResultsTable"):
         return False
-    
-    df = pd.DataFrame(listings)
-    city_info['folder'].mkdir(parents=True, exist_ok=True)
-    
-    today_date = datetime.now().strftime('%Y-%m-%d')
-    filename = city_info['folder'] / f"{city_key}_{today_date}.csv"
-    
-    df.to_csv(filename, index=False, encoding='utf-8-sig')
-    print(f"  💾 Saved: {filename}")
-    return True
 
-def main():
-    print("="*60)
-    print("SAHIBINDEN HOUSE RENTAL SCRAPER")
-    print(f"Date: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
-    print("="*60)
-    
-    total = 0
-    
-    for city_key, city_info in CITIES.items():
-        listings = scrape_city(city_key, city_info)
-        if listings:
-            save_city_data(city_key, city_info, listings)
-            total += len(listings)
-    
-    print(f"\n{'='*60}")
-    print(f"TOTAL: {total} listings today")
-    print("="*60)
+    lower = html.lower()
+    signals = [
+        "just a moment",
+        "bir dakika lütfen",
+        "lütfen bekleyiniz",
+        "cf-challenge",
+        "challenge-error-text",
+        "access denied",
+        "forbidden",
+        "güvenlik doğrulama",
+        "robot olmadığınızı",
+        "captcha",
+        "üye girişi",
+        "giriş yap",
+    ]
+    return any(s in lower for s in signals)
+
+
+def ensure_access(driver: uc.Chrome, url: str) -> None:
+    driver.get(url)
+    polite_sleep()
+
+    if is_block_page(driver.page_source):
+        print("\n[BLOCK DETECTED]")
+        print("Solve the verification in the opened browser window.")
+        input("When the real listings page is visible, press ENTER here to continue...")
+        driver.get(url)
+        polite_sleep()
+
+
+# =========================
+# Parsing
+# =========================
+
+def extract_listings_from_html(html: str) -> List[dict]:
+    soup = BeautifulSoup(html, "html.parser")
+
+    # Widen selector: some rows might not have 'searchResultsItem'
+    rows = soup.select("#searchResultsTable tbody tr")
+
+    out: List[dict] = []
+    for row in rows:
+        price_elem = row.select_one(".searchResultsPriceValue")
+        loc_elem = row.select_one(".searchResultsLocationValue")
+        attr_elems = row.select(".searchResultsAttributeValue")
+
+        price = price_elem.get_text(strip=True) if price_elem else ""
+        district = " / ".join(loc_elem.stripped_strings) if loc_elem else ""
+        rooms = attr_elems[1].get_text(strip=True) if len(attr_elems) > 1 else ""
+
+        if price and district:
+            out.append({"District": district, "Rooms": rooms, "Price": price})
+
+    return out
+
+
+def find_next_url(html: str) -> Optional[str]:
+    soup = BeautifulSoup(html, "html.parser")
+    next_a = soup.find("a", title="Sonraki")
+    if next_a and next_a.get("href"):
+        return "https://www.sahibinden.com" + next_a["href"]
+    return None
+
+
+# =========================
+# CSV
+# =========================
+
+def append_to_daily_csv(city: str, rows: List[dict]) -> str:
+    os.makedirs(data_dir_for_city(city), exist_ok=True)
+
+    today = datetime.now().strftime("%Y-%m-%d")
+    filename = f"{city.lower()}_{today}.csv"  # city prefix added
+    out_path = os.path.join(data_dir_for_city(city), filename)
+
+    file_exists = os.path.isfile(out_path)
+    with open(out_path, "a", newline="", encoding="utf-8-sig") as f:
+        w = csv.DictWriter(f, fieldnames=["District", "Rooms", "Price"])
+        if not file_exists:
+            w.writeheader()
+        w.writerows(rows)
+
+    return out_path
+
+
+# =========================
+# Bracket URL
+# =========================
+
+def build_bracket_url(base_url: str, min_p: int, max_p: int) -> str:
+    return f"{base_url}?pagingSize={PAGING_SIZE}&price_min={min_p}&price_max={max_p}"
+
+
+# =========================
+# Scraper
+# =========================
+
+def scrape_city(driver: uc.Chrome, city: str, base_url: str) -> Tuple[uc.Chrome, str]:
+    print(f"\n=== Scraping: {city} ===")
+    last_out_path = ""
+
+    brackets = PRICE_BRACKETS_antep if city == "antep" else PRICE_BRACKETS_DEFAULT
+
+    for (min_p, max_p) in brackets:
+        print(f"\n--- Bracket {min_p} - {max_p} ---")
+        url = build_bracket_url(base_url, min_p, max_p)
+
+        page_idx = 0
+        while True:
+            page_idx += 1
+            if page_idx > MAX_PAGES_PER_BRACKET:
+                print("Bracket page limit reached. Consider splitting brackets smaller.")
+                break
+
+            try:
+                ensure_access(driver, url)
+                html = driver.page_source
+
+                # If still blocked, pause/retry (no skipping!)
+                if is_block_page(html):
+                    print("Still blocked on this bracket page.")
+                    input("Solve it in browser, then press ENTER to retry this page...")
+                    continue
+
+                rows = extract_listings_from_html(html)
+                print(f"Page {page_idx}: {len(rows)} listings")
+
+                # Critical fix: do NOT skip zero-listing pages silently
+                if len(rows) == 0:
+                    print("Zero listings on page (possible soft-block). URL:", driver.current_url)
+                    input("Check browser. If it's blocked/empty, fix it, then press ENTER to retry...")
+                    continue
+
+                last_out_path = append_to_daily_csv(city, rows)
+                print(f"Appended {len(rows)} rows -> {last_out_path}")
+
+                next_url = find_next_url(html)
+                if not next_url:
+                    break
+
+                url = next_url
+                polite_sleep()
+
+            except WebDriverException as e:
+                msg = str(e).lower()
+                if "connection refused" in msg or "max retries exceeded" in msg or "disconnected" in msg:
+                    print("\n[DRIVER DIED] Recreating driver and continuing...")
+                    close_driver(driver)
+                    time.sleep(2.0)
+                    driver = setup_driver()
+                    continue
+                raise
+
+    return driver, last_out_path
+
+
+def main() -> None:
+    driver: Optional[uc.Chrome] = None
+    try:
+        driver = setup_driver()
+        for city, url in CITIES.items():
+            driver, out_path = scrape_city(driver, city, url)
+            if out_path:
+                print(f"\nDone: {city} -> {out_path}")
+            else:
+                print(f"\nDone: {city} (no output file written)")
+            time.sleep(2.0)
+    finally:
+        close_driver(driver)
+        # Keep profile for next day (so you don't verify again)
+        # If you want cleanup, uncomment:
+        # shutil.rmtree(os.path.join(os.path.dirname(__file__), PROFILE_DIR_NAME), ignore_errors=True)
+
 
 if __name__ == "__main__":
     main()
