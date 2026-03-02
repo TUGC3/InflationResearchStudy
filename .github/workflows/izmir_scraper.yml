@@ -1,15 +1,14 @@
 name: Izmir Rent Data Scraper
 
 on:
-  workflow_dispatch: # Allows you to trigger the workflow manually from the Actions tab
+  workflow_dispatch: # Actions sekmesinden manuel tetiklemeye izin verir
   schedule:
-    - cron: '0 0 * * 0' # (Optional) Runs automatically every Sunday at midnight
+    # Türkiye Saati (TSİ) ile tam 04:00'da çalışması için UTC 01:00 olarak ayarlandı
+    - cron: '0 1 * * *'
 
 jobs:
   scrape-and-save:
     runs-on: ubuntu-latest
-
-    # Grants write permissions so the bot can push the newly scraped data (CSV) to the repo
     permissions:
       contents: write
 
@@ -20,29 +19,36 @@ jobs:
       - name: Set up Python 3.12
         uses: actions/setup-python@v5
         with:
-          python-version: '3.12' # Matches the version in your error logs
+          python-version: '3.12'
+
+      - name: Install Chrome
+        uses: browser-actions/setup-chrome@v1
+        with:
+          chrome-version: 'stable'
 
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          # Specified the full path to the requirements.txt file
-          pip install -r Codes/HousesRent/Izmir/requirements.txt
+          pip install undetected-chromedriver beautifulsoup4 setuptools
+          
+          # Eğer klasöründe requirements.txt varsa onu da garantiye almak için kurar
+          if [ -f "Codes/HousesRent/Izmir/requirements.txt" ]; then pip install -r Codes/HousesRent/Izmir/requirements.txt; fi
 
       - name: Run Izmir Scraper
+        env:
+          HEADLESS: 'true' # Tarayıcının arka planda görünmez açılmasını sağlar (Çok önemli)
         run: |
-          # Specified the full path to the Python script
-          python Codes/HousesRent/Izmir/Izmir.py
+          # Önceki IDE ekran görüntüne göre doğru dosya yolu eklendi
+          python Codes/HousesRent/Izmir/scripts/main.py
 
       - name: Commit and Push Generated Data
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           
-          # Adding the new data to Git
-          # Assumes your script saves the file to the 'Datas/HousesRent/Izmir' folder
-          git add Datas/HousesRent/Izmir/izmir_rentals_full_dataset.csv
+          # Tüm yeni çekilen CSV dosyalarını ve Checkpoint (kalınan yer) klasörünü ekler
+          git add Codes/HousesRent/Izmir/*.csv || true
+          git add Codes/HousesRent/Izmir/scripts/checkpoints/*.json || true
           
-          # Adding a catch (|| echo) to prevent the workflow from failing if there is no new data to commit
           git commit -m "data: auto-update izmir rent dataset [skip ci]" || echo "No new data to commit"
-          
           git push
