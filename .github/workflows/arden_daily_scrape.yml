@@ -20,19 +20,24 @@ jobs:
       - name: Bağımlılıkları Yükle
         run: pip install selenium webdriver-manager
 
-      - name: Arden Market Scraper Çalıştır
-        # Bu komut klasör ismindeki büyük/küçük harf hatasını (Codes vs codes) bypass eder
+      - name: Dosyayi Bul ve Calistir
+        # 'find' komutuyla dosyanın yerini tespit edip o klasöre giriyoruz
         run: |
-          PYTHONPATH=$PYTHONPATH:$(pwd) python $(find . -name "arden_scraper.py")
+          FILE_PATH=$(find . -name "arden_scraper.py" -print -quit)
+          DIR_PATH=$(dirname "$FILE_PATH")
+          echo "Dosya burada bulundu: $FILE_PATH"
+          echo "Klasore giriliyor: $DIR_PATH"
+          cd "$DIR_PATH"
+          python arden_scraper.py
 
       - name: Verileri Kaydet ve Pushla
         run: |
           git config --global user.name "Scraper Bot"
           git config --global user.email "bot@github.com"
           
-          # Datas klasörünü zorla oluştur ve tüm CSV'leri ekle
-          mkdir -p Datas/Markets/Arden
-          git add Datas/Markets/Arden/*.csv || echo "Eklenecek dosya bulunamadı"
+          # Dosyaların nerede olduğunu tarayıp ekliyoruz
+          # Hangi klasöre çıkarsa çıksın 'Datas' klasörünü bulur
+          git add **/Datas/Markets/Arden/*.csv || git add Datas/Markets/Arden/*.csv || echo "Dosya yok"
           
-          git commit -m "Arden Veri Güncelleme: $(date +'%Y-%m-%d')" || echo "Değişiklik yok"
+          git commit -m "Arden Veri Güncelleme: $(date +'%Y-%m-%d')" || echo "Degisiklik yok"
           git push
