@@ -20,6 +20,15 @@ jobs:
       - name: Bağımlılıkları Yükle
         run: pip install selenium webdriver-manager
 
+      - name: Dizin Yapısını Kontrol Et
+        run: |
+          echo "=== MEVCUT DİZİN ==="
+          pwd
+          echo "=== TÜM DOSYALAR ==="
+          find . -name "*.py" | head -20
+          echo "=== Codes klasörü ==="
+          ls -la Codes/ || echo "Codes klasörü yok"
+
       - name: Scripti Calistir
         run: python Codes/Markets/Arden/arden_scraper.py
 
