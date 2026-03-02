@@ -31,14 +31,14 @@ def make_driver():
     opts.add_argument("--headless=new")
     opts.add_argument("--no-sandbox")
     opts.add_argument("--disable-dev-shm-usage")
-    opts.add_argument("--window-size=1920,1080")
+    opts.add_argument("--disable-gpu") # Ekstra stabilite için
     opts.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36")
     
-    service = Service(ChromeDriverManager().install())
-    return webdriver.Chrome(service=service, options=opts)
+    # Sürücü kurulumunu arkadaşınınkiyle birebir aynı ve daha sade hale getirdik
+    return webdriver.Chrome(options=opts)
 
 def main():
-    # DOSYA YOLU AYARI (Büyük M ile)
+
     bugunun_tarihi = datetime.now().strftime("%Y-%m-%d")
     target_dir = "Datas/Markets/Kale"
     os.makedirs(target_dir, exist_ok=True)
