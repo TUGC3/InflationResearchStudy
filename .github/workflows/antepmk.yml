@@ -1,35 +1,71 @@
-name: Daily House Rent Scraper (Antep, Maras, Kilis)
+name: Antep-Maras-Kilis House Rent Scraper
 
 on:
   schedule:
-    - cron: '0 3 * * *'
-  workflow_dispatch:
+    # Run daily at 2:30 AM UTC
+    - cron: '30 2 * * *'
+  workflow_dispatch:  # Allow manual trigger
 
 jobs:
   scrape:
     runs-on: ubuntu-latest
+    
     steps:
-      - uses: actions/checkout@v3
-        with:
-          token: ${{ secrets.GH_TOKEN }}
+    - name: Checkout repository
+      uses: actions/checkout@v3
       
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.10'
-          
-      - name: Install dependencies
-        run: |
-          pip install -r Codes/HousesRent/Antep_Maras_Kilis/requirements.txt
-          
-      - name: Run scraper
-        run: |
-          python Codes/HousesRent/Antep_Maras_Kilis/antep_maras_kilis.py
-          
-      - name: Commit and push
-        run: |
-          git config --global user.name "github-actions"
-          git config --global user.email "github-actions@github.com"
-          git add Datas/HousesRent/
-          git diff --quiet && git diff --staged --quiet || git commit -m "Daily house data: $(date +'%Y-%m-%d')"
-          git push
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+        
+    - name: Install system dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y \
+          wget \
+          unzip \
+          xvfb \
+          libxi6 \
+          libgconf-2-4 \
+          libxss1 \
+          libnss3 \
+          libx11-xcb1 \
+          libxcb-dri3-0 \
+          libdrm2 \
+          libgbm1 \
+          libasound2
+        
+    - name: Install Chrome
+      run: |
+        wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
+        sudo sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list'
+        sudo apt-get update
+        sudo apt-get install -y google-chrome-stable
+        
+    - name: Install Python dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install undetected-chromedriver beautifulsoup4 selenium
+        
+    - name: Create data directories
+      run: |
+        mkdir -p Datas/HousesRent/Maras
+        mkdir -p Datas/HousesRent/Antep
+        mkdir -p Datas/HousesRent/Kilis
+        
+    - name: Run scraper
+      env:
+        HEADLESS: "true"
+        BRAVE_PATH: "/usr/bin/google-chrome"
+      run: |
+        cd HousesRent/Antep_Maras_Kilis
+        python antep_maras_kilis.py
+        
+    - name: Commit and push results
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add Datas/HousesRent/Maras/*.csv Datas/HousesRent/Antep/*.csv Datas/HousesRent/Kilis/*.csv
+        git diff --quiet && git diff --staged --quiet || git commit -m "Update house rental data for Antep/Maras/Kilis - $(date +'%Y-%m-%d')"
+        git push
