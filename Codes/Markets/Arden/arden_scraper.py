@@ -191,13 +191,16 @@ try:
     #KAYIT VE DOSYALAMA BÖLÜMÜ (GÜNCELLENDİ)
     
     # os.getcwd() ana dizini verir. Veriler ana dizindeki 'data' klasörüne gider.
-    data_klasoru = os.path.join(os.getcwd(), 'data')
+    # --- ÖZEL VERİ YOLU KAYDI ---
     
-    if not os.path.exists(data_klasoru):
-        os.makedirs(data_klasoru)
+    # Projenin ana dizininden itibaren Datas/Markets/Arden yolunu oluşturur
+    hedef_klasor = os.path.join(os.getcwd(), 'Datas', 'Markets', 'Arden')
+    
+    if not os.path.exists(hedef_klasor):
+        os.makedirs(hedef_klasor)
 
     tarih_str = datetime.now().strftime("%Y-%m-%d")
-    dosya_adi = os.path.join(data_klasoru, f"arden_urunler_{tarih_str}.csv")
+    dosya_adi = os.path.join(hedef_klasor, f"arden_urunler_{tarih_str}.csv")
 
     with open(dosya_adi, "w", newline="", encoding="utf-8-sig") as f:
         fieldnames = ["kategori", "isim", "fiyat", "link", "resim"]
