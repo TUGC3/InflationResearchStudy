@@ -111,7 +111,7 @@ def scrape_entire_market():
 
             print(f"  Scraped {items_scraped_this_page} items.")
             page_num += 1
-            time.sleep(2)
+            time.sleep(1)
 
     # --- Save the Final Data ---
     if all_products_data:
