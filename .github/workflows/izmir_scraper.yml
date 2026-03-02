@@ -1,0 +1,55 @@
+name: Auto Scrape Sahibinden Izmir Rentals
+
+# Define when this workflow should run
+on:
+  schedule:
+    # Runs automatically every Monday at 03:00 AM (UTC)
+    - cron: '0 3 * * 1'
+  # Allows you to run this workflow manually from the GitHub Actions tab
+  workflow_dispatch:
+
+# Grant write permissions to allow the bot to commit and push the CSV file
+permissions:
+  contents: write
+
+jobs:
+  scrape-data:
+    # Use the latest Ubuntu environment provided by GitHub
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+
+    - name: Set up Python Environment
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.12'
+
+    - name: Install Stable Google Chrome
+      uses: browser-actions/setup-chrome@v1
+      with:
+        chrome-version: stable
+
+    - name: Install Python Dependencies
+      run: |
+        python -m pip install --upgrade pip
+        # Install packages from the requirements file
+        pip install -r requirements.txt
+
+    - name: Execute Scraper Script
+      run: |
+        # Run the Python script from the repository root
+        python Codes/HousesRent/Izmir/Izmir.py
+
+    - name: Commit and Push the Extracted Data
+      run: |
+        # Configure Git bot identity
+        git config --global user.name "github-actions[bot]"
+        git config --global user.email "github-actions[bot]@users.noreply.github.com"
+        
+        # Stage the specific CSV file
+        git add Datas/HousesRent/Izmir/izmir_rentals_full_dataset.csv
+        
+        # Check if there are changes, commit, and push. If no changes, do nothing.
+        git diff --quiet && git diff --staged --quiet || (git commit -m "Auto-update: Izmir rental dataset via GitHub Actions" && git push)
