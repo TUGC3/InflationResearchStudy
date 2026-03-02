@@ -187,9 +187,12 @@ def scrape_city(driver, city_url_name, folder_name, brackets):
         
         bracket_data = []
         page_num = 1
+        login_retries = 0  # Track consecutive login failures for this bracket
+        MAX_LOGIN_RETRIES = 5  # Skip bracket after this many consecutive login walls
         
-        url = f"https://www.sahibinden.com/kiralik/{city_url_name}?pagingSize=50&price_min={min_price}&price_max={max_price}"
-        driver.get(url)
+        base_url = f"https://www.sahibinden.com/kiralik/{city_url_name}?pagingSize=50&price_min={min_price}&price_max={max_price}"
+        current_url = base_url  # Track current page URL for restart recovery
+        driver.get(current_url)
 
         while True:
             time.sleep(random.uniform(2.5, 4.5))
@@ -198,7 +201,7 @@ def scrape_city(driver, city_url_name, folder_name, brackets):
             
             # --- STAGE 1: Handle Cloudflare waiting page (resolves itself) ---
             if is_waiting_page(page_source):
-                resolved = wait_for_challenge(driver, url)
+                resolved = wait_for_challenge(driver, current_url)
                 if resolved:
                     page_source = driver.page_source
                 else:
@@ -207,32 +210,44 @@ def scrape_city(driver, city_url_name, folder_name, brackets):
                     close_driver(driver)
                     time.sleep(random.uniform(5, 10))
                     driver = setup_driver()
-                    driver.get(url)
+                    driver.get(current_url)
                     time.sleep(random.uniform(4, 7))
                     page_source = driver.page_source
                     if is_waiting_page(page_source):
-                        wait_for_challenge(driver, url)
+                        wait_for_challenge(driver, current_url)
                         page_source = driver.page_source
             
             # --- STAGE 2: Handle actual login/captcha walls ---
             if is_login_page(page_source):
-                print("🔄 Login/CAPTCHA page detected! Restarting Chrome...")
+                login_retries += 1
+                print(f"🔄 Login/CAPTCHA page detected! (attempt {login_retries}/{MAX_LOGIN_RETRIES}) Restarting Chrome...")
+                
+                # If too many consecutive login walls, skip this bracket entirely
+                if login_retries >= MAX_LOGIN_RETRIES:
+                    print(f"❌ Hit {MAX_LOGIN_RETRIES} consecutive login walls. Skipping bracket {min_price}-{max_price} TL.")
+                    close_driver(driver)
+                    time.sleep(random.uniform(10, 20))  # Longer cooldown before next bracket
+                    driver = setup_driver()
+                    break
+                
                 close_driver(driver)
                 time.sleep(random.uniform(5, 10))
                 driver = setup_driver()
-                driver.get(url)
+                driver.get(current_url)  # Resume from the SAME page, not page 1
                 time.sleep(random.uniform(4, 7))
                 page_source = driver.page_source
                 
                 # Wait out any challenge on the new instance
                 if is_waiting_page(page_source):
-                    wait_for_challenge(driver, url)
+                    wait_for_challenge(driver, current_url)
                     page_source = driver.page_source
                 
-                # If still blocked after restart, skip this bracket
+                # If still blocked after restart, retry (loop back to the top)
                 if is_login_page(page_source):
-                    print("❌ Still blocked after Chrome restart. Skipping this bracket.")
-                    break
+                    continue
+            
+            # If we got past login check, reset the retry counter
+            login_retries = 0
             
             soup = BeautifulSoup(page_source, 'html.parser')
             listings = soup.select("#searchResultsTable tbody tr.searchResultsItem")
@@ -276,6 +291,7 @@ def scrape_city(driver, city_url_name, folder_name, brackets):
             next_button = soup.find('a', title='Sonraki')
             if next_button and 'href' in next_button.attrs:
                 next_url = "https://www.sahibinden.com" + next_button['href']
+                current_url = next_url  # Update current URL for restart recovery
                 driver.get(next_url)
                 page_num += 1
                 time.sleep(random.uniform(2, 4))
