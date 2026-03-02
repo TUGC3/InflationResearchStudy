@@ -1,12 +1,12 @@
 import csv
 import os
 import time
-import re
 from datetime import datetime
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
-
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
 KATEGORILER = [
     ("Meyve, Sebze", "https://www.kalemarketleri.com/meyve-sebze"),
@@ -29,68 +29,75 @@ def make_driver():
     opts.add_argument("--no-sandbox")
     opts.add_argument("--disable-dev-shm-usage")
     opts.add_argument("--window-size=1920,1080")
-    opts.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36")
+
+    opts.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36")
+    opts.add_experimental_option("excludeSwitches", ["enable-automation"])
+    opts.add_experimental_option('useAutomationExtension', False)
     return webdriver.Chrome(options=opts)
 
 def main():
-
     bugunun_tarihi = datetime.now().strftime("%Y-%m-%d")
     target_dir = "Datas/Markets/Kale"
     os.makedirs(target_dir, exist_ok=True)
     csv_dosyasi = os.path.join(target_dir, f"kalemarketleri_{bugunun_tarihi}.csv")
 
     driver = make_driver()
-    driver.set_page_load_timeout(60)
+
+    driver.execute_script("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})")
+    
     tum_urunler = []
 
     try:
         for kategori_adi, url in KATEGORILER:
             print(f"🔍 {kategori_adi} taranıyor...")
+            driver.get(url)
+            
+
             try:
-                driver.get(url)
-                time.sleep(5)
+                WebDriverWait(driver, 15).until(
+                    EC.presence_of_element_located((By.CLASS_NAME, "product-item"))
+                )
+            except:
+                print(f"⚠️ {kategori_adi} sayfasında ürünler zamanında yüklenmedi.")
 
-                driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-                time.sleep(3)
+            # Daha fazla ürün için aşağı kaydır
+            driver.execute_script("window.scrollTo(0, document.body.scrollHeight/2);")
+            time.sleep(2)
+            driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+            time.sleep(3)
 
+            urun_kartlari = driver.find_elements(By.CSS_SELECTOR, ".product-item, .product-card, [class*='product-item']")
+            
+            for kart in urun_kartlari:
+                try:
 
-                urun_kartlari = driver.find_elements(By.CSS_SELECTOR, "div.product-item")
-                
-                cekilen_kategori_sayisi = 0
-                for kart in urun_kartlari:
-                    try:
-
-                        isim = kart.find_element(By.CSS_SELECTOR, "div.product-title").text.strip()
-                        fiyat_text = kart.find_element(By.CSS_SELECTOR, "div.product-price").text.strip()
+                    isim_elemanlari = kart.find_elements(By.CSS_SELECTOR, ".product-title, .name, h3")
+                    fiyat_elemanlari = kart.find_elements(By.CSS_SELECTOR, ".product-price, .price, .current-price")
+                    
+                    if isim_elemanlari and fiyat_elemanlari:
+                        isim = isim_elemanlari[0].text.strip()
+                        fiyat = fiyat_elemanlari[0].text.strip().replace("TL", "").replace("₺", "").strip()
                         
-                        fiyat = fiyat_text.replace("TL", "").replace("₺", "").strip()
-
-                        if isim:
+                        if isim and fiyat:
                             tum_urunler.append({
                                 "kategori": kategori_adi,
                                 "product_name": isim,
                                 "product_price": fiyat
                             })
-                            cekilen_kategori_sayisi += 1
-                    except:
-                        continue
-                print(f"✅ {kategori_adi} bitti. Çekilen: {cekilen_kategori_sayisi}")
-            except Exception as e:
-                print(f"⚠️ {kategori_adi} taranırken hata oluştu: {e}")
-                continue
+                except:
+                    continue
+            print(f"✅ {kategori_adi} bitti. Şu ana kadar toplam: {len(tum_urunler)}")
 
     finally:
         driver.quit()
 
-    if tum_urunler:
-        with open(csv_dosyasi, "w", newline="", encoding="utf-8-sig") as f:
-            fieldnames = ["kategori", "product_name", "product_price"]
-            writer = csv.DictWriter(f, fieldnames=fieldnames)
-            writer.writeheader()
-            writer.writerows(tum_urunler)
-        print(f"\n🎉 İşlem tamam! {len(tum_urunler)} ürün '{csv_dosyasi}' dosyasına kaydedildi.")
-    else:
-        print("\n❌ Hiç ürün çekilemedi, dosya oluşturulmadı.")
+    # Verileri CSV'ye yaz
+    with open(csv_dosyasi, "w", newline="", encoding="utf-8-sig") as f:
+        writer = csv.DictWriter(f, fieldnames=["kategori", "product_name", "product_price"])
+        writer.writeheader()
+        writer.writerows(tum_urunler)
+
+    print(f"\n🎉 Tamamlandı! Toplam {len(tum_urunler)} ürün kaydedildi.")
 
 if __name__ == "__main__":
     main()
