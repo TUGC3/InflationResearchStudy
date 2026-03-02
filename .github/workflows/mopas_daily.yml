@@ -29,7 +29,7 @@ jobs:
 
     # 4. Runs your script from the root folder pointing to the new Codes location
     - name: Run Python script
-      run: python Codes/Markets/mopas_scraper.py
+      run: python Codes/Markets/Mopas/mopas_scraper.py
 
     # 5. Uploads the CSV file as a downloadable zip
     - name: Upload CSV as Artifact
