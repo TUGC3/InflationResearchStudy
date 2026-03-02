@@ -53,7 +53,7 @@ jobs:
         Xvfb :99 -screen 0 1920x1080x24 &
         export DISPLAY=:99
         
-        cd HousesRent/Antep_Maras_Kilis
+        cd Codes/HousesRent/Antep_Maras_Kilis
         python antep_maras_kilis.py
         
     - name: Commit and push results
