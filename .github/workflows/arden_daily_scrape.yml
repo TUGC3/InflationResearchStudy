@@ -1,9 +1,10 @@
 name: Daily Arden Scraper
 
+
 on:
   schedule:
-    - cron: '0 3 * * *' # Her gün TR saatiyle 06:00 (UTC 03:00)
-  workflow_dispatch: # Manuel çalıştırma butonu (Test için)
+    - cron: '0 3 * * *' # Her gün TR saatiyle 06:00
+  workflow_dispatch:
 
 jobs:
   scrape:
@@ -22,7 +23,6 @@ jobs:
           pip install selenium webdriver-manager
 
       - name: Arden Market Scraper Çalıştır
-        # Tam klasör yolunu veriyoruz
         run: python Codes/Markets/Arden/arden_scraper.py
 
       - name: Verileri Kaydet ve Pushla
@@ -30,9 +30,8 @@ jobs:
           git config --global user.name "Scraper Bot"
           git config --global user.email "bot@github.com"
           
-          # Script içindeki 'data' klasörüne kaydedilen CSV'leri ekler
-          # (Eğer data klasörü ana dizindeyse git add data/*.csv yeterli)
-          git add data/*.csv || git add Codes/Markets/Arden/data/*.csv
+          # Sadece yeni oluşturduğumuz Datas klasöründeki CSV'leri ekler
+          git add Datas/Markets/Arden/*.csv
           
-          git commit -m "Arden Veri Güncelleme: $(date +'%Y-%m-%d')" || echo "Değişiklik yok"
+          git commit -m "Arden Veri Güncelleme: $(date +'%Y-%m-%d')" || echo "Yeni veri yok"
           git push
