@@ -1,14 +1,11 @@
 import csv
-import re
-import time
 import os
+import time
+import re
 from datetime import datetime
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.chrome.service import Service
-from webdriver_manager.chrome import ChromeDriverManager
-
 
 
 KATEGORILER = [
@@ -31,10 +28,8 @@ def make_driver():
     opts.add_argument("--headless=new")
     opts.add_argument("--no-sandbox")
     opts.add_argument("--disable-dev-shm-usage")
-    opts.add_argument("--disable-gpu") # Ekstra stabilite için
+    opts.add_argument("--window-size=1920,1080")
     opts.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36")
-    
-    # Sürücü kurulumunu arkadaşınınkiyle birebir aynı ve daha sade hale getirdik
     return webdriver.Chrome(options=opts)
 
 def main():
@@ -51,41 +46,51 @@ def main():
     try:
         for kategori_adi, url in KATEGORILER:
             print(f"🔍 {kategori_adi} taranıyor...")
-            driver.get(url)
-            time.sleep(5)
+            try:
+                driver.get(url)
+                time.sleep(5)
 
-            # Sayfayı sona kadar kaydır (Daha fazla ürün yüklemesi için)
-            driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-            time.sleep(3)
+                driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+                time.sleep(3)
 
-            urun_kartlari = driver.find_elements(By.CSS_SELECTOR, "div.product-item")
-            
-            for kart in urun_kartlari:
-                try:
-                    isim = kart.find_element(By.CSS_SELECTOR, "div.product-title").text.strip()
-                    fiyat_text = kart.find_element(By.CSS_SELECTOR, "div.product-price").text.strip()
-                    
-                    fiyat = fiyat_text.replace("TL", "").replace("₺", "").strip()
 
-                    tum_urunler.append({
-                        "kategori": kategori_adi,
-                        "product_name": isim,
-                        "product_price": fiyat
-                    })
-                except:
-                    continue
-            print(f"✅ {kategori_adi} bitti. Şu ana kadar toplam: {len(tum_urunler)}")
+                urun_kartlari = driver.find_elements(By.CSS_SELECTOR, "div.product-item")
+                
+                cekilen_kategori_sayisi = 0
+                for kart in urun_kartlari:
+                    try:
+
+                        isim = kart.find_element(By.CSS_SELECTOR, "div.product-title").text.strip()
+                        fiyat_text = kart.find_element(By.CSS_SELECTOR, "div.product-price").text.strip()
+                        
+                        fiyat = fiyat_text.replace("TL", "").replace("₺", "").strip()
+
+                        if isim:
+                            tum_urunler.append({
+                                "kategori": kategori_adi,
+                                "product_name": isim,
+                                "product_price": fiyat
+                            })
+                            cekilen_kategori_sayisi += 1
+                    except:
+                        continue
+                print(f"✅ {kategori_adi} bitti. Çekilen: {cekilen_kategori_sayisi}")
+            except Exception as e:
+                print(f"⚠️ {kategori_adi} taranırken hata oluştu: {e}")
+                continue
 
     finally:
         driver.quit()
 
-    # CSV'ye yazma
-    with open(csv_dosyasi, "w", newline="", encoding="utf-8-sig") as f:
-        writer = csv.DictWriter(f, fieldnames=["kategori", "product_name", "product_price"])
-        writer.writeheader()
-        writer.writerows(tum_urunler)
-
-    print(f"\n🎉 Bitti! {len(tum_urunler)} ürün kaydedildi: {csv_dosyasi}")
+    if tum_urunler:
+        with open(csv_dosyasi, "w", newline="", encoding="utf-8-sig") as f:
+            fieldnames = ["kategori", "product_name", "product_price"]
+            writer = csv.DictWriter(f, fieldnames=fieldnames)
+            writer.writeheader()
+            writer.writerows(tum_urunler)
+        print(f"\n🎉 İşlem tamam! {len(tum_urunler)} ürün '{csv_dosyasi}' dosyasına kaydedildi.")
+    else:
+        print("\n❌ Hiç ürün çekilemedi, dosya oluşturulmadı.")
 
 if __name__ == "__main__":
     main()
