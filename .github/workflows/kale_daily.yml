@@ -1,0 +1,34 @@
+name: Kale Market Daily Scrape
+
+on:
+  schedule:
+    # Her gece Türkiye saatiyle 04:30'da çalışır (UTC 01:30)
+    - cron: '30 1 * * *'
+  workflow_dispatch: 
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install Dependencies
+        run: |
+          pip install selenium webdriver-manager
+
+      - name: Run Kale Scraper
+
+        run: python Codes/Markets/Kale/kale_scraper.py
+
+      - name: Commit and Push Data
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add Datas/markets/kale/
+          git commit -m "Auto-update Kale data: $(date +'%Y-%m-%d')" || echo "No changes"
+          git push
