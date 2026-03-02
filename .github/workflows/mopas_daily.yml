@@ -31,18 +31,18 @@ jobs:
     - name: Run Python script
       run: python Codes/Markets/mopas_scraper.py
 
-    # 5. Uploads the CSV file as a downloadable zip from the new Datas location
+    # 5. Uploads the CSV file as a downloadable zip
     - name: Upload CSV as Artifact
       uses: actions/upload-artifact@v4
       with:
         name: mopas-daily-data
-        path: Datas/Markets/*.csv
+        path: Datas/Markets/mopas/*.csv
 
     # 6. Saves the newly generated CSV file back to the repository
     - name: Commit and push changes
       run: |
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action Bot"
-        git add Datas/Markets/*
+        git add Datas/Markets/mopas/*
         git commit -m "Auto-update daily prices CSV for Mopaş" || exit 0
         git push
