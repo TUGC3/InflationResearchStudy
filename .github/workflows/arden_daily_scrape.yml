@@ -1,0 +1,44 @@
+name: Günlük Veri Kazıma ve Klasöre Kaydetme
+
+on:
+  schedule:
+    - cron: '0 3 * * *' # Her gün Türkiye saatiyle sabah 06:00 (UTC 03:00)
+  workflow_dispatch: # Manuel çalıştırma butonu (test için)
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Repoyu Klonla
+        uses: actions/checkout@v3
+
+      - name: Python Kur
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Bağımlılıkları Yükle
+        run: |
+          pip install selenium webdriver-manager
+
+      - name: Veri Klasörünü Hazırla
+        run: mkdir -p data # Eğer klasör yoksa oluşturur
+
+      - name: Arden Market Scraper Çalıştır
+        run: python arden_scraper.py
+
+      - name: Sahibinden Scraper Çalıştır
+        run: python sahibinden_scraper.py
+
+      - name: Sadece Verileri GitHub'a Yükle
+        run: |
+          git config --global user.name "Scraper Bot"
+          git config --global user.email "bot@github.com"
+          
+          # Sadece data klasörü altındaki CSV dosyalarını takibe alır
+          git add data/*.csv
+          
+          # Değişiklik varsa commit atar, yoksa hata vermeden geçer
+          git commit -m "Veri Güncelleme: $(date +'%Y-%m-%d')" || echo "Yeni veri bulunamadı."
+          
+          git push
