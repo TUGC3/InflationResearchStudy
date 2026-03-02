@@ -9,7 +9,55 @@ from typing import Dict, List, Optional, Tuple
 import undetected_chromedriver as uc
 from bs4 import BeautifulSoup
 from selenium.common.exceptions import WebDriverException
+# Add this near the top of your file after imports
+import platform
 
+def is_github_actions():
+    """Check if running in GitHub Actions"""
+    return os.getenv("GITHUB_ACTIONS") == "true"
+
+def setup_driver() -> uc.Chrome:
+    """Setup undetected Chrome driver"""
+    browser_exe = find_brave_exe()
+    
+    options = uc.ChromeOptions()
+    
+    if is_github_actions():
+        # GitHub Actions specific settings
+        profile_path = "/tmp/chrome-profile"
+        options.add_argument("--headless=new")
+        options.add_argument("--no-sandbox")
+        options.add_argument("--disable-dev-shm-usage")
+        options.add_argument("--disable-gpu")
+        options.add_argument("--disable-setuid-sandbox")
+        options.add_argument("--remote-debugging-port=9222")
+        options.add_argument("--single-process")  # Important for Docker/CI
+        options.add_argument("--disable-accelerated-2d-canvas")
+        options.add_argument("--disable-features=VizDisplayCompositor")
+    else:
+        profile_path = os.path.join(os.path.dirname(__file__), PROFILE_DIR_NAME)
+        if HEADLESS:
+            options.add_argument("--headless=new")
+    
+    options.add_argument(f"--user-data-dir={profile_path}")
+    options.add_argument("--window-size=1400,900")
+    options.add_argument("--lang=tr-TR")
+    options.add_argument("--disable-blink-features=AutomationControlled")
+    
+    # Additional arguments to appear more human
+    options.add_argument("--disable-web-security")
+    options.add_argument("--allow-running-insecure-content")
+    
+    # Set user agent
+    options.add_argument("--user-agent=Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36")
+    
+    return uc.Chrome(
+        options=options,
+        browser_executable_path=browser_exe,
+        version_main=120,  # Match Chrome version
+        driver_executable_path=None,
+        headless=is_github_actions() or HEADLESS
+    )
 # City configuration
 CITIES: Dict[str, str] = {
     "maras": "https://www.sahibinden.com/kiralik/kahramanmaras",
