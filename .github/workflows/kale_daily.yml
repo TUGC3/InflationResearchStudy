@@ -37,4 +37,4 @@ jobs:
           git config --global user.email "action@github.com"          
           git add Datas/Markets/Kale/*.csv
           git commit -m "Auto-update: Kale product data for $(date +'%Y-%m-%d')" || exit 0
-          git push origin HEAD:${{ github.ref_name }}
+          git push origin HEAD:${{ github.ref_name }} --force
