@@ -2,11 +2,11 @@ name: Daily Arden Scraper
 
 on:
   schedule:
-    - cron: '0 3 * * *' # Her gün Türkiye saatiyle sabah 06:00 (UTC 03:00)
-  workflow_dispatch: # Manuel çalıştırma butonu (test için)
+    - cron: '0 3 * * *' # Her gün TR saatiyle 06:00 (UTC 03:00)
+  workflow_dispatch: # Manuel çalıştırma butonu (Test için)
 
 jobs:
-  build:
+  scrape:
     runs-on: ubuntu-latest
     steps:
       - name: Repoyu Klonla
@@ -21,24 +21,18 @@ jobs:
         run: |
           pip install selenium webdriver-manager
 
-      - name: Veri Klasörünü Hazırla
-        run: mkdir -p data # Eğer klasör yoksa oluşturur
-
       - name: Arden Market Scraper Çalıştır
-        run: python arden_scraper.py
+        # Tam klasör yolunu veriyoruz
+        run: python Codes/Markets/Arden/arden_scraper.py
 
-      - name: Sahibinden Scraper Çalıştır
-        run: python sahibinden_scraper.py
-
-      - name: Sadece Verileri GitHub'a Yükle
+      - name: Verileri Kaydet ve Pushla
         run: |
           git config --global user.name "Scraper Bot"
           git config --global user.email "bot@github.com"
           
-          # Sadece data klasörü altındaki CSV dosyalarını takibe alır
-          git add data/*.csv
+          # Script içindeki 'data' klasörüne kaydedilen CSV'leri ekler
+          # (Eğer data klasörü ana dizindeyse git add data/*.csv yeterli)
+          git add data/*.csv || git add Codes/Markets/Arden/data/*.csv
           
-          # Değişiklik varsa commit atar, yoksa hata vermeden geçer
-          git commit -m "Veri Güncelleme: $(date +'%Y-%m-%d')" || echo "Yeni veri bulunamadı."
-          
+          git commit -m "Arden Veri Güncelleme: $(date +'%Y-%m-%d')" || echo "Değişiklik yok"
           git push
