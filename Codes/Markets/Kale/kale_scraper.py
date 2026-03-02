@@ -28,7 +28,7 @@ KATEGORILER = [
 
 # DOSYA YOLU AYARI: Codes/markets içinden 2 kat yukarı çıkıp Datas/markets/kale'ye gider
 REPO_ROOT = Path(__file__).resolve().parent.parent.parent
-OUT_DIR = REPO_ROOT / "Datas" / "markets" / "kale"
+OUT_DIR = REPO_ROOT / "Datas" / "Markets" / "Kale"
 OUT_DIR.mkdir(parents=True, exist_ok=True)
 
 
