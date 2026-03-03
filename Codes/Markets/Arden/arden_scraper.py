@@ -195,9 +195,15 @@ try:
     
     # Projenin ana dizininden itibaren Datas/Markets/Arden yolunu oluşturur
     hedef_klasor = os.path.join(os.getcwd(), 'Datas', 'Markets', 'Arden')
-    
-    if not os.path.exists(hedef_klasor):
-        os.makedirs(hedef_klasor)
+
+    # Eğer yolda dosya varsa (klasör değil), sil
+    yol_parcalari = ['Datas', os.path.join('Datas', 'Markets'), hedef_klasor]
+    for parca in yol_parcalari:
+        tam_yol = os.path.join(os.getcwd(), parca) if not os.path.isabs(parca) else parca
+        if os.path.exists(tam_yol) and not os.path.isdir(tam_yol):
+            os.remove(tam_yol)
+
+    os.makedirs(hedef_klasor, exist_ok=True)
 
     tarih_str = datetime.now().strftime("%Y-%m-%d")
     dosya_adi = os.path.join(hedef_klasor, f"arden_urunler_{tarih_str}.csv")
