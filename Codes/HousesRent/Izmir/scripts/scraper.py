@@ -1,5 +1,19 @@
 """
-scraper.py — Core scraping logic for Izmir.
+scraper.py — Core scraping logic for the Izmir rent scraper.
+
+Key design: SMART ADAPTIVE BRACKETS (EARLY PEEK)
+------------------------------------------------
+For any price range, the scraper loads page 1 and looks for the text telling
+us the total number of listings.
+- If count <= 1000: It continues and scrapes all pages.
+- If count > 1000: It stops immediately, cuts the price range in half, and
+  recursively tries again.
+
+Anti-Bot Evasion & Resuming:
+If a CAPTCHA or Login wall is detected, it raises a CaptchaDetectedException.
+The main process deletes the profile (force-killing tasks to avoid file locks)
+and restarts. The scraper remembers exactly which page it was on and resumes
+without duplicating data.
 """
 
 import csv
@@ -8,6 +22,8 @@ import os
 import random
 import re
 import time
+import shutil
+import subprocess  # Added to resolve locked files (taskkill)
 
 import undetected_chromedriver as uc
 from bs4 import BeautifulSoup
@@ -16,12 +32,69 @@ import config
 
 logger = logging.getLogger(__name__)
 
+# Global dictionary to remember the page we left off on (kept in memory)
+# Format: {(min_price, max_price): last_attempted_page_number}
+progress_tracker = {}
+
+# ── Custom Exception Class ────────────────────────────────────────────────────
+class CaptchaDetectedException(Exception):
+    """Raised when bot protection (CAPTCHA or Login wall) is detected."""
+    pass
+
+# ── Profile Cleanup ───────────────────────────────────────────────────────────
+def delete_selenium_profile():
+    """Completely deletes the existing Selenium profile directory (resets cookies and history).
+       Force-closes the browser to prevent Windows file lock issues.
+    """
+    profile_dir = getattr(config, 'SELENIUM_PROFILE_DIR', None)
+
+    if profile_dir and os.path.exists(profile_dir):
+        logger.info("🗑️ Deleting old Selenium profile (Resetting identity)...")
+
+        # 1. Force kill hanging Chrome tasks in the background on Windows
+        if os.name == 'nt':
+            try:
+                subprocess.call("taskkill /F /IM chrome.exe /T", shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+                subprocess.call("taskkill /F /IM chromedriver.exe /T", shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+            except Exception:
+                pass
+
+        # 2. Wait a short time for the OS to release file locks
+        time.sleep(3)
+
+        # 3. Attempt to delete the directory
+        try:
+            shutil.rmtree(profile_dir)
+            logger.info("✅ Profile deleted successfully.")
+        except Exception as e:
+            logger.warning(f"⚠️ First deletion attempt failed: {e}. Retrying...")
+            time.sleep(2)
+            try:
+                # Force delete the directory, ignoring stubborn locked files
+                shutil.rmtree(profile_dir, ignore_errors=True)
+                logger.info("✅ Profile force-deleted.")
+            except Exception as final_e:
+                logger.error(f"❌ Profile could not be permanently deleted: {final_e}")
+
+# ── Driver Setup ──────────────────────────────────────────────────────────────
 def setup_driver() -> uc.Chrome:
     options = uc.ChromeOptions()
-    options.add_argument(f"--user-data-dir={config.SELENIUM_PROFILE_DIR}")
+    if hasattr(config, 'SELENIUM_PROFILE_DIR') and config.SELENIUM_PROFILE_DIR:
+        options.add_argument(f"--user-data-dir={config.SELENIUM_PROFILE_DIR}")
+
+    options.add_argument("--disable-blink-features=AutomationControlled")
+
+    is_github_actions = os.environ.get("HEADLESS") == "true"
+    if is_github_actions:
+        options.add_argument("--headless=new")
+        options.add_argument("--no-sandbox")
+        options.add_argument("--disable-dev-shm-usage")
+        options.add_argument("--disable-gpu")
+
     driver = uc.Chrome(options=options, version_main=145)
     return driver
 
+# ── HTML Helpers ──────────────────────────────────────────────────────────────
 def _extract_total_listings(soup: BeautifulSoup) -> int | None:
     res_elem = soup.select_one(".result-text")
     if res_elem:
@@ -73,6 +146,7 @@ def _parse_listings(soup: BeautifulSoup, rooms_idx: int | None) -> list[dict]:
                 records.append({"District": district, "Rooms": rooms, "Price": price})
         except Exception as exc:
             logger.debug("Row parse error: %s", exc)
+
     return records
 
 def _wait_for_listings(driver: uc.Chrome) -> BeautifulSoup:
@@ -85,19 +159,13 @@ def _wait_for_listings(driver: uc.Chrome) -> BeautifulSoup:
         if "ilan bulunamadı" in page_lower or "bulunamamıştır" in page_lower:
             return soup
 
-        # GECE YAKALANIRSA KORUMA SİSTEMİ: 20 DAKİKA UYU
-        logger.warning("⚠️ CAPTCHA veya Giriş Ekranı yakalandı!")
-        logger.warning("Sistem gece çalışıyor olabileceği için manuel giriş beklenmiyor. IP'yi soğutmak için 20 dakika uyunacak...")
-        time.sleep(1200) # 20 dakika bekle
-
-        logger.info("20 dakika doldu. Sayfa yenileniyor...")
-        driver.refresh()
-        time.sleep(5)
-
-        soup = BeautifulSoup(driver.page_source, "html.parser")
+        logger.warning("🚨 CAPTCHA or Login screen detected!")
+        raise CaptchaDetectedException("Hit the bot protection wall.")
 
     return soup
 
+
+# ── Core: Adaptive Scrape ─────────────────────────────────────────────────────
 def scrape_range(
     driver: uc.Chrome,
     min_price: int,
@@ -108,77 +176,111 @@ def scrape_range(
     indent: int = 0,
 ) -> int:
     pad = "  " * indent
+    bracket_key = (min_price, max_price)
 
-    if (min_price, max_price) in done_ranges:
+    # Skip if the range is marked as "completely done" in the JSON file
+    if bracket_key in done_ranges:
         logger.info("%s↩  Skipping already-completed range %d–%d TL", pad, min_price, max_price)
         return 0
 
     width = max_price - min_price
-    logger.info("%s▶  Checking range %d–%d TL…", pad, min_price, max_price)
+
+    # Check if there's a page we previously left off on for this range
+    start_page = progress_tracker.get(bracket_key, 1)
+
+    if start_page == 1:
+        logger.info("%s▶  Checking range %d–%d TL…", pad, min_price, max_price)
+    else:
+        logger.info("%s⏩ Resuming range %d–%d TL directly from Page %d...", pad, min_price, max_price, start_page)
 
     url = (
         f"https://www.sahibinden.com/kiralik/{config.CITY_URL_NAME}"
         f"?pagingSize={config.PAGE_SIZE}"
         f"&price_min={min_price}&price_max={max_price}"
     )
+
+    # If not starting from page 1, add an Offset to the URL to go directly to that page
+    if start_page > 1:
+        offset = (start_page - 1) * config.PAGE_SIZE
+        url += f"&pagingOffset={offset}"
+
     driver.get(url)
-
     soup = _wait_for_listings(driver)
-    total_listings = _extract_total_listings(soup)
 
-    if total_listings is not None and total_listings > config.MAX_LISTINGS_PER_QUERY and width > config.MIN_BRACKET_WIDTH:
-        logger.info("%s   ✂️ Range too dense (%d listings). Splitting...", pad, total_listings)
-        mid = (min_price + max_price) // 2
-        total_saved = 0
-        total_saved += scrape_range(driver, min_price, mid, done_ranges, save_fn, save_checkpoint_fn, indent + 1)
-        total_saved += scrape_range(driver, mid + 1, max_price, done_ranges, save_fn, save_checkpoint_fn, indent + 1)
-        return total_saved
+    # ── SPLIT DECISION (We only make split decisions if we are on page 1) ──
+    if start_page == 1:
+        total_listings = _extract_total_listings(soup)
 
-    elif total_listings is not None and total_listings > config.MAX_LISTINGS_PER_QUERY:
-        logger.warning("%s   ⚠ Scraped up to cap.", pad)
-    elif total_listings is not None:
-        logger.info("%s   ✓ Safe range (%d listings). Scraping all pages.", pad, total_listings)
-    else:
-        logger.info("%s   ? Could not parse total count. Scraping.", pad)
+        if total_listings is not None and total_listings > config.MAX_LISTINGS_PER_QUERY and width > config.MIN_BRACKET_WIDTH:
+            logger.info("%s   ✂️ Range too dense (%d listings). Splitting...", pad, total_listings)
+            mid = (min_price + max_price) // 2
+            total_saved = 0
+            total_saved += scrape_range(driver, min_price, mid, done_ranges, save_fn, save_checkpoint_fn, indent + 1)
+            time.sleep(random.uniform(config.BETWEEN_BRACKET_DELAY_MIN, config.BETWEEN_BRACKET_DELAY_MAX))
+            total_saved += scrape_range(driver, mid + 1, max_price, done_ranges, save_fn, save_checkpoint_fn, indent + 1)
+            return total_saved
 
-    records: list[dict] = []
+        elif total_listings is not None and total_listings > config.MAX_LISTINGS_PER_QUERY:
+             logger.warning("%s   ⚠ Scraped up to cap.", pad)
+        elif total_listings is not None:
+             logger.info("%s   ✓ Safe range (%d listings). Scraping all pages.", pad, total_listings)
+        else:
+             logger.info("%s   ? Could not parse total count. Scraping.", pad)
+
+    # ── PERFORM ACTUAL SCRAPE ──
     rooms_idx: int | None = _resolve_rooms_index(soup)
-    page_num = 1
+    current_page = start_page
+    total_records_saved_this_run = 0
 
     while True:
         page_records = _parse_listings(soup, rooms_idx)
-        records.extend(page_records)
 
         if page_records:
-            logger.info("%s      Page %2d: %2d listings (total: %d) | %d–%d TL",
-                pad, page_num, len(page_records), len(records), min_price, max_price)
+            # 1. Save data IMMEDIATELY (So data isn't lost if the next page crashes)
+            save_fn(page_records)
+            total_records_saved_this_run += len(page_records)
+
+            # 2. Save the successfully completed page to the tracker
+            progress_tracker[bracket_key] = current_page + 1
+
+            logger.info("%s      Page %2d: %2d listings saved | %d–%d TL",
+                pad, current_page, len(page_records), min_price, max_price)
 
         has_next = bool(soup.find("a", title="Sonraki"))
 
-        if page_num >= 20:
+        if current_page >= 20:
              break
 
         if has_next:
             next_btn = soup.find("a", title="Sonraki")
             next_url = "https://www.sahibinden.com" + next_btn["href"]
             driver.get(next_url)
-            page_num += 1
             time.sleep(random.uniform(config.PAGE_TURN_DELAY_MIN, config.PAGE_TURN_DELAY_MAX))
+
+            # This might throw a CAPTCHA. If it does, the while loop breaks,
+            # and 'current_page + 1' saved in progress_tracker stays in memory!
             soup = _wait_for_listings(driver)
+
+            current_page += 1
             if rooms_idx is None:
                 rooms_idx = _resolve_rooms_index(soup)
         else:
             break
 
-    if records:
-        save_fn(records)
-        logger.info("%s✅ Saved %d records for %d–%d TL.", pad, len(records), min_price, max_price)
+    logger.info("%s✅ Finished entirely. Saved %d records this run for %d–%d TL.", pad, total_records_saved_this_run, min_price, max_price)
 
+    # Save to JSON if the entire range finished completely
     save_checkpoint_fn(min_price, max_price)
-    done_ranges.add((min_price, max_price))
+    done_ranges.add(bracket_key)
 
-    return len(records)
+    # Clear the record in the tracker since the range is done
+    if bracket_key in progress_tracker:
+        del progress_tracker[bracket_key]
 
+    return total_records_saved_this_run
+
+
+# ── CSV Output ────────────────────────────────────────────────────────────────
 def save_incremental(data_batch: list[dict]) -> None:
     if not data_batch:
         return
@@ -186,7 +288,7 @@ def save_incremental(data_batch: list[dict]) -> None:
     os.makedirs(config.OUTPUT_DIR, exist_ok=True)
     file_exists = os.path.isfile(config.CSV_OUTPUT_FILE)
 
-    with open(config.CSV_OUTPUT_FILE, mode="a", newline="", encoding="utf-8") as f:
+    with open(config.CSV_OUTPUT_FILE, mode="a", newline="", encoding="utf-8-sig") as f:
         writer = csv.DictWriter(f, fieldnames=["District", "Rooms", "Price"])
         if not file_exists:
             writer.writeheader()

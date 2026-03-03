@@ -1,10 +1,10 @@
 """
-main.py — Izmir Rent Scraper (GitHub Actions Uyumlu Versiyon)
+main.py — Izmir Rent Scraper (Continuous Full-Scrape Version)
 =========================================================
 
-Bu versiyon GitHub sunucu dakikalarını (action minutes) korumak için
-özel olarak tasarlanmıştır. Her çalıştırıldığında sadece 1 fiyat aralığını
-çeker, kaydeder ve sunucuyu kapatır.
+This version is designed to run continuously. It will iterate through
+EVERY price range defined in config.SEED_RANGES without stopping,
+while still utilizing the anti-bot evasion and resuming features.
 """
 
 import argparse
@@ -15,7 +15,8 @@ import time
 import random
 
 import config
-from scraper import setup_driver, scrape_range, save_incremental
+# All necessary functions are imported from scraper.py
+from scraper import setup_driver, scrape_range, save_incremental, CaptchaDetectedException, delete_selenium_profile
 
 logging.basicConfig(
     level=logging.INFO,
@@ -25,7 +26,7 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
-# ── Checkpoint (Kaldığı Yeri Kaydetme) İşlemleri ──────────────────────────────
+# ── Checkpoint Operations ─────────────────────────────────────────────────────
 
 def _load_checkpoint() -> dict:
     if os.path.exists(config.CHECKPOINT_FILE):
@@ -39,11 +40,10 @@ def _save_checkpoint(data: dict) -> None:
         json.dump(data, f, ensure_ascii=False, indent=2)
 
 
-# ── Ana Çalıştırma Fonksiyonu ─────────────────────────────────────────────────
+# ── Main Execution Function ───────────────────────────────────────────────────
 
 def run(args: argparse.Namespace) -> None:
-    # GitHub Actions için varsayılan olarak HER ZAMAN kaldığı yerden devam eder.
-    # Sadece --restart parametresi verilirse veriler sıfırlanır.
+    # Always resume from where it left off unless --restart is used
     checkpoint = _load_checkpoint() if not args.restart else {"done_ranges": []}
 
     done_ranges: set[tuple[int, int]] = {
@@ -52,7 +52,7 @@ def run(args: argparse.Namespace) -> None:
 
     if args.restart and os.path.exists(config.CSV_OUTPUT_FILE):
         os.remove(config.CSV_OUTPUT_FILE)
-        logger.info("Eski CSV dosyası temizlendi: %s", config.CSV_OUTPUT_FILE)
+        logger.info("Cleared old CSV file: %s", config.CSV_OUTPUT_FILE)
         _save_checkpoint({"done_ranges": []})
         done_ranges = set()
 
@@ -62,8 +62,8 @@ def run(args: argparse.Namespace) -> None:
         _save_checkpoint(checkpoint)
 
     logger.info(
-        "GitHub Actions için Izmir verisi çekme işlemi başlıyor... "
-        "(Toplam %d aralık, %d tanesi zaten çekilmiş)",
+        "Starting continuous Izmir data scraping... "
+        "(Total %d ranges in config, %d already completed)",
         len(config.SEED_RANGES),
         len(done_ranges),
     )
@@ -71,62 +71,85 @@ def run(args: argparse.Namespace) -> None:
     total_saved = 0
 
     try:
+        # Iterate through every single range defined in config.py
         for seed_min, seed_max in config.SEED_RANGES:
-            # Eğer bu aralık zaten "done_ranges" içindeyse (çekilmişse), atla ve diğerine geç.
             if (seed_min, seed_max) in done_ranges:
                 continue
 
-            logger.info(f"\n--- YENİ TARAYICI OTURUMU BAŞLATILIYOR ({seed_min} - {seed_max} TL) ---")
-            driver = setup_driver()
+            success = False
 
-            try:
-                saved = scrape_range(
-                    driver=driver,
-                    min_price=seed_min,
-                    max_price=seed_max,
-                    done_ranges=done_ranges,
-                    save_fn=save_incremental,
-                    save_checkpoint_fn=mark_done,
-                    indent=0,
-                )
-                total_saved += saved
+            while not success:
+                logger.info(f"\n--- STARTING NEW BROWSER SESSION ({seed_min} - {seed_max} TL) ---")
+                driver = setup_driver()
 
-            except Exception as e:
-                logger.error(f"Hata oluştu: {e}")
+                try:
+                    saved = scrape_range(
+                        driver=driver,
+                        min_price=seed_min,
+                        max_price=seed_max,
+                        done_ranges=done_ranges,
+                        save_fn=save_incremental,
+                        save_checkpoint_fn=mark_done,
+                        indent=0,
+                    )
+                    total_saved += saved
+                    success = True  # Mark as success to exit the while loop and move to next range
 
-            finally:
-                # O aralığın işi bitince tarayıcıyı mutlaka kapatıyoruz
-                driver.quit()
+                except CaptchaDetectedException:
+                    logger.warning(f"🛑 Blocked while scraping the {seed_min}-{seed_max} range!")
+                    driver.quit()  # Close the flagged browser
+                    delete_selenium_profile()  # Wipe the identity
 
-            # GITHUB ACTIONS KORUMASI: Sadece 1 aralık çekip programı bitir!
-            logger.info("✅ 1 fiyat aralığı başarıyla çekildi.")
-            logger.info("🛑 GitHub Sunucu süresini (dakika kotasını) tüketmemek için program sonlandırılıyor.")
-            logger.info("Bir sonraki tetiklenmede sıradaki aralıktan devam edecektir.")
-            break
+                    sleep_time = random.randint(60, 120)
+                    logger.info(f"⏳ Waiting {sleep_time} seconds before retrying with a new identity...")
+                    time.sleep(sleep_time)
+                    # Loop restarts to try the same range again
+
+                except Exception as e:
+                    logger.error(f"An error occurred: {e}")
+                    break  # Break out of the while loop to skip this specific range if it's a critical unknown error
+
+                finally:
+                    try:
+                        if 'driver' in locals() and driver is not None:
+                            driver.quit()
+                    except Exception:
+                        pass
+
+            # Once the range is fully scraped, take a short breather before starting the next one
+            if success:
+                logger.info("✅ Range %d–%d TL successfully scraped.", seed_min, seed_max)
+
+                # Check if it's the very last range in the list to avoid unnecessary sleeping at the end
+                if (seed_min, seed_max) != config.SEED_RANGES[-1]:
+                    cool_down = random.randint(30, 60)
+                    logger.info(f"⏳ Cooling down for {cool_down} seconds before tackling the next bracket...")
+                    time.sleep(cool_down)
 
     except KeyboardInterrupt:
-        logger.info("Kullanıcı tarafından manuel olarak durduruldu.")
+        logger.info("Manually stopped by the user.")
 
-    logger.info("\nİşlem Tamamlandı! ✓ Bu seansta kaydedilen yeni ilan sayısı: %d", total_saved)
-    logger.info("Çıktı Dosyası → %s", config.CSV_OUTPUT_FILE)
+    logger.info("\nProcess Complete! 🎉")
+    logger.info("Number of new listings saved in this session: %d", total_saved)
+    logger.info("Output File → %s", config.CSV_OUTPUT_FILE)
 
 
-# ── Komut Satırı (CLI) Ayarları ───────────────────────────────────────────────
+# ── Command Line Interface (CLI) Settings ─────────────────────────────────────
 
 def _build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="izmir-scraper",
-        description="Scrape house rental listings for Izmir from sahibinden.com (GitHub Actions Optimized).",
+        description="Scrape house rental listings for Izmir continuously from sahibinden.com.",
     )
     parser.add_argument(
         "--restart",
         action="store_true",
-        help="Günün tüm kayıtlarını ve CSV dosyasını silip en baştan (0 TL'den) başlar.",
+        help="Deletes all records and the CSV file for the day and starts over.",
     )
     parser.add_argument(
         "-v", "--verbose",
         action="store_true",
-        help="Detaylı (debug) hata ayıklama loglarını gösterir.",
+        help="Shows detailed (debug) logs.",
     )
     return parser
 
