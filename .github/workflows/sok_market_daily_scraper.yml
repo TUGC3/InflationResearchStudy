@@ -1,4 +1,4 @@
-name: Daily Scraper
+name: Sok Market Daily Scraper
 
 on:
   schedule:
