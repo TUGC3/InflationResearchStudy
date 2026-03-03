@@ -33,7 +33,7 @@ jobs:
           Cookie: ${{ secrets.COOKIE }}
         run: |
           # The scraper is expected to generate new CSV files in the 'data/' folder
-          python Codes/Markets/sok_market_scraper/sok_market.py
+          python Codes/Markets/sok_market_scraper/sok_market_scraper.py
 
       - name: Process and Push New Files
         run: |
