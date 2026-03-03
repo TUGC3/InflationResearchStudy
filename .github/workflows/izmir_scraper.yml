@@ -1,0 +1,54 @@
+name: Izmir Rent Data Scraper
+
+on:
+  workflow_dispatch: # Actions sekmesinden manuel tetiklemeye izin verir
+  schedule:
+    # Türkiye Saati (TSİ) ile tam 04:00'da çalışması için UTC 01:00 olarak ayarlandı
+    - cron: '0 1 * * *'
+
+jobs:
+  scrape-and-save:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install Chrome
+        uses: browser-actions/setup-chrome@v1
+        with:
+          chrome-version: 'stable'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install undetected-chromedriver beautifulsoup4 setuptools
+          
+          # Eğer klasöründe requirements.txt varsa onu da garantiye almak için kurar
+          if [ -f "Codes/HousesRent/Izmir/requirements.txt" ]; then pip install -r Codes/HousesRent/Izmir/requirements.txt; fi
+
+      - name: Run Izmir Scraper
+        env:
+          HEADLESS: 'true' # Tarayıcının arka planda görünmez açılmasını sağlar (Çok önemli)
+        run: |
+          # Önceki IDE ekran görüntüne göre doğru dosya yolu eklendi
+          python Codes/HousesRent/Izmir/scripts/main.py
+
+      - name: Commit and Push Generated Data
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          
+          # Tüm yeni çekilen CSV dosyalarını ve Checkpoint (kalınan yer) klasörünü ekler
+          git add Codes/HousesRent/Izmir/*.csv || true
+          git add Codes/HousesRent/Izmir/scripts/checkpoints/*.json || true
+          
+          git commit -m "data: auto-update izmir rent dataset [skip ci]" || echo "No new data to commit"
+          git push

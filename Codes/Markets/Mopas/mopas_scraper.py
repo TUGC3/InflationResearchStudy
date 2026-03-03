@@ -111,7 +111,7 @@ def scrape_entire_market():
 
             print(f"  Scraped {items_scraped_this_page} items.")
             page_num += 1
-            time.sleep(2)
+            time.sleep(1)
 
     # --- Save the Final Data ---
     if all_products_data:
@@ -122,9 +122,11 @@ def scrape_entire_market():
 
         today_date = datetime.now().strftime("%Y-%m-%d")
 
-        # Tell Python to use the team's Datas folder
-        os.makedirs("Datas/Markets", exist_ok=True)
-        filename = f"Datas/Markets/mopas_prices_{today_date}.csv"
+        today_date = datetime.now().strftime("%Y-%m-%d")
+        
+        # Create a specific 'mopas' folder inside Datas/Markets
+        os.makedirs("Datas/Markets/Mopas", exist_ok=True)
+        filename = f"Datas/Markets/Mopas/mopas_prices_{today_date}.csv"
 
         df.to_csv(filename, index=False, encoding='utf-8-sig')
 
