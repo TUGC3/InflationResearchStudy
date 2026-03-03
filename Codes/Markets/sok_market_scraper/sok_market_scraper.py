@@ -30,7 +30,7 @@ def safe_get_json(response, context=""):
 def main():
     try:
         # Determine project root and define data storage directory
-        BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+        BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
         DATA_DIR = os.path.join(BASE_DIR, "Datas", "Markets", "sok_market")
 
         # Create directory structure if it doesn't exist
