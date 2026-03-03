@@ -8,10 +8,11 @@ A Python tool to scrape residential rental listings for **Istanbul's European si
 Codes/HousesRent/IstanbulAvrupa/
 ├── scripts/
 │   ├── main.py       # CLI entry point & orchestrator
-│   ├── scraper.py    # Core scraping logic (driver, parsing, CSV saving)
-│   └── config.py     # All settings, paths, price brackets
+│   ├── scraper.py    # Core scraping logic (adaptive splitting, parsing, CSV saving)
+│   └── config.py     # All settings, paths, seed ranges
 ├── checkpoints/
 │   └── checkpoint_<DATE>.json   # Resume state (auto-generated)
+├── SeleniumProfile/  # Persistent browser profile (saves login state, cookies)
 ├── requirements.txt
 └── README.md
 
@@ -51,7 +52,7 @@ python main.py
 # Resume an interrupted run (skips already-completed brackets)
 python main.py --resume
 
-# Quick smoke-test — only scrape the first price bracket
+# Quick smoke-test — only scrape the first seed range
 python main.py --limit-brackets 1
 
 # Verbose debug output
@@ -60,55 +61,46 @@ python main.py -v
 
 ## How It Works
 
-### Price Brackets
+### Smart Adaptive Brackets
 
-sahibinden.com caps results at ~1 000 listings per query. Istanbul Avrupa has
-far more than that, so the scraper splits the search into **price range brackets**
-(configured in `config.py`):
+sahibinden.com caps results at **1,000 listings** per query (20 pages of 50). To capture all data in high-density areas like Istanbul, the scraper uses an **Adaptive Splitting** strategy:
 
-| Bracket (TL)       |
-| ------------------ |
-| 0 – 14 999         |
-| 15 000 – 19 999    |
-| 20 000 – 24 999    |
-| 25 000 – 29 999    |
-| 30 000 – 34 999    |
-| 35 000 – 39 999    |
-| 40 000 – 49 999    |
-| 50 000 – 74 999    |
-| 75 000 – 9 999 999 |
-
-Each bracket is paginated fully before moving to the next.
+1. It starts with wide **Seed Ranges** (e.g., 0 – 20,000 TL).
+2. For each range, it "peeks" at the total results count on the first page.
+3. If the count exceeds 1,000:
+   - It immediately splits the range in half (e.g., [0-10k] and [10k-20k]).
+   - It recursively applies this logic until every bracket is "safe" (<= 1,000 listings).
+4. This ensures 100% data coverage while minimizing redundant requests.
 
 ### Resume Support
 
-After each bracket the scraper writes a checkpoint file:
+The scraper tracks progress using checkpoint files:
 
 ```
 Codes/HousesRent/IstanbulAvrupa/checkpoints/checkpoint_<DATE>.json
 ```
 
-Pass `--resume` to pick up from where a previous interrupted run left off. A
-new run (without `--resume`) always starts fresh.
+Use the `--resume` flag to continue from where you left off.
 
 ### CAPTCHA Handling
 
-If sahibinden blocks a request, the scraper:
+If a CAPTCHA or Login wall is detected:
 
-1. Detects the missing listings and prints a warning.
-2. Pauses and prompts you to solve the CAPTCHA in the Chrome window.
-3. Resumes automatically once you press **ENTER** in the terminal.
+1. The scraper pauses and alerts you in the terminal.
+2. Solve the challenge manually in the open Chrome window.
+3. Press **ENTER** in the terminal to resume scraping.
 
 ## Configuration
 
-Edit `scripts/config.py` to change:
+Edit `scripts/config.py` to customize the behavior:
 
-| Setting                   | Default       | Description                     |
-| ------------------------- | ------------- | ------------------------------- |
-| `PRICE_BRACKETS`          | 9 ranges      | Price ranges to query           |
-| `PAGE_LOAD_DELAY`         | `2.5` s       | Wait after each page loads      |
-| `PAGE_TURN_DELAY_MIN/MAX` | `2.0 – 4.0` s | Random delay between page turns |
-| `BETWEEN_BRACKET_DELAY`   | `2.0 – 4.0` s | Random delay between brackets   |
-| `PAGE_SIZE`               | `50`          | Listings per page               |
+| Setting                  | Default       | Description                                  |
+| ------------------------ | ------------- | -------------------------------------------- |
+| `SEED_RANGES`            | 5 wide ranges | Starting points for adaptive splitting       |
+| `MAX_LISTINGS_PER_QUERY` | `1000`        | Threshold to trigger a range split           |
+| `MIN_BRACKET_WIDTH`      | `50` TL       | Prevents infinite splits on identical prices |
+| `PAGE_LOAD_DELAY`        | `2.5` s       | Wait after each page loads                   |
+| `PAGE_TURN_DELAY`        | `2.0 – 4.0` s | Random delay between page turns              |
+| `BETWEEN_BRACKET_DELAY`  | `1.0 – 2.0` s | Random delay between completed brackets      |
 
 > **Note**: This tool is for academic / research purposes only. Always respect `robots.txt` and the site's Terms of Service.
