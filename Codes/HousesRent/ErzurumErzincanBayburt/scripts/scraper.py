@@ -95,24 +95,45 @@ def _parse_listings(soup: BeautifulSoup, rooms_idx: int | None) -> list[dict]:
 
 
 def _wait_for_listings(driver: WebDriver) -> BeautifulSoup:
+    """
+    Wait for the listings table to load with a polling loop.
+    Retries several times before assuming CAPTCHA/login wall.
+    """
+    # Initial wait for page to start rendering
     time.sleep(config.PAGE_LOAD_DELAY)
-    soup = _get_soup(driver)
-    listings = soup.select("#searchResultsTable tbody tr.searchResultsItem")
 
-    if not listings:
+    # Poll for listings up to max_retries times
+    max_retries = 5
+    retry_delay = 2.0  # seconds between retries
+
+    for attempt in range(max_retries):
+        soup = _get_soup(driver)
+        listings = soup.select("#searchResultsTable tbody tr.searchResultsItem")
+
+        if listings:
+            return soup
+
+        # Check if the page explicitly says "no results"
         page_lower = driver.page_source.lower()
         if "ilan bulunamad\u0131" in page_lower or "bulunamam\u0131\u015ft\u0131r" in page_lower:
             return soup
 
-        print("\n" + "=" * 55)
-        print("\u26a0\ufe0f  ACTION REQUIRED: CAPTCHA or Login wall detected.")
-        print("   1. Look at the Chrome window and solve the puzzle.")
-        print("   2. Wait until you clearly see the list of houses.")
-        print("=" * 55)
-        input("   \u25b6 Press ENTER here ONLY AFTER you see the listings... ")
+        if attempt < max_retries - 1:
+            logger.debug(
+                "Listings not found yet (attempt %d/%d). Waiting %.1fs...",
+                attempt + 1, max_retries, retry_delay,
+            )
+            time.sleep(retry_delay)
 
-        soup = _get_soup(driver)
+    # All retries exhausted - likely CAPTCHA or login wall
+    print("\n" + "=" * 55)
+    print("\u26a0\ufe0f  ACTION REQUIRED: CAPTCHA or Login wall detected.")
+    print("   1. Look at the Chrome window and solve the puzzle.")
+    print("   2. Wait until you clearly see the list of houses.")
+    print("=" * 55)
+    input("   \u25b6 Press ENTER here ONLY AFTER you see the listings... ")
 
+    soup = _get_soup(driver)
     return soup
 
 
