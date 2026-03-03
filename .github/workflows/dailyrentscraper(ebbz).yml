@@ -1,47 +1,47 @@
-name: Daily House Rent Scraper (Eskisehir, Bolu, Bartin, Zonguldak)
+import os
+import time
+import pandas as pd
+from selenium import webdriver
+import undetected_chromedriver as uc
+from selenium.webdriver.chrome.options import Options
 
-on:
-  schedule:
-    - cron: '0 1 * * *'  # 04:00 TSİ
-  workflow_dispatch:
+# --- Ayarlar ---
+CITIES = ["Eskisehir", "Bolu", "Bartin", "Zonguldak"]
+BASE_DATA_PATH = "Datas/HousesRent/Eskisehir_Bolu_Bartin_Zonguldak"
 
-jobs:
-  scrape_houses:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
+# --- Chrome seçenekleri ---
+chrome_options = uc.ChromeOptions()
+chrome_options.headless = True
+chrome_options.add_argument("--no-sandbox")
+chrome_options.add_argument("--disable-dev-shm-usage")
+chrome_options.add_argument("--disable-gpu")
+chrome_options.add_argument("--window-size=1920,1080")
+# Geçici profil
+chrome_options.add_argument(f"--user-data-dir=/tmp/uc_profile")
 
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
+driver = uc.Chrome(options=chrome_options)
 
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.10'
-          cache: 'pip'
+# --- Örnek scraping akışı ---
+for city in CITIES:
+    data = []
+    # URL örneği, şehirye göre değiştirilebilir
+    url = f"https://www.sahibinden.com/kiralik-daire/{city.lower()}"
+    driver.get(url)
+    time.sleep(3)  # sayfa yüklenmesi için
 
-      - name: Install Chrome
-        uses: browser-actions/setup-chrome@v1
-        with:
-          chrome-version: 'stable'
+    listings = driver.find_elements("css selector", ".searchResultsItem")  # ürün container
+    for item in listings:
+        try:
+            title = item.find_element("css selector", ".classifiedTitle").text
+            price = item.find_element("css selector", ".searchResultsPriceValue").text
+            data.append({"title": title, "price": price})
+        except:
+            continue
 
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install undetected-chromedriver==3.5.5 selenium==4.16.0 beautifulsoup4==4.12.3
+    # CSV kaydı
+    city_folder = os.path.join(BASE_DATA_PATH, city)
+    os.makedirs(city_folder, exist_ok=True)
+    df = pd.DataFrame(data)
+    df.to_csv(os.path.join(city_folder, f"{city}_rent.csv"), index=False)
 
-      - name: Run House Rent Scraper
-        run: |
-          python Codes/HousesRent/Eskisehir_Bolu_Bartin_Zonguldak/scrape_EskisehirBoluBartinZonguldak.py
-
-      - name: Commit and push CSV files
-        run: |
-          git config --global user.name "GitHub Action Bot"
-          git config --global user.email "action@github.com"
-          git add "Datas/HousesRent/Eskisehir_Bolu_Bartin_Zonguldak/Eskişehir/" \
-                  "Datas/HousesRent/Eskisehir_Bolu_Bartin_Zonguldak/Bolu/" \
-                  "Datas/HousesRent/Eskisehir_Bolu_Bartin_Zonguldak/Bartın/" \
-                  "Datas/HousesRent/Eskisehir_Bolu_Bartin_Zonguldak/Zonguldak/"
-          git commit -m "Auto-update daily house rent data (Eskisehir/Bolu/Bartin/Zonguldak) $(date +'%Y-%m-%d')" || exit 0
-          git push origin HEAD:${{ github.ref }}
+driver.quit()
