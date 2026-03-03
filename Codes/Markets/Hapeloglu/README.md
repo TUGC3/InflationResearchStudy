@@ -1,4 +1,4 @@
-# Hapeloğlu Price Tracker | Successfully Vibecoded by Batu Koray (Even the README.md)
+# Hapeloğlu Price Tracker | Successfully Vibecoded by Batu Koray Masak (Even the README.md)
 
 **AI201 - Intro to Data Science** | Spring 2026 | Özyeğin University
 
@@ -12,6 +12,12 @@ that Cloudflare blocks (returning empty pages with 0 products).
 
 **`curl_cffi`** uses libcurl compiled to impersonate Chrome's exact TLS
 fingerprint. Cloudflare sees it as a real browser and serves full content.
+
+## Also Important: Why TSVs also instead of just CSVs?
+During Week 2 (± 1 week), the course instructor, when asked, explicitly requested tab-separated values as the output format. Both TSV and CSV are provided, but TSV is the primary format per the instructor's specification.
+
+> *We are law-abiding citizens.* -Batu Koray Masak
+
 
 ## Setup
 ```bash
