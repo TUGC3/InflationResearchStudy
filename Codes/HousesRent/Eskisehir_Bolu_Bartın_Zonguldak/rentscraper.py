@@ -22,16 +22,15 @@ CITIES: Dict[str, str] = {
 
 DATA_GROUP_FOLDER = "Eskisehir_Bolu_Bartin_Zonguldak"
 
-HEADLESS = False   # GitHub'da True yapabilirsin
+HEADLESS = True  # ACTION için True
 
-SLEEP_MIN = 2.5
-SLEEP_MAX = 4.5
+SLEEP_MIN = 2
+SLEEP_MAX = 4
 
 BROWSER_MAJOR_VERSION = 145
-PROFILE_DIR_NAME = "SeleniumProfile_PERSISTENT"
-
 PAGING_SIZE = 50
-MAX_PAGES_PER_BRACKET = 150
+MAX_PAGES_PER_BRACKET = 120
+MAX_RETRY = 3
 
 PRICE_BRACKETS: List[Tuple[int, int]] = [
     (0, 7999),
@@ -53,14 +52,10 @@ PRICE_BRACKETS: List[Tuple[int, int]] = [
 def setup_driver() -> uc.Chrome:
     options = uc.ChromeOptions()
 
-    profile_path = os.path.join(os.path.dirname(__file__), PROFILE_DIR_NAME)
-    options.add_argument(f"--user-data-dir={profile_path}")
-
     options.add_argument("--no-sandbox")
     options.add_argument("--disable-dev-shm-usage")
     options.add_argument("--disable-gpu")
     options.add_argument("--window-size=1400,900")
-    options.add_argument("--start-maximized")
     options.add_argument("--lang=tr-TR")
     options.add_argument("--disable-blink-features=AutomationControlled")
 
@@ -105,17 +100,6 @@ def is_block_page(html: str) -> bool:
         "giriş yap",
     ]
     return any(s in lower for s in signals)
-
-
-def ensure_access(driver: uc.Chrome, url: str):
-    driver.get(url)
-    polite_sleep()
-
-    if is_block_page(driver.page_source):
-        print("\n[BLOCK DETECTED]")
-        input("Solve in browser then press ENTER...")
-        driver.get(url)
-        polite_sleep()
 
 
 # =========================
@@ -199,32 +183,45 @@ def scrape_city(driver: uc.Chrome, city: str, base_url: str):
                 print("Page limit reached.")
                 break
 
-            ensure_access(driver, url)
+            success = False
 
-            html = driver.page_source
+            for attempt in range(MAX_RETRY):
+                try:
+                    driver.get(url)
+                    polite_sleep()
+                    html = driver.page_source
 
-            if is_block_page(html):
-                print("Still blocked.")
-                input("Fix and press ENTER...")
-                continue
+                    if is_block_page(html):
+                        print(f"Blocked (attempt {attempt+1})")
+                        time.sleep(5)
+                        continue
 
-            rows = extract_listings(html)
-            print(f"Page {page_count}: {len(rows)} listings")
+                    rows = extract_listings(html)
+                    print(f"Page {page_count}: {len(rows)} listings")
 
-            if len(rows) == 0:
-                print("Zero listings. Possibly blocked.")
-                input("Check and press ENTER...")
-                continue
+                    if len(rows) == 0:
+                        print("Zero listings. Skipping page.")
+                        break
 
-            path = append_to_csv(city, rows)
-            print("Saved to:", path)
+                    append_to_csv(city, rows)
 
-            next_url = find_next_url(html)
-            if not next_url:
+                    next_url = find_next_url(html)
+                    if not next_url:
+                        success = True
+                        break
+
+                    url = next_url
+                    polite_sleep()
+                    success = True
+                    break
+
+                except WebDriverException:
+                    print("Driver error. Retrying...")
+                    time.sleep(5)
+
+            if not success:
+                print("Skipping bracket due to repeated block/errors.")
                 break
-
-            url = next_url
-            polite_sleep()
 
 
 # =========================
@@ -237,7 +234,7 @@ def main():
         driver = setup_driver()
         for city, url in CITIES.items():
             scrape_city(driver, city, url)
-            time.sleep(2)
+            time.sleep(3)
     finally:
         if driver:
             driver.quit()
