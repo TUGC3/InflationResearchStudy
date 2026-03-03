@@ -65,3 +65,9 @@ pip-wheel-metadata/
 # --- OS / editor extras (macOS + misc) ---
 **/.DS_Store
 **/._*
+
+# Selenium / UC profiles (all variants)
+SeleniumProfile*/
+**/SeleniumProfile*/
+_selenium_profile/
+**/_selenium_profile/

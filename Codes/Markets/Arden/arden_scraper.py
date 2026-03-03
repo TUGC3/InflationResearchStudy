@@ -1,14 +1,24 @@
 import time
 import csv
+import os
+from datetime import datetime
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait, Select
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.chrome.options import Options
 
-driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
-driver.maximize_window()
+# --- HEADLESS AYARLARI ---
+chrome_options = Options()
+chrome_options.add_argument("--headless") 
+chrome_options.add_argument("--no-sandbox")
+chrome_options.add_argument("--disable-dev-shm-usage")
+chrome_options.add_argument("--window-size=1920,1080")
+chrome_options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36")
+
+driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
 wait = WebDriverWait(driver, 20)
 
 KATEGORILER = [
@@ -81,7 +91,7 @@ def son_sayfa_numarasini_al():
                 numara = int(span.text.strip())
                 numaralar.append(numara)
             except:
-                continue  # "İleri" gibi text'leri atla
+                continue 
 
         son = max(numaralar) if numaralar else 1
         print(f"  🔍 Bulunan sayfalar: {numaralar} → Son: {son}")
@@ -142,12 +152,9 @@ try:
     konum_sec()
 
     for kategori_url in KATEGORILER:
-        #kategori adını URLden çıkar
         kategori_adi = kategori_url.split("/")[-1].replace(".html", "").replace("-", " ").title()
         print(f"\n📂 Kategori: {kategori_adi}")
 
-        #önce 1. sayfaya gider, toplam sayfa sayısını öğrenir
-        #sarkuteri URLi farklı yapıda olduğu için base URLi ayırır
         if "?" in kategori_url:
             base_url = kategori_url.split("?")[0]
         else:
@@ -181,8 +188,27 @@ try:
 
             print(f"{len(bulunanlar)} ürün, {len(yeni)} yeni | Toplam: {len(tum_urunler)}")
 
+    #KAYIT VE DOSYALAMA BÖLÜMÜ (GÜNCELLENDİ)
+    
+    # os.getcwd() ana dizini verir. Veriler ana dizindeki 'data' klasörüne gider.
+    # --- ÖZEL VERİ YOLU KAYDI ---
+    
+    # Projenin ana dizininden itibaren Datas/Markets/Arden yolunu oluşturur
+    hedef_klasor = os.path.join(os.getcwd(), 'Datas', 'Markets', 'Arden')
 
-    with open("urunler.csv", "w", newline="", encoding="utf-8-sig") as f:
+    # Eğer yolda dosya varsa (klasör değil), sil
+    yol_parcalari = ['Datas', os.path.join('Datas', 'Markets'), hedef_klasor]
+    for parca in yol_parcalari:
+        tam_yol = os.path.join(os.getcwd(), parca) if not os.path.isabs(parca) else parca
+        if os.path.exists(tam_yol) and not os.path.isdir(tam_yol):
+            os.remove(tam_yol)
+
+    os.makedirs(hedef_klasor, exist_ok=True)
+
+    tarih_str = datetime.now().strftime("%Y-%m-%d")
+    dosya_adi = os.path.join(hedef_klasor, f"arden_urunler_{tarih_str}.csv")
+
+    with open(dosya_adi, "w", newline="", encoding="utf-8-sig") as f:
         fieldnames = ["kategori", "isim", "fiyat", "link", "resim"]
         writer = csv.DictWriter(f, fieldnames=fieldnames, extrasaction="ignore")
         writer.writeheader()
@@ -190,7 +216,7 @@ try:
 
     print(f"\n{'='*50}")
     print(f"🎉 TOPLAM ÜRÜN: {len(tum_urunler)}")
-    print(f"💾 urunler.csv kaydedildi")
+    print(f"💾 {dosya_adi} başarıyla kaydedildi")
     print(f"{'='*50}")
 
 finally:

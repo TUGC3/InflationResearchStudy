@@ -1,0 +1,65 @@
+name: Izmir Rent Data Continuous Scraper
+
+on:
+  workflow_dispatch: # Allows manual triggering from the Actions tab
+  schedule:
+    # Runs at 01:00 UTC (04:00 TSİ / Turkey Time) every day
+    - cron: '0 1 * * *'
+
+jobs:
+  scrape-and-save:
+    runs-on: ubuntu-latest
+
+    # Grants write permissions so the bot can push the newly scraped data to the repo
+    permissions:
+      contents: write
+
+    # Important: GitHub Actions has a max runtime of 6 hours (360 minutes).
+    # Since our Python script now runs continuously, if it hits the 6-hour limit,
+    # GitHub will safely kill it, and the script will resume from the checkpoint tomorrow!
+    timeout-minutes: 350
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install Chrome
+        uses: browser-actions/setup-chrome@v1
+        with:
+          chrome-version: 'stable'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install undetected-chromedriver beautifulsoup4 setuptools
+          
+          # Install from requirements.txt if it exists
+          if [ -f "Codes/HousesRent/Izmir/requirements.txt" ]; then pip install -r Codes/HousesRent/Izmir/requirements.txt; fi
+
+      - name: Run Izmir Scraper
+        env:
+          HEADLESS: 'true' # Crucial: Forces Chrome to open invisibly in the background
+        run: |
+          python Codes/HousesRent/Izmir/scripts/main.py
+
+      - name: Commit and Push Generated Data
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          
+          # Add the CSV data from the Datas folder
+          git add Datas/HousesRent/Izmir/*.csv || true
+          
+          # Add the JSON checkpoint file from the Codes folder
+          git add Codes/HousesRent/Izmir/scripts/checkpoints/*.json || true
+          
+          # Create a dynamic commit message with the current date/time
+          TIMESTAMP=$(date +'%Y-%m-%d %H:%M')
+          git commit -m "data: auto-update izmir rent dataset [$TIMESTAMP] [skip ci]" || echo "No new data to commit"
+          
+          git push
