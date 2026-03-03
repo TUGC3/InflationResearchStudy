@@ -1,32 +1,48 @@
-name: Daily Arden Scraper
+name: Arden Daily Scrape
 
 on:
   schedule:
-    - cron: '0 3 * * *'
-  workflow_dispatch:
+    # Her gün Türkiye saatiyle sabah 04:30'da çalışır (UTC 01:30)
+    - cron: '30 1 * * *'
+  workflow_dispatch: # Manuel tetikleme için
 
 jobs:
-  scrape:
+  scrape_and_upload:
     runs-on: ubuntu-latest
-    steps:
-      - name: Repoyu Klonla
-        uses: actions/checkout@v3
+    permissions:
+      contents: write
 
-      - name: Python Kur
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GH_TOKEN }}
+          fetch-depth: 0
+
+      - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.9'
+          python-version: '3.10'
 
-      - name: Bağımlılıkları Yükle
-        run: pip install selenium webdriver-manager
-
-      - name: Scripti Calistir
-        run: python Codes/Markets/Arden/arden_scraper.py
-
-      - name: Verileri Kaydet ve Pushla
+      - name: Install Chrome and Driver
         run: |
-          git config --global user.name "Scraper Bot"
-          git config --global user.email "bot@github.com"
-          git add Datas/Markets/Arden/*.csv || echo "Dosya yok"
-          git commit -m "Arden Veri Güncelleme: $(date +'%Y-%m-%d')" || echo "Degisiklik yok"
-          git push
+          sudo apt-get update
+          sudo apt-get install -y google-chrome-stable
+
+      - name: Install dependencies
+        run: |
+          pip install selenium webdriver-manager pandas
+
+      - name: Run scraper
+        run: |
+          python Codes/Markets/Kale/kale_scraper.py
+
+      - name: Commit and Push changes
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add Datas/Markets/Kale/*.csv
+          # Değişiklik yoksa hata vermemesi için || exit 0 kullanıyoruz
+          git commit -m "Auto-update: Kale data $(date +'%Y-%m-%d')" || echo "No changes to commit"
+          git pull --rebase origin master
+          git push origin HEAD:master
