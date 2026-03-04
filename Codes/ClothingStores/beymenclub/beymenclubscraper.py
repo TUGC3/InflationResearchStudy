@@ -22,7 +22,7 @@ class BeymenSpider(Spider):
         today_str = datetime.now().strftime("%Y-%m-%d")
         
         script_dir = os.path.dirname(os.path.abspath(__file__))
-        data_dir = os.path.join(script_dir, '..', '..', '..', 'Datas', 'clothes', 'beymenclub')
+        data_dir = os.path.join(script_dir, '..', '..', '..', 'Datas', 'ClothingStores', 'beymenclub')
         os.makedirs(data_dir, exist_ok=True)
         
         file_path = os.path.join(data_dir, f"{today_str}.csv")
