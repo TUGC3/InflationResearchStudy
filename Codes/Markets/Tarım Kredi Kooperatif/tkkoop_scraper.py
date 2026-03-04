@@ -56,7 +56,7 @@ async def main():
     all_products.sort(key=lambda x: x[0].lower())
 
     today_str = datetime.now().strftime("%Y-%m-%d")
-    filename = f"C:\\Users\\...\\{today_str}_products.csv" # Dosyanın kayıt edileceği yolu yaz
+    filename = f"Datas/Markets/Tarım Kredi Kooperatif/{today_str}_products.csv"
 
     with open(filename, "w", newline="", encoding="utf-8") as f:
         writer = csv.writer(f)
