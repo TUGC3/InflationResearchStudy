@@ -149,20 +149,38 @@ def _parse_listings(soup: BeautifulSoup, rooms_idx: int | None) -> list[dict]:
 
     return records
 
-def _wait_for_listings(driver: uc.Chrome) -> BeautifulSoup:
-    time.sleep(config.PAGE_LOAD_DELAY)
-    soup = BeautifulSoup(driver.page_source, "html.parser")
-    listings = soup.select("#searchResultsTable tbody tr.searchResultsItem")
 
-    if not listings:
+def _wait_for_listings(driver: uc.Chrome, timeout: int = 15) -> BeautifulSoup:
+    """
+    Waits dynamically for the listings to appear on the page.
+    Polls the DOM every second up to the timeout limit.
+    """
+    # Let the initial base load happen
+    time.sleep(config.PAGE_LOAD_DELAY)
+
+    start_time = time.time()
+
+    while time.time() - start_time < timeout:
+        soup = BeautifulSoup(driver.page_source, "html.parser")
+        listings = soup.select("#searchResultsTable tbody tr.searchResultsItem")
+
+        # Condition 1: We found the listings! The page loaded successfully.
+        if listings:
+            return soup
+
+        # Condition 2: The page loaded, but there are legitimately zero listings for this price.
         page_lower = driver.page_source.lower()
         if "ilan bulunamadı" in page_lower or "bulunamamıştır" in page_lower:
             return soup
 
-        logger.warning("🚨 CAPTCHA or Login screen detected!")
-        raise CaptchaDetectedException("Hit the bot protection wall.")
+        # If neither condition is met, the page is probably still loading or showing a Cloudflare check.
+        # Wait 1 second and check again.
+        time.sleep(1)
 
-    return soup
+    # If the loop finishes (15 seconds pass) and we STILL don't have listings,
+    # it is definitely a hard CAPTCHA or a dead block.
+    logger.warning("🚨 CAPTCHA, Login screen, or extreme lag detected!")
+    raise CaptchaDetectedException("Hit the bot protection wall or page timed out.")
 
 
 # ── Core: Adaptive Scrape ─────────────────────────────────────────────────────
