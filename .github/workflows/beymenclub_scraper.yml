@@ -1,0 +1,41 @@
+name: Daily Beymen Club Scraper
+
+on:
+  schedule:
+    # Runs at 02:00 UTC (05:00 TSİ) every day
+    - cron: '0 2 * * *'
+  workflow_dispatch: # Allows manual trigger from GitHub UI
+
+jobs:
+  scrape_and_upload:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install scrapling playwright patchright browserforge msgspec curl_cffi
+          playwright install chromium
+
+      - name: Run Scraper
+        run: |
+          python Codes/ClothingStores/beymenclub/beymenclubscraper.py
+
+      - name: Commit and push CSV files
+        run: |
+          git config --global user.name "GitHub Action Bot"
+          git config --global user.email "action@github.com"
+          git add "Datas/ClothingStores/beymenclub/"
+          git commit -m "Auto-update daily prices CSV for Beymen Club $(date +'%Y-%m-%d')" || exit 0
+          git push origin HEAD:${{ github.ref }}
