@@ -28,11 +28,11 @@ jobs:
 
       - name: Run scraper
         run: |
-          python /Codes/Markets/Tarım_Kredi_Kooperatif/tkkoop_scraper.py
+          python "Codes/Markets/Tarım Kredi Kooperatif/tkkoop_scraper.py"
 
       - name: Commit CSV
         run: |
-          TARGET_DIR="Datas/Markets/Tarım_Kredi_Kooperatif/"
+          TARGET_DIR="Datas/Markets/Tarım Kredi Kooperatif/"
 
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
