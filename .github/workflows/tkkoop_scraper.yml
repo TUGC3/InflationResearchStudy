@@ -28,7 +28,7 @@ jobs:
 
       - name: Run scraper
         run: |
-          python tkkoop_scraper.py
+          python /Codes/Markets/tkkoop_scraper.py
 
       - name: Commit CSV
         run: |
