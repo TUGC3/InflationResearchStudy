@@ -70,26 +70,33 @@ def setup_driver() -> uc.Chrome:
     
     options = uc.ChromeOptions()
     
+    # Use a more realistic profile
     profile_path = "/tmp/chrome-profile" if is_github_actions() else "ChromeProfile"
     
-    # Basic options
+    # Add more stealth options
     options.add_argument(f"--user-data-dir={profile_path}")
     options.add_argument("--no-sandbox")
     options.add_argument("--disable-dev-shm-usage")
-    options.add_argument("--disable-gpu")
     options.add_argument("--window-size=1400,900")
     options.add_argument("--lang=tr-TR")
     options.add_argument("--disable-blink-features=AutomationControlled")
-    options.add_argument("--user-agent=Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36")
     
-    # Add timeouts
-    options.add_argument("--page-load-timeout=30")
+    # Remove headless for GitHub Actions? Sometimes headless is detected
+    # Let's try without headless first
+    options.add_argument("--headless=new")  # Keep headless for now
     
-    if is_github_actions():
-        options.add_argument("--headless=new")
-        options.add_argument("--disable-setuid-sandbox")
-        options.add_argument("--remote-debugging-port=9222")
-        options.add_argument("--single-process")
+    # Add random user agent
+    user_agents = [
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+        "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+    ]
+    options.add_argument(f"--user-agent={random.choice(user_agents)}")
+    
+    # Additional stealth arguments
+    options.add_argument("--disable-web-security")
+    options.add_argument("--disable-features=IsolateOrigins,site-per-process")
+    options.add_argument("--disable-site-isolation-trials")
     
     browser_path = "/usr/bin/google-chrome" if os.path.exists("/usr/bin/google-chrome") else None
     
@@ -100,6 +107,13 @@ def setup_driver() -> uc.Chrome:
             version_main=int(chrome_version) if chrome_version.isdigit() else None,
             headless=is_github_actions() or HEADLESS
         )
+        
+        # Execute stealth scripts
+        driver.execute_script("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})")
+        driver.execute_cdp_cmd('Network.setUserAgentOverride', {
+            "userAgent": random.choice(user_agents)
+        })
+        
         driver.set_page_load_timeout(TIMEOUT_SECONDS)
         return driver
     except Exception as e:
