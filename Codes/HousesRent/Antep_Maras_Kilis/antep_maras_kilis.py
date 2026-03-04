@@ -1,10 +1,15 @@
 #!/usr/bin/env python3
+"""
+Sahibinden.com rental scraper for Kahramanmaras, Gaziantep, and Kilis
+Automated daily scraping with GitHub Actions
+"""
 
 import csv
 import os
 import random
 import shutil
 import time
+import subprocess
 from datetime import datetime
 from typing import Dict, List, Optional, Tuple
 
@@ -44,17 +49,21 @@ def is_github_actions() -> bool:
     """Check if running in GitHub Actions"""
     return os.getenv("GITHUB_ACTIONS") == "true"
 
-def get_browser_path() -> str:
-    """Get browser executable path"""
-    # Check for Chrome in GitHub Actions
-    if os.path.exists("/usr/bin/google-chrome"):
-        return "/usr/bin/google-chrome"
-    if os.path.exists("/usr/bin/chromium-browser"):
-        return "/usr/bin/chromium-browser"
-    return ""
+def get_chrome_version() -> str:
+    """Get installed Chrome version"""
+    try:
+        result = subprocess.run(['google-chrome', '--version'], 
+                              capture_output=True, text=True)
+        version = result.stdout.strip().split()[-1]
+        return version.split('.')[0]  # Return major version
+    except:
+        return "120"  # Default fallback
 
 def setup_driver() -> uc.Chrome:
     """Setup undetected Chrome driver"""
+    chrome_version = get_chrome_version()
+    print(f"Detected Chrome version: {chrome_version}")
+    
     options = uc.ChromeOptions()
     
     # Use temporary profile in GitHub Actions
@@ -77,17 +86,35 @@ def setup_driver() -> uc.Chrome:
         options.add_argument("--remote-debugging-port=9222")
         options.add_argument("--single-process")
         options.add_argument("--disable-accelerated-2d-canvas")
+        options.add_argument("--disable-features=VizDisplayCompositor")
     elif HEADLESS:
         options.add_argument("--headless=new")
     
-    browser_path = get_browser_path()
+    # Get browser path
+    browser_path = "/usr/bin/google-chrome" if os.path.exists("/usr/bin/google-chrome") else None
     
-    return uc.Chrome(
-        options=options,
-        browser_executable_path=browser_path if browser_path else None,
-        version_main=120,
-        headless=is_github_actions() or HEADLESS
-    )
+    try:
+        # Try with auto version detection
+        driver = uc.Chrome(
+            options=options,
+            browser_executable_path=browser_path,
+            version_main=int(chrome_version) if chrome_version.isdigit() else None,
+            headless=is_github_actions() or HEADLESS
+        )
+        return driver
+    except Exception as e:
+        print(f"Error with auto version detection: {e}")
+        print("Trying without version specification...")
+        
+        # Fallback: let undetected-chromedriver handle it
+        driver = uc.Chrome(
+            options=options,
+            browser_executable_path=browser_path,
+            headless=is_github_actions() or HEADLESS
+        )
+        return driver
+
+# [Rest of your functions remain the same - close_driver, polite_sleep, get_data_dir, etc.]
 
 def close_driver(driver: Optional[uc.Chrome]) -> None:
     """Safely close the driver"""
@@ -109,6 +136,8 @@ def get_data_dir(city: str) -> str:
         "kilis": "Kilis"
     }
     city_folder = city_folder_map.get(city, city.capitalize())
+    
+    # Navigate up from script location to repository root
     script_dir = os.path.dirname(os.path.abspath(__file__))
     repo_root = os.path.abspath(os.path.join(script_dir, "../../../"))
     
