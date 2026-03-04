@@ -28,7 +28,7 @@ jobs:
       run: mkdir -p Datas/HousesRent/{Maras,Antep,Kilis}
     
     - name: Run scraper
-      run: python Codes/HousesRent/Antep_Maras_Kilis/antep_maras_kilis.py.py
+      run: python Codes/HousesRent/Antep_Maras_Kilis/antep_maras_kilis.py
       env:
         HEADLESS: "true"
     
