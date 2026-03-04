@@ -222,7 +222,7 @@ class SahibindenScraper:
         logger.info("%s▶  Kontrol ediliyor: %d–%d TL…", pad, min_price, max_price)
 
         url = (
-            f"https://www.sahibinden.com/kiralik-daire/{url_slug}"
+            f"https://www.sahibinden.com/kiralik/{url_slug}"
             f"?pagingSize={PAGE_SIZE}&price_min={min_price}&price_max={max_price}"
         )
         self.driver.get(url)
