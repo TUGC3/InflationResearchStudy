@@ -109,9 +109,9 @@ def get_data_dir(city: str) -> str:
         "kilis": "Kilis"
     }
     city_folder = city_folder_map.get(city, city.capitalize())
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    repo_root = os.path.abspath(os.path.join(script_dir, "../../../"))
     
-    # Get the repository root (works in GitHub Actions)
-    repo_root = os.getcwd()
     return os.path.join(repo_root, "Datas", "HousesRent", city_folder)
 
 def is_block_page(html: str) -> bool:
