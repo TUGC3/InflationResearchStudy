@@ -1,10 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Sun Mar  1 09:50:56 2026
-
-@author: orenl
-"""
-
 import os
 import csv
 import time
@@ -130,4 +123,5 @@ def main():
         driver.quit()
 
 if __name__ == "__main__":
+
     main()

@@ -3,7 +3,7 @@ name: Daily Mopaş Scraper
 on:
   schedule:
     # 00:00 UTC translates to 03:00 AM Istanbul time
-    - cron: '0 0 * * *'
+    - cron: '30 14 * * *'
   workflow_dispatch: # This adds a button to the GitHub website so you can test it manually
 
 jobs:

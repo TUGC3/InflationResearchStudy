@@ -2,8 +2,7 @@
 =============================================================
   Marketzade Web Scraper — AI201 Intro to Data Science
   Sınıf Adı  : scraper_claude
-  CSV Çıktısı: csv_scraper_claude.csv
-  TSV Çıktısı: csv_scraper_claude.tsv
+  CSV Çıktısı: YYYY-MM-DD.csv  (o günün tarihi)
 
   KURULUM (PyCharm Terminali):
       pip install selenium webdriver-manager beautifulsoup4 lxml
@@ -16,7 +15,7 @@ import os
 import re
 import logging
 import sys
-from datetime import date
+from datetime import    date
 
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
@@ -38,8 +37,6 @@ log = logging.getLogger(__name__)
 
 class scraper_claude:
 
-    CSV_FILE    = "csv_scraper_claude.csv"
-    TSV_FILE    = "csv_scraper_claude.tsv"
     CSV_HEADERS = ["tarih", "kategori", "urun_adi", "fiyat", "para_birimi"]
 
     CATEGORIES = {
@@ -55,13 +52,14 @@ class scraper_claude:
     }
 
     PAGE_LOAD_WAIT = 15
-    SCROLL_PAUSE   = 3.0  # 2.5 → 3.0 (daha stabil)
-    MAX_STALE      = 5    # 3 → 5 (erken kesilmesin)
+    SCROLL_PAUSE   = 3.0
+    MAX_STALE      = 5
 
     def __init__(self):
         self.today         = str(date.today())
+        self.csv_file      = f"{self.today}.csv"
         self.total_scraped = 0
-        self._ensure_files()
+        self._ensure_file()
         self.driver = self._init_driver()
 
     # ── CHROME DRIVER ─────────────────────────────────────────
@@ -89,34 +87,23 @@ class scraper_claude:
         return driver
 
     # ── DOSYA YÖNETİMİ ────────────────────────────────────────
-    def _ensure_files(self):
-        if os.path.exists(self.CSV_FILE):
-            with open(self.CSV_FILE, encoding="utf-8-sig") as f:
-                reader = csv.DictReader(f)
-                for row in reader:
-                    if row.get("tarih") == self.today:
-                        log.error(
-                            f"⛔ DURDURULDU: {self.today} tarihi için veriler zaten mevcut!\n"
-                            f"   Bugün ikinci kez çalıştırıyorsunuz. Tekrar veri eklenmedi."
-                        )
-                        sys.exit(0)
+    def _ensure_file(self):
+        if os.path.exists(self.csv_file):
+            log.error(
+                f"⛔ DURDURULDU: {self.today} için '{self.csv_file}' zaten mevcut!\n"
+                f"   Bugün ikinci kez çalıştırıyorsunuz. Tekrar veri eklenmedi."
+            )
+            sys.exit(0)
 
-        for filepath in [self.CSV_FILE, self.TSV_FILE]:
-            if not os.path.exists(filepath):
-                delim = "\t" if filepath.endswith(".tsv") else ","
-                with open(filepath, "w", newline="", encoding="utf-8-sig") as f:
-                    csv.DictWriter(f, fieldnames=self.CSV_HEADERS, delimiter=delim).writeheader()
-                log.info(f"Dosya oluşturuldu: {filepath}")
-            else:
-                log.info(f"Mevcut dosyaya eklenecek: {filepath}")
+        with open(self.csv_file, "w", newline="", encoding="utf-8-sig") as f:
+            csv.DictWriter(f, fieldnames=self.CSV_HEADERS).writeheader()
+        log.info(f"Dosya oluşturuldu: {self.csv_file}")
 
     def _save_products(self, products: list):
         if not products:
             return
-        with open(self.CSV_FILE, "a", newline="", encoding="utf-8-sig") as f:
-            csv.DictWriter(f, fieldnames=self.CSV_HEADERS, delimiter=",").writerows(products)
-        with open(self.TSV_FILE, "a", newline="", encoding="utf-8-sig") as f:
-            csv.DictWriter(f, fieldnames=self.CSV_HEADERS, delimiter="\t").writerows(products)
+        with open(self.csv_file, "a", newline="", encoding="utf-8-sig") as f:
+            csv.DictWriter(f, fieldnames=self.CSV_HEADERS).writerows(products)
         self.total_scraped += len(products)
 
     # ── INFINITE SCROLL ───────────────────────────────────────
@@ -227,7 +214,6 @@ class scraper_claude:
             return
         products = self._parse_products(soup, category)
         self._save_products(products)
-
         log.info(f"  ✓ {category}: {len(products)} ürün kaydedildi.\n")
 
     # ── ANA ÇALIŞTIRICI ───────────────────────────────────────
@@ -245,11 +231,10 @@ class scraper_claude:
             self.driver.quit()
             log.info("Chrome driver kapatıldı.")
         log.info("=" * 55)
-        log.info(f"  TAMAMLANDI — {self.total_scraped} ürün → '{self.CSV_FILE}' + '{self.TSV_FILE}'")
+        log.info(f"  TAMAMLANDI — {self.total_scraped} ürün → '{self.csv_file}'")
         log.info("=" * 55)
 
 
 if __name__ == "__main__":
     scraper = scraper_claude()
     scraper.run()
-

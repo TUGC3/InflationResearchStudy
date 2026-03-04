@@ -6,8 +6,9 @@ from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
-from webdriver_manager.chrome import ChromeDriverManager
+# from webdriver_manager.chrome import ChromeDriverManager
 import os
+import undetected_chromedriver as uc
 
 market_url = "https://www.carrefoursa.com"
 categories = [
@@ -42,12 +43,8 @@ def scroll_to_bottom(driver):
 
         last_height = new_height
 
-options = Options()
-options.add_argument("--start-maximized")
-
-driver = webdriver.Chrome(
-    service=Service(ChromeDriverManager().install()),
-    options=options)
+options = uc.ChromeOptions()
+driver = uc.Chrome(version_main=145, options=options)
 
 data_dir = "Datas/Markets/CarrefourSA"
 os.makedirs(data_dir, exist_ok=True)

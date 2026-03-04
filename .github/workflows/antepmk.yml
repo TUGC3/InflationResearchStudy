@@ -1,70 +1,40 @@
-name: Antep-Maras-Kilis House Rent Scraper
+name: Daily Rental Scraper (antep maras kilis)
 
 on:
   schedule:
-    - cron: '30 2 * * *'
+    - cron: '0 3 * * *'
   workflow_dispatch:
 
 jobs:
   scrape:
     runs-on: ubuntu-latest
-    container:
-      image: python:3.11-slim
-      
+    
     steps:
-    - name: Install system dependencies
-      run: |
-        apt-get update
-        apt-get install -y \
-          wget \
-          gnupg \
-          unzip \
-          curl \
-          chromium \
-          chromium-driver \
-          xvfb \
-          libxss1 \
-          libnss3 \
-          libx11-xcb1 \
-          libxcb-dri3-0 \
-          libdrm2 \
-          libgbm1 \
-          --no-install-recommends
-          
-    - name: Checkout repository
-      uses: actions/checkout@v4
-      
+    - uses: actions/checkout@v3
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+    
+    - name: Setup Chrome
+      uses: browser-actions/setup-chrome@v1
+    
     - name: Install Python packages
       run: |
-        pip install --no-cache-dir undetected-chromedriver beautifulsoup4 selenium
-        
+        pip install undetected-chromedriver beautifulsoup4 selenium
+    
     - name: Create data directories
-      run: |
-        mkdir -p Datas/HousesRent/Maras
-        mkdir -p Datas/HousesRent/Antep
-        mkdir -p Datas/HousesRent/Kilis
-        
+      run: mkdir -p Datas/HousesRent/{Maras,Antep,Kilis}
+    
     - name: Run scraper
+      run: python Codes/HousesRent/Antep_Maras_Kilis/antep_maras_kilis.py
       env:
         HEADLESS: "true"
-        BRAVE_PATH: "/usr/bin/chromium"
-      run: |
-        # Start virtual display
-        Xvfb :99 -screen 0 1920x1080x24 &
-        export DISPLAY=:99
-        
-        cd Codes/HousesRent/Antep_Maras_Kilis
-        python antep_maras_kilis.py
-        
-    - name: Commit and push results
+    
+    - name: Commit data
       run: |
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
-        git add Datas/HousesRent/Maras/*.csv Datas/HousesRent/Antep/*.csv Datas/HousesRent/Kilis/*.csv 2>/dev/null || true
-        
-        if ! git diff --quiet && git diff --staged --quiet; then
-          git commit -m "Update house rental data for $(date +'%Y-%m-%d')"
-          git push
-        else
-          echo "No changes to commit"
-        fi
+        git add Datas/HousesRent/
+        git diff --staged --quiet || (git commit -m "Update rental data $(date +'%Y-%m-%d')" && git push)

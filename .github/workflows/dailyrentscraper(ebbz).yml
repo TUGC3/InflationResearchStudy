@@ -1,0 +1,47 @@
+import os
+import time
+import pandas as pd
+from selenium import webdriver
+import undetected_chromedriver as uc
+from selenium.webdriver.chrome.options import Options
+
+# --- Ayarlar ---
+CITIES = ["Eskisehir", "Bolu", "Bartin", "Zonguldak"]
+BASE_DATA_PATH = "Datas/HousesRent/Eskisehir_Bolu_Bartin_Zonguldak"
+
+# --- Chrome seçenekleri ---
+chrome_options = uc.ChromeOptions()
+chrome_options.headless = True
+chrome_options.add_argument("--no-sandbox")
+chrome_options.add_argument("--disable-dev-shm-usage")
+chrome_options.add_argument("--disable-gpu")
+chrome_options.add_argument("--window-size=1920,1080")
+# Geçici profil
+chrome_options.add_argument(f"--user-data-dir=/tmp/uc_profile")
+
+driver = uc.Chrome(options=chrome_options)
+
+# --- Örnek scraping akışı ---
+for city in CITIES:
+    data = []
+    # URL örneği, şehirye göre değiştirilebilir
+    url = f"https://www.sahibinden.com/kiralik-daire/{city.lower()}"
+    driver.get(url)
+    time.sleep(3)  # sayfa yüklenmesi için
+
+    listings = driver.find_elements("css selector", ".searchResultsItem")  # ürün container
+    for item in listings:
+        try:
+            title = item.find_element("css selector", ".classifiedTitle").text
+            price = item.find_element("css selector", ".searchResultsPriceValue").text
+            data.append({"title": title, "price": price})
+        except:
+            continue
+
+    # CSV kaydı
+    city_folder = os.path.join(BASE_DATA_PATH, city)
+    os.makedirs(city_folder, exist_ok=True)
+    df = pd.DataFrame(data)
+    df.to_csv(os.path.join(city_folder, f"{city}_rent.csv"), index=False)
+
+driver.quit()

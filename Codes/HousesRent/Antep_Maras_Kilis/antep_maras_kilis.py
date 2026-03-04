@@ -1,63 +1,22 @@
+#!/usr/bin/env python3
+"""
+Sahibinden.com rental scraper for Kahramanmaras, Gaziantep, and Kilis
+Automated daily scraping with GitHub Actions
+"""
+
 import csv
 import os
 import random
 import shutil
 import time
+import subprocess
 from datetime import datetime
 from typing import Dict, List, Optional, Tuple
 
 import undetected_chromedriver as uc
 from bs4 import BeautifulSoup
 from selenium.common.exceptions import WebDriverException
-# Add this near the top of your file after imports
-import platform
 
-def is_github_actions():
-    """Check if running in GitHub Actions"""
-    return os.getenv("GITHUB_ACTIONS") == "true"
-
-def setup_driver() -> uc.Chrome:
-    """Setup undetected Chrome driver"""
-    browser_exe = find_brave_exe()
-    
-    options = uc.ChromeOptions()
-    
-    if is_github_actions():
-        # GitHub Actions specific settings
-        profile_path = "/tmp/chrome-profile"
-        options.add_argument("--headless=new")
-        options.add_argument("--no-sandbox")
-        options.add_argument("--disable-dev-shm-usage")
-        options.add_argument("--disable-gpu")
-        options.add_argument("--disable-setuid-sandbox")
-        options.add_argument("--remote-debugging-port=9222")
-        options.add_argument("--single-process")  # Important for Docker/CI
-        options.add_argument("--disable-accelerated-2d-canvas")
-        options.add_argument("--disable-features=VizDisplayCompositor")
-    else:
-        profile_path = os.path.join(os.path.dirname(__file__), PROFILE_DIR_NAME)
-        if HEADLESS:
-            options.add_argument("--headless=new")
-    
-    options.add_argument(f"--user-data-dir={profile_path}")
-    options.add_argument("--window-size=1400,900")
-    options.add_argument("--lang=tr-TR")
-    options.add_argument("--disable-blink-features=AutomationControlled")
-    
-    # Additional arguments to appear more human
-    options.add_argument("--disable-web-security")
-    options.add_argument("--allow-running-insecure-content")
-    
-    # Set user agent
-    options.add_argument("--user-agent=Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36")
-    
-    return uc.Chrome(
-        options=options,
-        browser_executable_path=browser_exe,
-        version_main=120,  # Match Chrome version
-        driver_executable_path=None,
-        headless=is_github_actions() or HEADLESS
-    )
 # City configuration
 CITIES: Dict[str, str] = {
     "maras": "https://www.sahibinden.com/kiralik/kahramanmaras",
@@ -65,119 +24,52 @@ CITIES: Dict[str, str] = {
     "kilis": "https://www.sahibinden.com/kiralik/kilis",
 }
 
-DATA_GROUP_FOLDER = "Antep_Maras_Kilis"
-HEADLESS = os.environ.get("HEADLESS", "").strip().lower() in {"1", "true", "yes"}
-
+# Configuration
+HEADLESS = os.environ.get("HEADLESS", "true").lower() == "true"
 SLEEP_MIN = 2.5
 SLEEP_MAX = 4.5
-
-BROWSER_MAJOR_VERSION = 145
-
-# Persistent profile so manual verification/cookies stick
-PROFILE_DIR_NAME = "SeleniumProfile_PERSISTENT"
-
 PAGING_SIZE = 50
-MAX_PAGES_PER_BRACKET = 120  # raise a bit; antep can be big
+MAX_PAGES_PER_BRACKET = 120
 
-# Default brackets
+# Price brackets
 PRICE_BRACKETS_DEFAULT: List[Tuple[int, int]] = [
-    (0, 7999),
-    (8000, 9999),
-    (10000, 11999),
-    (12000, 13999),
-    (14000, 15999),
-    (16000, 17999),
-    (18000, 19999),
-    (20000, 22999),
-    (23000, 26999),
-    (27000, 9999999),
+    (0, 7999), (8000, 9999), (10000, 11999), (12000, 13999),
+    (14000, 15999), (16000, 17999), (18000, 19999),
+    (20000, 22999), (23000, 26999), (27000, 9999999),
 ]
 
-# More granular brackets for antep (bigger market)
-PRICE_BRACKETS_antep: List[Tuple[int, int]] = [
-    (0, 9999),
-    (10000, 12999),
-    (13000, 14999),
-    (15000, 16999),
-    (17000, 18999),
-    (19000, 20999),
-    (21000, 22999),
-    (23000, 24999),
-    (25000, 27999),
-    (28000, 31999),
-    (32000, 37999),
-    (38000, 44999),
-    (45000, 54999),
-    (55000, 9999999),
+PRICE_BRACKETS_ANTEP: List[Tuple[int, int]] = [
+    (0, 9999), (10000, 12999), (13000, 14999), (15000, 16999),
+    (17000, 18999), (19000, 20999), (21000, 22999), (23000, 24999),
+    (25000, 27999), (28000, 31999), (32000, 37999), (38000, 44999),
+    (45000, 54999), (55000, 9999999),
 ]
 
-# =========================
-# Paths
-# =========================
+def is_github_actions() -> bool:
+    """Check if running in GitHub Actions"""
+    return os.getenv("GITHUB_ACTIONS") == "true"
 
-def repo_root() -> str:
-    """Get the repository root directory"""
-    return os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../"))
-
-def data_dir_for_city(city: str) -> str:
-    """Get data directory for a specific city"""
-    # Map city names to folder names
-    city_folder_map = {
-        "maras": "Maras",
-        "antep": "Antep",
-        "kilis": "Kilis"
-    }
-    city_folder = city_folder_map.get(city, city.capitalize())
-    return os.path.join(repo_root(), "Datas", "HousesRent", city_folder)
-
-# =========================
-# Brave path for GitHub Actions
-# =========================
-
-def find_brave_exe() -> str:
-    """Find Brave executable path - works locally and in GitHub Actions"""
-    env_brave = os.environ.get("BRAVE_PATH", "").strip()
-    if env_brave and os.path.isfile(env_brave):
-        return env_brave
-
-    # Check if running in GitHub Actions (Chrome is available)
-    if os.path.exists("/usr/bin/google-chrome"):
-        return "/usr/bin/google-chrome"
-    
-    if os.path.exists("/usr/bin/chromium-browser"):
-        return "/usr/bin/chromium-browser"
-
-    # Windows paths for local development
-    candidates = [
-        r"C:\Program Files\BraveSoftware\Brave-Browser\Application\brave.exe",
-        r"C:\Program Files (x86)\BraveSoftware\Brave-Browser\Application\brave.exe",
-        os.path.expandvars(r"%LOCALAPPDATA%\BraveSoftware\Brave-Browser\Application\brave.exe"),
-        r"C:\Program Files\Google\Chrome\Application\chrome.exe",  # Fallback to Chrome
-    ]
-    
-    for p in candidates:
-        if p and os.path.isfile(p):
-            return p
-
-    # Default to Chrome in Linux (GitHub Actions)
-    return "/usr/bin/google-chrome"
-
-# =========================
-# Driver setup for GitHub Actions
-# =========================
+def get_chrome_version() -> str:
+    """Get installed Chrome version"""
+    try:
+        result = subprocess.run(['google-chrome', '--version'], 
+                              capture_output=True, text=True)
+        version = result.stdout.strip().split()[-1]
+        return version.split('.')[0]  # Return major version
+    except:
+        return "120"  # Default fallback
 
 def setup_driver() -> uc.Chrome:
     """Setup undetected Chrome driver"""
-    browser_exe = find_brave_exe()
-
+    chrome_version = get_chrome_version()
+    print(f"Detected Chrome version: {chrome_version}")
+    
     options = uc.ChromeOptions()
     
     # Use temporary profile in GitHub Actions
-    if os.getenv("GITHUB_ACTIONS"):
-        profile_path = "/tmp/chrome-profile"
-    else:
-        profile_path = os.path.join(os.path.dirname(__file__), PROFILE_DIR_NAME)
+    profile_path = "/tmp/chrome-profile" if is_github_actions() else "ChromeProfile"
     
+    # Basic options
     options.add_argument(f"--user-data-dir={profile_path}")
     options.add_argument("--no-sandbox")
     options.add_argument("--disable-dev-shm-usage")
@@ -185,112 +77,144 @@ def setup_driver() -> uc.Chrome:
     options.add_argument("--window-size=1400,900")
     options.add_argument("--lang=tr-TR")
     options.add_argument("--disable-blink-features=AutomationControlled")
+    options.add_argument("--user-agent=Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36")
     
-    # Additional arguments for GitHub Actions
-    if os.getenv("GITHUB_ACTIONS"):
+    # GitHub Actions specific options
+    if is_github_actions():
         options.add_argument("--headless=new")
         options.add_argument("--disable-setuid-sandbox")
         options.add_argument("--remote-debugging-port=9222")
+        options.add_argument("--single-process")
+        options.add_argument("--disable-accelerated-2d-canvas")
+        options.add_argument("--disable-features=VizDisplayCompositor")
     elif HEADLESS:
         options.add_argument("--headless=new")
+    
+    # Get browser path
+    browser_path = "/usr/bin/google-chrome" if os.path.exists("/usr/bin/google-chrome") else None
+    
+    try:
+        # Try with auto version detection
+        driver = uc.Chrome(
+            options=options,
+            browser_executable_path=browser_path,
+            version_main=int(chrome_version) if chrome_version.isdigit() else None,
+            headless=is_github_actions() or HEADLESS
+        )
+        return driver
+    except Exception as e:
+        print(f"Error with auto version detection: {e}")
+        print("Trying without version specification...")
+        
+        # Fallback: let undetected-chromedriver handle it
+        driver = uc.Chrome(
+            options=options,
+            browser_executable_path=browser_path,
+            headless=is_github_actions() or HEADLESS
+        )
+        return driver
 
-    return uc.Chrome(
-        options=options,
-        browser_executable_path=browser_exe,
-        version_main=BROWSER_MAJOR_VERSION,
-    )
+# [Rest of your functions remain the same - close_driver, polite_sleep, get_data_dir, etc.]
 
 def close_driver(driver: Optional[uc.Chrome]) -> None:
     """Safely close the driver"""
-    if driver is None:
-        return
-    try:
-        driver.quit()
-    except Exception:
-        pass
+    if driver:
+        try:
+            driver.quit()
+        except Exception:
+            pass
 
 def polite_sleep() -> None:
     """Sleep with random duration"""
     time.sleep(random.uniform(SLEEP_MIN, SLEEP_MAX))
 
-# =========================
-# Block detection
-# =========================
+def get_data_dir(city: str) -> str:
+    """Get data directory for a specific city"""
+    city_folder_map = {
+        "maras": "Maras",
+        "antep": "Antep",
+        "kilis": "Kilis"
+    }
+    city_folder = city_folder_map.get(city, city.capitalize())
+    
+    # Navigate up from script location to repository root
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    repo_root = os.path.abspath(os.path.join(script_dir, "../../../"))
+    
+    return os.path.join(repo_root, "Datas", "HousesRent", city_folder)
 
 def is_block_page(html: str) -> bool:
     """Check if page is blocked by Cloudflare or similar"""
     soup = BeautifulSoup(html, "html.parser")
-
-    # If listings table exists, not blocked
+    
     if soup.select_one("#searchResultsTable"):
         return False
-
+    
     lower = html.lower()
     signals = [
-        "just a moment",
-        "bir dakika lütfen",
-        "lütfen bekleyiniz",
-        "cf-challenge",
-        "challenge-error-text",
-        "access denied",
-        "forbidden",
-        "güvenlik doğrulama",
-        "robot olmadığınızı",
-        "captcha",
-        "üye girişi",
-        "giriş yap",
-        "cloudflare",
+        "just a moment", "bir dakika lütfen", "lütfen bekleyiniz",
+        "cf-challenge", "access denied", "forbidden", 
+        "güvenlik doğrulama", "robot olmadığınızı", "captcha",
+        "cloudflare", "403 forbidden"
     ]
     return any(s in lower for s in signals)
 
-def ensure_access(driver: uc.Chrome, url: str) -> None:
-    """Ensure we can access the page"""
-    driver.get(url)
-    polite_sleep()
-
-    if is_block_page(driver.page_source):
-        print("\n[BLOCK DETECTED]")
-        if os.getenv("GITHUB_ACTIONS"):
-            print("Block detected in GitHub Actions - cannot solve manually")
-            print("Waiting 60 seconds and retrying...")
-            time.sleep(60)
+def ensure_access(driver: uc.Chrome, url: str, max_retries: int = 3) -> bool:
+    """Ensure we can access the page with retries"""
+    for attempt in range(max_retries):
+        try:
             driver.get(url)
             polite_sleep()
-        else:
-            print("Solve the verification in the opened browser window.")
-            input("When the real listings page is visible, press ENTER here to continue...")
-            driver.get(url)
-            polite_sleep()
-
-# =========================
-# Parsing
-# =========================
+            
+            if not is_block_page(driver.page_source):
+                return True
+            
+            print(f"Block detected (attempt {attempt + 1}/{max_retries})")
+            if is_github_actions():
+                wait_time = 30 * (attempt + 1)
+                print(f"Waiting {wait_time} seconds before retry...")
+                time.sleep(wait_time)
+            else:
+                input("Solve verification in browser, then press Enter...")
+                
+        except Exception as e:
+            print(f"Error accessing URL: {e}")
+            time.sleep(5)
+    
+    return False
 
 def extract_listings_from_html(html: str) -> List[dict]:
     """Extract listings from HTML"""
     soup = BeautifulSoup(html, "html.parser")
     
     # Try multiple selectors for robustness
-    rows = soup.select("#searchResultsTable tbody tr")
-    if not rows:
-        rows = soup.select(".searchResultsItem")
-    if not rows:
-        rows = soup.select("tr[class*='search']")
-
-    out: List[dict] = []
+    rows = (soup.select("#searchResultsTable tbody tr") or 
+            soup.select(".searchResultsItem") or 
+            soup.select("tr[class*='search']"))
+    
+    listings = []
     for row in rows:
-        price_elem = row.select_one(".searchResultsPriceValue")
-        loc_elem = row.select_one(".searchResultsLocationValue")
-        attr_elems = row.select(".searchResultsAttributeValue")
-
-        price = price_elem.get_text(strip=True) if price_elem else ""
-        district = " / ".join(loc_elem.stripped_strings) if loc_elem else ""
-        rooms = attr_elems[1].get_text(strip=True) if len(attr_elems) > 1 else ""
-
-        if price and district:
-            out.append({"District": district, "Rooms": rooms, "Price": price})
-
-    return out
+        try:
+            price_elem = row.select_one(".searchResultsPriceValue")
+            loc_elem = row.select_one(".searchResultsLocationValue")
+            attr_elems = row.select(".searchResultsAttributeValue")
+            
+            price = price_elem.get_text(strip=True) if price_elem else ""
+            district = " / ".join(loc_elem.stripped_strings) if loc_elem else ""
+            rooms = attr_elems[1].get_text(strip=True) if len(attr_elems) > 1 else ""
+            
+            if price and district:
+                listings.append({
+                    "District": district,
+                    "Rooms": rooms,
+                    "Price": price,
+                    "Scraped_Date": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                })
+        except Exception as e:
+            print(f"Error parsing row: {e}")
+            continue
+    
+    return listings
 
 def find_next_url(html: str) -> Optional[str]:
     """Find next page URL"""
@@ -303,136 +227,107 @@ def find_next_url(html: str) -> Optional[str]:
         return "https://www.sahibinden.com" + href
     return None
 
-# =========================
-# CSV handling
-# =========================
-
-def append_to_daily_csv(city: str, rows: List[dict]) -> str:
-    """Append listings to daily CSV file"""
-    city_dir = data_dir_for_city(city)
+def save_to_csv(city: str, rows: List[dict]) -> str:
+    """Save listings to daily CSV file"""
+    city_dir = get_data_dir(city)
     os.makedirs(city_dir, exist_ok=True)
-
+    
     today = datetime.now().strftime("%Y-%m-%d")
     filename = f"{city.lower()}_{today}.csv"
     out_path = os.path.join(city_dir, filename)
-
+    
     file_exists = os.path.isfile(out_path)
     with open(out_path, "a", newline="", encoding="utf-8-sig") as f:
-        w = csv.DictWriter(f, fieldnames=["District", "Rooms", "Price"])
+        fieldnames = ["District", "Rooms", "Price", "Scraped_Date"]
+        writer = csv.DictWriter(f, fieldnames=fieldnames)
         if not file_exists:
-            w.writeheader()
-        w.writerows(rows)
-
+            writer.writeheader()
+        writer.writerows(rows)
+    
     return out_path
-
-# =========================
-# Bracket URL
-# =========================
 
 def build_bracket_url(base_url: str, min_p: int, max_p: int) -> str:
     """Build URL with price bracket"""
     return f"{base_url}?pagingSize={PAGING_SIZE}&price_min={min_p}&price_max={max_p}"
 
-# =========================
-# Scraper
-# =========================
-
 def scrape_city(driver: uc.Chrome, city: str, base_url: str) -> Tuple[uc.Chrome, str]:
     """Scrape all listings for a city"""
-    print(f"\n=== Scraping: {city} ===")
+    print(f"\n{'='*50}")
+    print(f"Scraping: {city.upper()}")
+    print(f"{'='*50}")
+    
     last_out_path = ""
-
-    brackets = PRICE_BRACKETS_antep if city == "antep" else PRICE_BRACKETS_DEFAULT
-
-    for (min_p, max_p) in brackets:
-        print(f"\n--- Bracket {min_p} - {max_p} ---")
+    brackets = PRICE_BRACKETS_ANTEP if city == "antep" else PRICE_BRACKETS_DEFAULT
+    
+    for min_p, max_p in brackets:
+        print(f"\n--- Price Bracket: {min_p} - {max_p} TL ---")
         url = build_bracket_url(base_url, min_p, max_p)
-
-        page_idx = 0
-        while True:
-            page_idx += 1
-            if page_idx > MAX_PAGES_PER_BRACKET:
-                print("Bracket page limit reached. Consider splitting brackets smaller.")
+        
+        page_num = 0
+        while page_num < MAX_PAGES_PER_BRACKET:
+            page_num += 1
+            
+            # Access page with retry
+            if not ensure_access(driver, url):
+                print(f"Failed to access page after retries, skipping bracket")
                 break
-
-            try:
-                ensure_access(driver, url)
-                html = driver.page_source
-
-                # If still blocked, pause/retry
-                if is_block_page(html):
-                    print("Still blocked on this bracket page.")
-                    if os.getenv("GITHUB_ACTIONS"):
-                        print("Waiting 30 seconds and retrying...")
-                        time.sleep(30)
-                        continue
-                    else:
-                        input("Solve it in browser, then press ENTER to retry this page...")
-                        continue
-
-                rows = extract_listings_from_html(html)
-                print(f"Page {page_idx}: {len(rows)} listings")
-
-                # Handle zero listings
-                if len(rows) == 0:
-                    print("Zero listings on page. URL:", driver.current_url)
-                    # Check if it's the last page
-                    next_url = find_next_url(html)
-                    if not next_url:
-                        print("No next page found - this might be the last page")
-                        break
-                    
-                    if os.getenv("GITHUB_ACTIONS"):
-                        print("Waiting 10 seconds and continuing to next page...")
-                        time.sleep(10)
-                        if next_url:
-                            url = next_url
-                            continue
-                    else:
-                        input("Check browser. If it's blocked/empty, fix it, then press ENTER to retry...")
-                        continue
-
-                last_out_path = append_to_daily_csv(city, rows)
-                print(f"Appended {len(rows)} rows -> {last_out_path}")
-
-                next_url = find_next_url(html)
-                if not next_url:
-                    break
-
-                url = next_url
-                polite_sleep()
-
-            except WebDriverException as e:
-                msg = str(e).lower()
-                if "connection refused" in msg or "max retries exceeded" in msg or "disconnected" in msg:
-                    print("\n[DRIVER DIED] Recreating driver and continuing...")
-                    close_driver(driver)
-                    time.sleep(2.0)
-                    driver = setup_driver()
-                    continue
-                raise
-
+            
+            # Extract listings
+            rows = extract_listings_from_html(driver.page_source)
+            print(f"Page {page_num}: Found {len(rows)} listings")
+            
+            if rows:
+                last_out_path = save_to_csv(city, rows)
+                print(f"Saved {len(rows)} listings to {last_out_path}")
+            
+            # Check for next page
+            next_url = find_next_url(driver.page_source)
+            if not next_url:
+                print("No more pages in this bracket")
+                break
+            
+            url = next_url
+            polite_sleep()
+    
     return driver, last_out_path
 
-def main() -> None:
+def main():
     """Main function"""
-    driver: Optional[uc.Chrome] = None
+    print("Starting Sahibinden.com scraper...")
+    print(f"Running in GitHub Actions: {is_github_actions()}")
+    
+    driver = None
     try:
         driver = setup_driver()
+        
         for city, url in CITIES.items():
-            driver, out_path = scrape_city(driver, city, url)
-            if out_path:
-                print(f"\nDone: {city} -> {out_path}")
-            else:
-                print(f"\nDone: {city} (no output file written)")
-            time.sleep(2.0)
+            try:
+                driver, out_path = scrape_city(driver, city, url)
+                if out_path:
+                    print(f"\n✓ Completed {city}: Data saved to {out_path}")
+                else:
+                    print(f"\n✓ Completed {city}: No data found")
+                
+                # Wait between cities
+                time.sleep(3)
+                
+            except Exception as e:
+                print(f"Error scraping {city}: {e}")
+                # Try to recover driver
+                close_driver(driver)
+                time.sleep(5)
+                driver = setup_driver()
+                continue
+        
+        print("\n✓ All cities processed successfully!")
+        
     except Exception as e:
-        print(f"Error in main: {e}")
+        print(f"Fatal error: {e}")
         raise
     finally:
         close_driver(driver)
         # Clean up profile in GitHub Actions
-        if os.getenv("GITHUB_ACTIONS") and os.path.exists("/tmp/chrome-profile"):
+        if is_github_actions() and os.path.exists("/tmp/chrome-profile"):
             shutil.rmtree("/tmp/chrome-profile", ignore_errors=True)
 
 if __name__ == "__main__":
