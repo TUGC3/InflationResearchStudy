@@ -1,0 +1,35 @@
+name: Daily AVEVA Scraper
+
+on:
+  schedule:
+    # Runs at 2:00 AM UTC every day (adjust as needed)
+    - cron: '0 2 * * *'
+  workflow_dispatch: # Allows you to run it manually from GitHub
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.10'
+
+    - name: Install dependencies
+      run: |
+        pip install requests beautifulsoup4 lxml
+
+    - name: Run scraper
+      run: python Codes/ClothingStores/Avva/avva_scraper.py
+
+    - name: Commit and push changes
+      run: |
+        git config --global user.name 'github-actions[bot]'
+        git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+        git add Datas/ClothingStores/Avva/
+        git diff --quiet && git diff --staged --quiet || git commit -m "Daily data update: $(date +'%Y-%m-%d')"
+        git push
