@@ -9,6 +9,9 @@ Usage examples:
   # Scrape a single category (by ID) and save as CSV
   python main.py --category 2 --output csv
 
+  # Scrape all categories with 3 parallel workers
+  python main.py --output both --workers 3
+
   # Scrape all categories, save both CSV and JSON, with a 1-second delay
   python main.py --output both --delay 1.0
 
@@ -25,6 +28,8 @@ import logging
 import os
 import sys
 import time
+import threading
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 
 import pandas as pd
@@ -42,6 +47,11 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
+# ── Thread-safety locks ──────────────────────────────────────────────────────
+_csv_lock        = threading.Lock()
+_checkpoint_lock = threading.Lock()
+_counter_lock    = threading.Lock()
+
 
 # ── Checkpoint helpers ───────────────────────────────────────────────────────
 
@@ -54,15 +64,16 @@ def _load_checkpoint() -> dict:
 
 def _save_checkpoint(checkpoint: dict) -> None:
     os.makedirs(config.CHECKPOINT_DIR, exist_ok=True)
-    with open(config.CHECKPOINT_FILE, "w", encoding="utf-8") as f:
-        json.dump(checkpoint, f, ensure_ascii=False, indent=2)
+    with _checkpoint_lock:
+        with open(config.CHECKPOINT_FILE, "w", encoding="utf-8") as f:
+            json.dump(checkpoint, f, ensure_ascii=False, indent=2)
 
 
 # ── Output helpers ───────────────────────────────────────────────────────────
 
 def _append_products(new_products: list[dict], output_format: str) -> None:
     """
-    Append new products to the output files incrementally.
+    Thread-safe append of new products to the output files.
     Called after every category so data is never lost on interruption.
     """
     if not new_products:
@@ -71,28 +82,29 @@ def _append_products(new_products: list[dict], output_format: str) -> None:
     os.makedirs(config.OUTPUT_DIR, exist_ok=True)
     df_new = pd.DataFrame(new_products)
 
-    if output_format in ("csv", "both"):
-        write_header = not os.path.exists(config.CSV_OUTPUT_FILE)
-        df_new.to_csv(
-            config.CSV_OUTPUT_FILE,
-            mode="a",
-            index=False,
-            header=write_header,
-            encoding="utf-8-sig",
-        )
+    with _csv_lock:
+        if output_format in ("csv", "both"):
+            write_header = not os.path.exists(config.CSV_OUTPUT_FILE)
+            df_new.to_csv(
+                config.CSV_OUTPUT_FILE,
+                mode="a",
+                index=False,
+                header=write_header,
+                encoding="utf-8-sig",
+            )
 
-    if output_format in ("json", "both"):
-        # Rewrite the whole JSON each time (needed for valid JSON array)
-        existing: list[dict] = []
-        if os.path.exists(config.JSON_OUTPUT_FILE):
-            try:
-                with open(config.JSON_OUTPUT_FILE, "r", encoding="utf-8") as f:
-                    existing = json.load(f)
-            except Exception:
-                existing = []
-        existing.extend(new_products)
-        with open(config.JSON_OUTPUT_FILE, "w", encoding="utf-8") as f:
-            json.dump(existing, f, ensure_ascii=False, indent=2)
+        if output_format in ("json", "both"):
+            # Rewrite the whole JSON each time (needed for valid JSON array)
+            existing: list[dict] = []
+            if os.path.exists(config.JSON_OUTPUT_FILE):
+                try:
+                    with open(config.JSON_OUTPUT_FILE, "r", encoding="utf-8") as f:
+                        existing = json.load(f)
+                except Exception:
+                    existing = []
+            existing.extend(new_products)
+            with open(config.JSON_OUTPUT_FILE, "w", encoding="utf-8") as f:
+                json.dump(existing, f, ensure_ascii=False, indent=2)
 
 
 def _dedup_csv() -> int:
@@ -126,7 +138,7 @@ def _dedup_json() -> None:
         json.dump(deduped, f, ensure_ascii=False, indent=2)
 
 
-# ── Core scraping logic ──────────────────────────────────────────────────────
+# ── Per-worker session factory ───────────────────────────────────────────────────
 
 def _make_session() -> requests.Session:
     session = requests.Session()
@@ -134,13 +146,28 @@ def _make_session() -> requests.Session:
     return session
 
 
-def run_scraper(args: argparse.Namespace) -> None:
-    session = _make_session()
+# ── Worker function (runs in a thread) ────────────────────────────────────────────
 
-    # 1. Fetch categories
+def _scrape_category_worker(cat: dict, delay: float, page_limit: int) -> list[dict]:
+    """Scrape one category in its own thread with its own Session."""
+    session = _make_session()
+    return fetch_products_for_category(
+        category=cat,
+        session=session,
+        delay=delay,
+        page_limit=page_limit,
+    )
+
+
+# ── Core scraping logic ──────────────────────────────────────────────────────
+
+
+def run_scraper(args: argparse.Namespace) -> None:
+    # 1. Fetch categories (single-threaded bootstrap)
     logger.info("Fetching category list…")
+    bootstrap_session = _make_session()
     try:
-        categories = fetch_categories(session=session)
+        categories = fetch_categories(session=bootstrap_session)
     except RuntimeError as exc:
         logger.error("Could not fetch categories: %s", exc)
         sys.exit(1)
@@ -193,35 +220,47 @@ def run_scraper(args: argparse.Namespace) -> None:
             logger.warning("Could not count existing products: %s", exc)
 
     logger.info(
-        "Scraping %d categor%s…",
+        "Scraping %d categor%s with %d worker(s)…",
         len(categories_to_scrape),
         "y" if len(categories_to_scrape) == 1 else "ies",
+        args.workers,
     )
 
-    with tqdm(categories_to_scrape, unit="category", desc="Categories") as pbar:
-        for cat in pbar:
-            pbar.set_postfix_str(cat["name"])
+    # 5. Parallel scraping with ThreadPoolExecutor
+    futures = {}
+    with ThreadPoolExecutor(max_workers=args.workers) as executor:
+        for cat in categories_to_scrape:
+            future = executor.submit(_scrape_category_worker, cat, args.delay, args.limit)
+            futures[future] = cat
 
-            cat_products = _scrape_category(
-                session=session,
-                category=cat,
-                delay=args.delay,
-                page_limit=args.limit,
-            )
+        with tqdm(total=len(futures), unit="category", desc="Categories") as pbar:
+            for future in as_completed(futures):
+                cat = futures[future]
+                pbar.set_postfix_str(cat["name"])
+                try:
+                    cat_products = future.result()
+                except Exception as exc:
+                    logger.error("Category '%s' failed: %s", cat["name"], exc)
+                    cat_products = []
 
-            # ✅ Save immediately after each category — no data lost on interruption
-            if cat_products:
-                _append_products(cat_products, args.output)
-                total_products += len(cat_products)
+                # Save immediately after each category — no data lost on interruption
+                if cat_products:
+                    _append_products(cat_products, args.output)
+                    with _counter_lock:
+                        total_products += len(cat_products)
 
-            checkpoint["done"].append(cat["id"])
-            _save_checkpoint(checkpoint)
+                # Mark category done in checkpoint
+                with _checkpoint_lock:
+                    checkpoint["done"].append(cat["id"])
+                _save_checkpoint(checkpoint)
 
-            if cat_products:
-                logger.info(
-                    "Category '%s': +%d products (total so far: %d)",
-                    cat["name"], len(cat_products), total_products,
+                if cat_products:
+                    logger.info(
+                        "Category '%s': +%d products (total so far: %d)",
+                        cat["name"], len(cat_products), total_products,
                 )
+
+                pbar.update(1)
 
     # 5. Final deduplication pass
     logger.info("Running final deduplication…")
@@ -235,22 +274,7 @@ def run_scraper(args: argparse.Namespace) -> None:
         logger.info("Output → %s", config.JSON_OUTPUT_FILE)
 
 
-def _scrape_category(
-    session: requests.Session,
-    category: dict,
-    delay: float,
-    page_limit: int,
-) -> list[dict]:
-    """
-    Scrape all (or up to page_limit) pages of a category dict.
-    page_limit=0 means unlimited.
-    """
-    return fetch_products_for_category(
-        category=category,
-        session=session,
-        delay=delay,
-        page_limit=page_limit,
-    )
+
 
 
 # ── CLI ──────────────────────────────────────────────────────────────────────
@@ -280,11 +304,18 @@ def _build_parser() -> argparse.ArgumentParser:
         help="Output format (default: both).",
     )
     parser.add_argument(
+        "--workers",
+        type=int,
+        default=config.DEFAULT_WORKERS,
+        metavar="N",
+        help=f"Number of parallel category workers (default: {config.DEFAULT_WORKERS}).",
+    )
+    parser.add_argument(
         "--delay",
         type=float,
         default=config.REQUEST_DELAY,
         metavar="SECONDS",
-        help=f"Delay between page requests in seconds (default: {config.REQUEST_DELAY}).",
+        help=f"Delay between page requests per worker in seconds (default: {config.REQUEST_DELAY}).",
     )
     parser.add_argument(
         "--limit",

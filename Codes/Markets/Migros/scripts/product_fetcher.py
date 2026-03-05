@@ -13,6 +13,7 @@ When a subcategory entry has a ``parent_id``, we pass both parameters.
 When it only has an ``id`` (top-level fallback), we pass just ``category-id``.
 """
 
+import random
 import time
 import logging
 from typing import Optional
@@ -163,7 +164,7 @@ def fetch_products_for_category(
             name, page, len(products_raw), len(all_products),
         )
         page += 1
-        time.sleep(delay)
+        time.sleep(delay * random.uniform(config.JITTER_MIN, config.JITTER_MAX))
 
     return all_products
 

@@ -41,6 +41,13 @@ RETRY_BACKOFF = 2
 # Default sort order (onerilenler = recommended)
 DEFAULT_SORT = "onerilenler"
 
+# Number of parallel category workers
+DEFAULT_WORKERS = 3
+
+# Jitter multiplier range applied to REQUEST_DELAY (uniform random between these)
+JITTER_MIN = 0.5
+JITTER_MAX = 1.5
+
 # ── Output Settings ──────────────────────────────────────────────────────────
 import datetime as _dt
 from pathlib import Path as _Path
