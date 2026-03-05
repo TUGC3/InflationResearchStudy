@@ -1,40 +1,49 @@
-name: Daily Rental Scraper (antep maras kilis)
+name: Daily Rental Scraper
 
 on:
   schedule:
-    - cron: '0 3 * * *'
+    - cron: "0 3 * * *" # 03:00 UTC daily
   workflow_dispatch:
+
+concurrency:
+  group: daily-rental-scrape
+  cancel-in-progress: false
 
 jobs:
   scrape:
     runs-on: ubuntu-latest
-    
+    timeout-minutes: 60
+
     steps:
-    - uses: actions/checkout@v3
-    
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.10'
-    
-    - name: Setup Chrome
-      uses: browser-actions/setup-chrome@v1
-    
-    - name: Install Python packages
-      run: |
-        pip install undetected-chromedriver beautifulsoup4 selenium
-    
-    - name: Create data directories
-      run: mkdir -p Datas/HousesRent/{Maras,Antep,Kilis}
-    
-    - name: Run scraper
-      run: python Codes/HousesRent/Antep_Maras_Kilis/antep_maras_kilis.py
-      env:
-        HEADLESS: "true"
-    
-    - name: Commit data
-      run: |
-        git config --local user.email "action@github.com"
-        git config --local user.name "GitHub Action"
-        git add Datas/HousesRent/
-        git diff --staged --quiet || (git commit -m "Update rental data $(date +'%Y-%m-%d')" && git push)
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+          cache: "pip"
+
+      - name: Install Chrome
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y google-chrome-stable
+
+      - name: Install Python packages
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r Codes/HousesRent/Antep_Maras_Kilis/requirements.txt
+
+      - name: Run scraper
+        env:
+          HEADLESS: "true"
+          TZ: "UTC"
+        run: |
+          python Codes/HousesRent/Antep_Maras_Kilis/antep_maras_kilis.py
+
+      - name: Commit data
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add Datas/HousesRent/
+          git diff --staged --quiet || (git commit -m "Update rental data (auto)" && git push)
