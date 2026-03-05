@@ -1,5 +1,50 @@
 """
-Configuration settings for the Migros Türkiye product scraper.
+config.py — Configuration settings for the Migros Türkiye product scraper.
+===========================================================================
+
+This module is the single source of truth for every constant used by the
+scraper.  Import it with ``import config`` from any sibling script.
+
+Sections
+--------
+Base URLs
+    The root domain and the two API endpoints the scraper talks to.
+
+Request Headers
+    HTTP headers injected into every request.  The custom ``X-Device-PWA``
+    and ``X-FORWARDED-REST`` headers are required by the Migros API; without
+    them the endpoint returns 403 Forbidden.
+
+Scraping Parameters
+    Tunable knobs that control request rate, retry behaviour, and concurrency.
+
+    REQUEST_DELAY  : float  — base pause (seconds) between paginated requests.
+                             A random jitter factor (JITTER_MIN … JITTER_MAX) is
+                             multiplied in at runtime by ``product_fetcher.py``.
+    MAX_RETRIES    : int    — how many times a failed HTTP request is retried
+                             before the category is skipped.
+    RETRY_BACKOFF  : float  — seed value (seconds) for the exponential back-off
+                             delay.  Actual wait = RETRY_BACKOFF × attempt number.
+    DEFAULT_SORT   : str    — ``sirala`` query-parameter value sent to the API.
+                             "onerilenler" (recommended) is the stable default.
+    DEFAULT_WORKERS: int    — number of threads used by the
+                             ``ThreadPoolExecutor`` in ``main.py``.
+    JITTER_MIN/MAX : float  — uniform-random multiplier range applied on top of
+                             REQUEST_DELAY to spread out concurrent requests.
+
+Output Settings
+    All output paths are resolved relative to this file so the scraper works
+    correctly regardless of the directory from which ``main.py`` is called.
+
+    OUTPUT_DIR     : str  — directory where CSV / JSON data files are written.
+    CHECKPOINT_DIR : str  — directory where daily checkpoint JSON files live.
+    CSV_OUTPUT_FILE: str  — full path to today's CSV output file.
+    JSON_OUTPUT_FILE: str — full path to today's JSON output file.
+    CHECKPOINT_FILE: str  — full path to today's checkpoint file.
+
+    Files are named with today's date (``YYYY-MM-DD``) so each daily run
+    produces its own output set.  Passing ``--resume`` on the same day reuses
+    the existing checkpoint to pick up where the previous run left off.
 """
 
 # ── Base URLs ────────────────────────────────────────────────────────────────

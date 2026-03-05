@@ -1,8 +1,37 @@
 """
-main.py — Migros Türkiye Product Scraper
-=========================================
+main.py — Migros Türkiye Product Scraper — CLI entry point & orchestrator
+==========================================================================
 
-Usage examples:
+This module is the top-level entry point for the scraper.  It orchestrates
+category discovery, parallel product fetching, incremental output writing,
+checkpoint management, and a final deduplication pass.
+
+Pipeline
+--------
+1. **Category discovery** — ``category_fetcher.fetch_categories()`` probes the
+   Migros REST API and returns all scrapable (sub)categories.
+2. **Checkpoint loading** — when ``--resume`` is passed, the today's checkpoint
+   file is loaded and already-completed category IDs are skipped.
+3. **Parallel scraping** — each remaining category is dispatched to a
+   ``ThreadPoolExecutor`` worker.  Every worker creates its own
+   ``requests.Session`` so sessions are never shared across threads.
+4. **Incremental saving** — product data and checkpoint state are written to
+   disk immediately after each category completes.  An interruption therefore
+   loses at most one in-flight category.
+5. **Deduplication** — a final pass removes any products whose ``id`` was seen
+   more than once across categories (can happen for multi-category items).
+
+Output files
+------------
+All paths are configured in ``config.py`` and are derived relative to that
+file, so the scraper works correctly regardless of the CWD.
+
+    Datas/Markets/Migros/migros_<DATE>.csv    — UTF-8-with-BOM CSV
+    Datas/Markets/Migros/migros_<DATE>.json   — pretty-printed JSON array
+    Codes/Markets/Migros/checkpoints/migros_checkpoint_<DATE>.json
+
+Usage examples
+--------------
   # List all available categories
   python main.py --list-categories
 
@@ -20,6 +49,9 @@ Usage examples:
 
   # Resume an interrupted run (skips already-done categories)
   python main.py --output csv --resume
+
+  # Enable verbose / debug-level logging
+  python main.py --output csv -v
 """
 
 import argparse
@@ -56,6 +88,14 @@ _counter_lock    = threading.Lock()
 # ── Checkpoint helpers ───────────────────────────────────────────────────────
 
 def _load_checkpoint() -> dict:
+    """Load today's checkpoint file from disk.
+
+    Returns
+    -------
+    dict
+        Parsed checkpoint dict.  Schema: ``{"done": [<category_id>, ...]}``. 
+        Returns ``{"done": []}`` when the checkpoint file does not yet exist.
+    """
     if os.path.exists(config.CHECKPOINT_FILE):
         with open(config.CHECKPOINT_FILE, "r", encoding="utf-8") as f:
             return json.load(f)
@@ -63,6 +103,18 @@ def _load_checkpoint() -> dict:
 
 
 def _save_checkpoint(checkpoint: dict) -> None:
+    """Write ``checkpoint`` to ``config.CHECKPOINT_FILE`` atomically under a lock.
+
+    Creates ``config.CHECKPOINT_DIR`` if it does not already exist.  The write
+    is protected by ``_checkpoint_lock`` so concurrent worker threads cannot
+    corrupt the file.
+
+    Args
+    ----
+    checkpoint : dict
+        Checkpoint dict to serialise.  Expected schema:
+        ``{"done": [<category_id>, ...]}``.
+    """
     os.makedirs(config.CHECKPOINT_DIR, exist_ok=True)
     with _checkpoint_lock:
         with open(config.CHECKPOINT_FILE, "w", encoding="utf-8") as f:
@@ -72,9 +124,27 @@ def _save_checkpoint(checkpoint: dict) -> None:
 # ── Output helpers ───────────────────────────────────────────────────────────
 
 def _append_products(new_products: list[dict], output_format: str) -> None:
-    """
-    Thread-safe append of new products to the output files.
-    Called after every category so data is never lost on interruption.
+    """Thread-safely append ``new_products`` to the daily output files.
+
+    Called immediately after each category is scraped so that data is
+    persisted to disk even if the process is interrupted mid-run.
+
+    - **CSV**: rows are appended with a header written only for the first
+      batch (``mode="a"``).  Uses UTF-8-with-BOM encoding for wide Excel
+      compatibility.
+    - **JSON**: the entire file is rewritten on every call to maintain a
+      valid JSON array.  Existing entries are preserved.
+
+    Writing is serialised via ``_csv_lock`` so concurrent worker threads
+    never interleave their writes.
+
+    Args
+    ----
+    new_products : list[dict]
+        Products scraped from a single category (as returned by
+        ``fetch_products_for_category``).  A no-op when the list is empty.
+    output_format : str
+        One of ``"csv"``, ``"json"``, or ``"both"``.
     """
     if not new_products:
         return
@@ -108,7 +178,17 @@ def _append_products(new_products: list[dict], output_format: str) -> None:
 
 
 def _dedup_csv() -> int:
-    """Remove duplicate product IDs from the CSV file. Returns final row count."""
+    """Remove rows with duplicate product IDs from the CSV output file in-place.
+
+    Reads the entire CSV, drops duplicates on the ``id`` column (keeping the
+    first occurrence), resets the index, and overwrites the file.
+
+    Returns
+    -------
+    int
+        Number of rows in the file after deduplication.  Returns ``0`` when
+        the file does not exist.
+    """
     if not os.path.exists(config.CSV_OUTPUT_FILE):
         return 0
     df = pd.read_csv(config.CSV_OUTPUT_FILE, encoding="utf-8-sig")
@@ -122,7 +202,11 @@ def _dedup_csv() -> int:
 
 
 def _dedup_json() -> None:
-    """Remove duplicate product IDs from the JSON file."""
+    """Remove entries with duplicate product IDs from the JSON output file in-place.
+
+    Reads the JSON array, filters to the first occurrence of each ``id``, and
+    overwrites the file.  No-op when the file does not exist.
+    """
     if not os.path.exists(config.JSON_OUTPUT_FILE):
         return
     with open(config.JSON_OUTPUT_FILE, "r", encoding="utf-8") as f:
@@ -141,6 +225,16 @@ def _dedup_json() -> None:
 # ── Per-worker session factory ───────────────────────────────────────────────────
 
 def _make_session() -> requests.Session:
+    """Create a new ``requests.Session`` pre-loaded with the required HTTP headers.
+
+    Each worker thread calls this to obtain its own independent session,
+    preventing cross-thread state sharing.
+
+    Returns
+    -------
+    requests.Session
+        A session with ``config.DEFAULT_HEADERS`` already applied.
+    """
     session = requests.Session()
     session.headers.update(config.DEFAULT_HEADERS)
     return session
@@ -149,7 +243,26 @@ def _make_session() -> requests.Session:
 # ── Worker function (runs in a thread) ────────────────────────────────────────────
 
 def _scrape_category_worker(cat: dict, delay: float, page_limit: int) -> list[dict]:
-    """Scrape one category in its own thread with its own Session."""
+    """Scrape one category in an isolated worker thread.
+
+    Creates a private ``requests.Session`` so it does not share connection
+    state with the other workers, then delegates to
+    ``fetch_products_for_category``.
+
+    Args
+    ----
+    cat : dict
+        Category dict as returned by ``fetch_categories``.
+    delay : float
+        Base inter-page sleep in seconds (jitter applied inside the fetcher).
+    page_limit : int
+        Maximum pages to scrape per category (``0`` = unlimited).
+
+    Returns
+    -------
+    list[dict]
+        Normalised product records for all pages of ``cat``.
+    """
     session = _make_session()
     return fetch_products_for_category(
         category=cat,
@@ -163,6 +276,25 @@ def _scrape_category_worker(cat: dict, delay: float, page_limit: int) -> list[di
 
 
 def run_scraper(args: argparse.Namespace) -> None:
+    """Execute the full scraping pipeline according to parsed CLI arguments.
+
+    Steps
+    -----
+    1. Fetch the full category list (single-threaded bootstrap).
+    2. Optionally filter to a single ``--category`` ID.
+    3. Load (or initialise) the today's checkpoint.
+    4. Clear stale output files when not resuming.
+    5. Dispatch remaining categories to a ``ThreadPoolExecutor``; save
+       products and update the checkpoint after every completed category.
+    6. Run a final deduplication pass on the output files.
+
+    Args
+    ----
+    args : argparse.Namespace
+        Parsed command-line arguments as produced by ``_build_parser().parse_args()``.
+        Expected attributes: ``category``, ``output``, ``workers``, ``delay``,
+        ``limit``, ``resume``.
+    """
     # 1. Fetch categories (single-threaded bootstrap)
     logger.info("Fetching category list…")
     bootstrap_session = _make_session()
@@ -280,6 +412,14 @@ def run_scraper(args: argparse.Namespace) -> None:
 # ── CLI ──────────────────────────────────────────────────────────────────────
 
 def _build_parser() -> argparse.ArgumentParser:
+    """Construct and return the CLI argument parser.
+
+    Returns
+    -------
+    argparse.ArgumentParser
+        Configured parser with arguments: ``--list-categories``, ``--category``,
+        ``--output``, ``--workers``, ``--delay``, ``--limit``, ``--resume``, ``-v``.
+    """
     parser = argparse.ArgumentParser(
         prog="migros-scraper",
         description="Scrape all product data from Migros Türkiye (migros.com.tr).",
@@ -338,6 +478,12 @@ def _build_parser() -> argparse.ArgumentParser:
 
 
 def main() -> None:
+    """Parse CLI arguments and run the appropriate action.
+
+    Enables debug logging when ``-v`` / ``--verbose`` is passed, then either
+    prints the category list (``--list-categories``) or delegates to
+    ``run_scraper()`` for a full scrape.
+    """
     parser = _build_parser()
     args = parser.parse_args()
 
