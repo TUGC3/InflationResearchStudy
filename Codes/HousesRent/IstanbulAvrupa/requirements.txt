@@ -1,3 +1,5 @@
 beautifulsoup4
+lxml
 undetected-chromedriver
 selenium
+tqdm
