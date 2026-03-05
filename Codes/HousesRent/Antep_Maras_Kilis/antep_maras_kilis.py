@@ -1,386 +1,377 @@
 #!/usr/bin/env python3
 """
 Sahibinden.com rental scraper for Kahramanmaras, Gaziantep, and Kilis
-Automated daily scraping with GitHub Actions
+
+Goals:
+- Run daily in GitHub Actions (or self-hosted runner)
+- Save CSVs as: {city}_{YYYY-MM-DD}.csv
+- Columns: District, Rooms, Price, Scraped_Date
+- Always create the CSV even if 0 listings (headers only)
+- Avoid long loops when blocked (fail fast)
 """
 
 import csv
 import os
 import random
 import shutil
-import time
 import subprocess
-import signal
-from datetime import datetime
+import time
+from datetime import datetime, timezone
 from typing import Dict, List, Optional, Tuple
-import sys
 
 import undetected_chromedriver as uc
 from bs4 import BeautifulSoup
-from selenium.common.exceptions import WebDriverException, TimeoutException
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
+from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait
 
-# City configuration
+# -----------------------------
+# Config
+# -----------------------------
+
 CITIES: Dict[str, str] = {
     "maras": "https://www.sahibinden.com/kiralik/kahramanmaras",
     "antep": "https://www.sahibinden.com/kiralik/gaziantep",
     "kilis": "https://www.sahibinden.com/kiralik/kilis",
 }
 
-# Configuration
 HEADLESS = os.environ.get("HEADLESS", "true").lower() == "true"
-SLEEP_MIN = 1.0  # Reduced sleep times
-SLEEP_MAX = 2.0
+TIMEOUT_SECONDS = 30
+
+# Politeness (not evasion)
+SLEEP_MIN = 1.5
+SLEEP_MAX = 3.5
+
 PAGING_SIZE = 50
-MAX_PAGES_PER_BRACKET = 50  # Reduced from 120
-MAX_BRACKETS_PER_CITY = 5  # Limit brackets to test first
-TIMEOUT_SECONDS = 30  # Page load timeout
+MAX_PAGES_PER_CITY = 5  # keep short + stable; increase only if you are not blocked
 
-# Price brackets - use fewer for testing
-PRICE_BRACKETS_DEFAULT: List[Tuple[int, int]] = [
-    (0, 9999999),  # Just one bracket for testing
-]
+# One bracket only (simple + fast)
+PRICE_BRACKETS: List[Tuple[int, int]] = [(0, 9_999_999)]
 
-PRICE_BRACKETS_ANTEP: List[Tuple[int, int]] = [
-    (0, 9999999),  # Just one bracket for testing
-]
+
+# -----------------------------
+# Helpers
+# -----------------------------
 
 def is_github_actions() -> bool:
-    """Check if running in GitHub Actions"""
     return os.getenv("GITHUB_ACTIONS") == "true"
 
-def get_chrome_version() -> str:
-    """Get installed Chrome version"""
+
+def utc_now_str() -> str:
+    # Keep a consistent timestamp in UTC for research
+    return datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S")
+
+
+def today_utc_date() -> str:
+    return datetime.now(timezone.utc).strftime("%Y-%m-%d")
+
+
+def polite_sleep() -> None:
+    time.sleep(random.uniform(SLEEP_MIN, SLEEP_MAX))
+
+
+def get_chrome_major_version() -> Optional[int]:
+    """
+    Try to detect Chrome major version on Linux runners.
+    If unavailable, return None and let uc handle it.
+    """
     try:
-        result = subprocess.run(['google-chrome', '--version'], 
-                              capture_output=True, text=True, timeout=5)
-        version = result.stdout.strip().split()[-1]
-        print(f"Detected Chrome version: {version}")
-        return version.split('.')[0]
+        result = subprocess.run(
+            ["google-chrome", "--version"], capture_output=True, text=True, timeout=5
+        )
+        # e.g. "Google Chrome 123.0.6312.86"
+        parts = result.stdout.strip().split()
+        if parts:
+            version = parts[-1]
+            major = int(version.split(".")[0])
+            print(f"Detected Chrome version: {version} (major={major})")
+            return major
     except Exception as e:
-        print(f"Error detecting Chrome version: {e}")
-        return "120"
+        print(f"Chrome version detection failed: {e}")
+    return None
+
+
+def get_repo_root() -> str:
+    # This file is Codes/HousesRent/Antep_Maras_Kilis/antep_maras_kilis.py
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    return os.path.abspath(os.path.join(script_dir, "../../../"))
+
+
+def get_data_dir(city: str) -> str:
+    city_folder_map = {"maras": "Maras", "antep": "Antep", "kilis": "Kilis"}
+    city_folder = city_folder_map.get(city, city.capitalize())
+    return os.path.join(get_repo_root(), "Datas", "HousesRent", city_folder)
+
+
+def ensure_daily_csv_exists(city: str) -> str:
+    """
+    Ensure the daily CSV exists with header even if no data is scraped.
+    Returns path.
+    """
+    city_dir = get_data_dir(city)
+    os.makedirs(city_dir, exist_ok=True)
+
+    filename = f"{city.lower()}_{today_utc_date()}.csv"
+    out_path = os.path.join(city_dir, filename)
+
+    if not os.path.exists(out_path):
+        with open(out_path, "w", newline="", encoding="utf-8-sig") as f:
+            writer = csv.DictWriter(
+                f, fieldnames=["District", "Rooms", "Price", "Scraped_Date"]
+            )
+            writer.writeheader()
+
+    return out_path
+
+
+def append_rows(out_path: str, rows: List[dict]) -> None:
+    if not rows:
+        return
+    with open(out_path, "a", newline="", encoding="utf-8-sig") as f:
+        writer = csv.DictWriter(
+            f, fieldnames=["District", "Rooms", "Price", "Scraped_Date"]
+        )
+        writer.writerows(rows)
+
+
+def is_block_page(html: str) -> bool:
+    """
+    Detect challenge/blocked pages.
+    We treat "no results table + challenge signals" as blocked.
+    """
+    soup = BeautifulSoup(html, "html.parser")
+
+    # If results table exists, assume OK
+    if soup.select_one("#searchResultsTable"):
+        return False
+
+    lower = html.lower()
+    signals = [
+        "just a moment",
+        "bir dakika lütfen",
+        "cf-challenge",
+        "cloudflare",
+        "güvenlik doğrulama",
+        "robot olmadığınızı",
+        "captcha",
+        "access denied",
+        "403 forbidden",
+        "forbidden",
+    ]
+    return any(s in lower for s in signals)
+
+
+def wait_for_results_or_timeout(driver: uc.Chrome, timeout: int = 10) -> bool:
+    """
+    Wait briefly for the search results table to appear.
+    Returns True if found.
+    """
+    try:
+        WebDriverWait(driver, timeout).until(
+            EC.presence_of_element_located((By.CSS_SELECTOR, "#searchResultsTable"))
+        )
+        return True
+    except TimeoutException:
+        return False
+
+
+def build_bracket_url(base_url: str, min_p: int, max_p: int) -> str:
+    return f"{base_url}?pagingSize={PAGING_SIZE}&price_min={min_p}&price_max={max_p}"
+
+
+def find_next_url(html: str) -> Optional[str]:
+    soup = BeautifulSoup(html, "html.parser")
+    next_a = soup.find("a", title="Sonraki")
+    if next_a and next_a.get("href"):
+        href = next_a["href"]
+        return href if href.startswith("http") else "https://www.sahibinden.com" + href
+    return None
+
+
+def extract_listings_from_html(html: str) -> List[dict]:
+    soup = BeautifulSoup(html, "html.parser")
+    rows = soup.select("#searchResultsTable tbody tr")
+
+    listings: List[dict] = []
+    for row in rows:
+        try:
+            price_elem = row.select_one(".searchResultsPriceValue")
+            loc_elem = row.select_one(".searchResultsLocationValue")
+            attr_elems = row.select(".searchResultsAttributeValue")
+
+            price = price_elem.get_text(strip=True) if price_elem else ""
+            district = " / ".join(loc_elem.stripped_strings) if loc_elem else ""
+
+            # Sahibinden layout can shift; guard indexes
+            rooms = ""
+            if len(attr_elems) >= 2:
+                rooms = attr_elems[1].get_text(strip=True)
+
+            if price and district:
+                listings.append(
+                    {
+                        "District": district,
+                        "Rooms": rooms,
+                        "Price": price,
+                        "Scraped_Date": utc_now_str(),
+                    }
+                )
+        except Exception:
+            continue
+
+    return listings
+
+
+# -----------------------------
+# Driver
+# -----------------------------
 
 def setup_driver() -> uc.Chrome:
-    """Setup undetected Chrome driver"""
-    chrome_version = get_chrome_version()
-    print(f"Setting up driver for Chrome version: {chrome_version}")
-    
     options = uc.ChromeOptions()
-    
-    # Use a more realistic profile
+
+    # Keep profile location deterministic
     profile_path = "/tmp/chrome-profile" if is_github_actions() else "ChromeProfile"
-    
-    # Add more stealth options
     options.add_argument(f"--user-data-dir={profile_path}")
+
     options.add_argument("--no-sandbox")
     options.add_argument("--disable-dev-shm-usage")
     options.add_argument("--window-size=1400,900")
     options.add_argument("--lang=tr-TR")
-    options.add_argument("--disable-blink-features=AutomationControlled")
-    
-    # Remove headless for GitHub Actions? Sometimes headless is detected
-    # Let's try without headless first
-    options.add_argument("--headless=new")  # Keep headless for now
-    
-    # Add random user agent
+
+    # Headless controlled by env
+    if HEADLESS:
+        options.add_argument("--headless=new")
+
     user_agents = [
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
-        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
-        "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
+        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
+        "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
     ]
     options.add_argument(f"--user-agent={random.choice(user_agents)}")
-    
-    # Additional stealth arguments
-    options.add_argument("--disable-web-security")
-    options.add_argument("--disable-features=IsolateOrigins,site-per-process")
-    options.add_argument("--disable-site-isolation-trials")
-    
+
     browser_path = "/usr/bin/google-chrome" if os.path.exists("/usr/bin/google-chrome") else None
-    
-    try:
-        driver = uc.Chrome(
-            options=options,
-            browser_executable_path=browser_path,
-            version_main=int(chrome_version) if chrome_version.isdigit() else None,
-            headless=is_github_actions() or HEADLESS
-        )
-        
-        # Execute stealth scripts
-        driver.execute_script("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})")
-        driver.execute_cdp_cmd('Network.setUserAgentOverride', {
-            "userAgent": random.choice(user_agents)
-        })
-        
-        driver.set_page_load_timeout(TIMEOUT_SECONDS)
-        return driver
-    except Exception as e:
-        print(f"Error setting up driver: {e}")
-        raise
+    version_main = get_chrome_major_version()
+
+    driver = uc.Chrome(
+        options=options,
+        browser_executable_path=browser_path,
+        version_main=version_main,
+        headless=HEADLESS,
+    )
+    driver.set_page_load_timeout(TIMEOUT_SECONDS)
+    return driver
+
 
 def close_driver(driver: Optional[uc.Chrome]) -> None:
-    """Safely close the driver"""
     if driver:
         try:
             driver.quit()
         except Exception:
             pass
 
-def polite_sleep() -> None:
-    """Sleep with random duration"""
-    time.sleep(random.uniform(SLEEP_MIN, SLEEP_MAX))
 
-def get_data_dir(city: str) -> str:
-    """Get data directory for a specific city"""
-    city_folder_map = {
-        "maras": "Maras",
-        "antep": "Antep",
-        "kilis": "Kilis"
-    }
-    city_folder = city_folder_map.get(city, city.capitalize())
-    
-    script_dir = os.path.dirname(os.path.abspath(__file__))
-    repo_root = os.path.abspath(os.path.join(script_dir, "../../../"))
-    
-    return os.path.join(repo_root, "Datas", "HousesRent", city_folder)
+# -----------------------------
+# Scrape logic
+# -----------------------------
 
-def is_block_page(html: str) -> bool:
-    """Check if page is blocked by Cloudflare or similar"""
-    soup = BeautifulSoup(html, "html.parser")
-    
-    if soup.select_one("#searchResultsTable"):
-        return False
-    
-    lower = html.lower()
-    signals = [
-        "just a moment", "bir dakika lütfen", "lütfen bekleyiniz",
-        "cf-challenge", "access denied", "forbidden", 
-        "güvenlik doğrulama", "robot olmadığınızı", "captcha",
-        "cloudflare", "403 forbidden"
-    ]
-    return any(s in lower for s in signals)
-
-def wait_for_element(driver: uc.Chrome, selector: str, timeout: int = 10) -> bool:
-    """Wait for element to be present"""
+def load_page(driver: uc.Chrome, url: str) -> Tuple[bool, str]:
+    """
+    Returns (ok, status):
+      ok=True  -> page loaded and looks like listings page OR empty results page
+      ok=False -> blocked/challenged or hard error
+    """
     try:
-        WebDriverWait(driver, timeout).until(
-            EC.presence_of_element_located((By.CSS_SELECTOR, selector))
-        )
-        return True
+        print(f"GET {url[:120]}...")
+        driver.get(url)
+
+        # quick wait for results
+        _ = wait_for_results_or_timeout(driver, timeout=10)
+
+        html = driver.page_source or ""
+        if is_block_page(html):
+            return False, "blocked"
+
+        # Not blocked; maybe empty, but OK
+        return True, "ok"
     except TimeoutException:
-        return False
+        return False, "timeout"
+    except Exception as e:
+        return False, f"error:{e.__class__.__name__}"
 
-def ensure_access(driver: uc.Chrome, url: str, max_retries: int = 2) -> bool:
-    """Ensure we can access the page with retries"""
-    for attempt in range(max_retries):
-        try:
-            print(f"Accessing URL: {url[:100]}...")
-            driver.get(url)
-            
-            # Wait for either results table or block indicator
-            if wait_for_element(driver, "#searchResultsTable", timeout=10):
-                print("Page loaded successfully")
-                return True
-            
-            # Check if blocked
-            if is_block_page(driver.page_source):
-                print(f"Block detected (attempt {attempt + 1}/{max_retries})")
-                if is_github_actions():
-                    time.sleep(10)
-                    continue
-            else:
-                # No block but also no results - might be empty page
-                print("Page loaded but no results table found")
-                return True
-                
-        except TimeoutException:
-            print(f"Timeout loading page (attempt {attempt + 1}/{max_retries})")
-        except Exception as e:
-            print(f"Error accessing URL: {e}")
-        
-        time.sleep(5)
-    
-    return False
 
-def extract_listings_from_html(html: str) -> List[dict]:
-    """Extract listings from HTML"""
-    soup = BeautifulSoup(html, "html.parser")
-    
-    # Try multiple selectors
-    rows = soup.select("#searchResultsTable tbody tr")
-    if not rows:
-        rows = soup.select(".searchResultsItem")
-    
-    print(f"Found {len(rows)} listing rows")
-    
-    listings = []
-    for i, row in enumerate(rows[:10]):  # Limit to first 10 for testing
-        try:
-            price_elem = row.select_one(".searchResultsPriceValue")
-            loc_elem = row.select_one(".searchResultsLocationValue")
-            attr_elems = row.select(".searchResultsAttributeValue")
-            
-            price = price_elem.get_text(strip=True) if price_elem else ""
-            district = " / ".join(loc_elem.stripped_strings) if loc_elem else ""
-            rooms = attr_elems[1].get_text(strip=True) if len(attr_elems) > 1 else ""
-            
-            if price and district:
-                listings.append({
-                    "District": district,
-                    "Rooms": rooms,
-                    "Price": price,
-                    "Scraped_Date": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-                })
-        except Exception as e:
-            print(f"Error parsing row {i}: {e}")
-            continue
-    
-    return listings
+def scrape_city(driver: uc.Chrome, city: str, base_url: str) -> str:
+    out_path = ensure_daily_csv_exists(city)
 
-def find_next_url(html: str) -> Optional[str]:
-    """Find next page URL"""
-    soup = BeautifulSoup(html, "html.parser")
-    next_a = soup.find("a", title="Sonraki")
-    if next_a and next_a.get("href"):
-        href = next_a["href"]
-        if href.startswith("http"):
-            return href
-        return "https://www.sahibinden.com" + href
-    return None
+    total = 0
+    blocked_count = 0
 
-def save_to_csv(city: str, rows: List[dict]) -> str:
-    """Save listings to daily CSV file"""
-    if not rows:
-        return ""
-        
-    city_dir = get_data_dir(city)
-    os.makedirs(city_dir, exist_ok=True)
-    
-    today = datetime.now().strftime("%Y-%m-%d")
-    filename = f"{city.lower()}_{today}.csv"
-    out_path = os.path.join(city_dir, filename)
-    
-    file_exists = os.path.isfile(out_path)
-    with open(out_path, "a", newline="", encoding="utf-8-sig") as f:
-        fieldnames = ["District", "Rooms", "Price", "Scraped_Date"]
-        writer = csv.DictWriter(f, fieldnames=fieldnames)
-        if not file_exists:
-            writer.writeheader()
-        writer.writerows(rows)
-    
-    return out_path
-
-def build_bracket_url(base_url: str, min_p: int, max_p: int) -> str:
-    """Build URL with price bracket"""
-    return f"{base_url}?pagingSize={PAGING_SIZE}&price_min={min_p}&price_max={max_p}"
-
-def scrape_city(driver: uc.Chrome, city: str, base_url: str) -> Tuple[uc.Chrome, str]:
-    """Scrape all listings for a city"""
-    print(f"\n{'='*50}")
-    print(f"Scraping: {city.upper()}")
-    print(f"{'='*50}")
-    
-    last_out_path = ""
-    brackets = PRICE_BRACKETS_ANTEP if city == "antep" else PRICE_BRACKETS_DEFAULT
-    
-    total_listings = 0
-    start_time = time.time()
-    
-    for bracket_idx, (min_p, max_p) in enumerate(brackets[:MAX_BRACKETS_PER_CITY]):
-        print(f"\n--- Bracket {bracket_idx + 1}/{len(brackets)}: {min_p} - {max_p} TL ---")
+    for (min_p, max_p) in PRICE_BRACKETS:
         url = build_bracket_url(base_url, min_p, max_p)
-        
-        page_num = 0
-        while page_num < MAX_PAGES_PER_BRACKET:
-            page_num += 1
-            
-            # Check time limit (20 minutes max per city)
-            if time.time() - start_time > 1200:  # 20 minutes
-                print("Time limit reached for this city")
-                break
-            
-            print(f"\nPage {page_num}:")
-            
-            if not ensure_access(driver, url):
-                print(f"Failed to access page, moving to next bracket")
-                break
-            
-            rows = extract_listings_from_html(driver.page_source)
-            print(f"Found {len(rows)} listings on this page")
-            
+
+        for page_idx in range(1, MAX_PAGES_PER_CITY + 1):
+            ok, status = load_page(driver, url)
+            if not ok:
+                print(f"Status={status} on {city} page {page_idx}.")
+                blocked_count += 1
+
+                # Fail-fast: if blocked once, stop this city for today
+                if status == "blocked":
+                    print(f"Blocked for city={city}. Stop scraping this city today.")
+                    return out_path
+
+                # If timeout/error, try a small pause then stop city (avoid loops)
+                polite_sleep()
+                return out_path
+
+            html = driver.page_source or ""
+            rows = extract_listings_from_html(html)
+            print(f"{city}: page {page_idx} -> {len(rows)} listings")
             if rows:
-                total_listings += len(rows)
-                last_out_path = save_to_csv(city, rows)
-                print(f"Saved {len(rows)} listings")
-            
-            # Check for next page
-            next_url = find_next_url(driver.page_source)
+                append_rows(out_path, rows)
+                total += len(rows)
+
+            next_url = find_next_url(html)
             if not next_url:
-                print("No next page found")
                 break
-            
+
             url = next_url
             polite_sleep()
-        
-        if time.time() - start_time > 1200:
-            break
-    
-    print(f"\n✓ City {city} complete: {total_listings} total listings in {time.time()-start_time:.1f} seconds")
-    return driver, last_out_path
 
-def main():
-    """Main function"""
-    print("="*60)
-    print("Starting Sahibinden.com scraper...")
-    print(f"Time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
-    print(f"Running in GitHub Actions: {is_github_actions()}")
-    print("="*60)
-    
-    driver = None
-    overall_start = time.time()
-    
+    print(f"Done city={city}. total_rows={total}, blocked_events={blocked_count}")
+    return out_path
+
+
+def main() -> None:
+    print("=" * 70)
+    print("Starting Sahibinden rental scraper")
+    print(f"UTC time: {utc_now_str()}")
+    print(f"GitHub Actions: {is_github_actions()}")
+    print(f"Headless: {HEADLESS}")
+    print("=" * 70)
+
+    driver: Optional[uc.Chrome] = None
     try:
         driver = setup_driver()
-        
+
         for city, url in CITIES.items():
-            try:
-                print(f"\n{'#'*60}")
-                print(f"Processing city: {city}")
-                print(f"{'#'*60}")
-                
-                driver, out_path = scrape_city(driver, city, url)
-                
-                if out_path:
-                    print(f"✓ Data saved to: {out_path}")
-                else:
-                    print(f"✓ No data found for {city}")
-                
-                # Brief pause between cities
-                time.sleep(2)
-                
-            except Exception as e:
-                print(f"Error scraping {city}: {e}")
-                # Try to recover
-                close_driver(driver)
-                time.sleep(5)
-                driver = setup_driver()
-                continue
-        
-        total_time = time.time() - overall_start
-        print(f"\n{'='*60}")
-        print(f"✓ All cities processed successfully!")
-        print(f"Total execution time: {total_time:.1f} seconds")
-        print(f"{'='*60}")
-        
-    except Exception as e:
-        print(f"\n❌ Fatal error: {e}")
-        raise
+            print("\n" + "#" * 70)
+            print(f"City: {city} | URL: {url}")
+            print("#" * 70)
+
+            out_path = scrape_city(driver, city, url)
+            print(f"Output CSV: {out_path}")
+
+            # small pause between cities
+            time.sleep(2)
+
+        print("\nAll done.")
     finally:
         close_driver(driver)
+        # cleanup profile on GitHub Actions
         if is_github_actions() and os.path.exists("/tmp/chrome-profile"):
             shutil.rmtree("/tmp/chrome-profile", ignore_errors=True)
+
 
 if __name__ == "__main__":
     main()
