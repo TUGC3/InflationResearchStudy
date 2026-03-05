@@ -35,14 +35,14 @@ def main():
     df["scrape_date"] = timestamp.strftime("%Y-%m-%d")
     df["scrape_timestamp"] = timestamp.isoformat()
 
-    # Save CSV
+    # Save CSV and TSV
     os.makedirs(OUTPUT_DIR, exist_ok=True)
     filename = f"happycenter_{timestamp.strftime('%Y-%m-%d')}.csv"
     filepath = os.path.join(OUTPUT_DIR, filename)
     df.to_csv(filepath, index=False, encoding="utf-8-sig")
 
+
     print(f"\nDone! {len(df)} products -> {filepath}")
-    print(f"TSV copy -> {tsv_filepath}")
 
 
 if __name__ == "__main__":
