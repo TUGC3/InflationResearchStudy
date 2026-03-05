@@ -227,8 +227,15 @@ def extract_listings_from_html(html: str) -> List[dict]:
 # Driver
 # -----------------------------
 
-def setup_driver() -> uc.Chrome:
+# In your scraper.py, modify setup_driver:
+def setup_driver():
     options = uc.ChromeOptions()
+    
+    # Add proxy - you'll need a proxy service
+    PROXY = "http://user:pass@proxy-provider.com:port"
+    options.add_argument(f'--proxy-server={PROXY}')
+    
+    # Rest of your setup...
 
     # Keep profile location deterministic
     profile_path = "/tmp/chrome-profile" if is_github_actions() else "ChromeProfile"
