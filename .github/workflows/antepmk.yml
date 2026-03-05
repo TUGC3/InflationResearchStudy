@@ -1,9 +1,12 @@
-name: Daily Rental (Antep Maras kilis)
+name: Daily Rental Scraper
 
 on:
   schedule:
-    - cron: "0 3 * * *" # 03:00 UTC daily
+    - cron: "0 3 * * *"
   workflow_dispatch:
+
+permissions:
+  contents: write
 
 concurrency:
   group: daily-rental-scrape
@@ -17,6 +20,9 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+          fetch-depth: 0
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -46,4 +52,8 @@ jobs:
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git add Datas/HousesRent/
-          git diff --staged --quiet || (git commit -m "Update rental data (auto)" && git push)
+          git diff --staged --quiet || git commit -m "Update rental data (auto)"
+
+      - name: Push changes
+        run: |
+          git push
