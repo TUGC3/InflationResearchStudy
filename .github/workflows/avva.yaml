@@ -1,4 +1,4 @@
-name: Daily AVEVA Scraper
+name: Daily AVVA Scraper
 
 on:
   schedule:
