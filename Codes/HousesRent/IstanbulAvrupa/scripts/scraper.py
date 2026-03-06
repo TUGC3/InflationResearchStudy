@@ -206,13 +206,20 @@ def _wait_for_listings(driver: uc.Chrome) -> BeautifulSoup:
         Parsed HTML soup of the driver's current active page.
     """
     time.sleep(config.PAGE_LOAD_DELAY)
-    soup = BeautifulSoup(driver.page_source, "lxml")
+    try:
+        driver.switch_to.window(driver.window_handles[-1])
+        driver.switch_to.default_content()
+        html = driver.execute_script("return document.documentElement.outerHTML;")
+    except Exception:
+        html = driver.page_source
+
+    soup = BeautifulSoup(html, "lxml")
     listings = soup.select("#searchResultsTable tbody tr.searchResultsItem")
 
     if listings:
         return soup
 
-    page_lower = driver.page_source.lower()
+    page_lower = html.lower()
     if "ilan bulunamadı" in page_lower or "bulunamamıştır" in page_lower:
         return soup
 
@@ -228,17 +235,27 @@ def _wait_for_listings(driver: uc.Chrome) -> BeautifulSoup:
             input("   ▶ Press ENTER here ONLY AFTER you see the listings… ")
 
             time.sleep(2.0)
-            soup = BeautifulSoup(driver.page_source, "lxml")
+            try:
+                driver.switch_to.window(driver.window_handles[-1])
+                driver.switch_to.default_content()
+                html = driver.execute_script("return document.documentElement.outerHTML;")
+            except Exception:
+                html = driver.page_source
+
+            soup = BeautifulSoup(html, "lxml")
             listings = soup.select("#searchResultsTable tbody tr.searchResultsItem")
 
             if listings:
                 break
 
-            page_lower = driver.page_source.lower()
+            page_lower = html.lower()
             if "ilan bulunamadı" in page_lower or "bulunamamıştır" in page_lower:
                 break
 
-            print("   ⚠  No listings visible yet. Please wait a moment longer.")
+            current_url = driver.current_url
+            print(f"   ⚠  No listings visible yet. Current URL: {current_url}")
+            print("      (If you are stuck, simply navigate back to the search results in Chrome!)")
+            print("      Please wait a moment longer or try refreshing the page manually.")
 
     return soup
 

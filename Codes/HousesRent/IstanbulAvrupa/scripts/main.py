@@ -137,19 +137,17 @@ def run(args: argparse.Namespace) -> None:
         Expected attributes: ``delay``, ``limit_brackets``, ``resume``, ``verbose``.
     """
     # ── Load / reset checkpoint ───────────────────────────────────────────────
-    checkpoint = _load_checkpoint() if args.resume else {"done_ranges": [], "brackets": None}
+    checkpoint = _load_checkpoint() if args.resume else {"done_ranges": []}
     done_ranges: set[tuple[int, int]] = {
         tuple(r) for r in checkpoint.get("done_ranges", [])
     }
-    cached_brackets: list | None = checkpoint.get("brackets")  # None = not yet cached
 
     if not args.resume:
         if os.path.exists(config.CSV_OUTPUT_FILE):
             os.remove(config.CSV_OUTPUT_FILE)
             logger.info("Cleared old CSV: %s", config.CSV_OUTPUT_FILE)
-        _save_checkpoint({"done_ranges": [], "brackets": None})
+        _save_checkpoint({"done_ranges": []})
         done_ranges = set()
-        cached_brackets = None
 
     # ── Checkpoint callback ───────────────────────────────────────────────────
     def mark_done(min_p: int, max_p: int) -> None:
@@ -161,85 +159,36 @@ def run(args: argparse.Namespace) -> None:
     total_saved = 0
 
     try:
-        # Resume with a cached bracket list: skip listing-count checks entirely
-        # and scrape the remaining brackets directly.
-        if args.resume and cached_brackets:
-            remaining = [
-                b for b in cached_brackets if tuple(b) not in done_ranges
-            ]
-            logger.info(
-                "Resuming with cached brackets: %d / %d remaining.",
-                len(remaining), len(cached_brackets),
+        brackets_scraped = 0
+
+        for seed_min, seed_max in config.SEED_RANGES:
+            logger.info("Seed range: %d – %d TL", seed_min, seed_max)
+            saved = scrape_and_resolve(
+                driver, seed_min, seed_max,
+                done_ranges=done_ranges,
+                save_fn=_append_records,
+                mark_done_fn=mark_done,
+                bracket_cache=None,
+                delay=args.delay,
             )
+            total_saved += saved
+            brackets_scraped += 1
 
+            # --limit-brackets logic
+            # Note: limit-brackets originally used len(bracket_cache), which counted leaf brackets.
+            # Without bracket_cache, we'll check how many ranges are in done_ranges.
             if args.limit_brackets and args.limit_brackets > 0:
-                remaining = remaining[: args.limit_brackets]
-                logger.info("Capped to first %d bracket(s) for testing.", args.limit_brackets)
-
-            with tqdm(total=len(remaining), unit="bracket", desc="Brackets") as pbar:
-                for min_p, max_p in remaining:
-                    pbar.set_postfix_str(f"{min_p}–{max_p} TL")
-                    saved = scrape_leaf_bracket(
-                        driver, min_p, max_p,
-                        _append_records, mark_done,
-                        delay=args.delay,
-                    )
-                    total_saved += saved
-                    pbar.update(1)
-                    time.sleep(random.uniform(
-                        config.BETWEEN_BRACKET_DELAY_MIN,
-                        config.BETWEEN_BRACKET_DELAY_MAX,
-                    ))
-
-        # Fresh run, or resume without a cached bracket list: adaptively
-        # resolve + scrape each seed range from scratch.
-        else:
-            bracket_cache: list = []
-            brackets_scraped = 0
-
-            for seed_min, seed_max in config.SEED_RANGES:
-                logger.info("Seed range: %d – %d TL", seed_min, seed_max)
-                saved = scrape_and_resolve(
-                    driver, seed_min, seed_max,
-                    done_ranges=done_ranges,
-                    save_fn=_append_records,
-                    mark_done_fn=mark_done,
-                    bracket_cache=bracket_cache,
-                    delay=args.delay,
-                )
-                total_saved += saved
-                brackets_scraped += 1
-
-                # Save bracket cache after every seed range so an interrupted
-                # run still has partial bracket data for --resume.
-                if bracket_cache:
-                    checkpoint["brackets"] = bracket_cache
-                    _save_checkpoint(checkpoint)
-
-                # --limit-brackets counts leaf brackets, not seed ranges.
-                # Check after each seed range completes.
-                if (
-                    args.limit_brackets
-                    and args.limit_brackets > 0
-                    and len(bracket_cache) >= args.limit_brackets
-                ):
+                if len(done_ranges) >= args.limit_brackets:
                     logger.info(
                         "Reached --limit-brackets (%d). Stopping early.",
                         args.limit_brackets,
                     )
                     break
 
-                time.sleep(random.uniform(
-                    config.BETWEEN_BRACKET_DELAY_MIN,
-                    config.BETWEEN_BRACKET_DELAY_MAX,
-                ))
-
-            # Cache the resolved bracket list for fast future --resume runs.
-            if bracket_cache:
-                logger.info(
-                    "Bracket list cached (%d brackets) → fast --resume available.",
-                    len(bracket_cache),
-                )
+            time.sleep(random.uniform(
+                config.BETWEEN_BRACKET_DELAY_MIN,
+                config.BETWEEN_BRACKET_DELAY_MAX,
+            ))
 
     finally:
         driver.quit()
