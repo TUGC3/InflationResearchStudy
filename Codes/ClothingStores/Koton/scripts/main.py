@@ -1,8 +1,28 @@
 """
-main.py — Koton Türkiye Product Scraper
-========================================
+main.py — Koton Türkiye Product Scraper — CLI entry point & orchestrator
+==========================================================================
 
-Usage examples:
+This module is the top-level entry point for the scraper. It orchestrates
+category discovery, parallel product fetching, incremental output writing,
+checkpoint management, and a final deduplication pass.
+
+Pipeline
+--------
+1. **Category discovery** — ``category_fetcher.fetch_categories()`` probes the
+   Koton sitemap and extracts all category slugs.
+2. **Checkpoint loading** — when ``--resume`` is passed, the today's checkpoint
+   file is loaded and already-completed category slugs are skipped.
+3. **Parallel scraping** — each remaining category is dispatched to a
+   ``ThreadPoolExecutor`` worker. Every worker creates its own
+   ``requests.Session`` so sessions are never shared across threads.
+4. **Incremental saving** — product data and checkpoint state are written to
+   disk immediately after each category completes. An interruption therefore
+   loses at most one in-flight category.
+5. **Deduplication** — a final pass removes any products whose internal ID
+   was seen more than once across categories.
+
+Usage examples
+--------------
   # List all available categories
   python main.py --list-categories
 
@@ -250,9 +270,9 @@ def _build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--workers",
         type=int,
-        default=2,
+        default=1,
         metavar="N",
-        help="Number of parallel category workers (default: 2).",
+        help="Number of parallel category workers (default: 1, increase carefully to avoid rate-limits).",
     )
     parser.add_argument(
         "--delay",

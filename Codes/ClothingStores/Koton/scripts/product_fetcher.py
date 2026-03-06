@@ -1,10 +1,13 @@
 """
-Product fetcher: scrapes all products from a Koton category page,
-handling pagination and retries automatically.
+product_fetcher.py — Scrapes all products from a Koton category page.
+=======================================================================
+
+This module parses product listing pages and handles pagination and retries
+automatically.
 
 How it works
 ------------
-Koton renders each product listing page as HTML.  Each product card
+Koton renders each product listing page as HTML. Each product card
 contains a hidden <div class="js-insider-product"> whose text is a
 JSON-like blob with full product data (name, prices, URL, image, stock…).
 The parent wrapper <div class="js-product-wrapper"> has data attributes
@@ -13,7 +16,7 @@ including the product pk and sku.
 The GA4 hidden div <div class="js-ga4-product-item"> provides the brand,
 category hierarchy, and the human-readable base_code (style code).
 
-Pagination is via ?page=N.  We stop when a page returns no products.
+Pagination is via ?page=N. We stop when a page returns no products.
 """
 
 import json
@@ -37,8 +40,15 @@ _TRAILING_COMMA_RE = re.compile(r",\s*([}\]])")
 
 
 def _make_session() -> requests.Session:
+    """Create a requests Session with a randomly chosen User-Agent.
+
+    Each worker (thread) calls this once, so concurrent workers present
+    different browser fingerprints to the server.
+    """
     session = requests.Session()
-    session.headers.update(config.DEFAULT_HEADERS)
+    headers = dict(config.DEFAULT_HEADERS)  # shallow copy
+    headers["User-Agent"] = random.choice(config.USER_AGENTS)
+    session.headers.update(headers)
     return session
 
 
@@ -161,15 +171,44 @@ def _fetch_page(
     """
     Fetch one page of a category listing.
     Returns a BeautifulSoup object or None on permanent failure.
+
+    Handles 429 / 403 rate-limit responses with a longer back-off pause
+    before retrying so the scraper recovers gracefully instead of giving up.
     """
     params = {"page": page} if page > 1 else {}
+
+    # Update Referer to look like natural browser navigation:
+    # first page comes from the homepage, subsequent pages come from page N-1.
+    if page > 1:
+        prev_params = f"?page={page - 1}" if page > 2 else ""
+        session.headers["Referer"] = category_url + prev_params
+    else:
+        session.headers["Referer"] = config.BASE_URL + "/"
+
     for attempt in range(1, config.MAX_RETRIES + 1):
         try:
             resp = session.get(category_url, params=params, timeout=30)
+
+            # 404 → category or page genuinely doesn't exist
             if resp.status_code == 404:
                 return None
+
+            # 429 / 403 → rate-limited / blocked; pause and retry
+            if resp.status_code in (403, 429):
+                retry_after = int(resp.headers.get("Retry-After", config.RATE_LIMIT_BACKOFF))
+                wait = max(retry_after, config.RATE_LIMIT_BACKOFF)
+                logger.warning(
+                    "Rate-limited (%d) on %s page %d. Backing off %ds (attempt %d/%d)…",
+                    resp.status_code, category_url, page, wait, attempt, config.MAX_RETRIES,
+                )
+                time.sleep(wait)
+                # Rotate to a fresh User-Agent after a rate-limit hit
+                session.headers["User-Agent"] = random.choice(config.USER_AGENTS)
+                continue
+
             resp.raise_for_status()
             return BeautifulSoup(resp.text, "lxml")
+
         except requests.RequestException as exc:
             if attempt == config.MAX_RETRIES:
                 logger.error(

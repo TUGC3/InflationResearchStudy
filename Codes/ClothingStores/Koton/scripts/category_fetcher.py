@@ -1,9 +1,16 @@
 """
-Category fetcher: discovers all Koton product categories by parsing
-the gzip XML category sitemap.
+category_fetcher.py — Discovers all scrapable Koton product categories.
+=======================================================================
 
-Strategy
---------
+Public API
+----------
+fetch_categories(session=None) -> list[dict]
+    Returns the definitive list of all Koton categories from the XML sitemap.
+    Each dict contains the keys ``name``, ``slug``, ``url``,
+    ``parent_name``, and ``parent_slug``.
+
+Discovery strategy
+------------------
 Koton provides a comprehensive sitemap of all its categories:
 https://s3.eu-central-1.amazonaws.com/f58f3a/sitemaps/sitemaps/sitemap-categories-1.xml.gz
 
