@@ -1,16 +1,38 @@
 """
-Category fetcher: discovers all Migros product categories using the
-REST API's own aggregation data — the only reliable source of categories
-that actually have products.
+category_fetcher.py — Discovers all scrapable Migros product categories.
+=========================================================================
 
-Strategy
---------
-Migros exposes 8 top-level category IDs (2–9) that return products directly.
-Each API response includes an ``aggregationGroups`` section listing all
-available sub-category filters under the key ``kategoriler``.
+Public API
+----------
+fetch_categories(session=None) -> list[dict]
+    Returns the full flat list of (sub)category dicts ready for the product
+    fetcher.  Each dict contains the keys ``id``, ``name``, ``parent_id``,
+    ``parent_name``, and ``product_count``.
 
-By collecting those filters from every top-level category we get the full
-tree of scrapable (sub)categories.
+Discovery strategy
+------------------
+Migros exposes 13 verified top-level category IDs (see ``TOP_LEVEL_CATEGORIES``
+below).  Sending a single search request for each top-level category returns
+an ``aggregationGroups`` section in the JSON payload.  This section contains a
+``kategoriler`` group whose ``aggregationInfos`` list every sub-category filter
+available for that top-level bucket.
+
+By harvesting those filter entries we obtain the complete, exhaustive set of
+scrapable (sub)categories — the same ones a user sees when browsing the site.
+
+Fallback behaviour
+------------------
+If a top-level category returns *no* sub-category filters (either the API
+omits the ``kategoriler`` group or all sub-categories have ``count == 0``),
+the top-level category itself is kept as a single entry with ``parent_id``
+set to ``None``.  ``product_fetcher.py`` recognises this and sends only a
+``category-id`` parameter (no ``kategoriler`` filter).
+
+Deduplication
+-------------
+A ``seen_ids`` set prevents the same sub-category ID from appearing twice
+in the final list, which can otherwise happen when a sub-category is shared
+between two top-level buckets.
 """
 
 import time
@@ -44,6 +66,13 @@ TOP_LEVEL_CATEGORIES = [
 
 
 def _make_session() -> requests.Session:
+    """Create a new ``requests.Session`` pre-loaded with the default headers.
+
+    Returns
+    -------
+    requests.Session
+        A session with ``config.DEFAULT_HEADERS`` already applied.
+    """
     session = requests.Session()
     session.headers.update(config.DEFAULT_HEADERS)
     return session
@@ -54,13 +83,36 @@ def _fetch_subcategories(
     parent_id: str,
     parent_name: str,
 ) -> list[dict]:
-    """
-    Query the API for a top-level category and extract its sub-category
-    filter options from the ``aggregationGroups`` field.
+    """Query the API for a top-level category and extract sub-category filters.
 
-    Returns a list of sub-category dicts:
-        [{"id": "101", "name": "Meyve", "parent_id": "2",
-          "parent_name": "Meyve, Sebze"}, ...]
+    Sends a page-1 search request for ``parent_id`` and parses the
+    ``aggregationGroups[kategoriler].aggregationInfos`` list from the JSON
+    response body.  Only entries with ``count > 0`` are returned.
+
+    Args
+    ----
+    session : requests.Session
+        Active session with the required headers already set.
+    parent_id : str
+        Top-level category ID (e.g. ``"2"`` for Meyve, Sebze).
+    parent_name : str
+        Human-readable label for ``parent_id`` (used in log messages and the
+        returned dicts).
+
+    Returns
+    -------
+    list[dict]
+        Each dict has the shape::
+
+            {
+              "id":           "101",          # sub-category filter value
+              "name":         "Meyve",
+              "parent_id":    "2",
+              "parent_name":  "Meyve, Sebze",
+              "product_count": 50,
+            }
+
+        Returns an empty list if all retries are exhausted.
     """
     for attempt in range(1, config.MAX_RETRIES + 1):
         try:
@@ -113,21 +165,36 @@ def _fetch_subcategories(
 
 
 def fetch_categories(session: Optional[requests.Session] = None) -> list[dict]:
-    """
-    Return the full list of scrapable categories.
+    """Return the full flat list of scrapable (sub)categories.
 
-    Each entry is:
-        {
-          "id": "101",          # subcategory filter ID for ?kategoriler=
-          "name": "Meyve",
-          "parent_id": "2",     # top-level category ID for ?category-id=
-          "parent_name": "Meyve, Sebze",
-          "product_count": 50,
-        }
+    Iterates over every entry in ``TOP_LEVEL_CATEGORIES``, calls
+    ``_fetch_subcategories``, and collects the results.  Duplicate IDs are
+    silently skipped.  Top-level categories that expose no sub-categories are
+    included as a fallback entry (see module docstring).
 
-    If a top-level category has no subcategories exposed in the API
-    aggregations, it is included as a single entry with id == parent_id
-    and parent_id == None (scraped without subcategory filter).
+    Args
+    ----
+    session : requests.Session, optional
+        Shared session to reuse.  A new session is created automatically when
+        ``None`` is passed.
+
+    Returns
+    -------
+    list[dict]
+        Flat list of category dicts, each with the shape::
+
+            {
+              "id":            "101",         # ?kategoriler= filter value
+              "name":          "Meyve",
+              "parent_id":     "2",           # ?category-id= value; None for fallbacks
+              "parent_name":   "Meyve, Sebze",# None for fallbacks
+              "product_count": 50,            # None for fallbacks
+            }
+
+    Notes
+    -----
+    A 0.3-second pause is inserted between top-level requests to avoid
+    triggering rate-limiting on the Migros API.
     """
     if session is None:
         session = _make_session()

@@ -14,49 +14,31 @@ import undetected_chromedriver as uc
 # ============================================================
 
 KAYSERI_BRACKETS = [
-    (0, 10999),  # ~200
-    (11000, 11999),  # ~130
-    (12000, 12999),  # ~220
-    (13000, 13999),  # ~260
-    (14000, 14999),  # ~250
-    (15000, 15499),  # ~430  (very dense zone — may need split later)
-    (15500, 15999),  # ~155
-    (16000, 16999),  # ~320
-    (17000, 17499),  # ~160
-    (17500, 17999),  # ~120
-    (18000, 19499),  # ~390
-    (19500, 19999),  # ~70
-    (20000, 20999),  # ~355
-    (21000, 21999),  # ~145
-    (22000, 23999),  # ~280
-    (24000, 24999),  # ~80
-    (25000, 28999),  # ~395
-    (29000, 34999),  # ~200
-    (35000, 9999999),  # ~240
+    (0, 19_999),
+    (20_000, 39_999),
+    (40_000, 59_999),
+    (60_000, 99_999),
+    (100_000, 9_999_999)
 ]
 
 SIVAS_BRACKETS = [
-    (0, 13999),  # ~215
-    (14000, 15499),  # ~215
-    (15500, 17499),  # ~240
-    (17500, 18999),  # ~230
-    (19000, 19999),  # ~80
-    (20000, 23499),  # ~380
-    (23500, 26999),  # ~215
-    (27000, 9999999),  # ~250
+    (0, 19_999),
+    (20_000, 39_999),
+    (40_000, 59_999),
+    (60_000, 99_999),
+    (100_000, 9_999_999)
 ]
 
 TOKAT_BRACKETS = [
-    (0, 13499),  # ~200
-    (13500, 14999),  # ~115
-    (15000, 17999),  # ~355
-    (18000, 21999),  # ~230
-    (22000, 9999999),  # ~235
+    (0, 19_999),
+    (20_000, 39_999),
+    (40_000, 59_999),
+    (60_000, 99_999),
+    (100_000, 9_999_999)
 ]
 
 
 
-# Map the target cities with their calibrated brackets
 CITIES = {
     'kayseri': {'folder': 'Kayseri', 'brackets': KAYSERI_BRACKETS},
     'sivas': {'folder': 'Sivas', 'brackets': SIVAS_BRACKETS},
@@ -66,7 +48,6 @@ CITIES = {
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_BASE_DIR = os.path.abspath(os.path.join(SCRIPT_DIR, "../../../Datas/HousesRent/"))
 
-# Counter for unique profile directories
 _profile_counter = 0
 
 
@@ -98,10 +79,8 @@ def setup_driver():
 
 
     options = uc.ChromeOptions()
-    # Each new driver gets a unique profile dir so Sahibinden can't track the session
     profile_path = os.path.join(SCRIPT_DIR, f"SeleniumProfile_{_profile_counter}")
     options.add_argument(f"--user-data-dir={profile_path}")
-    # Only use headless if explicitly requested (e.g. CI). Headed mode bypasses Cloudflare better.
     if os.environ.get('HEADLESS', '').lower() in ('1', 'true', 'yes'):
         options.add_argument('--headless=new')
     options.add_argument('--no-sandbox')

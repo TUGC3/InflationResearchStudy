@@ -1,14 +1,35 @@
 """
+config.py — Configuration settings for the Istanbul Avrupa rent scraper.
+========================================================================
+
 Configuration settings for the Istanbul Avrupa (European Side) rent scraper.
 Source: sahibinden.com
 
-Bracket Strategy: Smart Adaptive Brackets with Early Peek
----------------------------------------------------------
-Instead of static brackets, we use wide seed ranges. On the first page of any
-range, the scraper peeks at the "Total Listings Found" text.
-  - If <= 1000: It safely scrapes all pages.
-  - If > 1000: It immediately splits the range in half and recurses.
-This guarantees speed (no wasted scraping) and complete data capture.
+Sections
+--------
+Paths
+    Directory paths for the scraper, output, and checkpoints.
+
+City Settings
+    Constants defining the target city for URLs and folders.
+
+Seed Ranges
+    Wide starting price ranges that the scraper automatically splits into
+    optimal leaf brackets using the adaptive bracket splitting strategy.
+
+Adaptive Splitting Settings
+    Constants related to the algorithm that works around sahibinden.com's
+    limits per query (e.g. threshold caps and minimum bracket width).
+
+Request / Timing Settings
+    Timing configurations for page loads and delays to prevent detection by
+    anti-scraping mechanisms.
+
+Browser Settings
+    Location configurations for the persistent Selenium profile.
+
+Output Settings
+    Output directories and daily-stamped filenames for CSVs and checkpoints.
 """
 
 import datetime as _dt
@@ -34,7 +55,7 @@ SEED_RANGES = [
     (100_000, 9_999_999), # Low density, likely won't split at all
 ]
 
-# ── Adaptive Splitting Settings ───────────────────────────────────────────────
+# ── Adaptive Splitting Settings ─────────────────────────────────────────────────
 # Sahibinden limits queries to 1000 listings (20 pages of 50).
 # We split if the total count exceeds this threshold.
 MAX_LISTINGS_PER_QUERY = 1000
@@ -46,9 +67,9 @@ MIN_BRACKET_WIDTH = 50
 # ── Request / Timing Settings ─────────────────────────────────────────────────
 PAGE_SIZE              = 50             # Listings per page (sahibinden max)
 PAGE_LOAD_DELAY        = 2.5            # Seconds to wait after a page loads
-PAGE_TURN_DELAY_MIN    = 2.0            # Random range between page turns (s)
-PAGE_TURN_DELAY_MAX    = 4.0
-BETWEEN_BRACKET_DELAY_MIN = 1.0         # Random range between brackets (s)
+                                        # Also the base for the per-page jitter:
+                                        #   actual wait = PAGE_LOAD_DELAY * uniform(0.5, 1.5)
+BETWEEN_BRACKET_DELAY_MIN = 1.0         # Random range between splits during discovery (s)
 BETWEEN_BRACKET_DELAY_MAX = 2.0
 
 # ── Browser Settings ──────────────────────────────────────────────────────────
@@ -57,7 +78,12 @@ SELENIUM_PROFILE_DIR = str(_SCRAPER_DIR / "SeleniumProfile")
 # ── Output Settings ───────────────────────────────────────────────────────────
 _TODAY = _dt.date.today().strftime("%Y-%m-%d")
 
-OUTPUT_DIR      = str(_PROJECT_ROOT / "Datas" / "HousesRent" / FOLDER_NAME)
+# Base output directory
+BASE_OUTPUT_DIR = str(_PROJECT_ROOT / "Datas" / "HousesRent" / FOLDER_NAME)
+
+OUTPUT_DIR      = str(_Path(BASE_OUTPUT_DIR) / "RentData")
+INFLATION_DIR   = str(_Path(BASE_OUTPUT_DIR) / "InflationData")
+
 CHECKPOINT_DIR  = str(_SCRAPER_DIR / "checkpoints")
 
 CSV_OUTPUT_FILE = str(_Path(OUTPUT_DIR)     / f"{FOLDER_NAME}_{_TODAY}.csv")

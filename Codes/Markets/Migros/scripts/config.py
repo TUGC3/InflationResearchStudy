@@ -1,5 +1,50 @@
 """
-Configuration settings for the Migros Türkiye product scraper.
+config.py — Configuration settings for the Migros Türkiye product scraper.
+===========================================================================
+
+This module is the single source of truth for every constant used by the
+scraper.  Import it with ``import config`` from any sibling script.
+
+Sections
+--------
+Base URLs
+    The root domain and the two API endpoints the scraper talks to.
+
+Request Headers
+    HTTP headers injected into every request.  The custom ``X-Device-PWA``
+    and ``X-FORWARDED-REST`` headers are required by the Migros API; without
+    them the endpoint returns 403 Forbidden.
+
+Scraping Parameters
+    Tunable knobs that control request rate, retry behaviour, and concurrency.
+
+    REQUEST_DELAY  : float  — base pause (seconds) between paginated requests.
+                             A random jitter factor (JITTER_MIN … JITTER_MAX) is
+                             multiplied in at runtime by ``product_fetcher.py``.
+    MAX_RETRIES    : int    — how many times a failed HTTP request is retried
+                             before the category is skipped.
+    RETRY_BACKOFF  : float  — seed value (seconds) for the exponential back-off
+                             delay.  Actual wait = RETRY_BACKOFF × attempt number.
+    DEFAULT_SORT   : str    — ``sirala`` query-parameter value sent to the API.
+                             "onerilenler" (recommended) is the stable default.
+    DEFAULT_WORKERS: int    — number of threads used by the
+                             ``ThreadPoolExecutor`` in ``main.py``.
+    JITTER_MIN/MAX : float  — uniform-random multiplier range applied on top of
+                             REQUEST_DELAY to spread out concurrent requests.
+
+Output Settings
+    All output paths are resolved relative to this file so the scraper works
+    correctly regardless of the directory from which ``main.py`` is called.
+
+    OUTPUT_DIR     : str  — directory where CSV / JSON data files are written.
+    CHECKPOINT_DIR : str  — directory where daily checkpoint JSON files live.
+    CSV_OUTPUT_FILE: str  — full path to today's CSV output file.
+    JSON_OUTPUT_FILE: str — full path to today's JSON output file.
+    CHECKPOINT_FILE: str  — full path to today's checkpoint file.
+
+    Files are named with today's date (``YYYY-MM-DD``) so each daily run
+    produces its own output set.  Passing ``--resume`` on the same day reuses
+    the existing checkpoint to pick up where the previous run left off.
 """
 
 # ── Base URLs ────────────────────────────────────────────────────────────────
@@ -41,6 +86,13 @@ RETRY_BACKOFF = 2
 # Default sort order (onerilenler = recommended)
 DEFAULT_SORT = "onerilenler"
 
+# Number of parallel category workers
+DEFAULT_WORKERS = 3
+
+# Jitter multiplier range applied to REQUEST_DELAY (uniform random between these)
+JITTER_MIN = 0.5
+JITTER_MAX = 1.5
+
 # ── Output Settings ──────────────────────────────────────────────────────────
 import datetime as _dt
 from pathlib import Path as _Path
@@ -51,8 +103,12 @@ _SCRIPTS_DIR    = _Path(__file__).resolve().parent          # …/Codes/Markets/
 _MIGROS_DIR     = _SCRIPTS_DIR.parent                       # …/Codes/Markets/Migros
 _PROJECT_ROOT   = _MIGROS_DIR.parent.parent.parent          # …/InflationResearchStudy
 
-# CSV / JSON output  →  Datas/Markets/Migros/
-OUTPUT_DIR      = str(_PROJECT_ROOT / "Datas" / "Markets" / "Migros")
+# Base output directory
+BASE_OUTPUT_DIR = str(_PROJECT_ROOT / "Datas" / "Markets" / "Migros")
+
+# CSV / JSON output  →  Datas/Markets/Migros/ProductData/
+OUTPUT_DIR      = str(_Path(BASE_OUTPUT_DIR) / "ProductData")
+INFLATION_DIR   = str(_Path(BASE_OUTPUT_DIR) / "InflationData")
 
 # Checkpoint files   →  Codes/Markets/Migros/checkpoints/
 CHECKPOINT_DIR  = str(_MIGROS_DIR / "checkpoints")
