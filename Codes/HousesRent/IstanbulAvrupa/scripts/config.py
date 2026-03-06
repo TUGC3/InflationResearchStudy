@@ -78,7 +78,12 @@ SELENIUM_PROFILE_DIR = str(_SCRAPER_DIR / "SeleniumProfile")
 # ── Output Settings ───────────────────────────────────────────────────────────
 _TODAY = _dt.date.today().strftime("%Y-%m-%d")
 
-OUTPUT_DIR      = str(_PROJECT_ROOT / "Datas" / "HousesRent" / FOLDER_NAME)
+# Base output directory
+BASE_OUTPUT_DIR = str(_PROJECT_ROOT / "Datas" / "HousesRent" / FOLDER_NAME)
+
+OUTPUT_DIR      = str(_Path(BASE_OUTPUT_DIR) / "RentData")
+INFLATION_DIR   = str(_Path(BASE_OUTPUT_DIR) / "InflationData")
+
 CHECKPOINT_DIR  = str(_SCRAPER_DIR / "checkpoints")
 
 CSV_OUTPUT_FILE = str(_Path(OUTPUT_DIR)     / f"{FOLDER_NAME}_{_TODAY}.csv")

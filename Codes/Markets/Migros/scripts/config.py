@@ -103,8 +103,12 @@ _SCRIPTS_DIR    = _Path(__file__).resolve().parent          # …/Codes/Markets/
 _MIGROS_DIR     = _SCRIPTS_DIR.parent                       # …/Codes/Markets/Migros
 _PROJECT_ROOT   = _MIGROS_DIR.parent.parent.parent          # …/InflationResearchStudy
 
-# CSV / JSON output  →  Datas/Markets/Migros/
-OUTPUT_DIR      = str(_PROJECT_ROOT / "Datas" / "Markets" / "Migros")
+# Base output directory
+BASE_OUTPUT_DIR = str(_PROJECT_ROOT / "Datas" / "Markets" / "Migros")
+
+# CSV / JSON output  →  Datas/Markets/Migros/ProductData/
+OUTPUT_DIR      = str(_Path(BASE_OUTPUT_DIR) / "ProductData")
+INFLATION_DIR   = str(_Path(BASE_OUTPUT_DIR) / "InflationData")
 
 # Checkpoint files   →  Codes/Markets/Migros/checkpoints/
 CHECKPOINT_DIR  = str(_MIGROS_DIR / "checkpoints")

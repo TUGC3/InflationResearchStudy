@@ -98,8 +98,12 @@ _SCRIPTS_DIR  = _Path(__file__).resolve().parent          # …/Codes/ClothingSt
 _KOTON_DIR    = _SCRIPTS_DIR.parent                       # …/Codes/ClothingStores/Koton
 _PROJECT_ROOT = _KOTON_DIR.parent.parent.parent           # …/InflationResearchStudy
 
-# CSV / JSON output  →  Datas/ClothingStores/Koton/
-OUTPUT_DIR    = str(_PROJECT_ROOT / "Datas" / "ClothingStores" / "Koton")
+# Base output directory
+BASE_OUTPUT_DIR = str(_PROJECT_ROOT / "Datas" / "ClothingStores" / "Koton")
+
+# CSV / JSON output  →  Datas/ClothingStores/Koton/ProductData/
+OUTPUT_DIR      = str(_Path(BASE_OUTPUT_DIR) / "ProductData")
+INFLATION_DIR   = str(_Path(BASE_OUTPUT_DIR) / "InflationData")
 
 # Checkpoint files   →  Codes/ClothingStores/Koton/checkpoints/
 CHECKPOINT_DIR = str(_KOTON_DIR / "checkpoints")
