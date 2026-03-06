@@ -52,6 +52,7 @@ import requests
 from tqdm import tqdm
 
 import config
+import inflation
 from category_fetcher import fetch_categories
 from product_fetcher import fetch_products_for_category
 
@@ -245,6 +246,11 @@ def run_scraper(args: argparse.Namespace) -> None:
     final_count = _dedup_csv()
     logger.info("Done! ✓  Total unique products: %d", final_count)
     logger.info("Output → %s", config.CSV_OUTPUT_FILE)
+
+    # 7. Calculate Inflation
+    logger.info("Calculating inflation metrics...")
+    inflation.calculate_inflation()
+
 
 
 # ── CLI ──────────────────────────────────────────────────────────────────────

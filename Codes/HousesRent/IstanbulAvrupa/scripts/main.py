@@ -55,6 +55,7 @@ import time
 from tqdm import tqdm
 
 import config
+import inflation
 from scraper import (
     setup_driver,
     scrape_and_resolve,
@@ -195,7 +196,10 @@ def run(args: argparse.Namespace) -> None:
 
     logger.info("Done! ✓  Total records saved: %d", total_saved)
     logger.info("Output → %s", config.CSV_OUTPUT_FILE)
-
+    
+    # Calculate Inflation
+    logger.info("Calculating inflation metrics...")
+    inflation.calculate_inflation()
 
 # ── CLI ───────────────────────────────────────────────────────────────────────
 
