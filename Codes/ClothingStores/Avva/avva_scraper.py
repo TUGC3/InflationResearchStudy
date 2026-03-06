@@ -1,107 +1,93 @@
-import requests
-from bs4 import BeautifulSoup
-import csv
 import os
-from datetime import datetime
 import time
 import random
+import pandas as pd
+from datetime import datetime
+import undetected_chromedriver as uc
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
-# --- Configuration ---
-OUTPUT_DIR = "Datas/ClothingStores/Avva"
-TARGET_URL = "https://www.avva.com.tr" # You'll need to find the exact category page URL(s)
-HEADERS = {
-    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
-    'Accept-Language': 'en-US,en;q=0.9',
-    'Accept-Encoding': 'gzip, deflate, br',
-    'Connection': 'keep-alive',
-}
+# 1. Configuration & Paths
+CATEGORIES = [
+    "https://www.avva.com.tr/erkek-ev-ve-ic-giyim",
+    "https://www.avva.com.tr/erkek-canta-valiz",
+    "https://www.avva.com.tr/erkek-saat",
+    "https://www.avva.com.tr/erkek-aksesuar",
+    "https://www.avva.com.tr/erkek-sort",
+    "https://www.avva.com.tr/erkek-ayakkabi",
+    "https://www.avva.com.tr/erkek-esofman-alti",
+    "https://www.avva.com.tr/erkek-ceket",
+    "https://www.avva.com.tr/takim-elbise",
+    "https://www.avva.com.tr/erkek-esofman-takimi",
+    "https://www.avva.com.tr/erkek-kazak",
+    "https://www.avva.com.tr/polar",
+    "https://www.avva.com.tr/erkek-sweatshirt",
+    "https://www.avva.com.tr/erkek-pantolon",
+    "https://www.avva.com.tr/erkek-triko-t-shirt",
+    "https://www.avva.com.tr/erkek-t-shirt",
+    "https://www.avva.com.tr/erkek-gomlek/gomlek-ceket",
+    "https://www.avva.com.tr/erkek-mont"
+]
 
-# --- Helper Functions ---
-def fetch_page(url, retries=3):
-    """Fetch page with retry logic and delays."""
-    for i in range(retries):
-        try:
-            time.sleep(random.uniform(1, 3)) # Be polite, delay between requests
-            response = requests.get(url, headers=HEADERS, timeout=10)
-            if response.status_code == 200:
-                return response.text
-            elif response.status_code == 403:
-                print(f"Attempt {i+1}: Received 403 Forbidden. Retrying...")
-                time.sleep(5) # Wait longer if blocked
-            else:
-                print(f"Attempt {i+1}: Status code {response.status_code}")
-        except requests.exceptions.RequestException as e:
-            print(f"Attempt {i+1}: Request failed - {e}")
-            time.sleep(5)
-    return None
+DATA_DIR = "Datas/ClothingStores/Avva"
+os.makedirs(DATA_DIR, exist_ok=True)
+current_date = datetime.now().strftime("%Y-%m-%d")
+file_path = os.path.join(DATA_DIR, f"avva_{current_date}.csv")
 
-def parse_product_listing(html_content):
-    """Parse product listings (You'll need to adapt the selectors!)."""
-    soup = BeautifulSoup(html_content, 'html.parser')
-    products = []
-    
-    # !!! YOU MUST INSPECT THE WEBSITE TO FIND THE CORRECT SELECTORS !!!
-    # Example selectors (these are guesses - replace with actual ones):
-    product_cards = soup.find_all('div', class_='product-item') # Change this
-    
-    for card in product_cards:
-        try:
-            name = card.find('h3', class_='product-name').text.strip() # Change
-            price_text = card.find('span', class_='product-price').text.strip() # Change
-            # Clean price (remove currency, convert to float if needed)
-            price = ''.join(filter(str.isdigit, price_text)) # Basic digit extraction
-            
-            # Get product URL for potential category info
-            link_tag = card.find('a', href=True)
-            category = "Unknown" # You might need to derive this from the URL or another element
-            
-            products.append({
-                'name': name,
-                'price': price,
-                'category': category,
-                'scrape_date': datetime.now().strftime('%Y-%m-%d')
-            })
-        except Exception as e:
-            print(f"Error parsing a product card: {e}")
-            continue
-    return products
-
-def save_to_csv(products, output_path):
-    """Save product list to a CSV file."""
-    if not products:
-        print("No products to save.")
-        return
-    
-    os.makedirs(os.path.dirname(output_path), exist_ok=True)
-    
-    with open(output_path, 'w', newline='', encoding='utf-8') as csvfile:
-        fieldnames = ['name', 'price', 'category', 'scrape_date']
-        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-        writer.writeheader()
-        writer.writerows(products)
-    print(f"Saved {len(products)} products to {output_path}")
-
-# --- Main Execution ---
-def main():
-    # You might need to loop through multiple category/subcategory pages
-    # For example: categories = ["/erkek", "/kadin", "/cocuk"]
-    category_urls = [TARGET_URL] # Replace with actual category page URLs
+def scrape_avva():
+    # Initialize Undetected Chromedriver
+    options = uc.ChromeOptions()
+    options.add_argument("--headless") # Run without window for automation
+    driver = uc.Chrome(options=options)
     
     all_products = []
-    for cat_url in category_urls:
-        print(f"Fetching category: {cat_url}")
-        html = fetch_page(cat_url)
-        if html:
-            products = parse_product_listing(html)
-            # Optionally add category info based on the URL
-            all_products.extend(products)
-        else:
-            print(f"Failed to fetch {cat_url}")
-    
-    # Generate filename with current date
-    today_str = datetime.now().strftime('%Y-%m-%d')
-    output_file = os.path.join(OUTPUT_DIR, f"products_{today_str}.csv")
-    save_to_csv(all_products, output_file)
+
+    try:
+        for base_url in CATEGORIES:
+            category_name = base_url.split('/')[-1]
+            print(f"--- Scraping Category: {category_name} ---")
+            
+            # Scrape first 3 pages (Adjust range as needed)
+            for page in range(1, 4):
+                url = f"{base_url}?pg={page}"
+                driver.get(url)
+                
+                # Wait for products to load (Update selector based on site inspection)
+                try:
+                    WebDriverWait(driver, 10).until(
+                        EC.presence_of_element_for_all_elements_located((By.CLASS_NAME, "product-item"))
+                    )
+                except:
+                    print(f"No more products or timeout on page {page}")
+                    break
+
+                # Extract items
+                items = driver.find_elements(By.CLASS_NAME, "product-item")
+                for item in items:
+                    try:
+                        name = item.find_element(By.CLASS_NAME, "product-name").text.strip()
+                        price = item.find_element(By.CLASS_NAME, "product-price").text.strip()
+                        
+                        all_products.append({
+                            "Date": current_date,
+                            "Category": category_name,
+                            "Product Name": name,
+                            "Price": price
+                        })
+                    except Exception as e:
+                        continue
+                
+                print(f"Finished page {page}")
+                time.sleep(random.uniform(2, 5)) # Anti-ban delay
+
+    finally:
+        driver.quit()
+
+    # Save to CSV
+    df = pd.DataFrame(all_products)
+    df.to_csv(file_path, index=False, encoding='utf-8-sig')
+    print(f"Successfully saved data to {file_path}")
 
 if __name__ == "__main__":
-    main()
+    scrape_avva()
