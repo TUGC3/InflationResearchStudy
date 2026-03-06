@@ -264,6 +264,12 @@ def scrape_range(
             logger.info("%s      Page %2d: %2d listings saved | %d–%d TL",
                 pad, current_page, len(page_records), min_price, max_price)
 
+        # --- HUMAN-LIKE PAUSE EVERY 3 PAGES ---
+        if current_page > 0 and current_page % 3 == 0:
+            pause_time = random.uniform(3, 6)
+            logger.info("%s      ⏳ Taking a human-like pause of %.2f seconds...", pad, pause_time)
+            time.sleep(pause_time)
+
         has_next = bool(soup.find("a", title="Sonraki"))
 
         if current_page >= 20:
