@@ -1,0 +1,38 @@
+name: Pull & Bear Test Run
+
+on:
+  workflow_dispatch:  # Manuel tetikleme
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      - name: Install dependencies
+        run: pip install requests
+      
+      - name: Run Pull & Bear scraper
+        run: |
+          cd pullandbear
+          python main.py
+      
+      - name: Show results
+        run: |
+          cd pullandbear
+          echo "=== CSV Preview (first 20 lines) ==="
+          head -20 pullandbear_prices.csv
+          echo "=== Total products ==="
+          wc -l pullandbear_prices.csv
+      
+      - name: Upload CSV as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: pullandbear-prices-test
+          path: pullandbear/pullandbear_prices.csv
