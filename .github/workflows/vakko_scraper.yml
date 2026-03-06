@@ -1,0 +1,44 @@
+name: Vakko Daily Scraper
+
+# Kodun ne zaman çalışacağını belirliyoruz
+on:
+  schedule:
+    - cron: '0 4 * * *' # Her sabah UTC saatiyle 04:00'te (Türkiye saatiyle 07:00) çalışır.
+  workflow_dispatch: # GitHub sitesinden manuel olarak tetikleme butonu ekler.
+
+jobs:
+  scrape-and-save:
+    runs-on: ubuntu-latest # Kodu sanal bir Linux makinesinde çalıştır
+
+    steps:
+      # 1. Kodlarımızı sanal makineye çek
+      - name: Repoyu Klonla
+        uses: actions/checkout@v4
+
+      # 2. Python 3.12 kur
+      - name: Python Kurulumu
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      # 3. Gerekli kütüphaneleri yükle (Eğer requirements.txt dosyan varsa 'pip install -r requirements.txt' de yapabilirsin)
+      - name: Kütüphaneleri Yükle
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests pandas beautifulsoup4 python-dotenv
+
+      # 4. Asıl Scraper kodunu çalıştır (Sırları sanal makineye değişken olarak veriyoruz)
+      - name: Master Scraper'ı Çalıştır
+        env:
+          VAKKO_COOKIE: ${{ secrets.VAKKO_COOKIE }}
+          USER_AGENT: ${{ secrets.VAKKO_USER_AGENT }}
+        run: python Codes/ClothingStores/Vakko/vakko_master_scraper.py
+
+      # 5. Çekilen ve 'Datas' klasörüne kaydedilen CSV dosyasını repoya Pushla
+      - name: Yeni Verileri GitHub'a Pushla
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action Bot"
+          git add Datas/ClothingStores/Vakko/*.csv
+          git commit -m "🤖 Otomatik Veri Çekimi: Vakko Günlük Ürün Fiyatları" || echo "Kaydedilecek yeni bir veri bulunamadı."
+          git push
