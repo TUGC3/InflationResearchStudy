@@ -1,4 +1,4 @@
-﻿District,Rooms,Price
+District,Rooms,Price
 Konak / Gürçeşme,1+1,9.000 TL
 Aliağa,3+1,9.000 TL
 Buca,Stüdyo (1+0),8.000 TL
@@ -200,7 +200,6 @@ Bayraklı / Alpaslan,2+1,11.000 TL
 Menemen / Seyrek,1+1,12.500 TL
 Menemen / Seyrek,1+1,14.000 TL
 Bayraklı,2+1,12.000 TL
-Menemen / Ulukent,,12.000 TL
 Menemen / Seyrek,1+1,13.500 TL
 Karabağlar / Kibar,2+1,14.500 TL
 Ödemiş,1+1,13.000 TL
@@ -300,7 +299,6 @@ Bayraklı / Alpaslan,3+1,12.500 TL
 Bornova / Naldöken,2+1,14.000 TL
 Bayraklı / Alpaslan,2+1,12.000 TL
 Menemen / Seyrek,1+1,14.500 TL
-Selçuk / Köyler,,10.000 TL
 Karşıyaka / Alaybey,3+1,14.500 TL
 Menemen / Seyrek,1+1,13.000 TL
 Konak / Gürçeşme,2+1,13.000 TL
@@ -644,7 +642,6 @@ Buca,1+1,16.000 TL
 Buca,1+1,16.000 TL
 Menemen / Seyrek,1+1,15.000 TL
 Torbalı / Ayrancılar,1+1,15.500 TL
-Foça / Köyler,,16.000 TL
 Torbalı,3+1,15.000 TL
 Buca,Stüdyo (1+0),15.000 TL
 Buca / İşçievleri,2+1,16.000 TL
@@ -3990,10 +3987,6 @@ Konak / Alsancak,1+1,20.000 TL
 Menderes / Gümüldür,1+1,20.000 TL
 Torbalı / Ayrancılar,1+1,20.000 TL
 Urla / Köyler,2+1,20.000 TL
-Ordu / Altınordu,1+1,20.050 TL
-Karabük / Merkez,1+1,20.100 TL
-Ankara / Sincan,3+1,20.150 TL
-Ankara / Sincan,3+1,20.100 TL
 Karabağlar,2+1,20.200 TL
 Çiğli / Balatçık,1+1,20.250 TL
 Karabağlar,2+1,20.200 TL
@@ -6411,16 +6404,6 @@ Menemen / Seyrek,3+1,24.700 TL
 Karabağlar / Yeşilyurt,3+1,24.850 TL
 Menemen,3+1,24.750 TL
 Çeşme / Alaçatı,6+2,24.900 TL
-Mersin / Tarsus,4+1,24.990 TL
-Ankara / Keçiören,3+1,24.990 TL
-Van / Edremit,3+1,24.990 TL
-İstanbul / Çekmeköy,1+1,24.990 TL
-Gaziantep / Şehitkamil,1+1,24.990 TL
-Antalya / Alanya,2+1,24.990 TL
-Muğla / Fethiye,1+1,24.990 TL
-Kayseri / Talas,3+1,24.995 TL
-Tokat / Merkez,3+1,24.975 TL
-Kayseri / Melikgazi,2+1,24.995 TL
 Buca,2+1,25.000 TL
 Bornova / Atatürk,2+1,25.000 TL
 Menemen,2+1,25.000 TL
@@ -7430,16 +7413,6 @@ Seferihisar,3+1,25.000 TL
 Karşıyaka,2+1,25.000 TL
 Gaziemir / Sarnıç,2+1,25.000 TL
 Karşıyaka / Alaybey,2+1,25.050 TL
-İstanbul / Arnavutköy,2+1,25.200 TL
-İstanbul / Ümraniye,2+1,25.200 TL
-İstanbul / Çekmeköy,2+1,25.100 TL
-Gaziantep / Şehitkamil,3+1,25.100 TL
-Samsun / Atakum,2+1,25.200 TL
-Nevşehir / Merkez,3+1,25.200 TL
-İstanbul / Kartal,Stüdyo (1+0),25.200 TL
-Erzincan / Merkez,3+1,25.200 TL
-Bilecik / Merkez,3+1,25.100 TL
-Tokat / Merkez,4+1,25.100 TL
 Torbalı,3+1,25.500 TL
 Buca / İşçievleri,3+1,25.500 TL
 Seferihisar,1+1,25.500 TL
@@ -10742,11 +10715,6 @@ Bornova / Atatürk,3+1,30.000 TL
 Karşıyaka / Nergiz,2+1,30.000 TL
 Karabağlar / Yeşilyurt,3+1,30.000 TL
 Çeşme,2+1,30.000 TL
-Balıkesir / Karesi,3+1,30.100 TL
-İstanbul / Pendik,1+1,30.100 TL
-İstanbul / Fatih,1+1,30.100 TL
-Ankara / Yenimahalle,1+1,30.100 TL
-Kocaeli / Çayırova,2+1,30.100 TL
 Karşıyaka / Nergiz,3+1,31.000 TL
 Seferihisar,2+1,31.000 TL
 Bornova,1+1,31.000 TL
@@ -12357,7 +12325,6 @@ Karşıyaka / Yalı,2+1,35.000 TL
 Bornova / Çamdibi,1+1,35.000 TL
 Konak / Güzelyalı,3+1,35.000 TL
 Urla,2+1,35.000 TL
-Konak / Küçükyalı,,35.000 TL
 Bornova / Atatürk,3+1,35.000 TL
 Gaziemir,3+1,35.000 TL
 Urla,3+1,35.000 TL
@@ -12522,7 +12489,6 @@ Selçuk,2+1,35.000 TL
 Gaziemir,3+1,35.000 TL
 Aliağa,2+1,35.000 TL
 Konak / Güzelyalı,2+1,35.000 TL
-Seferihisar,,35.000 TL
 Balçova,3+1,35.000 TL
 Buca,3+1,35.000 TL
 Buca,3+1,35.000 TL
@@ -12960,7 +12926,6 @@ Seferihisar,2+1,35.000 TL
 Seferihisar,3+1,35.000 TL
 Konak,4+1,35.000 TL
 Buca / Şirinyer,2+1,35.000 TL
-Menderes / Köyler,,35.000 TL
 Bornova / Altındağ,1+1,35.000 TL
 Çiğli / Egekent,2+1,35.000 TL
 Çiğli / Ataşehir,1+1,35.000 TL
@@ -13030,11 +12995,6 @@ Karabağlar / Kibar,3+1,35.000 TL
 Torbalı,3+1,35.000 TL
 Bornova / Atatürk,2+1,35.000 TL
 Dikili,2+1,35.000 TL
-Tokat / Merkez,4+1,35.100 TL
-Ankara / Çankaya,3+1,35.050 TL
-Ankara / Yenimahalle,1+1,35.100 TL
-Ankara / Yenimahalle,1+1,35.100 TL
-İstanbul / Kağıthane,2+1,35.048 TL
 Bornova / Kazımdirik,1+1,35.250 TL
 Karşıyaka / Nergiz,2+1,35.500 TL
 Buca / Şirinyer,3+1,35.500 TL
@@ -13980,7 +13940,6 @@ Buca / İşçievleri,3+1,40.000 TL
 Balçova,2+1,42.000 TL
 Menemen,3+1,40.000 TL
 Aliağa,3+1,40.000 TL
-Konak / Küçükyalı,,40.000 TL
 Karşıyaka / Denizbostanlısı,2+1,40.000 TL
 Balçova,3+1,44.000 TL
 Güzelbahçe / Yelki,2+1,42.000 TL
@@ -14434,7 +14393,6 @@ Gaziemir,3+1,40.000 TL
 Konak / Güzelyalı,3+1,40.000 TL
 Karşıyaka,2+1,40.000 TL
 Bornova / Atatürk,2+1,40.000 TL
-Konak,,42.000 TL
 Bornova,3+1,40.000 TL
 Karşıyaka / Denizbostanlısı,1+1,40.000 TL
 Konak / Pasaport,1+1,40.000 TL
@@ -15062,7 +15020,6 @@ Balçova,2+1,45.000 TL
 Karşıyaka / Nergiz,3+1,45.000 TL
 Urla,2+1,45.000 TL
 Çeşme,1+1,45.000 TL
-Konak / Küçükyalı,,48.000 TL
 Urla / Köyler,1+1,45.000 TL
 Foça / Bağarası,1+1,47.000 TL
 Karşıyaka,3+1,48.000 TL
@@ -15595,7 +15552,6 @@ Konak / Alsancak,3+1,50.000 TL
 Çiğli / Ataşehir,2+1,56.000 TL
 Menemen,3+1,56.000 TL
 Çeşme / Köyler,3+1,50.000 TL
-Karşıyaka,,50.000 TL
 Urla / Çeşmealtı,2+1,50.000 TL
 Konak / Alsancak,3+1,52.500 TL
 Gaziemir,3+1,50.000 TL
@@ -15728,7 +15684,6 @@ Bornova / Kazımdirik,2+1,55.000 TL
 Foça / Eskifoça,3+1,57.500 TL
 Aliağa,3+1,50.000 TL
 Karşıyaka / Denizbostanlısı,2+1,55.000 TL
-Karşıyaka,,50.000 TL
 Konak / Yenişehir,1+1,55.000 TL
 Urla,3+1,56.000 TL
 Aliağa,3+1,58.000 TL
@@ -15737,7 +15692,6 @@ Menemen,5+1,57.000 TL
 Bayraklı,1+1,50.000 TL
 Konak / Yenişehir,1+1,50.000 TL
 Urla,4+1,50.000 TL
-Karşıyaka,,55.000 TL
 Bayraklı,2+1,55.000 TL
 Karabağlar / Yeşilyurt,3+1,58.500 TL
 Konak / Alsancak,2+1,50.000 TL
@@ -15763,7 +15717,6 @@ Foça / Eskifoça,3+1,50.000 TL
 Güzelbahçe / Yelki,2+1,50.000 TL
 Menemen / Ulukent,3+1,55.000 TL
 Aliağa,3+1,50.000 TL
-Karşıyaka / Alaybey,,55.000 TL
 Narlıdere,4+1,52.500 TL
 Konak / Yenişehir,1+1,55.000 TL
 Buca,3+1,55.000 TL
@@ -16048,7 +16001,6 @@ Konak / Kahramanlar,1+1,50.000 TL
 Karabağlar / Hatay,3+1,55.000 TL
 Seferihisar,3+1,55.000 TL
 Bornova / Kazımdirik,2+1,50.000 TL
-Konak / Küçükyalı,,55.000 TL
 Karşıyaka,2+1,55.000 TL
 Buca,3+1,50.000 TL
 Menderes / Özdere,2+1,50.000 TL
@@ -16164,7 +16116,6 @@ Karşıyaka / Denizbostanlısı,3+1,58.000 TL
 Bayraklı,1+1,50.000 TL
 Konak / Küçükyalı,3+1,52.000 TL
 Menemen / Ulukent,3+1,50.000 TL
-Konak / Güzelyalı,,50.000 TL
 Foça / Yenifoça,3+1,50.000 TL
 Güzelbahçe,2+1,50.000 TL
 Dikili / Köyler,3+1,55.000 TL
@@ -16192,8 +16143,6 @@ Konak,3+1,50.000 TL
 Urla,3+1,52.500 TL
 Çeşme,4+1,55.000 TL
 Karşıyaka / Denizbostanlısı,3+1,57.000 TL
-Karşıyaka,,52.500 TL
-Konak / Küçükyalı,,50.000 TL
 Menderes,3+1,52.500 TL
 Konak / Güzelyalı,2+1,50.000 TL
 Bayraklı / Manavkuyu,3+1,55.000 TL
@@ -16267,7 +16216,6 @@ Konak / Kahramanlar,2+1,75.000 TL
 Çiğli / Sasalı,2+1,73.000 TL
 Çiğli / Balatçık,2+1,65.000 TL
 Konak / Alsancak,3+1,70.000 TL
-Konak / Küçükyalı,,65.000 TL
 Bornova,3+1,65.000 TL
 Karşıyaka / Denizbostanlısı,2+1,62.000 TL
 Gaziemir,2+1,72.000 TL
@@ -16374,7 +16322,6 @@ Urla / Çeşmealtı,2+1,60.000 TL
 Bayraklı,3+1,60.000 TL
 Çeşme,2+1,60.000 TL
 Konak / Güzelyalı,3+1,65.000 TL
-Konak / Küçükyalı,,70.000 TL
 Karşıyaka / Denizbostanlısı,2+1,78.000 TL
 Bayraklı,4+1,75.000 TL
 Karşıyaka / Yalı,2+1,68.000 TL
@@ -16574,7 +16521,6 @@ Narlıdere,3+1,63.000 TL
 Konak / Güzelyalı,3+1,70.000 TL
 Güzelbahçe,4+2,60.000 TL
 Konak / Alsancak,3+1,70.000 TL
-Konak / Güzelyalı,,70.000 TL
 Urla / Çeşmealtı,3+1,60.000 TL
 Konak / Kahramanlar,2+1,73.000 TL
 Foça / Köyler,3+1,70.000 TL
@@ -16610,7 +16556,6 @@ Urla / Çeşmealtı,3+1,69.000 TL
 Çiğli / Sasalı,3+1,65.000 TL
 Balçova,4+1,65.000 TL
 Bornova,3+1,60.000 TL
-Konak / Güzelyalı,,64.500 TL
 Buca,3+1,60.000 TL
 Urla / Çeşmealtı,3+1,70.000 TL
 Karabağlar / Hatay,3+1,60.000 TL
@@ -16747,7 +16692,6 @@ Bayraklı / Manavkuyu,3+1,64.000 TL
 Urla / Çeşmealtı,1+1,75.000 TL
 Konak / Yenişehir,1+1,65.000 TL
 Foça / Yenifoça,3+1,75.000 TL
-Konak / Küçükyalı,,75.000 TL
 Buca / Köyler,5+1,70.000 TL
 Gaziemir,4+1,65.000 TL
 Bornova / Altındağ,3+1,62.000 TL
@@ -16776,7 +16720,6 @@ Konak / Küçükyalı,3+1,72.000 TL
 Karşıyaka / Yalı,3+1,72.000 TL
 Karşıyaka / Denizbostanlısı,2+1,60.000 TL
 Bayraklı / Manavkuyu,3+1,62.500 TL
-Konak / Küçükyalı,,70.000 TL
 Konak / Alsancak,4+1,75.000 TL
 Urla,2+1,70.000 TL
 Seferihisar,3+1,60.000 TL
@@ -16861,7 +16804,6 @@ Narlıdere,3+1,60.000 TL
 Çeşme,3+1,65.000 TL
 Menemen,5+1,75.000 TL
 Bornova,3+1,60.000 TL
-Konak,,68.000 TL
 Karşıyaka / Denizbostanlısı,2+1,75.000 TL
 Gaziemir,3+1,70.000 TL
 Foça / Yenifoça,3+1,75.000 TL
@@ -16974,7 +16916,6 @@ Karabağlar / Hatay,4+1,65.000 TL
 Gaziemir,3+1,65.000 TL
 Karşıyaka / Alaybey,3+1,62.000 TL
 Foça / Yenifoça,4+1,60.000 TL
-Karşıyaka,,65.000 TL
 Seferihisar,4+2,72.000 TL
 Karşıyaka / Denizbostanlısı,3+1,60.000 TL
 Konak / Yenişehir,2+1,79.500 TL
@@ -17122,7 +17063,6 @@ Konak / Alsancak,3+1,95.000 TL
 Gaziemir,3+1,95.000 TL
 Güzelbahçe,4+2,90.000 TL
 Bornova / Naldöken,4+1,92.500 TL
-Konak / Güzelyalı,,85.000 TL
 Urla,3+1,80.000 TL
 Karşıyaka / Denizbostanlısı,3+1,94.000 TL
 Çeşme,4+1,90.000 TL
@@ -17151,7 +17091,6 @@ Urla / Köyler,4+1,98.000 TL
 Bornova / Naldöken,4+1,85.000 TL
 Konak / Alsancak,3+1,87.000 TL
 Konak / Alsancak,3+1,92.000 TL
-Konak / Küçükyalı,,85.000 TL
 Aliağa,5+1,80.000 TL
 Çeşme,4+1,85.000 TL
 Konak / Alsancak,2+1,85.000 TL
@@ -17171,9 +17110,7 @@ Urla / Köyler,3+1,85.000 TL
 Bornova / Köyler,6+1,85.000 TL
 Çeşme / Alaçatı,3+1,95.000 TL
 Konak / Küçükyalı,3+1,80.000 TL
-Kemalpaşa / Bağyurdu,,80.000 TL
 Çeşme,4+1,80.000 TL
-Konak / Alsancak,,90.000 TL
 Konak / Yenişehir,3+1,80.000 TL
 Urla / Köyler,4+1,85.000 TL
 Konak / Yenişehir,2+1,95.000 TL
@@ -17293,12 +17230,10 @@ Gaziemir,3+1,85.000 TL
 Balçova,4+1,85.000 TL
 Çeşme / Alaçatı,1+1,85.000 TL
 Konak / Alsancak,3.5+1,85.000 TL
-Konak / Güzelyalı,,85.000 TL
 Konak / Kahramanlar,2+1,85.000 TL
 Çiğli / Sasalı,3+1,96.000 TL
 Seferihisar,6+1,85.000 TL
 Çeşme,3+1,85.000 TL
-Konak / Güzelyalı,,95.000 TL
 Konak / Kahramanlar,2+1,82.500 TL
 Buca / Köyler,5+2,85.000 TL
 Çeşme / Alaçatı,4+1,90.000 TL
@@ -17788,7 +17723,6 @@ Urla / Köyler,3+1,105.000 TL
 Çeşme / Alaçatı,4+1,825.000 TL
 Seferihisar,7+2,110.000 TL
 Konak / Kahramanlar,3+1,115.000 TL
-Konak / Küçükyalı,,110.000 TL
 Güzelbahçe,4+1,117.000 TL
 Balçova,5+1,100.000 TL
 Seferihisar / Doğanbey,2+1,250.000 TL
@@ -18258,7 +18192,6 @@ Bornova / Naldöken,4+1,100.000 TL
 Urla / Çeşmealtı,6+2,250.000 TL
 Çeşme,3+1,380.000 TL
 Seferihisar,3+1,110.000 TL
-Buca / Köyler,,100.000 TL
 Narlıdere,5+1,300.000 TL
 Bornova / Kazımdirik,3+1,100.000 TL
 Urla / Çeşmealtı,3+1,200.000 TL
@@ -18335,7 +18268,6 @@ Urla / Çeşmealtı,4+1,150.000 TL
 Çeşme / Alaçatı,3+1,1.900.000 TL
 Çeşme,4+1,1.800.000 TL
 Çeşme / Alaçatı,4+1,2.200.000 TL
-Çeşme / Köyler,,2.500.000 TL
 Çeşme,5+2,2.000.000 TL
 Çeşme,5+1,2.000.000 TL
 Çeşme,4+1,1.500.000 TL
@@ -18422,5 +18354,3 @@ Seferihisar,10 Üzeri,4.900.000 TL
 Bergama,2+0,3.000.000 TL
 Çeşme,5+1,3.000.000 TL
 Çeşme,3+1,3.000.000 TL
-Muğla / Bodrum,2+1,8.305.000 TL
-Mersin / Akdeniz,2+1,5.300.000 TL
