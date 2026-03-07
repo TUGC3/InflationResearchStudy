@@ -104,10 +104,18 @@ def calculate_inflation():
     summary_file = inflation_dir / "inflation_summary.csv"
     df_summary = pd.DataFrame(summary_data)
     
-    header = not summary_file.exists()
     try:
-        df_summary.to_csv(summary_file, mode='a', index=False, header=header, encoding='utf-8')
-        logger.info(f"Appended daily inflation summary to: {summary_file}")
+        if summary_file.exists():
+            df_existing = pd.read_csv(summary_file)
+            # Remove any existing entry for today's date
+            df_existing = df_existing[df_existing['date'] != today_str]
+            # Append new data
+            df_final = pd.concat([df_existing, df_summary], ignore_index=True)
+            df_final.to_csv(summary_file, index=False, encoding='utf-8')
+            logger.info(f"Updated daily inflation summary in: {summary_file}")
+        else:
+            df_summary.to_csv(summary_file, index=False, encoding='utf-8')
+            logger.info(f"Created daily inflation summary in: {summary_file}")
     except Exception as e:
         logger.error(f"Failed to write summary file: {e}")
 
