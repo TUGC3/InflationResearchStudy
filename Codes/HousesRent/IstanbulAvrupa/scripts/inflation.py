@@ -20,7 +20,7 @@ def parse_price(price_str):
     except Exception:
         return None
 
-def calculate_inflation():
+def calculate_inflation(target_date=None):
     """Calculates inflation for the IstanbulAvrupa data based on 1-day, 7-day, 15-day, and 30-day intervals.
     
     Reads today's scraped CSV file, finds historical CSVs, and calculates median prices 
@@ -29,7 +29,15 @@ def calculate_inflation():
     """
     output_dir = Path(config.OUTPUT_DIR)
     folder_name = config.FOLDER_NAME # IstanbulAvrupa
-    today_str = datetime.today().strftime("%Y-%m-%d")
+    
+    if target_date:
+        today_str = target_date
+        # Ensure we compute past dates relative to the target date
+        base_date = datetime.strptime(target_date, "%Y-%m-%d")
+    else:
+        base_date = datetime.today()
+        today_str = base_date.strftime("%Y-%m-%d")
+        
     today_file = output_dir / f"{folder_name}_{today_str}.csv"
     
     if not today_file.exists():
@@ -53,7 +61,7 @@ def calculate_inflation():
     summary_data = {'date': [today_str]}
     
     for days in intervals:
-        past_date = (datetime.today() - timedelta(days=days)).strftime("%Y-%m-%d")
+        past_date = (base_date - timedelta(days=days)).strftime("%Y-%m-%d")
         past_file = output_dir / f"{folder_name}_{past_date}.csv"
         
         col_name = f"inflation_{days}d_pct"
@@ -120,6 +128,11 @@ def calculate_inflation():
         logger.error(f"Failed to write summary file: {e}")
 
 if __name__ == "__main__":
+    import argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--date", help="Target date in YYYY-MM-DD format", default=None)
+    args = parser.parse_args()
+
     # Configure basic logging for standalone execution
     logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
-    calculate_inflation()
+    calculate_inflation(args.date)
