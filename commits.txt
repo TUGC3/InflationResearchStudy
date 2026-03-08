@@ -1,0 +1,2497 @@
+Batu Koray Masak <batukoraymasak@gmail.com>
+data: Add Hapeloglu, Happy Center (For Elif Kocur, who I believe is still not added to the repository), Sahibinden daily data
+
+---
+aykockadir <kadir.kardes@ozu.edu.tr>
+Add daily datas
+
+---
+batuonlukus <batu.onlukus.20@gmail.com>
+Tunceli rental listings 2026-03-07
+---
+batuonlukus <batu.onlukus.20@gmail.com>
+Malatya rental listings 2026-03-07
+---
+batuonlukus <batu.onlukus.20@gmail.com>
+Elazığ rental listings 2026-03-07
+---
+batuonlukus <batu.onlukus.20@gmail.com>
+	 Add Marketzade 2026-03-07 daily price data
+---
+qNefeeee <efe.yildirim500@gmail.com>
+Delete Datas/HousesRent/Isparta_Burdur_Igdır_Agrı_Ardahan_Batman_Siirt_Sırnak_Kastamonu/a.csv
+---
+qNefeeee <efe.yildirim500@gmail.com>
+Add files via upload
+---
+qNefeeee <efe.yildirim500@gmail.com>
+Create a.csv
+---
+qNefeeee <efe.yildirim500@gmail.com>
+Create rent_scrape.py
+---
+qNefeeee <efe.yildirim500@gmail.com>
+Delete Codes/HousesRent/Isparta_Burdur_Igdır_Agrı_Ardahan_Batman_Siirt_Sırnak_Kastamonu
+---
+qNefeeee <efe.yildirim500@gmail.com>
+Create Isparta_Burdur_Igdır_Agrı_Ardahan_Batman_Siirt_Sırnak_Kastamonu
+---
+atahakancildas <cildasata@gmail.com>
+Migros: Duplicate check for inflation calculator
+
+---
+atahakancildas <cildasata@gmail.com>
+Koton: Daily data commit
+
+---
+atahakancildas <cildasata@gmail.com>
+IstanbulAvrupa: Daily data commit
+
+---
+Batuhan Burak Pehlivan <batuhan.pehlivan@ozu.edu.tr>
+added daily rent datas
+---
+Batuhan Burak Pehlivan <batuhan.pehlivan@ozu.edu.tr>
+added daily market datas
+---
+atahakancildas <cildasata@gmail.com>
+Migros: Changed data folder structure
+
+---
+atahakancildas <cildasata@gmail.com>
+Migros: Daily data commit
+
+---
+Eroshix <erensinakizmaz@gmail.com>
+daily scrope
+
+---
+doruk gülen <61842553+DorukGulen@users.noreply.github.com>
+Add files via upload
+---
+qNefeeee <efe.yildirim500@gmail.com>
+Add files via upload
+---
+aleksandra <sashka_kolm@mail.ru>
+carrefourSA daily data
+
+---
+doruk gülen <61842553+DorukGulen@users.noreply.github.com>
+Add files via upload
+---
+doruk gülen <61842553+DorukGulen@users.noreply.github.com>
+Delete Datas/Markets/A101/03-04-2026.csv
+---
+Eroshix <erensinakizmaz@gmail.com>
+daily scrape
+
+---
+Eroshix <erensinakizmaz@gmail.com>
+daily scrape
+
+---
+ZeusSYD <yigit.dolek@gmail.com>
+.
+
+---
+ZeusSYD <yigit.dolek@gmail.com>
+manual data update
+
+---
+Ömer Faruk GÖLBAŞI <omergolbasi@Omer-MacBook-Air.local>
+Auto-update daily prices CSV for 2026-03-07 (Local Run)
+
+---
+vinnipukh <73662383+vinnipukh@users.noreply.github.com>
+Rename vakkoapitest.py to vakko_master_scraper.py
+---
+onurk <demirtasonurkaan@gmail.com>
+Merge remote-tracking branch 'origin/master'
+
+---
+onurk <demirtasonurkaan@gmail.com>
+"feat: daily data committed and random sleeps per 3 pages added"
+
+---
+Batu Koray Masak <batukoraymasak@gmail.com>
+data: add daily data from Hapeloglu, Happy Center, Sahibinden
+
+- Hapeloglu: market prices
+- Happy Center: market prices (on behalf of Elif Kocur, who is still NOT added to the repository)
+- Sahibinden: house prices for Erzurum/Erzincan/Bayburt
+
+---
+batuonlukus <batu.onlukus.20@gmail.com>
+Tunceli rental listings 2026-03-06
+---
+batuonlukus <batu.onlukus.20@gmail.com>
+Malatya rental listings 2026-03-06
+---
+batuonlukus <batu.onlukus.20@gmail.com>
+Elazığ rental listings 2026-03-06
+---
+batuonlukus <batu.onlukus.20@gmail.com>
+Add Marketzade 2026-03-06 daily price data
+---
+AlexanderTurns <erenhirabayashi@gmail.com>
+Create Clothes3-6.csv
+---
+keremdobo <kdobooglu@gmail.com>
+Update pullandbear.yml
+---
+keremdobo <kdobooglu@gmail.com>
+Update and rename pullandbear_test.yml to pullandbear.yml
+---
+keremdobo <kdobooglu@gmail.com>
+Update product_fetcher.py
+---
+keremdobo <kdobooglu@gmail.com>
+Update main.py
+---
+keremdobo <kdobooglu@gmail.com>
+Update config.py
+---
+keremdobo <kdobooglu@gmail.com>
+Update category_fetcher.py
+---
+keremdobo <kdobooglu@gmail.com>
+Create s
+---
+AlexanderTurns <erenhirabayashi@gmail.com>
+Create clothingScraper.py
+---
+AlexanderTurns <erenhirabayashi@gmail.com>
+Add files via upload
+---
+AlexanderTurns <erenhirabayashi@gmail.com>
+Add files via upload
+---
+keremdobo <kdobooglu@gmail.com>
+Create pullandbear_test.yml
+---
+keremdobo <kdobooglu@gmail.com>
+Create config.py
+---
+keremdobo <kdobooglu@gmail.com>
+Create product_fetcher.py
+---
+keremdobo <kdobooglu@gmail.com>
+Create category_fetcher.py
+---
+keremdobo <kdobooglu@gmail.com>
+Update main.py
+---
+keremdobo <kdobooglu@gmail.com>
+Create main.py
+---
+Eroshix <erensinakizmaz@gmail.com>
+daily scrape
+
+---
+vinnipukh <73662383+vinnipukh@users.noreply.github.com>
+Merge remote-tracking branch 'origin/master'
+
+---
+vinnipukh <73662383+vinnipukh@users.noreply.github.com>
+Added Vakko scraper, github workflow, and vakko daily data
+
+---
+aykockadir <kadir.kardes@ozu.edu.tr>
+Add daily datas
+
+---
+Eroshix <erensinakizmaz@gmail.com>
+daily scrape
+
+---
+atahakancildas <cildasata@gmail.com>
+Migros, IstanbulAvrupa, Koton: Add inflation data calculator and calculatedinital data
+
+---
+atahakancildas <cildasata@gmail.com>
+Koton: Daily data commit
+
+---
+atahakancildas <cildasata@gmail.com>
+IstanbulAvrupa: Daily data commit
+
+---
+atahakancildas <cildasata@gmail.com>
+Migros: Daily data commit
+
+---
+Hikmet Tarık Keskin <htarikk00@gmail.com>
+Add files via upload
+---
+Hikmet Tarık Keskin <htarikk00@gmail.com>
+Add files via upload
+---
+Hikmet Tarık Keskin <htarikk00@gmail.com>
+Add files via upload
+---
+Hikmet Tarık Keskin <htarikk00@gmail.com>
+Add files via upload
+---
+Hikmet Tarık Keskin <htarikk00@gmail.com>
+Add files via upload
+---
+seda37 <148045067+seda37@users.noreply.github.com>
+Update avva.yaml
+---
+seda37 <148045067+seda37@users.noreply.github.com>
+Update avva_scraper.py
+---
+Batuhan Burak Pehlivan <batuhan.pehlivan@ozu.edu.tr>
+Add files via upload
+---
+Batuhan Burak Pehlivan <batuhan.pehlivan@ozu.edu.tr>
+Add files via upload
+---
+qNefeeee <efe.yildirim500@gmail.com>
+Add files via upload
+---
+qNefeeee <efe.yildirim500@gmail.com>
+Delete Datas/Markets/Kale/kalemarketleri_2026-03-06.numbers
+---
+qNefeeee <efe.yildirim500@gmail.com>
+Add files via upload
+---
+Ömer Faruk GÖLBAŞI <omergolbasi@Omer-MacBook-Air.local>
+Auto-update daily prices CSV for 2026-03-06 (Local Run)
+
+---
+aleksandra <sashka_kolm@mail.ru>
+carrefourSA daily data
+
+---
+GitHub Action <action@github.com>
+Auto-update: Added daily gurmar product data for 2026-03-06
+
+---
+GitHub Action <action@github.com>
+Auto-update: Added daily product data for 2026-03-06
+
+---
+atahakancildas <cildasata@gmail.com>
+Koton: Scraper documentation update, bug fixed and optimization updates, and daily data commit
+
+---
+atahakancildas <cildasata@gmail.com>
+Migros: Documentation update
+
+---
+atahakancildas <cildasata@gmail.com>
+IstanbulAvrupa: Update code documentation and some optimization changes
+
+---
+atahakancildas <cildasata@gmail.com>
+Migros: Parallel worker style scraper refactor and daily data commit
+
+---
+doruk gülen <61842553+DorukGulen@users.noreply.github.com>
+add 04_04_2026.csv
+---
+Batu Koray Masak <batukoraymasak@gmail.com>
+Datas: Add daily HappyCenter Market and Erzurum/Erzincan/Bayburt Sahibinden Rent Price CSVs and minor fix in HappyCenter Scraper
+
+---
+Hikmet Tarık Keskin <htarikk00@gmail.com>
+Add files via upload
+---
+Hikmet Tarık Keskin <htarikk00@gmail.com>
+Add files via upload
+---
+Hikmet Tarık Keskin <htarikk00@gmail.com>
+Add files via upload
+---
+Hikmet Tarık Keskin <htarikk00@gmail.com>
+Add files via upload
+---
+Hikmet Tarık Keskin <htarikk00@gmail.com>
+Create readme.md
+---
+Hikmet Tarık Keskin <htarikk00@gmail.com>
+Create readme.md
+---
+Hikmet Tarık Keskin <htarikk00@gmail.com>
+Create dirs
+---
+Hikmet Tarık Keskin <htarikk00@gmail.com>
+Create dirs
+---
+AlexanderTurns <erenhirabayashi@gmail.com>
+Add files via upload
+---
+AlexanderTurns <erenhirabayashi@gmail.com>
+Add files via upload
+---
+Eroshix <erensinakizmaz@gmail.com>
+daily scrape
+
+---
+Eroshix <erensinakizmaz@gmail.com>
+daily scrape
+
+---
+batuonlukus <batu.onlukus.20@gmail.com>
+Tunceli rental listings 2026-03-05
+---
+batuonlukus <batu.onlukus.20@gmail.com>
+Malatya rental listings 2026-03-05
+---
+batuonlukus <batu.onlukus.20@gmail.com>
+Elazığ rental listings 2026-03-05
+---
+batuonlukus <batu.onlukus.20@gmail.com>
+Add Marketzade 2026-03-05 daily price data
+---
+aykockadir <kadir.kardes@ozu.edu.tr>
+Add daily data
+
+---
+aykockadir <kadir.kardes@ozu.edu.tr>
+Add scraper for Mudo
+
+---
+aykockadir <kadir.kardes@ozu.edu.tr>
+Add daily datas
+
+---
+GitHub Action Bot <action@github.com>
+Auto-update daily prices CSV for Mopaş
+
+---
+Batu Koray Masak <batukoraymasak@gmail.com>
+Hapeloglu: Add daily market price data
+
+---
+Ömer Faruk GÖLBAŞI <omergolbasi@Omer-MacBook-Air.local>
+Auto-update daily prices CSV for Samsun/Ordu/Giresun/Sinop 2026-03-05
+
+---
+aleksandra <sashka_kolm@mail.ru>
+carrefurSA daily data
+
+---
+seda37 <148045067+seda37@users.noreply.github.com>
+Update avva.yaml
+---
+seda37 <148045067+seda37@users.noreply.github.com>
+Create avva.yaml
+---
+seda37 <148045067+seda37@users.noreply.github.com>
+Create requirements.txt
+---
+seda37 <148045067+seda37@users.noreply.github.com>
+Update avva_scraper.py
+---
+seda37 <148045067+seda37@users.noreply.github.com>
+Create try.csv
+---
+seda37 <148045067+seda37@users.noreply.github.com>
+Create avva_scraper.py
+---
+Batuhan Burak Pehlivan <batuhan.pehlivan@ozu.edu.tr>
+Add files via upload
+---
+Batuhan Burak Pehlivan <batuhan.pehlivan@ozu.edu.tr>
+Add files via upload
+---
+seda37 <148045067+seda37@users.noreply.github.com>
+Update antep_maras_kilis.py
+---
+GitHub Action <action@github.com>
+Update rental data (auto)
+
+---
+seda37 <148045067+seda37@users.noreply.github.com>
+Update antepmk.yml
+---
+seda37 <148045067+seda37@users.noreply.github.com>
+Update antepmk.yml
+---
+seda37 <148045067+seda37@users.noreply.github.com>
+Update antepmk.yml
+---
+seda37 <148045067+seda37@users.noreply.github.com>
+Update antepmk.yml
+---
+seda37 <148045067+seda37@users.noreply.github.com>
+Update requirements.txt
+---
+seda37 <148045067+seda37@users.noreply.github.com>
+Update antep_maras_kilis.py
+---
+github-actions[bot] <github-actions[bot]@users.noreply.github.com>
+Automated scrape: sok_market 2026-03-05
+
+---
+github-actions[bot] <github-actions[bot]@users.noreply.github.com>
+Automated scrape: tkkoop 2026-03-05
+
+---
+github-actions[bot] <github-actions[bot]@users.noreply.github.com>
+📦 Sariyer fiyat güncellemesi: 2026-03-05
+
+---
+github-actions <github-actions@github.com>
+Daily market data update
+
+---
+GitHub Action Bot <action@github.com>
+Auto-update daily prices CSV for Beymen Club 2026-03-05
+
+---
+github-actions[bot] <github-actions[bot]@users.noreply.github.com>
+Auto-update: Arden data 2026-03-05
+
+---
+GitHub Action <action@github.com>
+Auto-update: Kale product data for 2026-03-05
+
+---
+GitHub Action Bot <action@github.com>
+Auto-update daily prices CSV for Ideal Market 2026-03-05
+
+---
+GitHub Action <action@github.com>
+Auto-update: Added daily gurmar product data for 2026-03-05
+
+---
+GitHub Action <action@github.com>
+Auto-update: Added daily product data for 2026-03-05
+
+---
+Hikmet Tarık Keskin <htarikk00@gmail.com>
+Add files via upload
+---
+ZeusSYD <yigit.dolek@gmail.com>
+correcte name
+---
+ZeusSYD <yigit.dolek@gmail.com>
+Create Balikesir_2026-03-02.csv
+---
+ZeusSYD <yigit.dolek@gmail.com>
+Add files via upload
+---
+ZeusSYD <yigit.dolek@gmail.com>
+Create config.py
+---
+GitHub Action Bot <action@github.com>
+Auto-update daily prices CSV for Beymen Club 2026-03-04
+
+---
+Ömer Faruk GÖLBAŞI <omergolbasi@Omer-MacBook-Air.local>
+Add anyio requirement for Github Actions runner
+
+---
+Hikmet Tarık Keskin <htarikk00@gmail.com>
+Add files via upload
+---
+Ömer Faruk GÖLBAŞI <omergolbasi@Omer-MacBook-Air.local>
+Add GitHub Actions workflow for BeymenClub daily scrape
+
+---
+Ömer Faruk GÖLBAŞI <omergolbasi@Omer-MacBook-Air.local>
+Moved beymenclub scraper to ClothingStores and deleted clothes dir
+
+---
+Ömer Faruk GÖLBAŞI <omergolbasi@Omer-MacBook-Air.local>
+Add defacto folders to clothes
+
+---
+Ömer Faruk GÖLBAŞI <omergolbasi@Omer-MacBook-Air.local>
+Rename Clothes to clothes
+
+---
+Ömer Faruk GÖLBAŞI <omergolbasi@Omer-MacBook-Air.local>
+Rename BeymenClub to beymenclub as requested
+
+---
+Ömer Faruk GÖLBAŞI <omergolbasi@Omer-MacBook-Air.local>
+Add Beymen Club scraper script & first dataset for 2026-03-04
+
+---
+atahakancildas <cildasata@gmail.com>
+Koton: scraper added and daily data commit
+
+---
+github-actions[bot] <github-actions[bot]@users.noreply.github.com>
+Automated scrape: tkkoop 2026-03-04
+
+---
+ZeusSYD <yigit.dolek@gmail.com>
+Create requirements.txt
+---
+ZeusSYD <yigit.dolek@gmail.com>
+Update tkkoop_scraper.yml
+---
+ZeusSYD <yigit.dolek@gmail.com>
+Update tkkoop_scraper.yml again :(
+---
+ZeusSYD <yigit.dolek@gmail.com>
+Update tkkoop_scraper.yml
+---
+ZeusSYD <yigit.dolek@gmail.com>
+Update tkkoop_scraper.yml
+---
+AlexanderTurns <erenhirabayashi@gmail.com>
+Update and rename AntalyaFent3-4.csv to AntalyaRent3-4.csv
+---
+AlexanderTurns <erenhirabayashi@gmail.com>
+Add files via upload
+---
+AlexanderTurns <erenhirabayashi@gmail.com>
+Add files via upload
+---
+ZeusSYD <yigit.dolek@gmail.com>
+Add GitHub Actions automation
+
+---
+Batu Koray Masak <batukoraymasak@gmail.com>
+IMPORTANT: elfkcr (Elif Kocur) not yet added to repo
+
+- Added HappyCenter scraper and first daily data on her behalf
+- 15 subcategories, 7768 products, pagination handling
+- Output: CSV to Datas/Markets/HappyCenter/
+- Updated README with note about missing collaborator
+- Please add elfkcr as collaborator so she can push her own work
+
+---
+batuonlukus <batu.onlukus.20@gmail.com>
+Add files via upload
+---
+batuonlukus <batu.onlukus.20@gmail.com>
+Add files via upload
+---
+batuonlukus <batu.onlukus.20@gmail.com>
+Add files via upload
+---
+batuonlukus <batu.onlukus.20@gmail.com>
+Add files via upload
+---
+batuonlukus <batu.onlukus.20@gmail.com>
+Add files via upload
+---
+aykockadir <kadir.kardes@ozu.edu.tr>
+Add daily datas
+
+---
+vinnipukh <73662383+vinnipukh@users.noreply.github.com>
+Daily Sahibinden Kayseri Sivas Tokat data upload
+
+---
+GitHub Action Bot <action@github.com>
+Auto-update daily prices CSV for Mopaş
+
+---
+doruk gülen <61842553+DorukGulen@users.noreply.github.com>
+Create a.txt
+---
+doruk gülen <61842553+DorukGulen@users.noreply.github.com>
+add scrapper
+---
+doruk gülen <61842553+DorukGulen@users.noreply.github.com>
+Create a.txt
+---
+doruk gülen <61842553+DorukGulen@users.noreply.github.com>
+add 03-04-2026.csv
+---
+aleksandra <sashka_kolm@mail.ru>
+carrefourSA daily data
+
+---
+seda37 <148045067+seda37@users.noreply.github.com>
+Update antep_maras_kilis.py
+---
+vinnipukh <oyunlarinefendiler@gmail.com>
+Updated brackets
+
+---
+seda37 <148045067+seda37@users.noreply.github.com>
+Update antep_maras_kilis.py
+---
+Eroshix <erensinakizmaz@gmail.com>
+daily scrape
+
+---
+onurk <demirtasonurkaan@gmail.com>
+Merge remote-tracking branch 'origin/master'
+
+---
+onurk <demirtasonurkaan@gmail.com>
+"feat: daily data committed and scraper.py fixed"
+
+---
+Eroshix <erensinakizmaz@gmail.com>
+daily scrape
+
+---
+seda37 <148045067+seda37@users.noreply.github.com>
+Update antep_maras_kilis.py
+---
+Ömer Faruk GÖLBAŞI <omergolbasi@Omer-MacBook-Air.local>
+Daily house rent data for 2026-03-04
+
+---
+seda37 <148045067+seda37@users.noreply.github.com>
+Update antepmk.yml
+---
+seda37 <148045067+seda37@users.noreply.github.com>
+Update antepmk.yml
+---
+seda37 <148045067+seda37@users.noreply.github.com>
+Update requirements.txt
+---
+seda37 <148045067+seda37@users.noreply.github.com>
+Update antep_maras_kilis.py
+---
+seda37 <148045067+seda37@users.noreply.github.com>
+Update antepmk.yml
+---
+seda37 <148045067+seda37@users.noreply.github.com>
+Update antep_maras_kilis.py
+---
+atahakancildas <cildasata@gmail.com>
+IstanbulAvrupa: daily data commit
+
+---
+atahakancildas <cildasata@gmail.com>
+Migros: daily data commit
+
+---
+Batu Koray Masak <batukoraymasak@gmail.com>
+data(rent): add daily housing data for Erzurum, Erzincan, Bayburt (2026-03-04)
+
+---
+github-actions[bot] <github-actions[bot]@users.noreply.github.com>
+Automated scrape: sok_market 2026-03-04
+
+---
+Batu Koray Masak <batukoraymasak@gmail.com>
+feat(hapeloglu): add daily price data, quality check notebook, and documentation
+
+- Upload daily Hapeloglu market scrape (2026-03-04, CSV/TSV)
+- Implement Quality_Check.ipynb for automated data validation pipeline
+  - Null/duplicate detection, price sanity checks, IQR outlier analysis
+  - Discount consistency verification and category distribution tracking
+  - Dynamic filename resolution via datetime for seamless daily use
+- Add README.md documenting schema, collection methodology, and QC checks
+
+---
+Batuhan Burak Pehlivan <batuhan.pehlivan@ozu.edu.tr>
+added daily rent datas
+---
+Batuhan Burak Pehlivan <batuhan.pehlivan@ozu.edu.tr>
+basdas market datas updated (04.03.2026)
+---
+github-actions[bot] <github-actions[bot]@users.noreply.github.com>
+📦 Sariyer fiyat güncellemesi: 2026-03-04
+
+---
+github-actions <github-actions@github.com>
+Daily market data update
+
+---
+github-actions[bot] <github-actions[bot]@users.noreply.github.com>
+Auto-update: Arden data 2026-03-04
+
+---
+GitHub Action <action@github.com>
+Auto-update: Kale product data for 2026-03-04
+
+---
+GitHub Action Bot <action@github.com>
+Auto-update daily prices CSV for Ideal Market 2026-03-04
+
+---
+GitHub Action <action@github.com>
+Auto-update: Added daily gurmar product data for 2026-03-04
+
+---
+GitHub Action <action@github.com>
+Auto-update: Added daily product data for 2026-03-04
+
+---
+Batu Koray Masak <batukoraymasak@gmail.com>
+docs(hapeloglu): add TSV format rationale and author attribution
+---
+doruk gülen <61842553+DorukGulen@users.noreply.github.com>
+add 03-03-2026.csv
+---
+AlexanderTurns <erenhirabayashi@gmail.com>
+Update and rename AntalyaFent3-4.csv to AntalyaRent3-3.csv
+---
+AlexanderTurns <erenhirabayashi@gmail.com>
+Add files via upload
+---
+AlexanderTurns <erenhirabayashi@gmail.com>
+Update AntalyaScraper.py
+---
+ZeusSYD <yigit.dolek@gmail.com>
+Add files via upload
+---
+Can Kenan Çetin <kenan.cetin@ozu.edu.tr>
+Add Sahibinden rent scraper for Hatay, Osmaniye, Adiyaman
+
+---
+aleksandra <sashka_kolm@mail.ru>
+updated daily data for carrefourSA
+
+---
+Ömer Kaan Şanal <kaan.sanal@ozu.edu.tr>
+Daily data of markets and house rents
+
+---
+github-actions[bot] <github-actions[bot]@users.noreply.github.com>
+Automated scrape: sok_market 2026-03-03
+
+---
+Oguz Kagan Gocmez <gocmezoguzkagan@gmail.com>
+path update
+
+---
+Ömer Faruk GÖLBAŞI <omergolbasi@Omer-MacBook-Air.local>
+Daily house rent data for 2026-03-03
+
+---
+Oguz Kagan Gocmez <gocmezoguzkagan@gmail.com>
+corrected file name
+
+---
+Oguz Kagan Gocmez <gocmezoguzkagan@gmail.com>
+Updated file structure
+
+---
+Oguz Kagan Gocmez <gocmezoguzkagan@gmail.com>
+requirements updated
+
+---
+Oguz Kagan Gocmez <gocmezoguzkagan@gmail.com>
+Updated the name of the file
+
+---
+Oguz Kagan Gocmez <gocmezoguzkagan@gmail.com>
+Added previous day's data and required x store ids.
+
+---
+Oguz Kagan Gocmez <gocmezoguzkagan@gmail.com>
+Added sok market scraper code
+
+---
+Oguz Kagan Gocmez <gocmezoguzkagan@gmail.com>
+Added sok market workflow
+
+---
+sinemorenli <sinem.orenli@ozu.edu.tr>
+dailyrentscraper(ebbz).yml
+---
+aleksandra <sashka_kolm@mail.ru>
+Merge branch 'master' of https://github.com/urazkagangunes/InflationResearchStudy
+
+---
+aleksandra <sashka_kolm@mail.ru>
+fixed
+
+---
+sinemorenli <sinem.orenli@ozu.edu.tr>
+dailyrentscraper(ebbz).yml
+---
+Batu Koray Masak <batukoraymasak@gmail.com>
+Add daily rent data of Erzurum, Erzincan and Bayburt
+
+---
+sinemorenli <sinem.orenli@ozu.edu.tr>
+requirements_sahibinden.txt
+---
+aleksandra <sashka_kolm@mail.ru>
+Merge branch 'master' of https://github.com/urazkagangunes/InflationResearchStudy
+
+---
+sinemorenli <sinem.orenli@ozu.edu.tr>
+rentscraper.py
+---
+aleksandra <sashka_kolm@mail.ru>
+carrefour daily data
+
+---
+sinemorenli <sinem.orenli@ozu.edu.tr>
+requirements_sahibinden.txt
+---
+sinemorenli <sinem.orenli@ozu.edu.tr>
+rentscraper.py
+---
+batuonlukus <batu.onlukus.20@gmail.com>
+Delete Datas/Markets/Marketzade/csv_scraper_claude.csv
+---
+batuonlukus <batu.onlukus.20@gmail.com>
+Add files via upload
+---
+batuonlukus <batu.onlukus.20@gmail.com>
+Add files via upload
+---
+sinemorenli <sinem.orenli@ozu.edu.tr>
+sahibinden_kira_botu.py
+---
+AlexanderTurns <erenhirabayashi@gmail.com>
+Add files via upload
+---
+aykockadir <kadir.kardes@ozu.edu.tr>
+Add daily datas
+
+---
+GitHub Action Bot <action@github.com>
+Auto-update daily prices CSV for Mopaş
+
+---
+cankcetin <kenan.cetin@ozu.edu.tr>
+Update mopas_daily.yml
+---
+onurk <demirtasonurkaan@gmail.com>
+"feat: requirements.txt file updated"
+
+---
+onurk <demirtasonurkaan@gmail.com>
+"feat: implement continuous adaptive scraping, aggressive anti-bot evasion, and manual data seed
+- config.py: Refined SEED_RANGES with 46 high-density micro-brackets and routed output to 'Datas/HousesRent/Izmir'.
+- main.py: Switched to continuous loop mode to scrape all brackets in a single run.
+- scraper.py: Implemented mid-bracket resuming via 'progress_tracker' and aggressive profile deletion (Windows taskkill) for CAPTCHA evasion.
+- izmir-scraper.yml: Updated paths to match new config output and translated comments to English.
+- data: Seeded repository with initial manually scraped data for Izmir."
+
+---
+elifsudetural <elifsudeturall@gmail.com>
+Add files via upload
+---
+Eroshix <erensinakizmaz@gmail.com>
+Daily Scrape
+
+---
+atahakancildas <cildasata@gmail.com>
+IstanbulAvrupa: Daily data commit
+
+---
+atahakancildas <cildasata@gmail.com>
+Migros: Daily data commit
+
+---
+batuonlukus <batu.onlukus.20@gmail.com>
+Delete Datas/HousesRent/Malatya_Elazig_Tunceli/Tunceli/2026-03-03_tunceli.csv
+---
+batuonlukus <batu.onlukus.20@gmail.com>
+Add files via upload
+---
+batuonlukus <batu.onlukus.20@gmail.com>
+Delete Datas/HousesRent/Malatya_Elazig_Tunceli/Malatya/2026-03-03_malatya.csv
+---
+batuonlukus <batu.onlukus.20@gmail.com>
+Add files via upload
+---
+batuonlukus <batu.onlukus.20@gmail.com>
+Delete Datas/HousesRent/Malatya_Elazig_Tunceli/Elazig/2026-03-03_elazig.csv
+---
+batuonlukus <batu.onlukus.20@gmail.com>
+Add files via upload
+---
+batuonlukus <batu.onlukus.20@gmail.com>
+Delete Codes/HousesRent/Malatya_Elazig_Tunceli/.gitkeep
+---
+batuonlukus <batu.onlukus.20@gmail.com>
+Add files via upload
+---
+batuonlukus <batu.onlukus.20@gmail.com>
+Delete Codes/HousesRent/Malatya_Elazig_Tunceli/IstanbulAvrupa.url
+---
+batuonlukus <batu.onlukus.20@gmail.com>
+Add files via upload
+---
+batuonlukus <batu.onlukus.20@gmail.com>
+Create .gitkeep
+---
+batuonlukus <batu.onlukus.20@gmail.com>
+Delete Codes/HousesRent/Malatya_Elazig_Tunceli/Sahibinden.py
+---
+Batu Koray Masak <batukoraymasak@gmail.com>
+Add daily Market price data
+
+---
+Batu Koray Masak <batukoraymasak@gmail.com>
+Add daily Market & Housing Price data
+
+---
+batuonlukus <batu.onlukus.20@gmail.com>
+Add files via upload
+---
+elifsudetural <elifsudeturall@gmail.com>
+Update arden_scraper.py
+---
+elifsudetural <elifsudeturall@gmail.com>
+Update arden_daily_scrape.yml
+---
+Batuhan Burak Pehlivan <batuhan.pehlivan@ozu.edu.tr>
+Add files via upload
+---
+Batuhan Burak Pehlivan <batuhan.pehlivan@ozu.edu.tr>
+all datas up to date (03.03.2026)
+---
+vinnipukh <73662383+vinnipukh@users.noreply.github.com>
+Merge remote-tracking branch 'origin/master'
+
+---
+vinnipukh <73662383+vinnipukh@users.noreply.github.com>
+Daily Sahibinden Kayseri Sivas Tokat data upload
+
+---
+sinemorenli <sinem.orenli@ozu.edu.tr>
+Delete .github/workflows/DailyBizimMarketScrape.yml
+---
+qNefeeee <efe.yildirim500@gmail.com>
+Delete Datas/Markets/Arden
+---
+sinemorenli <sinem.orenli@ozu.edu.tr>
+DailyBizimMarketScrape.yml
+---
+sinemorenli <sinem.orenli@ozu.edu.tr>
+Delete .github/workflows/DailyBizimMarket_scraper
+---
+elifsudetural <elifsudeturall@gmail.com>
+Update arden_daily_scrape.yml
+---
+sinemorenli <sinem.orenli@ozu.edu.tr>
+DailyBizimMarket_scraper
+---
+github-actions[bot] <github-actions[bot]@users.noreply.github.com>
+📦 Sariyer fiyat güncellemesi: 2026-03-03
+
+---
+Eroshix <erensinakizmaz@gmail.com>
+add daily market datas
+
+---
+github-actions <github-actions@github.com>
+Daily market data update
+
+---
+GitHub Action Bot <action@github.com>
+Auto-update daily prices CSV for Mopaş
+
+---
+GitHub Action Bot <action@github.com>
+Auto-update daily prices CSV for Ideal Market 2026-03-03
+
+---
+GitHub Action <action@github.com>
+Auto-update: Added daily gurmar product data for 2026-03-03
+
+---
+GitHub Action <action@github.com>
+Auto-update: Added daily product data for 2026-03-03
+
+---
+doruk gülen <61842553+DorukGulen@users.noreply.github.com>
+add 02-03-2026.csv
+---
+ZeusSYD <yigit.dolek@gmail.com>
+Add files via upload
+---
+qNefeeee <efe.yildirim500@gmail.com>
+Add files via upload
+---
+GitHub Action <action@github.com>
+Auto-update: Kale product data for 2026-03-02
+
+---
+batuonlukus <batu.onlukus.20@gmail.com>
+Delete Datas/HousesRent/Malatya_Elazig_Tunceli/Malatya/.gitkeep
+---
+qNefeeee <efe.yildirim500@gmail.com>
+Update kale_scraper.py
+---
+batuonlukus <batu.onlukus.20@gmail.com>
+Delete Datas/HousesRent/Malatya_Elazig_Tunceli/Elazig/.gitkeep
+---
+batuonlukus <batu.onlukus.20@gmail.com>
+Delete Datas/HousesRent/Malatya_Elazig_Tunceli/Tunceli/.gitkeep
+---
+batuonlukus <batu.onlukus.20@gmail.com>
+Add files via upload
+---
+batuonlukus <batu.onlukus.20@gmail.com>
+Create .gitkeep
+---
+batuonlukus <batu.onlukus.20@gmail.com>
+Add files via upload
+---
+batuonlukus <batu.onlukus.20@gmail.com>
+Create .gitkeep
+---
+batuonlukus <batu.onlukus.20@gmail.com>
+Add files via upload
+---
+batuonlukus <batu.onlukus.20@gmail.com>
+Create .gitkeep
+---
+cankcetin <kenan.cetin@ozu.edu.tr>
+Add files via upload
+---
+onurk <demirtasonurkaan@gmail.com>
+Merge remote-tracking branch 'origin/master'
+
+---
+onurk <demirtasonurkaan@gmail.com>
+"feat: optimize Izmir scraper for GitHub Actions (incremental & scheduled)"
+
+---
+cankcetin <kenan.cetin@ozu.edu.tr>
+Update mopas_daily.yml
+---
+batuonlukus <batu.onlukus.20@gmail.com>
+Delete Codes/HousesRent/Malatya_Elazig_Tunceli/README.md
+---
+qNefeeee <efe.yildirim500@gmail.com>
+Delete Datas/Markets/Kale/kalemarketleri_2026-03-02.csv
+---
+batuonlukus <batu.onlukus.20@gmail.com>
+Add Sahibinden.py
+---
+qNefeeee <efe.yildirim500@gmail.com>
+Update kale_scraper.py
+---
+sinemorenli <sinem.orenli@ozu.edu.tr>
+daily_scrapper_bbez.yml
+---
+batuonlukus <batu.onlukus.20@gmail.com>
+Create README.md
+---
+GitHub Action <action@github.com>
+Auto-update: Kale product data for 2026-03-02
+
+---
+qNefeeee <efe.yildirim500@gmail.com>
+Update kale_scraper.py
+---
+qNefeeee <efe.yildirim500@gmail.com>
+Update kale_daily.yml
+---
+sinemorenli <sinem.orenli@ozu.edu.tr>
+Create deneme
+---
+qNefeeee <efe.yildirim500@gmail.com>
+Update kale_scraper.py
+---
+sinemorenli <sinem.orenli@ozu.edu.tr>
+Delete Datas/HousesRent/Eskisehir_Bolu_Bartın_Zonguldak/Eskisehir
+---
+sinemorenli <sinem.orenli@ozu.edu.tr>
+Create deneme
+---
+sinemorenli <sinem.orenli@ozu.edu.tr>
+Create deneme
+---
+sinemorenli <sinem.orenli@ozu.edu.tr>
+Create deneme
+---
+qNefeeee <efe.yildirim500@gmail.com>
+Update kale_scraper.py
+---
+sinemorenli <sinem.orenli@ozu.edu.tr>
+Create deneme
+---
+qNefeeee <efe.yildirim500@gmail.com>
+Update kale_daily.yml
+---
+sinemorenli <sinem.orenli@ozu.edu.tr>
+Create Eskisehir
+---
+cankcetin <kenan.cetin@ozu.edu.tr>
+Update mopas_scraper.py
+---
+cankcetin <kenan.cetin@ozu.edu.tr>
+Update mopas_scraper.py
+---
+cankcetin <kenan.cetin@ozu.edu.tr>
+Update mopas_daily.yml
+---
+qNefeeee <efe.yildirim500@gmail.com>
+Update kale_daily.yml
+---
+sinemorenli <sinem.orenli@ozu.edu.tr>
+Delete Codes/HousesRent/Eskisehir_Bolu_Bartın_Zonguldak/rentscrapper
+---
+sinemorenli <sinem.orenli@ozu.edu.tr>
+Add files via upload
+---
+sinemorenli <sinem.orenli@ozu.edu.tr>
+rentscrapper
+---
+sinemorenli <sinem.orenli@ozu.edu.tr>
+bizimmarket.py
+---
+qNefeeee <efe.yildirim500@gmail.com>
+Update kale_scraper.py
+---
+Batu Koray Masak <batukoraymasak@gmail.com>
+Re-write some README.md files for more professionality
+
+---
+qNefeeee <efe.yildirim500@gmail.com>
+Update kale_daily.yml
+---
+qNefeeee <efe.yildirim500@gmail.com>
+Update kale_scraper.py
+---
+Batu Koray Masak <batukoraymasak@gmail.com>
+Daily House Price Commit
+
+---
+cankcetin <kenan.cetin@ozu.edu.tr>
+Update mopas_daily.yml
+---
+qNefeeee <efe.yildirim500@gmail.com>
+Update kale_daily.yml
+---
+qNefeeee <efe.yildirim500@gmail.com>
+Update kale_scraper.py
+---
+cankcetin <kenan.cetin@ozu.edu.tr>
+Update mopas_daily.yml
+---
+cankcetin <kenan.cetin@ozu.edu.tr>
+Update mopas_scraper.py
+---
+cankcetin <kenan.cetin@ozu.edu.tr>
+Update mopas_daily.yml
+---
+qNefeeee <efe.yildirim500@gmail.com>
+Create kale_daily.yml
+---
+elifsudetural <elifsudeturall@gmail.com>
+Add files via upload
+---
+elifsudetural <elifsudeturall@gmail.com>
+Create x.txt
+---
+qNefeeee <efe.yildirim500@gmail.com>
+Create kale_scraper.py
+---
+elifsudetural <elifsudeturall@gmail.com>
+Add files via upload
+---
+vinnipukh <73662383+vinnipukh@users.noreply.github.com>
+Add daily house rent scraper workflow for Kayseri, Sivas, Tokat
+---
+onurk <demirtasonurkaan@gmail.com>
+fix: set version_main to 145 for github runner compatibility
+
+---
+onurk <demirtasonurkaan@gmail.com>
+Merge remote-tracking branch 'origin/master'
+
+---
+onurk <demirtasonurkaan@gmail.com>
+"ci: fix file paths in izmir scraper workflow and add auto-commit"
+
+---
+qNefeeee <efe.yildirim500@gmail.com>
+Delete Codes/Markets/kale_scraper.py
+---
+onurk <demirtasonurkaan@gmail.com>
+Merge remote-tracking branch 'origin/master'
+
+---
+qNefeeee <efe.yildirim500@gmail.com>
+Create kale_scraper.py
+---
+elifsudetural <elifsudeturall@gmail.com>
+Update arden_daily_scrape.yml
+---
+elifsudetural <elifsudeturall@gmail.com>
+Update arden_daily_scrape.yml
+---
+elifsudetural <elifsudeturall@gmail.com>
+Update arden_daily_scrape.yml
+---
+elifsudetural <elifsudeturall@gmail.com>
+Update arden_daily_scrape.yml
+---
+elifsudetural <elifsudeturall@gmail.com>
+Update arden_daily_scrape.yml
+---
+elifsudetural <elifsudeturall@gmail.com>
+Update arden_daily_scrape.yml
+---
+onurk <demirtasonurkaan@gmail.com>
+"ci: automate izmir data scraper via github actions"
+
+---
+elifsudetural <elifsudeturall@gmail.com>
+Update arden_daily_scrape.yml
+---
+elifsudetural <elifsudeturall@gmail.com>
+Update arden_daily_scrape.yml
+---
+Ömer Faruk GÖLBAŞI <omergolbasi@Omer-MacBook-Air.local>
+Daily house rent data for 2026-03-02 + scraper robustness fixes
+
+Data:
+- Samsun: 4,753 records
+- Ordu: 2,060 records
+- Giresun: 1,050 records
+- Sinop: 340 records
+
+Fixes:
+- Skip bracket after 5 consecutive login walls (prevents infinite loops)
+- Resume from correct page after Chrome restart (prevents duplicate data)
+- Headless mode now opt-in via HEADLESS env var
+
+---
+elifsudetural <elifsudeturall@gmail.com>
+Update arden_daily_scrape.yml
+---
+elifsudetural <elifsudeturall@gmail.com>
+Update arden_daily_scrape.yml
+---
+elifsudetural <elifsudeturall@gmail.com>
+Update arden_daily_scrape.yml
+---
+elifsudetural <elifsudeturall@gmail.com>
+Update arden_daily_scrape.yml
+---
+elifsudetural <elifsudeturall@gmail.com>
+Update arden_scraper.py
+---
+elifsudetural <elifsudeturall@gmail.com>
+Create Arden
+---
+elifsudetural <elifsudeturall@gmail.com>
+Update arden_scraper.py
+---
+elifsudetural <elifsudeturall@gmail.com>
+Update arden_daily_scrape.yml
+---
+elifsudetural <elifsudeturall@gmail.com>
+Update arden_daily_scrape.yml
+---
+Batuhan Burak Pehlivan <batuhan.pehlivan@ozu.edu.tr>
+filter improved
+---
+Batuhan Burak Pehlivan <batuhan.pehlivan@ozu.edu.tr>
+added daily house rent datas (02.03.2026)
+---
+elifsudetural <elifsudeturall@gmail.com>
+Create arden_daily_scrape.yml
+---
+elifsudetural <elifsudeturall@gmail.com>
+Update arden_scraper.py
+
+her gün veri toplama özelliği getirildi
+---
+batuonlukus <batu.onlukus.20@gmail.com>
+update marketzade.csv 2026.03.02
+---
+batuonlukus <batu.onlukus.20@gmail.com>
+update marketzade.csv 02.03.2026
+---
+Batuhan Burak Pehlivan <batuhan.pehlivan@ozu.edu.tr>
+Delete Datas/HousesRent/VanBitlisMusHakkari_Data/Tum_Ilanlar directory
+---
+Batuhan Burak Pehlivan <batuhan.pehlivan@ozu.edu.tr>
+Delete Codes/HousesRent/VanBitlisMusHakkari directory
+---
+Batuhan Burak Pehlivan <batuhan.pehlivan@ozu.edu.tr>
+daily rent datas for Van, Bitlis, Muş, Hakkari
+---
+Batuhan Burak Pehlivan <batuhan.pehlivan@ozu.edu.tr>
+Added up to date datas (02.03.2026)
+---
+Batu Koray Masak <batukoraymasak@gmail.com>
+Hapeloglu: Daily data commit
+
+---
+Batuhan Burak Pehlivan <batuhan.pehlivan@ozu.edu.tr>
+all basdas price datas up to date (02.03.2026)
+---
+atahakancildas <cildasata@gmail.com>
+Migros: daily data commit
+
+---
+atahakancildas <cildasata@gmail.com>
+IstanbulAvrupa: scraper added and daily data added
+
+---
+seda37 <148045067+seda37@users.noreply.github.com>
+Update antepmk.yml
+---
+seda37 <148045067+seda37@users.noreply.github.com>
+Update3 antep_maras_kilis.py
+---
+seda37 <148045067+seda37@users.noreply.github.com>
+Update2 antepmk.yml
+---
+seda37 <148045067+seda37@users.noreply.github.com>
+Update antepmk.yml
+---
+seda37 <148045067+seda37@users.noreply.github.com>
+Update antepmk.yml
+---
+seda37 <148045067+seda37@users.noreply.github.com>
+Update antep_maras_kilis.py
+---
+seda37 <148045067+seda37@users.noreply.github.com>
+Update requirements.txt
+---
+seda37 <148045067+seda37@users.noreply.github.com>
+Update antep_maras_kilis.py
+---
+aykockadir <kadir.kardes@ozu.edu.tr>
+Add daily datas
+
+---
+Eroshix <erensinakizmaz@gmail.com>
+Add Sahibinden rent scraper for Duzce/Kocaeli/Sakarya (2026-03-02)
+
+---
+AlexanderTurns <erenhirabayashi@gmail.com>
+Add files via upload
+---
+Eroshix <erensinakizmaz@gmail.com>
+add daily data
+
+---
+github-actions[bot] <github-actions[bot]@users.noreply.github.com>
+📦 Sariyer fiyat güncellemesi: 2026-03-02
+
+---
+github-actions <github-actions@github.com>
+Daily market data update
+
+---
+GitHub Action Bot <action@github.com>
+Auto-update daily prices CSV for Ideal Market 2026-03-02
+
+---
+GitHub Action <action@github.com>
+Auto-update: Added daily product data for 2026-03-02
+
+---
+GitHub Action <action@github.com>
+Auto-update: Added daily gurmar product data for 2026-03-02
+
+---
+Batu Koray Masak <batukoraymasak@gmail.com>
+Hapeloglu: Daily data commit
+
+---
+aleksandra <sashka_kolm@mail.ru>
+carrefourSA daily data
+
+---
+ZeusSYD <yigit.dolek@gmail.com>
+Create tkkoop_scraper.py
+---
+ZeusSYD <yigit.dolek@gmail.com>
+Add files via upload
+---
+ZeusSYD <yigit.dolek@gmail.com>
+Create 2026-03-01_products.csv
+---
+vinnipukh <73662383+vinnipukh@users.noreply.github.com>
+Added kayseri,sivas,tokat scraper
+
+---
+atahakancildas <cildasata@gmail.com>
+Migros: Daily data commit
+
+---
+aykockadir <kadir.kardes@ozu.edu.tr>
+Merge branch 'master' of https://github.com/urazkagangunes/InflationResearchStudy
+
+---
+aykockadir <kadir.kardes@ozu.edu.tr>
+Add daily datas
+
+---
+Eroshix <erensinakizmaz@gmail.com>
+add daily datas
+
+---
+batuonlukus <batu.onlukus.20@gmail.com>
+Add Marketzade daily price data 2026-03-01
+
+csv_marketzade
+---
+batuonlukus <batu.onlukus.20@gmail.com>
+Update print statement from 'Hello' to 'Goodbye'
+
+Add Marketzade daily price data 2026-03-01
+---
+batuonlukus <batu.onlukus.20@gmail.com>
+Add Marketzade Scraper
+
+Marketzade web scraper for AI201 Inflation Research project. Scrapes 9 categories with Selenium infinite scroll and saves daily prices to CSV/TSV.
+---
+keremdobo <kdobooglu@gmail.com>
+Update scrape_diyarbakir_sanliurfa_mardin.yml
+---
+keremdobo <kdobooglu@gmail.com>
+Update scrape_diyarbakir_sanliurfa_mardin.yml
+---
+keremdobo <kdobooglu@gmail.com>
+Update scrape_diyarbakir_sanliurfa_mardin.yml
+---
+keremdobo <kdobooglu@gmail.com>
+Update scrape_diyarbakir_sanliurfa_mardin.py
+---
+AlexanderTurns <erenhirabayashi@gmail.com>
+Add files via upload
+---
+keremdobo <kdobooglu@gmail.com>
+Update scrape_diyarbakir_sanliurfa_mardin.yml
+---
+keremdobo <kdobooglu@gmail.com>
+Update scrape_diyarbakir_sanliurfa_mardin.yml
+---
+keremdobo <kdobooglu@gmail.com>
+Update scrape_diyarbakir_sanliurfa_mardin.py
+---
+elifsudetural <elifsudeturall@gmail.com>
+Create sahibinden-scraper.py
+
+Kod sayfaları geziyor, Çorum, Çankırı, Kırıkkale, Kırşehir şehirlerini geziyor. Sahibinden sitesinin giriş yap uyarısı üzerine çalışılıyor.
+---
+elifsudetural <elifsudeturall@gmail.com>
+Add files via upload
+---
+elifsudetural <elifsudeturall@gmail.com>
+Create arden_scraper.py
+---
+keremdobo <kdobooglu@gmail.com>
+Update scrape_diyarbakir_sanliurfa_mardin.yml
+---
+keremdobo <kdobooglu@gmail.com>
+Update scrape_diyarbakir_sanliurfa_mardin.yml
+---
+Uraz Kağan GÜNEŞ <104699103+urazkagangunes@users.noreply.github.com>
+Add reminder to include date in CSV file names
+
+Added a note about including the date in CSV file names.
+---
+keremdobo <kdobooglu@gmail.com>
+Update scrape_diyarbakir_sanliurfa_mardin.yml
+---
+aleksandra <sashka_kolm@mail.ru>
+carrefourSA daily data
+
+---
+keremdobo <kdobooglu@gmail.com>
+Update scrape_diyarbakir_sanliurfa_mardin.yml
+---
+doruk gülen <61842553+DorukGulen@users.noreply.github.com>
+add 01-03-2026.csv
+---
+AlexanderTurns <erenhirabayashi@gmail.com>
+Add files via upload
+---
+keremdobo <kdobooglu@gmail.com>
+Update scrape_diyarbakir_sanliurfa_mardin.yml
+---
+keremdobo <kdobooglu@gmail.com>
+Update scrape_diyarbakir_sanliurfa_mardin.py
+---
+keremdobo <kdobooglu@gmail.com>
+Update scrape_diyarbakir_sanliurfa_mardin.yml
+---
+keremdobo <kdobooglu@gmail.com>
+Update scrape_diyarbakir_sanliurfa_mardin.yml
+---
+keremdobo <kdobooglu@gmail.com>
+Update scrape_diyarbakir_sanliurfa_mardin.yml
+---
+keremdobo <kdobooglu@gmail.com>
+Create m1
+---
+keremdobo <kdobooglu@gmail.com>
+Create s1
+---
+keremdobo <kdobooglu@gmail.com>
+Create d1
+---
+keremdobo <kdobooglu@gmail.com>
+Delete Datas/Diyarbakir directory
+---
+keremdobo <kdobooglu@gmail.com>
+Create d1
+---
+keremdobo <kdobooglu@gmail.com>
+Delete Datas/HousesRent/DiyarbakirSanliurfaMardin directory
+---
+keremdobo <kdobooglu@gmail.com>
+Update and rename requirements.txt to .gitignore
+---
+keremdobo <kdobooglu@gmail.com>
+Update scrape_diyarbakir_sanliurfa_mardin.py
+---
+keremdobo <kdobooglu@gmail.com>
+Update scrape_diyarbakir_sanliurfa_mardin.yml
+---
+Ömer Faruk GÖLBAŞI <omergolbasi@Omer-MacBook-Air.local>
+Daily house rent data for 2026-03-01 (Samsun/Ordu/Giresun/Sinop)
+
+- Samsun: 4,753 records
+- Ordu: 1,871 records
+- Giresun: 1,006 records
+- Sinop: 330 records
+- Total: 7,960 records
+- Fixed: headless mode disabled for local runs (Cloudflare blocks it)
+
+---
+keremdobo <kdobooglu@gmail.com>
+Update scrape_diyarbakir_sanliurfa_mardin.yml
+---
+keremdobo <kdobooglu@gmail.com>
+Update scrape_diyarbakir_sanliurfa_mardin.py
+---
+keremdobo <kdobooglu@gmail.com>
+Rename scrape_diyabakir_sanliurfa_mardin.py to scrape_diyarbakir_sanliurfa_mardin.py
+---
+keremdobo <kdobooglu@gmail.com>
+Update scrape_diyarbakir_sanliurfa_mardin.yml
+---
+keremdobo <kdobooglu@gmail.com>
+Rename scrape_diyarbakir_sanliurfa_mardin to scrape_diyarbakir_sanliurfa_mardin.yml
+---
+keremdobo <kdobooglu@gmail.com>
+Rename requirements to requirements.txt
+---
+keremdobo <kdobooglu@gmail.com>
+Rename scrapeDSM to scrape_diyabakir_sanliurfa_mardin.py
+---
+keremdobo <kdobooglu@gmail.com>
+Create requirements
+---
+keremdobo <kdobooglu@gmail.com>
+Create scrape_diyarbakir_sanliurfa_mardin
+---
+keremdobo <kdobooglu@gmail.com>
+Update scrapeDSM
+---
+keremdobo <kdobooglu@gmail.com>
+Create denem3
+---
+keremdobo <kdobooglu@gmail.com>
+Create denem2
+---
+keremdobo <kdobooglu@gmail.com>
+Create denem1
+---
+keremdobo <kdobooglu@gmail.com>
+Delete Datas/HousesRent/DiyarbakirSanliurfaMardin/Diyarbakir
+---
+keremdobo <kdobooglu@gmail.com>
+Create Diyarbakir
+---
+keremdobo <kdobooglu@gmail.com>
+Update scrapeDSM
+---
+keremdobo <kdobooglu@gmail.com>
+Create scrapeDSM
+---
+seda37 <148045067+seda37@users.noreply.github.com>
+Update antepmk.yml
+---
+seda37 <148045067+seda37@users.noreply.github.com>
+Update antep_maras_kilis.py
+---
+seda37 <148045067+seda37@users.noreply.github.com>
+Update antep_maras_kilis.py
+---
+seda37 <148045067+seda37@users.noreply.github.com>
+Update antepmk.yml
+---
+seda37 <148045067+seda37@users.noreply.github.com>
+Update antep_maras_kilis.py
+---
+AlexanderTurns <erenhirabayashi@gmail.com>
+Update AntalyaScraper.py
+---
+seda37 <148045067+seda37@users.noreply.github.com>
+Create antepmk.yml
+---
+seda37 <148045067+seda37@users.noreply.github.com>
+Create requirements.txt
+---
+seda37 <148045067+seda37@users.noreply.github.com>
+Update antep_maras_kilis.py
+---
+seda37 <148045067+seda37@users.noreply.github.com>
+Create antep_maras_kilis.py
+---
+seda37 <148045067+seda37@users.noreply.github.com>
+Delete Codes/HousesRent/Antep_Maras_Kilis
+---
+seda37 <148045067+seda37@users.noreply.github.com>
+Create Antep_Maras_Kilis
+---
+seda37 <148045067+seda37@users.noreply.github.com>
+Delete Codes/HousesRent/Antep_Maras_Kilis
+---
+seda37 <148045067+seda37@users.noreply.github.com>
+Create Antep_Maras_Kilis
+---
+github-actions <github-actions@github.com>
+Daily market data update
+
+---
+seda37 <148045067+seda37@users.noreply.github.com>
+Update cagri_daily.yml
+---
+seda37 <148045067+seda37@users.noreply.github.com>
+Rename cagri_scraper.yml to cagri_daily.yml
+---
+seda37 <148045067+seda37@users.noreply.github.com>
+Update cagri_daily.yml
+---
+seda37 <148045067+seda37@users.noreply.github.com>
+Update cagri_scraper.py
+---
+seda37 <148045067+seda37@users.noreply.github.com>
+Create cagri_scraper.yml
+---
+seda37 <148045067+seda37@users.noreply.github.com>
+Create requirements.txt
+---
+seda37 <148045067+seda37@users.noreply.github.com>
+Create  cagri_scraper.py
+---
+sinemorenli <sinem.orenli@ozu.edu.tr>
+sahibindenrentbot
+---
+sinemorenli <sinem.orenli@ozu.edu.tr>
+Add files via upload
+---
+sinemorenli <sinem.orenli@ozu.edu.tr>
+Delete Codes/HousesRent/Sinem
+---
+sinemorenli <sinem.orenli@ozu.edu.tr>
+Sinem
+---
+sinemorenli <sinem.orenli@ozu.edu.tr>
+Delete Codes/HousesRent/sinem
+---
+sinemorenli <sinem.orenli@ozu.edu.tr>
+sinem
+---
+sinemorenli <sinem.orenli@ozu.edu.tr>
+Delete Codes/HousesRent/EskişehirBoluBartınZonguldak
+---
+sinemorenli <sinem.orenli@ozu.edu.tr>
+Delete Codes/HousesRent/sahibinden_scraper.py
+---
+sinemorenli <sinem.orenli@ozu.edu.tr>
+Eskişehir_Bolu_Bartın_Zonguldak
+---
+sinemorenli <sinem.orenli@ozu.edu.tr>
+sahibinden_scraper.py
+---
+sinemorenli <sinem.orenli@ozu.edu.tr>
+Create EskişehirBoluBartınZonguldak
+---
+github-actions[bot] <github-actions[bot]@users.noreply.github.com>
+📦 Sariyer fiyat güncellemesi: 2026-03-01
+
+---
+GitHub Action Bot <action@github.com>
+Auto-update daily prices CSV for Ideal Market 2026-03-01
+
+---
+GitHub Action <action@github.com>
+Auto-update: Added daily product data for 2026-03-01
+
+---
+GitHub Action <action@github.com>
+Auto-update: Added daily gurmar product data for 2026-03-01
+
+---
+doruk gülen <61842553+DorukGulen@users.noreply.github.com>
+Delete Codes/Markets/A101/Notes.txt
+---
+doruk gülen <61842553+DorukGulen@users.noreply.github.com>
+Delete Datas/Markets/A101/note.txt
+---
+doruk gülen <61842553+DorukGulen@users.noreply.github.com>
+28/02/2026
+---
+doruk gülen <61842553+DorukGulen@users.noreply.github.com>
+Create A101
+---
+atahakancildas <cildasata@gmail.com>
+Migros: daily data commit
+
+---
+Batu Koray Masak <batukoraymasak@gmail.com>
+Ignore Python caches and remove tracked bytecode
+
+---
+Batu Koray Masak <batukoraymasak@gmail.com>
+Halepoglu: Add daily data
+
+---
+doruk gülen <61842553+DorukGulen@users.noreply.github.com>
+add a101_scraper.py
+---
+doruk gülen <61842553+DorukGulen@users.noreply.github.com>
+Rename a.txt to Notes.txt
+---
+doruk gülen <61842553+DorukGulen@users.noreply.github.com>
+Delete Codes/Markets/A101
+---
+doruk gülen <61842553+DorukGulen@users.noreply.github.com>
+Create A101.txt
+---
+doruk gülen <61842553+DorukGulen@users.noreply.github.com>
+Create A101
+---
+Eroshix <erensinakizmaz@gmail.com>
+add daily datas
+
+---
+vinnipukh <73662383+vinnipukh@users.noreply.github.com>
+Updated gurmar_prices_2026-02-24.csv file's name
+---
+vinnipukh <73662383+vinnipukh@users.noreply.github.com>
+Added gurmar data from other repo
+---
+Ömer Faruk GÖLBAŞI <omergolbasi@Omer-MacBook-Air.local>
+Fix CI: auto-detect Chrome version to match ChromeDriver
+
+Resolves 'SessionNotCreatedException: ChromeDriver only supports Chrome version 146'
+by detecting the installed Chrome major version and passing version_main to uc.Chrome().
+
+---
+AlexanderTurns <erenhirabayashi@gmail.com>
+Add files via upload
+---
+AlexanderTurns <erenhirabayashi@gmail.com>
+Create AntalyaRent2-28.csv
+---
+AlexanderTurns <erenhirabayashi@gmail.com>
+Add files via upload
+---
+AlexanderTurns <erenhirabayashi@gmail.com>
+Create AntalyaScraper.py
+---
+Ömer Kaan Şanal <kaan.sanal@ozu.edu.tr>
+Added daily data of market and house rent
+
+---
+github-actions[bot] <github-actions[bot]@users.noreply.github.com>
+📦 Sariyer fiyat güncellemesi: 2026-02-28
+
+---
+GitHub Action Bot <action@github.com>
+Auto-update daily prices CSV for Ideal Market 2026-02-28
+
+---
+GitHub Action <action@github.com>
+Auto-update: Added daily product data for 2026-02-28
+
+---
+GitHub Action <action@github.com>
+Auto-update: Added daily gurmar product data for 2026-02-28
+
+---
+Batu Koray Masak <batukoraymasak@gmail.com>
+Hapeloglu: Add daily data
+
+---
+aykockadir <kadir.kardes@ozu.edu.tr>
+Merge branch 'master' of https://github.com/urazkagangunes/InflationResearchStudy
+
+---
+aykockadir <kadir.kardes@ozu.edu.tr>
+Add daily datas
+
+---
+Eroshix <erensinakizmaz@gmail.com>
+datas updated
+
+---
+AlexanderTurns <erenhirabayashi@gmail.com>
+Rename products-02-23.cvs to products-02-23.csv
+---
+AlexanderTurns <erenhirabayashi@gmail.com>
+Add files via upload
+---
+AlexanderTurns <erenhirabayashi@gmail.com>
+Create products-02-23.cvs
+---
+AlexanderTurns <erenhirabayashi@gmail.com>
+Create scraper.py
+---
+Hikmet Tarık Keskin <htarikk00@gmail.com>
+Add files via upload
+---
+Hikmet Tarık Keskin <htarikk00@gmail.com>
+Create README.md for sehzade market scraper
+
+Add a README file for the sehzade market scraper
+---
+Hikmet Tarık Keskin <htarikk00@gmail.com>
+Add files via upload
+---
+Hikmet Tarık Keskin <htarikk00@gmail.com>
+Create README.md for sehzade market data
+
+Add README file for sehzade market data directory
+---
+Uraz Kağan GÜNEŞ <104699103+urazkagangunes@users.noreply.github.com>
+Examples deleted
+
+---
+Ömer Faruk GÖLBAŞI <omergolbasi@Omer-MacBook-Air.local>
+Optimize price brackets per city based on real data analysis
+
+- Samsun: 19 brackets (4,388 listings → ~230/bracket)
+- Ordu: 8 brackets (1,833 listings → ~230/bracket)
+- Giresun: 5 brackets (1,131 listings → ~225/bracket)
+- Sinop: 2 brackets (331 listings → ~165/bracket)
+- Replaces generic HEAVY/LIGHT system with calibrated per-city brackets
+
+---
+Ömer Faruk GÖLBAŞI <omergolbasi@Omer-MacBook-Air.local>
+Add house rent scraper for Samsun/Ordu/Giresun/Sinop with daily automation
+
+- New scraper: scrape_SamsunOrduGiresunSinop.py
+- Login/CAPTCHA detection with automatic Chrome restart
+- Cloudflare challenge waiting page handler
+- Daily GitHub Actions workflow (01:00 UTC)
+- Initial data: 7,683 rental listings (2026-02-27)
+
+---
+aleksandra <sashka_kolm@mail.ru>
+carrefourSA daily data
+
+---
+atahakancildas <cildasata@gmail.com>
+Migros: daily data commit
+
+---
+github-actions[bot] <github-actions[bot]@users.noreply.github.com>
+📦 Sariyer fiyat güncellemesi: 2026-02-27
+
+---
+GitHub Action Bot <action@github.com>
+Auto-update daily prices CSV for Ideal Market 2026-02-27
+
+---
+GitHub Action <action@github.com>
+Auto-update: Added daily product data for 2026-02-27
+
+---
+GitHub Action <action@github.com>
+Auto-update: Added daily gurmar product data for 2026-02-27
+
+---
+Ömer Kaan Şanal <kaan.sanal@ozu.edu.tr>
+Added todays market data
+
+---
+aykockadir <kadir.kardes@ozu.edu.tr>
+Update scraper
+
+---
+aykockadir <kadir.kardes@ozu.edu.tr>
+Update scraper
+
+---
+Ömer Kaan Şanal <kaan.sanal@ozu.edu.tr>
+Fixed my script and data
+
+---
+Ömer Kaan Şanal <kaan.sanal@ozu.edu.tr>
+Update data and scraper
+
+---
+Ömer Kaan Şanal <kaan.sanal@ozu.edu.tr>
+Added a changed scraper script for my cities and daily data
+
+---
+Batu Koray Masak <batukoraymasak@gmail.com>
+Hapeloglu: Add daily data
+
+---
+aykockadir <kadir.kardes@ozu.edu.tr>
+Add daily rent datas
+
+---
+aykockadir <kadir.kardes@ozu.edu.tr>
+Update scrape method
+
+---
+aykockadir <kadir.kardes@ozu.edu.tr>
+Add daily data
+
+---
+aykockadir <kadir.kardes@ozu.edu.tr>
+Add daily data
+
+---
+aykockadir <kadir.kardes@ozu.edu.tr>
+Update scrape
+
+---
+aykockadir <kadir.kardes@ozu.edu.tr>
+Added daily data
+
+---
+aykockadir <kadir.kardes@ozu.edu.tr>
+Update scrape_macrocenter.py
+
+---
+aykockadir <kadir.kardes@ozu.edu.tr>
+Macrocenter data 2026-02-26
+
+---
+aykockadir <kadir.kardes@ozu.edu.tr>
+Macrocenter data 2026-02-26
+
+---
+aykockadir <kadir.kardes@ozu.edu.tr>
+Merge branch 'master' of https://github.com/urazkagangunes/InflationResearchStudy
+
+---
+aykockadir <kadir.kardes@ozu.edu.tr>
+Update .gitignore
+
+---
+aykockadir <kadir.kardes@ozu.edu.tr>
+Added scrape_houses.py
+
+---
+github-actions[bot] <github-actions[bot]@users.noreply.github.com>
+📦 Sariyer fiyat güncellemesi: 2026-02-26
+
+---
+aykockadir <kadir.kardes@ozu.edu.tr>
+Merge branch 'master' of https://github.com/urazkagangunes/InflationResearchStudy
+
+---
+kadir <165329365+aykock@users.noreply.github.com>
+Delete Codes/HousesRent/scrape_houses.py
+---
+kadir <165329365+aykock@users.noreply.github.com>
+Delete Codes/HousesRent/Datas/HousesRent directory
+---
+aykockadir <kadir.kardes@ozu.edu.tr>
+Updated directory structure
+
+---
+keremdobo <kdobooglu@gmail.com>
+Update main.py
+---
+aykockadir <kadir.kardes@ozu.edu.tr>
+Deleted debug file
+
+---
+aykockadir <kadir.kardes@ozu.edu.tr>
+Added scrape file
+
+---
+aykockadir <kadir.kardes@ozu.edu.tr>
+Sahibinden kiralik data 2026-02-26
+
+---
+aykockadir <kadir.kardes@ozu.edu.tr>
+Sahibinden kiralik data 2026-02-26
+
+---
+keremdobo <kdobooglu@gmail.com>
+Delete Datas/Markets/Sariyer/sariyermarket_2026-02-26.csv
+---
+keremdobo <kdobooglu@gmail.com>
+Update main.py
+---
+github-actions[bot] <github-actions[bot]@users.noreply.github.com>
+📦 Sariyer fiyat güncellemesi: 2026-02-26
+
+---
+keremdobo <kdobooglu@gmail.com>
+Update sarıyer_daily.yml
+---
+Uraz Kağan GÜNEŞ <104699103+urazkagangunes@users.noreply.github.com>
+Folders Created
+
+---
+aleksandra <sashka_kolm@mail.ru>
+Merge branch 'master' of https://github.com/urazkagangunes/InflationResearchStudy
+
+---
+aleksandra <sashka_kolm@mail.ru>
+carrefour: daily data
+
+---
+keremdobo <kdobooglu@gmail.com>
+Update product_fetcher.py
+---
+keremdobo <kdobooglu@gmail.com>
+Update product_fetcher.py
+---
+atahakancildas <cildasata@gmail.com>
+Migros: daily data commit
+
+---
+Eroshix <erensinakizmaz@gmail.com>
+Merge branch 'master' of https://github.com/urazkagangunes/InflationResearchStudy
+
+---
+Eroshix <erensinakizmaz@gmail.com>
+Add SozSanal scraper and daily CSV
+
+---
+keremdobo <kdobooglu@gmail.com>
+Update category_fetcher.py
+---
+GitHub Action Bot <action@github.com>
+Auto-update daily prices CSV for Ideal Market 2026-02-26
+
+---
+GitHub Action <action@github.com>
+Auto-update: Added daily product data for 2026-02-26
+
+---
+GitHub Action <action@github.com>
+Auto-update: Added daily gurmar product data for 2026-02-26
+
+---
+Ömer Kaan Şanal <kaan.sanal@ozu.edu.tr>
+Added new data
+
+---
+aleksandra <sashka_kolm@mail.ru>
+add parse file for CarrefourSA
+
+---
+aleksandra <sashka_kolm@mail.ru>
+added carrefourSA daily data
+
+---
+Batu Koray Masak <batukoraymasak@gmail.com>
+Add Hapeloglu's daily data
+
+---
+Ömer Kaan Şanal <kaan.sanal@ozu.edu.tr>
+Corrected 25.02.2026 data
+
+---
+Ömer Kaan Şanal <kaan.sanal@ozu.edu.tr>
+Update Onur scraper and data
+
+---
+aykockadir <kadir.kardes@ozu.edu.tr>
+Remove .ai from tracking
+
+---
+aykockadir <kadir.kardes@ozu.edu.tr>
+Merge branch 'master' of https://github.com/urazkagangunes/InflationResearchStudy
+
+---
+aykockadir <kadir.kardes@ozu.edu.tr>
+Update auto push
+
+---
+keremdobo <kdobooglu@gmail.com>
+Update category_fetcher.py
+---
+keremdobo <kdobooglu@gmail.com>
+Update category_fetcher.py
+---
+aykockadir <kadir.kardes@ozu.edu.tr>
+Update auto push
+
+---
+keremdobo <kdobooglu@gmail.com>
+Update config.py
+---
+keremdobo <kdobooglu@gmail.com>
+Update product_fetcher.py
+---
+keremdobo <kdobooglu@gmail.com>
+Update category_fetcher.py
+---
+keremdobo <kdobooglu@gmail.com>
+Update config.py
+---
+aykockadir <kadir.kardes@ozu.edu.tr>
+Merge branch 'master' of https://github.com/urazkagangunes/InflationResearchStudy
+
+---
+Batuhan Burak Pehlivan <batuhan.pehlivan@ozu.edu.tr>
+manually updated daily prices (2026-02-25)
+---
+aykockadir <kadir.kardes@ozu.edu.tr>
+Move files to correct directories
+
+---
+aykockadir <kadir.kardes@ozu.edu.tr>
+Use team gitignore
+
+---
+Batuhan Burak Pehlivan <batuhan.pehlivan@ozu.edu.tr>
+migrate data storage from Excel to CSV and update main accordingly
+---
+keremdobo <kdobooglu@gmail.com>
+Rename product.py to product_fetcher.py
+---
+keremdobo <kdobooglu@gmail.com>
+Rename category.py to category_fetcher.py
+---
+keremdobo <kdobooglu@gmail.com>
+Rename product to product.py
+---
+keremdobo <kdobooglu@gmail.com>
+Rename category to category.py
+---
+keremdobo <kdobooglu@gmail.com>
+Rename config to config.py
+---
+keremdobo <kdobooglu@gmail.com>
+Rename main to main.py
+---
+keremdobo <kdobooglu@gmail.com>
+Update sarıyer_daily.yml
+---
+aykockadir <kadir.kardes@ozu.edu.tr>
+Add Macrocenter scraper and historical data
+
+---
+Batuhan Burak Pehlivan <batuhan.pehlivan@ozu.edu.tr>
+Basdas price scraper with Excel export and daily scheduler
+
+- Scrapes products by grupID
+- Cleans and parses prices
+- Stores data in Excel without duplicates
+- Runs daily at 12:00 (I hope)
+---
+keremdobo <kdobooglu@gmail.com>
+Create s
+---
+keremdobo <kdobooglu@gmail.com>
+Delete Datas/Markets/Sariyer
+---
+keremdobo <kdobooglu@gmail.com>
+Rename Datas/Markets/Sarıyer/.gitkeep to Datas/Markets/Sariyer
+---
+keremdobo <kdobooglu@gmail.com>
+Rename productfetcher to product
+---
+keremdobo <kdobooglu@gmail.com>
+Rename config to config
+---
+keremdobo <kdobooglu@gmail.com>
+Rename categoryfetcher to category
+---
+keremdobo <kdobooglu@gmail.com>
+Rename main to main
+---
+keremdobo <kdobooglu@gmail.com>
+Delete Codes/Markets/Sariyer directory
+---
+keremdobo <kdobooglu@gmail.com>
+Create dd
+---
+keremdobo <kdobooglu@gmail.com>
+Update sarıyer_daily.yml
+---
+aykockadir <kadir.kardes@ozu.edu.tr>
+Add Macrocenter scraper
+
+---
+keremdobo <kdobooglu@gmail.com>
+Update sarıyer_daily.yml
+---
+keremdobo <kdobooglu@gmail.com>
+Update sarıyer_daily.yml
+---
+keremdobo <kdobooglu@gmail.com>
+Create sarıyer_daily.yml
+---
+keremdobo <kdobooglu@gmail.com>
+Update config
+---
+keremdobo <kdobooglu@gmail.com>
+Create .gitkeep
+---
+keremdobo <kdobooglu@gmail.com>
+Update config
+---
+keremdobo <kdobooglu@gmail.com>
+Create categoryfetcher
+---
+keremdobo <kdobooglu@gmail.com>
+Create productfetcher
+---
+keremdobo <kdobooglu@gmail.com>
+Create config
+---
+keremdobo <kdobooglu@gmail.com>
+Update main
+---
+keremdobo <kdobooglu@gmail.com>
+Create main
+---
+keremdobo <kdobooglu@gmail.com>
+Delete Codes/Markets/Sarıyer
+---
+keremdobo <kdobooglu@gmail.com>
+Create Sarıyer
+---
+keremdobo <kdobooglu@gmail.com>
+Delete Codes/Markets/Sarıyer
+---
+keremdobo <kdobooglu@gmail.com>
+Delete Codes/Sarıyer
+---
+keremdobo <kdobooglu@gmail.com>
+Create Sarıyer
+---
+keremdobo <kdobooglu@gmail.com>
+Create Sarıyer
+---
+vinnipukh <73662383+vinnipukh@users.noreply.github.com>
+Enhance scraper with user-agent and scroll limit
+
+Added a user-agent string to Chrome options and limited infinite scroll to a maximum of 50 scrolls.
+---
+Ömer Kaan Şanal <kaan.sanal@ozu.edu.tr>
+Added data of onur
+
+---
+vinnipukh <73662383+vinnipukh@users.noreply.github.com>
+Refactor daily market scrape workflow
+---
+vinnipukh <73662383+vinnipukh@users.noreply.github.com>
+Refactor gurmar_scraper to use Selenium for scraping
+---
+Eroshix <erensinakizmaz@gmail.com>
+Add File market scraper skeleton and CSV output
+
+---
+GitHub Action <action@github.com>
+Auto-update: Added daily product data for 2026-02-25
+
+---
+onurk <demirtasonurkaan@gmail.com>
+"fix(ci): correct YAML syntax and indentation in daily scrape workflow"
+
+---
+onurk <demirtasonurkaan@gmail.com>
+Merge remote-tracking branch 'origin/master'
+
+---
+onurk <demirtasonurkaan@gmail.com>
+"fix: update directory paths in workflow and data storage for Baskent Market"
+
+---
+atahakancildas <cildasata@gmail.com>
+Migros: daily data commit
+
+---
+GitHub Action Bot <action@github.com>
+Auto-update daily prices CSV for Ideal Market 2026-02-25
+
+---
+Can Kenan Çetin <kenan.cetin@ozu.edu.tr>
+fix
+
+---
+Can Kenan Çetin <kenan.cetin@ozu.edu.tr>
+Migrate
+
+---
+Can Kenan Çetin <kenan.cetin@ozu.edu.tr>
+Merge branch 'main'
+
+---
+vinnipukh <73662383+vinnipukh@users.noreply.github.com>
+Merge remote-tracking branch 'origin/master'
+
+---
+vinnipukh <73662383+vinnipukh@users.noreply.github.com>
+Added gurmar scraper and 24 02 2026's prices.
+
+---
+vinnipukh <73662383+vinnipukh@users.noreply.github.com>
+Add GitHub Actions workflow for Gurmar price scraping
+---
+Batu Koray Masak <batukoraymasak@gmail.com>
+Remove IntelliJ .idea files from repo
+
+---
+Uraz Kağan GÜNEŞ <104699103+urazkagangunes@users.noreply.github.com>
+Update README with data format and repository instructions
+
+Added guidelines for data format and repository management.
+---
+Ömer Faruk GÖLBAŞI <omergolbasi@Omer-MacBook-Air.local>
+Auto-update daily prices CSV for Ideal 2026-02-24 (Manual Run) and Rename Scraper
+
+---
+Ömer Faruk GÖLBAŞI <omergolbasi@Omer-MacBook-Air.local>
+Refactor: Move Ideal market into master structure
+
+---
+onurk <demirtasonurkaan@gmail.com>
+Merge remote-tracking branch 'origin/master'
+
+---
+onurk <demirtasonurkaan@gmail.com>
+"fix: update directory paths in workflow and data storage for Baskent Market"
+
+---
+Batu Koray Masak <batukoraymasak@gmail.com>
+Hapeloglu: update config, README, add TSV output, clean up structure
+
+---
+Batu Koray Masak <batukoraymasak@gmail.com>
+Revise README.md
+
+Updated README to include credit for Vibecoding.
+---
+Batu Koray Masak <batukoraymasak@gmail.com>
+Hapeloglu: add TSV output alongside CSV
+
+---
+atahakancildas <cildasata@gmail.com>
+chore: add .gitignore and remove tracked .DS_Store files
+
+---
+atahakancildas <cildasata@gmail.com>
+Added .gitignore
+
+---
+atahakancildas <cildasata@gmail.com>
+Update README
+
+---
+atahakancildas <cildasata@gmail.com>
+Added Migros scraper and 1st day data
+
+---
+onurk <demirtasonurkaan@gmail.com>
+"Baskent Market daily data committed"
+
+---
+onurk <demirtasonurkaan@gmail.com>
+"Initial commit: Added Baskent Market scraper with daily automation workflow"
+
+---
+Batu Koray Masak <batukoraymasak@gmail.com>
+Add Hapeloglu scraper and first daily data
+
+---
+Uraz Kağan GÜNEŞ <104699103+urazkagangunes@users.noreply.github.com>
+Folders Created
+
+---
+Uraz Kağan GÜNEŞ <104699103+urazkagangunes@users.noreply.github.com>
+Initial commit
+
+---
+Can Kenan Çetin <kenan.cetin@ozu.edu.tr>
+Permanently delete .idea folder from repository
+
+---
+Can Kenan Çetin <kenan.cetin@ozu.edu.tr>
+change broken push step
+
+---
+Can Kenan Çetin <kenan.cetin@ozu.edu.tr>
+fix
+
+---
+Can Kenan Çetin <kenan.cetin@ozu.edu.tr>
+Merge branch 'main' of https://github.com/urazkagangunes/InflationResearchStudy
+
+---
+Can Kenan Çetin <kenan.cetin@ozu.edu.tr>
+Update scraper with timeout safety and loop fix
+
+---
+Can Kenan Çetin <kenan.cetin@ozu.edu.tr>
+Fix possible loop
+
+---
+Ömer Faruk GÖLBAŞI <omergolbasi@Mac.hgw.local>
+Auto-update daily prices CSV for 2026-02-22 (Manual Run)
+
+---
+vinnipukh <73662383+vinnipukh@users.noreply.github.com>
+Merge remote-tracking branch 'origin/main'
+
+---
+vinnipukh <73662383+vinnipukh@users.noreply.github.com>
+added gurmar prices of 22.02.2026
+
+---
+Can Kenan Çetin <kenan.cetin@ozu.edu.tr>
+Fix missing datetime import
+
+---
+Can Kenan Çetin <kenan.cetin@ozu.edu.tr>
+Add GitHub Action workflow for Mopaş daily scraping
+
+---
+Can Kenan Çetin <kenan.cetin@ozu.edu.tr>
+Add Mopaş market scraper and initial folder structure
+
+---
+Ömer Faruk GÖLBAŞI <omergolbasi@Mac.hgw.local>
+Auto-update daily prices CSV for 2026-02-21 (Manual Run)
+
+---
+vinnipukh <73662383+vinnipukh@users.noreply.github.com>
+added gurmar scraper and prices of 21.02.2026
+
+---
+Ömer Faruk GÖLBAŞI <omergolbasi@Omer-MacBook-Air.local>
+fix: restore .gitignore inside student folder
+
+---
+Ömer Faruk GÖLBAŞI <omergolbasi@Omer-MacBook-Air.local>
+chore: clean up root directory, leave only student folder
+
+---
+Ömer Faruk GÖLBAŞI <omergolbasi@Omer-MacBook-Air.local>
+chore: remove root github folder
+
+---
+Ömer Faruk GÖLBAŞI <omergolbasi@Omer-MacBook-Air.local>
+chore: move github actions to subfolder
+
+---
+Ömer Faruk GÖLBAŞI <omergolbasi@Omer-MacBook-Air.local>
+chore: move scraper to specific school project folder 'ideal market omer faruk golbasi'
+
+---
+Ömer Faruk GÖLBAŞI <omergolbasi@Omer-MacBook-Air.local>
+refactor: swap targets to save name/price to csv and full details to supabase
+
+---
+Ömer Faruk GÖLBAŞI <omergolbasi@Omer-MacBook-Air.local>
+feat: export full products to daily csv and push only name/price to supabase
+
+---
+Ömer Faruk GÖLBAŞI <omergolbasi@Omer-MacBook-Air.local>
+feat: initial scraper with supabase integration and ga
+
+---
+kadir <165329365+aykock@users.noreply.github.com>
+Delete .idea directory
+---
+kadir <165329365+aykock@users.noreply.github.com>
+Add .idea/ to .gitignore
+---
+aykockadir <kadir.kardes@ozu.edu.tr>
+Initial commit
+
+---
