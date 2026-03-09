@@ -19,7 +19,7 @@ HEADERS = {
 BASE_URL = "https://www.loft.com.tr"
 LISTING_URL = f"{BASE_URL}/c/tumurunler-1"
 
-PRICE_RE = re.compile(r"(\d{1,3}(?:\.\d{3})*,\d{2})\s*TL", re.IGNORECASE)
+PRICE_RE = re.compile(r"((?:\d{1,3}(?:\.\d{3})+|\d+),\d{2})\s*TL", re.IGNORECASE)
 TOTAL_COUNT_RE = re.compile(r"(\d+)\s+ürün\s+bulundu", re.IGNORECASE)
 VISIBLE_COUNT_RE = re.compile(
     r"(\d+)\s+üründen\s+(\d+)\s+tanesini\s+görüntüledin",
