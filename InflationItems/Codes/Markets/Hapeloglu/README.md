@@ -13,10 +13,7 @@ that Cloudflare blocks (returning empty pages with 0 products).
 **`curl_cffi`** uses libcurl compiled to impersonate Chrome's exact TLS
 fingerprint. Cloudflare sees it as a real browser and serves full content.
 
-## Also Important: Why TSVs also instead of just CSVs?
-During Week 2 (± 1 week), the course instructor, when asked, explicitly requested tab-separated values as the output format. Both TSV and CSV are provided, but TSV is the primary format per the instructor's specification.
 
-> *We are law-abiding citizens.* -Batu Koray Masak
 
 
 ## Setup
@@ -32,7 +29,7 @@ python -m scripts.run_scraper       # scrape today's prices
 python -m scripts.run_analysis      # merge + analyze multi-day data
 ```
 
-Output (CSV + TSV) is saved directly to `Datas/Markets/Hapeloglu/`.
+Output (CSV) is saved directly to `Datas/Markets/Hapeloglu/`.
 
 ## Project Structure
 ```
@@ -42,13 +39,12 @@ Codes/Markets/Hapeloglu/
         utils.py        fetch_page(), parse_price() (uses curl_cffi)
         scraper.py      Core scraping engine
     scripts/
-        run_scraper.py  Daily scraper entry point (outputs CSV + TSV)
+        run_scraper.py  Daily scraper entry point (outputs CSV)
         run_analysis.py Multi-day analysis entry point
         run_daily.sh    Cron automation wrapper
 
 Datas/Markets/Hapeloglu/
     hapeloglu_YYYY-MM-DD.csv   Daily CSV snapshots
-    hapeloglu_YYYY-MM-DD.tsv   Daily TSV snapshots
 ```
 
 ## Data Schema
