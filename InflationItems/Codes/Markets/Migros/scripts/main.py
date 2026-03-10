@@ -66,8 +66,17 @@ import pandas as pd
 import requests
 from tqdm import tqdm
 
+import sys
 import config
+
+# Add the new location of inflation.py to sys.path
+_inflation_dir = os.path.join(
+    os.path.dirname(os.path.abspath(__file__)), 
+    "..", "..", "..", "..", "..", "Inflations", "Codes", "Markets", "Migros"
+)
+sys.path.append(os.path.abspath(_inflation_dir))
 import inflation
+
 from category_fetcher import fetch_categories
 from product_fetcher import fetch_products_for_category
 

@@ -81,7 +81,7 @@ _TODAY = _dt.date.today().strftime("%Y-%m-%d")
 # Base output directory
 BASE_OUTPUT_DIR = str(_PROJECT_ROOT / "Datas" / "HousesRent" / FOLDER_NAME)
 
-OUTPUT_DIR      = str(_Path(BASE_OUTPUT_DIR) / "RentData")
+OUTPUT_DIR      = str(_Path(BASE_OUTPUT_DIR))
 INFLATION_DIR   = str(_Path(BASE_OUTPUT_DIR) / "InflationData")
 
 CHECKPOINT_DIR  = str(_SCRAPER_DIR / "checkpoints")

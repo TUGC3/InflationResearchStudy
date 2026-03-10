@@ -106,8 +106,8 @@ _PROJECT_ROOT   = _MIGROS_DIR.parent.parent.parent          # …/InflationResea
 # Base output directory
 BASE_OUTPUT_DIR = str(_PROJECT_ROOT / "Datas" / "Markets" / "Migros")
 
-# CSV / JSON output  →  Datas/Markets/Migros/ProductData/
-OUTPUT_DIR      = str(_Path(BASE_OUTPUT_DIR) / "ProductData")
+# CSV / JSON output  →  Datas/Markets/Migros/
+OUTPUT_DIR      = str(_Path(BASE_OUTPUT_DIR))
 INFLATION_DIR   = str(_Path(BASE_OUTPUT_DIR) / "InflationData")
 
 # Checkpoint files   →  Codes/Markets/Migros/checkpoints/

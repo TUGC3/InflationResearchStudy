@@ -1,7 +1,14 @@
 import logging
 from datetime import datetime, timedelta
 import pandas as pd
+import sys
 from pathlib import Path
+
+# Add the scraper's scripts directory to sys.path so we can import config
+# This file is in: .../Inflations/Codes/HousesRent/IstanbulAvrupa/inflation.py
+# Config is in: .../InflationItems/Codes/HousesRent/IstanbulAvrupa/scripts
+scraper_dir = Path(__file__).resolve().parent.parent.parent.parent.parent / "InflationItems" / "Codes" / "HousesRent" / "IstanbulAvrupa" / "scripts"
+sys.path.append(str(scraper_dir))
 
 import config
 
@@ -25,7 +32,8 @@ def calculate_inflation(target_date=None):
     grouped by 'District' and 'Rooms'. Then calculates the percentage price change 
     for each group and outputs a new summarized CSV file containing the inflation data.
     """
-    output_dir = Path(config.OUTPUT_DIR)
+    # Use BASE_OUTPUT_DIR because raw CSVs are directly there
+    output_dir = Path(config.BASE_OUTPUT_DIR)
     folder_name = config.FOLDER_NAME # IstanbulAvrupa
     
     if target_date:
@@ -98,7 +106,9 @@ def calculate_inflation(target_date=None):
             df_today_grouped[col_name] = None
             summary_data[f"avg_{col_name}"] = [None]
 
-    inflation_dir = Path(config.INFLATION_DIR)
+    # Output to the Inflations/Datas hierarchy
+    project_inflations_dir = Path(__file__).resolve().parent.parent.parent.parent
+    inflation_dir = project_inflations_dir / "Datas" / "HousesRent" / "IstanbulAvrupa"
     inflation_dir.mkdir(parents=True, exist_ok=True)
 
     # Save detailed data (it's essentially a grouped summary since listings don't have unique IDs)

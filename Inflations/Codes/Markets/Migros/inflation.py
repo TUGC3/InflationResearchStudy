@@ -1,20 +1,28 @@
 import logging
 from datetime import datetime, timedelta
 import pandas as pd
+import sys
 from pathlib import Path
+
+# Add the scraper's scripts directory to sys.path so we can import config
+# This file is in: .../Inflations/Codes/Markets/Migros/inflation.py
+# Config is in: .../InflationItems/Codes/Markets/Migros/scripts
+scraper_dir = Path(__file__).resolve().parent.parent.parent.parent.parent / "InflationItems" / "Codes" / "Markets" / "Migros" / "scripts"
+sys.path.append(str(scraper_dir))
 
 import config
 
 logger = logging.getLogger(__name__)
 
 def calculate_inflation(target_date=None):
-    """Calculates inflation for the Koton data based on 1-day, 7-day, 15-day, and 30-day intervals.
+    """Calculates inflation for the Migros data based on 1-day, 7-day, 15-day, and 30-day intervals.
     
     Reads today's scraped CSV file, finds historical CSVs, calculates the percentage price change
-    for each product based on its 'pk', and outputs a new combined CSV file containing the inflation data
+    for each product based on its 'id', and outputs a new combined CSV file containing the inflation data
     along with a summary CSV for the daily average inflation.
     """
-    output_dir = Path(config.OUTPUT_DIR)
+    # Use BASE_OUTPUT_DIR because raw CSVs are directly there
+    output_dir = Path(config.BASE_OUTPUT_DIR)
     
     if target_date:
         today_str = target_date
@@ -24,7 +32,7 @@ def calculate_inflation(target_date=None):
         base_date = datetime.today()
         today_str = base_date.strftime("%Y-%m-%d")
         
-    today_file = output_dir / f"koton_{today_str}.csv"
+    today_file = output_dir / f"migros_{today_str}.csv"
     
     if not today_file.exists():
         logger.warning(f"Today's data file not found: {today_file}. Cannot calculate inflation.")
@@ -38,15 +46,15 @@ def calculate_inflation(target_date=None):
         logger.error(f"Failed to read today's CSV: {e}")
         return
 
-    # Ensure 'sale_price' is numeric
-    df_today['sale_price'] = pd.to_numeric(df_today['sale_price'], errors='coerce')
+    # Ensure 'shown_price' is numeric
+    df_today['shown_price'] = pd.to_numeric(df_today['shown_price'], errors='coerce')
     
     intervals = [1, 7, 15, 30]
     summary_data = {'date': [today_str]}
     
     for days in intervals:
         past_date = (base_date - timedelta(days=days)).strftime("%Y-%m-%d")
-        past_file = output_dir / f"koton_{past_date}.csv"
+        past_file = output_dir / f"migros_{past_date}.csv"
         
         col_name = f"inflation_{days}d_pct"
         
@@ -59,16 +67,16 @@ def calculate_inflation(target_date=None):
         logger.info(f"Loading historical data from {days} days ago: {past_file}")
         try:
             df_past = pd.read_csv(past_file)
-            df_past['sale_price'] = pd.to_numeric(df_past['sale_price'], errors='coerce')
+            df_past['shown_price'] = pd.to_numeric(df_past['shown_price'], errors='coerce')
             
-            # Keep only pk and sale_price for merging
-            df_past_subset = df_past[['pk', 'sale_price']].rename(columns={'sale_price': f'past_price_{days}d'})
+            # Keep only id and shown_price for merging
+            df_past_subset = df_past[['id', 'shown_price']].rename(columns={'shown_price': f'past_price_{days}d'})
             
-            # Merge on product pk
-            df_today = df_today.merge(df_past_subset, on='pk', how='left')
+            # Merge on product id
+            df_today = df_today.merge(df_past_subset, on='id', how='left')
             
             # Calculate percentage change: ((current - past) / past) * 100
-            df_today[col_name] = ((df_today['sale_price'] - df_today[f'past_price_{days}d']) / df_today[f'past_price_{days}d']) * 100
+            df_today[col_name] = ((df_today['shown_price'] - df_today[f'past_price_{days}d']) / df_today[f'past_price_{days}d']) * 100
             
             # Calculate average inflation for the day (excluding NaNs and infinities)
             avg_inflation = df_today[col_name].replace([float('inf'), float('-inf')], pd.NA).mean()
@@ -82,11 +90,13 @@ def calculate_inflation(target_date=None):
             df_today[col_name] = None
             summary_data[f"avg_{col_name}"] = [None]
 
-    inflation_dir = Path(config.INFLATION_DIR)
+    # Output to the Inflations/Datas hierarchy
+    project_inflations_dir = Path(__file__).resolve().parent.parent.parent.parent
+    inflation_dir = project_inflations_dir / "Datas" / "Markets" / "Migros"
     inflation_dir.mkdir(parents=True, exist_ok=True)
 
     # Save detailed data
-    output_inflation_file = inflation_dir / f"koton_inflation_{today_str}.csv"
+    output_inflation_file = inflation_dir / f"migros_inflation_{today_str}.csv"
     df_today.to_csv(output_inflation_file, index=False, encoding='utf-8')
     logger.info(f"Saved detailed inflation data to: {output_inflation_file}")
     

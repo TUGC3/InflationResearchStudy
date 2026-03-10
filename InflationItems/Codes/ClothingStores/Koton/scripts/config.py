@@ -101,8 +101,8 @@ _PROJECT_ROOT = _KOTON_DIR.parent.parent.parent           # …/InflationResearc
 # Base output directory
 BASE_OUTPUT_DIR = str(_PROJECT_ROOT / "Datas" / "ClothingStores" / "Koton")
 
-# CSV / JSON output  →  Datas/ClothingStores/Koton/ProductData/
-OUTPUT_DIR      = str(_Path(BASE_OUTPUT_DIR) / "ProductData")
+# CSV / JSON output  →  Datas/ClothingStores/Koton/
+OUTPUT_DIR      = str(_Path(BASE_OUTPUT_DIR))
 INFLATION_DIR   = str(_Path(BASE_OUTPUT_DIR) / "InflationData")
 
 # Checkpoint files   →  Codes/ClothingStores/Koton/checkpoints/

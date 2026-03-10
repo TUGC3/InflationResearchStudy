@@ -52,7 +52,17 @@ import random
 import time
 
 import config
+import sys
+import os
+
+# Add the new location of inflation.py to sys.path
+_inflation_dir = os.path.join(
+    os.path.dirname(os.path.abspath(__file__)), 
+    "..", "..", "..", "..", "..", "Inflations", "Codes", "HousesRent", "IstanbulAvrupa"
+)
+sys.path.append(os.path.abspath(_inflation_dir))
 import inflation
+
 from scraper import (
     setup_driver,
     scrape_and_resolve,
