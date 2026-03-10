@@ -46,10 +46,10 @@ def scroll_to_bottom(driver):
 options = uc.ChromeOptions()
 driver = uc.Chrome(version_main=145, options=options)
 
-data_dir = "Datas/Markets/CarrefourSA"
+data_dir = "InflationItems/Datas/Markets/CarrefourSA"
 os.makedirs(data_dir, exist_ok=True)
 date = datetime.now().strftime("%Y-%m-%d")
-filename = f"Datas/Markets/CarrefourSA/carrefourSA_{date}.csv"
+filename = f"InflationItems/Datas/Markets/CarrefourSA/carrefourSA_{date}.csv"
 
 with open(filename, "w", newline="", encoding="utf-8") as f:
     writer = csv.writer(f)
