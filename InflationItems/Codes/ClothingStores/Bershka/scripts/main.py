@@ -4,24 +4,22 @@ main.py — Bershka Türkiye Product Scraper — CLI entry point & orchestrator
 
 This module is the top-level entry point for the scraper. It orchestrates
 category discovery, parallel product fetching, incremental output writing,
-checkpoint management, and both live and final deduplication passes.
+and both live and final deduplication passes.
 
 Pipeline
 --------
 1. **Category discovery** — ``category_fetcher.fetch_categories()`` queries the
    Inditex catalog API and extracts all leaf category IDs.
-2. **Checkpoint loading** — when ``--resume`` is passed, today's checkpoint
-   file is loaded and already-completed category IDs are skipped.
-3. **Parallel scraping** — categories are partitioned across N worker threads.
+2. **Parallel scraping** — categories are partitioned across N worker threads.
    Each worker creates **one** ``curl_cffi.Session`` and reuses it for all
    its assigned categories (avoids per-category warmup overhead).
-4. **Live deduplication** — a thread-safe global set tracks all product IDs
+3. **Live deduplication** — a thread-safe global set tracks all product IDs
    seen so far. Duplicate products from overlapping categories are filtered
    out before writing, saving disk I/O and reducing final dedup work.
-5. **Incremental saving** — product data and checkpoint state are written to
-   disk immediately after each category completes.
-6. **Final deduplication** — a safety-net pass removes any remaining dupes.
-7. **Inflation** — calculates price changes vs historical data.
+4. **Incremental saving** — product data is written to disk immediately
+   after each category completes.
+5. **Final deduplication** — a safety-net pass removes any remaining dupes.
+6. **Inflation** — calculates price changes vs historical data.
 
 Usage examples
 --------------
@@ -33,13 +31,9 @@ Usage examples
 
   # Scrape all categories with 2 parallel workers
   python main.py --workers 2
-
-  # Resume an interrupted run (skips already-done categories)
-  python main.py --resume
 """
 
 import argparse
-import json
 import logging
 import os
 import sys
@@ -63,30 +57,14 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 # ── Thread-safety primitives ─────────────────────────────────────────────────
-_csv_lock        = threading.Lock()
-_checkpoint_lock = threading.Lock()
-_counter_lock    = threading.Lock()
-_seen_lock       = threading.Lock()
+_csv_lock     = threading.Lock()
+_counter_lock = threading.Lock()
+_seen_lock    = threading.Lock()
 
 # Global set of product_ids already collected — used for live deduplication
 # across categories processed by different workers.
 _seen_product_ids: set[str] = set()
 
-
-# ── Checkpoint helpers ───────────────────────────────────────────────────────
-
-def _load_checkpoint() -> dict:
-    if os.path.exists(config.CHECKPOINT_FILE):
-        with open(config.CHECKPOINT_FILE, "r", encoding="utf-8") as f:
-            return json.load(f)
-    return {"done": []}
-
-
-def _save_checkpoint(checkpoint: dict) -> None:
-    os.makedirs(config.CHECKPOINT_DIR, exist_ok=True)
-    with _checkpoint_lock:
-        with open(config.CHECKPOINT_FILE, "w", encoding="utf-8") as f:
-            json.dump(checkpoint, f, ensure_ascii=False, indent=2)
 
 
 # ── Output helpers ───────────────────────────────────────────────────────────
@@ -161,7 +139,6 @@ def _make_session() -> requests.Session:
 def _worker_scrape_chunk(
     chunk: list[dict],
     delay: float,
-    checkpoint: dict,
     pbar: tqdm,
     counter: list,  # mutable list holding [total_products]
 ) -> None:
@@ -194,11 +171,6 @@ def _worker_scrape_chunk(
             _append_products(unique_products)
             with _counter_lock:
                 counter[0] += len(unique_products)
-
-        # Mark category done in checkpoint
-        with _checkpoint_lock:
-            checkpoint["done"].append(cat["id"])
-        _save_checkpoint(checkpoint)
 
         pbar.set_postfix_str(cat["name"])
         pbar.update(1)
@@ -245,37 +217,13 @@ def run_scraper(args: argparse.Namespace) -> None:
             )
             sys.exit(1)
 
-    # 3. Load checkpoint for resume support
-    checkpoint = _load_checkpoint() if args.resume else {"done": []}
+    # 3. Clear old output file for today (fresh run every time)
+    if os.path.exists(config.CSV_OUTPUT_FILE):
+        os.remove(config.CSV_OUTPUT_FILE)
+        logger.info("Cleared old output file: %s", config.CSV_OUTPUT_FILE)
+    _seen_product_ids = set()
 
-    # 4. On a fresh run, clear old output file for today
-    if not args.resume:
-        if os.path.exists(config.CSV_OUTPUT_FILE):
-            os.remove(config.CSV_OUTPUT_FILE)
-            logger.info("Cleared old output file: %s", config.CSV_OUTPUT_FILE)
-        _seen_product_ids = set()
-    else:
-        # When resuming, pre-load seen product IDs from existing CSV
-        _seen_product_ids = set()
-        if os.path.exists(config.CSV_OUTPUT_FILE):
-            try:
-                existing_df = pd.read_csv(config.CSV_OUTPUT_FILE, encoding="utf-8-sig")
-                if "product_id" in existing_df.columns:
-                    _seen_product_ids = set(existing_df["product_id"].astype(str).tolist())
-                logger.info(
-                    "Resuming: %d existing products loaded into dedup set.",
-                    len(_seen_product_ids),
-                )
-            except Exception as exc:
-                logger.warning("Could not load existing products for dedup: %s", exc)
-
-    categories_to_scrape = [
-        c for c in categories if c["id"] not in checkpoint["done"]
-    ]
-
-    if not categories_to_scrape:
-        logger.info("All categories already scraped. Run without --resume to start fresh.")
-        return
+    categories_to_scrape = categories
 
     total_products = len(_seen_product_ids)
     # Use a mutable list so worker threads can update it
@@ -289,6 +237,7 @@ def run_scraper(args: argparse.Namespace) -> None:
         n_workers,
     )
 
+
     # 5. Partition categories into chunks (one per worker) for session reuse
     chunks = [[] for _ in range(n_workers)]
     for i, cat in enumerate(categories_to_scrape):
@@ -299,7 +248,7 @@ def run_scraper(args: argparse.Namespace) -> None:
             futures = []
             for chunk in chunks:
                 future = executor.submit(
-                    _worker_scrape_chunk, chunk, args.delay, checkpoint, pbar, counter
+                    _worker_scrape_chunk, chunk, args.delay, pbar, counter
                 )
                 futures.append(future)
 
@@ -310,13 +259,13 @@ def run_scraper(args: argparse.Namespace) -> None:
                 except Exception as exc:
                     logger.error("Worker failed: %s", exc)
 
-    # 6. Final deduplication pass (safety net — live dedup should catch most)
+    # 5. Final deduplication pass (safety net — live dedup should catch most)
     logger.info("Running final deduplication…")
     final_count = _dedup_csv()
     logger.info("Done! ✓  Total unique products: %d", final_count)
     logger.info("Output → %s", config.CSV_OUTPUT_FILE)
 
-    # 7. Calculate Inflation
+    # 6. Calculate Inflation
     logger.info("Calculating inflation metrics...")
     inflation.calculate_inflation()
 
@@ -354,11 +303,6 @@ def _build_parser() -> argparse.ArgumentParser:
         default=config.REQUEST_DELAY,
         metavar="SECONDS",
         help=f"Delay between requests per worker (default: {config.REQUEST_DELAY}s).",
-    )
-    parser.add_argument(
-        "--resume",
-        action="store_true",
-        help="Skip categories already listed in the checkpoint file.",
     )
     parser.add_argument(
         "-v", "--verbose",

@@ -70,11 +70,7 @@ BASE_OUTPUT_DIR = str(_PROJECT_ROOT / "Datas" / "ClothingStores" / "Bershka")
 OUTPUT_DIR      = str(_Path(BASE_OUTPUT_DIR) / "ProductData")
 INFLATION_DIR   = str(_Path(BASE_OUTPUT_DIR) / "InflationData")
 
-# Checkpoint files   →  Codes/ClothingStores/Bershka/checkpoints/
-CHECKPOINT_DIR = str(_BERSHKA_DIR / "checkpoints")
-
 # Files are named with today's date so each daily run produces its own set.
 _TODAY = _dt.date.today().strftime("%Y-%m-%d")
 
-CSV_OUTPUT_FILE  = str(_Path(OUTPUT_DIR)      / f"bershka_{_TODAY}.csv")
-CHECKPOINT_FILE  = str(_Path(CHECKPOINT_DIR)  / f"bershka_checkpoint_{_TODAY}.json")
+CSV_OUTPUT_FILE  = str(_Path(OUTPUT_DIR) / f"bershka_{_TODAY}.csv")
