@@ -36,9 +36,9 @@ import datetime as _dt
 from pathlib import Path as _Path
 
 # ── Paths ─────────────────────────────────────────────────────────────────────
-_SCRIPTS_DIR   = _Path(__file__).resolve().parent          # …/IstanbulAvrupa/scripts
-_SCRAPER_DIR   = _SCRIPTS_DIR.parent                       # …/IstanbulAvrupa
-_PROJECT_ROOT  = _SCRAPER_DIR.parent.parent.parent         # …/InflationResearchStudy
+_SCRIPTS_DIR   = _Path(__file__).resolve().parent          # …/InflationItems/Codes/HousesRent/IstanbulAvrupa/scripts
+_SCRAPER_DIR   = _SCRIPTS_DIR.parent                       # …/InflationItems/Codes/HousesRent/IstanbulAvrupa
+_PROJECT_ROOT  = _SCRAPER_DIR.parent.parent.parent.parent  # …/InflationResearchStudy
 
 # ── City Settings ─────────────────────────────────────────────────────────────
 CITY_URL_NAME = "istanbul-avrupa"
@@ -79,7 +79,7 @@ SELENIUM_PROFILE_DIR = str(_SCRAPER_DIR / "SeleniumProfile")
 _TODAY = _dt.date.today().strftime("%Y-%m-%d")
 
 # Base output directory
-BASE_OUTPUT_DIR = str(_PROJECT_ROOT / "Datas" / "HousesRent" / FOLDER_NAME)
+BASE_OUTPUT_DIR = str(_PROJECT_ROOT / "InflationItems" / "Datas" / "HousesRent" / FOLDER_NAME)
 
 OUTPUT_DIR      = str(_Path(BASE_OUTPUT_DIR))
 INFLATION_DIR   = str(_Path(BASE_OUTPUT_DIR) / "InflationData")

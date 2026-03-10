@@ -16,7 +16,7 @@ A Python tool to scrape all product data from [koton.com](https://www.koton.com)
 ## Project Structure
 
 ```
-Codes/ClothingStores/Koton/
+InflationItems/Codes/ClothingStores/Koton/
 ├── scripts/
 │   ├── main.py              # CLI entry point & orchestrator
 │   ├── category_fetcher.py  # Discovers all categories from the XML sitemap
@@ -27,8 +27,16 @@ Codes/ClothingStores/Koton/
 ├── requirements.txt
 └── README.md
 
-Datas/ClothingStores/Koton/          ← output lives here (outside Codes/)
-└── koton_<DATE>.csv
+InflationItems/Datas/ClothingStores/Koton/          ← output lives here (outside Codes/)
+├── koton_<DATE>.csv
+└── InflationData/
+    └── koton_inflation_<DATE>.csv
+
+Inflations/Codes/ClothingStores/Koton/
+└── inflation.py             # Inflation calculation script triggered by main.py
+
+Inflations/Datas/ClothingStores/Koton/
+└── inflation_summary.csv    # Summary of inflation trends
 ```
 
 ## Scraping Pipeline
@@ -82,7 +90,7 @@ source venv/bin/activate   # macOS / Linux
 # venv\Scripts\activate    # Windows
 
 # 3. Install dependencies
-pip install -r Codes/ClothingStores/Koton/requirements.txt
+pip install -r InflationItems/Codes/ClothingStores/Koton/requirements.txt
 ```
 
 ## Usage
@@ -90,7 +98,7 @@ pip install -r Codes/ClothingStores/Koton/requirements.txt
 Run all commands from inside the `scripts/` directory (so that relative imports resolve correctly):
 
 ```bash
-cd Codes/ClothingStores/Koton/scripts
+cd InflationItems/Codes/ClothingStores/Koton/scripts
 
 # List all discovered categories (311 total)
 python main.py --list-categories
@@ -128,10 +136,10 @@ python main.py --category kadin-giyim -v
 
 ## Output Files
 
-| File                                                                  | Description                                            |
-| --------------------------------------------------------------------- | ------------------------------------------------------ |
-| `Datas/ClothingStores/Koton/koton_<DATE>.csv`                         | All unique products (UTF-8 with BOM for Excel compat.) |
-| `Codes/ClothingStores/Koton/checkpoints/koton_checkpoint_<DATE>.json` | Tracks completed category slugs for `--resume` support |
+| File                                                                                 | Description                                            |
+| ------------------------------------------------------------------------------------ | ------------------------------------------------------ |
+| `InflationItems/Datas/ClothingStores/Koton/koton_<DATE>.csv`                         | All unique products (UTF-8 with BOM for Excel compat.) |
+| `InflationItems/Codes/ClothingStores/Koton/checkpoints/koton_checkpoint_<DATE>.json` | Tracks completed category slugs for `--resume` support |
 
 > Output paths are resolved automatically by `config.py` relative to the script's location, regardless of the working directory from which `main.py` is invoked.
 
@@ -139,26 +147,26 @@ python main.py --category kadin-giyim -v
 
 Edit `scripts/config.py` to change scraper behaviour:
 
-| Setting                | Default                       | Description                                                     |
-| ---------------------- | ----------------------------- | --------------------------------------------------------------- |
-| `REQUEST_DELAY`        | `2` s                         | Base delay between paginated requests (jitter applied on top)   |
-| `MAX_RETRIES`          | `5`                           | Retries before skipping a failed page                           |
-| `RETRY_BACKOFF`        | `3` s                         | Back-off seed: actual wait = `RETRY_BACKOFF × attempt` seconds  |
-| `RATE_LIMIT_BACKOFF`   | `60` s                        | Minimum explicit delay if a 429/403 response is received        |
-| `USER_AGENTS`          | `[...]` list                  | A pool of User-Agents to rotate, specifically per worker thread |
-| `CATEGORY_SITEMAP_URL` | URL                           | The Koton category sitemap XML gz URL                           |
-| `OUTPUT_DIR`           | `Datas/ClothingStores/Koton/` | Directory where CSV files are written                           |
-| `CHECKPOINT_DIR`       | `.../Koton/checkpoints/`      | Directory where checkpoint files are stored                     |
+| Setting                | Default                                      | Description                                                     |
+| ---------------------- | -------------------------------------------- | --------------------------------------------------------------- |
+| `REQUEST_DELAY`        | `2` s                                        | Base delay between paginated requests (jitter applied on top)   |
+| `MAX_RETRIES`          | `5`                                          | Retries before skipping a failed page                           |
+| `RETRY_BACKOFF`        | `3` s                                        | Back-off seed: actual wait = `RETRY_BACKOFF × attempt` seconds  |
+| `RATE_LIMIT_BACKOFF`   | `60` s                                       | Minimum explicit delay if a 429/403 response is received        |
+| `USER_AGENTS`          | `[...]` list                                 | A pool of User-Agents to rotate, specifically per worker thread |
+| `CATEGORY_SITEMAP_URL` | URL                                          | The Koton category sitemap XML gz URL                           |
+| `OUTPUT_DIR`           | `InflationItems/Datas/ClothingStores/Koton/` | Directory where CSV files are written                           |
+| `CHECKPOINT_DIR`       | `.../Koton/checkpoints/`                     | Directory where checkpoint files are stored                     |
 
 ## Troubleshooting
 
-| Symptom                        | Likely cause                             | Fix                                                              |
-| ------------------------------ | ---------------------------------------- | ---------------------------------------------------------------- |
-| HTTP 403 Forbidden             | Rate limited / bot blocked               | Increase `--delay` or rotate User-Agents; reduce `--workers`     |
-| HTTP 429 Too Many Requests     | Rate limit triggered                     | The scraper auto-backs-off using `RATE_LIMIT_BACKOFF`.           |
-| Empty CSV after full run       | Site structure changed                   | Check `js-insider-product` or `js-ga4-product-item` selectors    |
-| Resume doesn't skip categories | Checkpoint file from a different date    | Delete old checkpoint or use the correct `--resume` on same day  |
-| `ModuleNotFoundError: config`  | Script not run from `scripts/` directory | `cd Codes/ClothingStores/Koton/scripts` before running `main.py` |
+| Symptom                        | Likely cause                             | Fix                                                                             |
+| ------------------------------ | ---------------------------------------- | ------------------------------------------------------------------------------- |
+| HTTP 403 Forbidden             | Rate limited / bot blocked               | Increase `--delay` or rotate User-Agents; reduce `--workers`                    |
+| HTTP 429 Too Many Requests     | Rate limit triggered                     | The scraper auto-backs-off using `RATE_LIMIT_BACKOFF`.                          |
+| Empty CSV after full run       | Site structure changed                   | Check `js-insider-product` or `js-ga4-product-item` selectors                   |
+| Resume doesn't skip categories | Checkpoint file from a different date    | Delete old checkpoint or use the correct `--resume` on same day                 |
+| `ModuleNotFoundError: config`  | Script not run from `scripts/` directory | `cd InflationItems/Codes/ClothingStores/Koton/scripts` before running `main.py` |
 
 ## Developer Notes
 

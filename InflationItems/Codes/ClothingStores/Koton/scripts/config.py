@@ -101,11 +101,11 @@ _PROJECT_ROOT = _KOTON_DIR.parent.parent.parent           # …/InflationResearc
 # Base output directory
 BASE_OUTPUT_DIR = str(_PROJECT_ROOT / "Datas" / "ClothingStores" / "Koton")
 
-# CSV / JSON output  →  Datas/ClothingStores/Koton/
+# CSV / JSON output  →  InflationItems/Datas/ClothingStores/Koton/
 OUTPUT_DIR      = str(_Path(BASE_OUTPUT_DIR))
 INFLATION_DIR   = str(_Path(BASE_OUTPUT_DIR) / "InflationData")
 
-# Checkpoint files   →  Codes/ClothingStores/Koton/checkpoints/
+# Checkpoint files   →  InflationItems/Codes/ClothingStores/Koton/checkpoints/
 CHECKPOINT_DIR = str(_KOTON_DIR / "checkpoints")
 
 # Files are named with today's date so each daily run produces its own set.

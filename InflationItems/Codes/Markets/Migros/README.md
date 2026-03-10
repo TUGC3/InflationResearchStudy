@@ -16,7 +16,7 @@ A Python tool to scrape all product data from [migros.com.tr](https://www.migros
 ## Project Structure
 
 ```
-Codes/Markets/Migros/
+InflationItems/Codes/Markets/Migros/
 ├── scripts/
 │   ├── main.py              # CLI entry point & orchestrator
 │   ├── category_fetcher.py  # Discovers all scrapable (sub)categories via the REST API
@@ -27,9 +27,17 @@ Codes/Markets/Migros/
 ├── requirements.txt
 └── README.md
 
-Datas/Markets/Migros/                   ← output lives here (outside Codes/)
+InflationItems/Datas/Markets/Migros/                   ← output lives here (outside Codes/)
 ├── migros_<DATE>.csv
-└── migros_<DATE>.json
+├── migros_<DATE>.json
+└── InflationData/
+    └── migros_inflation_<DATE>.csv
+
+Inflations/Codes/Markets/Migros/
+└── inflation.py             # Inflation calculation script triggered by main.py
+
+Inflations/Datas/Markets/Migros/
+└── inflation_summary.csv    # Summary of inflation trends
 ```
 
 ## Scraping Pipeline
@@ -85,7 +93,7 @@ source venv/bin/activate   # macOS / Linux
 # venv\Scripts\activate    # Windows
 
 # 3. Install dependencies
-pip install -r Codes/Markets/Migros/requirements.txt
+pip install -r InflationItems/Codes/Markets/Migros/requirements.txt
 ```
 
 ## Usage
@@ -93,7 +101,7 @@ pip install -r Codes/Markets/Migros/requirements.txt
 Run all commands from inside the `scripts/` directory (so that relative imports resolve correctly):
 
 ```bash
-cd Codes/Markets/Migros/scripts
+cd InflationItems/Codes/Markets/Migros/scripts
 
 # List all discovered categories and their IDs
 python main.py --list-categories
@@ -135,11 +143,11 @@ python main.py --category 2 -v
 
 ## Output Files
 
-| File                                                             | Description                                            |
-| ---------------------------------------------------------------- | ------------------------------------------------------ |
-| `Datas/Markets/Migros/migros_<DATE>.csv`                         | All unique products (UTF-8 with BOM for Excel compat.) |
-| `Datas/Markets/Migros/migros_<DATE>.json`                        | Same data as a pretty-printed JSON array               |
-| `Codes/Markets/Migros/checkpoints/migros_checkpoint_<DATE>.json` | Tracks completed category IDs for `--resume` support   |
+| File                                                                            | Description                                            |
+| ------------------------------------------------------------------------------- | ------------------------------------------------------ |
+| `InflationItems/Datas/Markets/Migros/migros_<DATE>.csv`                         | All unique products (UTF-8 with BOM for Excel compat.) |
+| `InflationItems/Datas/Markets/Migros/migros_<DATE>.json`                        | Same data as a pretty-printed JSON array               |
+| `InflationItems/Codes/Markets/Migros/checkpoints/migros_checkpoint_<DATE>.json` | Tracks completed category IDs for `--resume` support   |
 
 > Output paths are resolved automatically by `config.py` relative to the script's location, regardless of the working directory from which `main.py` is invoked.
 
@@ -147,17 +155,17 @@ python main.py --category 2 -v
 
 Edit `scripts/config.py` to change scraper behaviour:
 
-| Setting           | Default                             | Description                                                     |
-| ----------------- | ----------------------------------- | --------------------------------------------------------------- |
-| `REQUEST_DELAY`   | `0.5` s                             | Base delay between paginated requests (jitter applied on top)   |
-| `MAX_RETRIES`     | `3`                                 | Retries before skipping a failed page                           |
-| `RETRY_BACKOFF`   | `2` s                               | Back-off seed: actual wait = `RETRY_BACKOFF × attempt` seconds  |
-| `DEFAULT_SORT`    | `onerilenler`                       | `sirala` query-parameter value sent to the API                  |
-| `DEFAULT_WORKERS` | `3`                                 | Default number of parallel worker threads                       |
-| `JITTER_MIN`      | `0.5`                               | Lower bound of the jitter multiplier applied to `REQUEST_DELAY` |
-| `JITTER_MAX`      | `1.5`                               | Upper bound of the jitter multiplier applied to `REQUEST_DELAY` |
-| `OUTPUT_DIR`      | `Datas/Markets/Migros/`             | Directory where CSV / JSON files are written                    |
-| `CHECKPOINT_DIR`  | `Codes/Markets/Migros/checkpoints/` | Directory where checkpoint files are stored                     |
+| Setting           | Default                                            | Description                                                     |
+| ----------------- | -------------------------------------------------- | --------------------------------------------------------------- |
+| `REQUEST_DELAY`   | `0.5` s                                            | Base delay between paginated requests (jitter applied on top)   |
+| `MAX_RETRIES`     | `3`                                                | Retries before skipping a failed page                           |
+| `RETRY_BACKOFF`   | `2` s                                              | Back-off seed: actual wait = `RETRY_BACKOFF × attempt` seconds  |
+| `DEFAULT_SORT`    | `onerilenler`                                      | `sirala` query-parameter value sent to the API                  |
+| `DEFAULT_WORKERS` | `3`                                                | Default number of parallel worker threads                       |
+| `JITTER_MIN`      | `0.5`                                              | Lower bound of the jitter multiplier applied to `REQUEST_DELAY` |
+| `JITTER_MAX`      | `1.5`                                              | Upper bound of the jitter multiplier applied to `REQUEST_DELAY` |
+| `OUTPUT_DIR`      | `InflationItems/Datas/Markets/Migros/`             | Directory where CSV / JSON files are written                    |
+| `CHECKPOINT_DIR`  | `InflationItems/Codes/Markets/Migros/checkpoints/` | Directory where checkpoint files are stored                     |
 
 ## Category Discovery
 
@@ -183,13 +191,13 @@ If the API returns no sub-category filters for a top-level category, that catego
 
 ## Troubleshooting
 
-| Symptom                        | Likely cause                             | Fix                                                                |
-| ------------------------------ | ---------------------------------------- | ------------------------------------------------------------------ |
-| HTTP 403 Forbidden             | Too many requests / missing headers      | Increase `--delay`; ensure `DEFAULT_HEADERS` are not overridden    |
-| HTTP 429 Too Many Requests     | Rate limit triggered                     | Increase `--delay` and reduce `--workers`                          |
-| Empty CSV after full run       | API changed product key names            | Check `storeProductInfos` / `products` key in `product_fetcher.py` |
-| Resume doesn't skip categories | Checkpoint file from a different date    | Delete old checkpoint or use the correct `--resume` on same day    |
-| `ModuleNotFoundError: config`  | Script not run from `scripts/` directory | `cd Codes/Markets/Migros/scripts` before running `main.py`         |
+| Symptom                        | Likely cause                             | Fix                                                                       |
+| ------------------------------ | ---------------------------------------- | ------------------------------------------------------------------------- |
+| HTTP 403 Forbidden             | Too many requests / missing headers      | Increase `--delay`; ensure `DEFAULT_HEADERS` are not overridden           |
+| HTTP 429 Too Many Requests     | Rate limit triggered                     | Increase `--delay` and reduce `--workers`                                 |
+| Empty CSV after full run       | API changed product key names            | Check `storeProductInfos` / `products` key in `product_fetcher.py`        |
+| Resume doesn't skip categories | Checkpoint file from a different date    | Delete old checkpoint or use the correct `--resume` on same day           |
+| `ModuleNotFoundError: config`  | Script not run from `scripts/` directory | `cd InflationItems/Codes/Markets/Migros/scripts` before running `main.py` |
 
 ## Developer Notes
 

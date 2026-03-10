@@ -99,18 +99,18 @@ from pathlib import Path as _Path
 
 # Resolve paths relative to this config file so the scraper works regardless
 # of the working directory from which main.py is invoked.
-_SCRIPTS_DIR    = _Path(__file__).resolve().parent          # …/Codes/Markets/Migros/scripts
-_MIGROS_DIR     = _SCRIPTS_DIR.parent                       # …/Codes/Markets/Migros
-_PROJECT_ROOT   = _MIGROS_DIR.parent.parent.parent          # …/InflationResearchStudy
+_SCRIPTS_DIR    = _Path(__file__).resolve().parent          # …/InflationItems/Codes/Markets/Migros/scripts
+_MIGROS_DIR     = _SCRIPTS_DIR.parent                       # …/InflationItems/Codes/Markets/Migros
+_PROJECT_ROOT   = _MIGROS_DIR.parent.parent.parent.parent   # …/InflationResearchStudy
 
 # Base output directory
-BASE_OUTPUT_DIR = str(_PROJECT_ROOT / "Datas" / "Markets" / "Migros")
+BASE_OUTPUT_DIR = str(_PROJECT_ROOT / "InflationItems" / "Datas" / "Markets" / "Migros")
 
-# CSV / JSON output  →  Datas/Markets/Migros/
+# CSV / JSON output  →  InflationItems/Datas/Markets/Migros/
 OUTPUT_DIR      = str(_Path(BASE_OUTPUT_DIR))
 INFLATION_DIR   = str(_Path(BASE_OUTPUT_DIR) / "InflationData")
 
-# Checkpoint files   →  Codes/Markets/Migros/checkpoints/
+# Checkpoint files   →  InflationItems/Codes/Markets/Migros/checkpoints/
 CHECKPOINT_DIR  = str(_MIGROS_DIR / "checkpoints")
 
 # Files are named with today's date so each daily run produces its own set.

@@ -26,9 +26,9 @@ Output files
 All paths are configured in ``config.py`` and are derived relative to that
 file, so the scraper works correctly regardless of the CWD.
 
-    Datas/Markets/Migros/migros_<DATE>.csv    — UTF-8-with-BOM CSV
-    Datas/Markets/Migros/migros_<DATE>.json   — pretty-printed JSON array
-    Codes/Markets/Migros/checkpoints/migros_checkpoint_<DATE>.json
+    InflationItems/Datas/Markets/Migros/migros_<DATE>.csv    — UTF-8-with-BOM CSV
+    InflationItems/Datas/Markets/Migros/migros_<DATE>.json   — pretty-printed JSON array
+    InflationItems/Codes/Markets/Migros/checkpoints/migros_checkpoint_<DATE>.json
 
 Usage examples
 --------------

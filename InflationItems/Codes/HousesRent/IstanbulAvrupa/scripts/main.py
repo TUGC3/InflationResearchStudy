@@ -23,8 +23,8 @@ Output files
 ------------
 All paths are configured in ``config.py`` and derived from the project structure.
 
-    Datas/HousesRent/IstanbulAvrupa/IstanbulAvrupa_<DATE>.csv
-    Codes/HousesRent/IstanbulAvrupa/checkpoints/checkpoint_<DATE>.json
+    InflationItems/Datas/HousesRent/IstanbulAvrupa/IstanbulAvrupa_<DATE>.csv
+    InflationItems/Codes/HousesRent/IstanbulAvrupa/checkpoints/checkpoint_<DATE>.json
 
 Usage examples
 --------------

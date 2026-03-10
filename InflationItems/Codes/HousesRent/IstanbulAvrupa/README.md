@@ -14,7 +14,7 @@ A Python tool to scrape residential rental listings for **Istanbul's European si
 ## Project Structure
 
 ```
-Codes/HousesRent/IstanbulAvrupa/
+InflationItems/Codes/HousesRent/IstanbulAvrupa/
 ├── scripts/
 │   ├── main.py       # CLI entry point & run orchestration
 │   ├── scraper.py    # Scraping logic (bracket splitting, page parsing, CSV output)
@@ -25,8 +25,16 @@ Codes/HousesRent/IstanbulAvrupa/
 ├── requirements.txt
 └── README.md
 
-Datas/HousesRent/IstanbulAvrupa/           ← output lives here
-└── IstanbulAvrupa_<DATE>.csv
+InflationItems/Datas/HousesRent/IstanbulAvrupa/           ← output lives here
+├── IstanbulAvrupa_<DATE>.csv
+└── InflationData/
+    └── IstanbulAvrupa_inflation_<DATE>.csv
+
+Inflations/Codes/HousesRent/IstanbulAvrupa/
+└── inflation.py      # Inflation calculation script triggered by main.py
+
+Inflations/Datas/HousesRent/IstanbulAvrupa/
+└── inflation_summary.csv # Summary of inflation trends
 ```
 
 ## Scraping Pipeline
@@ -68,7 +76,7 @@ python3 -m venv venv
 source venv/bin/activate
 
 # 3. Install dependencies
-pip install -r Codes/HousesRent/IstanbulAvrupa/requirements.txt
+pip install -r InflationItems/Codes/HousesRent/IstanbulAvrupa/requirements.txt
 ```
 
 > Chrome must be installed. The `undetected-chromedriver` version is pinned in `scraper.py` (`version_main=145`).
@@ -78,7 +86,7 @@ pip install -r Codes/HousesRent/IstanbulAvrupa/requirements.txt
 Run all commands from inside the `scripts/` directory:
 
 ```bash
-cd Codes/HousesRent/IstanbulAvrupa/scripts
+cd InflationItems/Codes/HousesRent/IstanbulAvrupa/scripts
 
 # Full scrape (starts fresh, clears today's CSV if it exists)
 python main.py
@@ -122,7 +130,7 @@ To capture all data across high-density areas like Istanbul, the scraper uses ad
 Progress is tracked in a checkpoint file:
 
 ```
-Codes/HousesRent/IstanbulAvrupa/checkpoints/checkpoint_<DATE>.json
+InflationItems/Codes/HousesRent/IstanbulAvrupa/checkpoints/checkpoint_<DATE>.json
 ```
 
 The checkpoint stores both the list of **completed brackets** and the full **resolved bracket list** from the current day. When `--resume` is used and the bracket list is present, the scraper skips all listing-count checks and jumps straight to scraping the remaining brackets.
