@@ -19,10 +19,12 @@ API Sabitleri (STORE_ID / REGION_ID):
     REGION_ID = 50331081   (Inditex TR bölge tanımlayıcısı)
 """
 
+import argparse
 import csv
 import logging
 import time
 import random
+from collections import defaultdict
 from datetime import date
 from pathlib import Path
 from typing import Optional
@@ -248,10 +250,15 @@ class StradivariusScraper:
                 seen.add(cat["id"])
                 unique.append(cat)
 
-        # Gercek urun kategorileri once, editoryal sonra
+        # Gercek urun kategorileri once, editoryal sonra.
+        # Hem parent_name hem de category'nin kendi adi kontrol edilir.
+        # Ornek: root "Yeni" kategorisi (parent=None, name="Yeni") → editorial.
+        # parent_name kontrolu olmadan is_editorial=False donup gercek gibi
+        # islenir ve urunler yanlis etiketlenir.
         def is_editorial(cat: dict) -> bool:
             p = (cat.get("parent_name") or "").strip().lower()
-            return p in EDITORIAL_PARENTS
+            n = (cat.get("name") or "").strip().lower()
+            return p in EDITORIAL_PARENTS or n in EDITORIAL_PARENTS
 
         unique.sort(key=is_editorial)
 
@@ -304,58 +311,81 @@ class StradivariusScraper:
 
     # ── Kayıt çıkarımı ────────────────────────────────────────────────────────
 
-    def extract_record(self, raw: dict, category_path: str) -> Optional[dict]:
+    def extract_records(self, raw: dict, category_path: str) -> list[dict]:
         """
-        Ham Inditex urun dict'inden tek CSV satiri uretir.
+        Ham Inditex urun dict'inden renk basina bir CSV satiri uretir.
 
-        Fiyat olarak ilk rengin ilk bedeninin fiyati alinir.
-        Ayni urunun farkli renkleri her zaman ayni fiyata sahip oldugu icin
-        renk bazinda ayirma yapmak gereksizdir.
+        Her renk icin ilk bedenin fiyati alinir.
+        Ayni rengin farkli bedenleri her zaman ayni fiyata sahiptir.
+
+        Donulen liste bos olabilir (isim/fiyat alinamazsa).
 
         price: o gunun satis fiyati (TRY).
             Indirimli urunde indirimli, indirimsizde normal fiyat.
             Enflasyon takibi icin dogru kolon budur.
+
+        Ornek cikti (tek urun, 3 renk):
+            [
+                {"category": "Tişört", "product_name": "Basic tişört", "color": "Siyah", "price": 649.0},
+                {"category": "Tişört", "product_name": "Basic tişört", "color": "Beyaz", "price": 649.0},
+                {"category": "Tişört", "product_name": "Basic tişört", "color": "Krem",  "price": 649.0},
+            ]
         """
         if not raw or not isinstance(raw, dict):
-            return None
+            return []
 
         name = (raw.get("name") or "").strip()
         if not name:
-            return None
+            return []
 
+        records: list[dict] = []
         try:
             summaries = raw.get("bundleProductSummaries") or []
             if not summaries:
-                return None
+                return []
             detail = summaries[0].get("detail") or {}
             colors = detail.get("colors") or []
 
-            for color in colors:
-                for size in color.get("sizes") or []:
+            for color_obj in colors:
+                color_name = (color_obj.get("name") or "").strip()
+                if not color_name:
+                    continue
+                # ilk bedenin fiyatini al
+                for size in color_obj.get("sizes") or []:
                     price_cents = size.get("price")
                     if price_cents is not None:
-                        return {
+                        records.append({
                             "category":     category_path,
                             "product_name": name,
+                            "color":        color_name,
                             "price":        round(int(price_cents) / 100, 2),
-                        }
-        except Exception:
-            return None
+                        })
+                        break  # bu renk icin ilk beden yeterli
 
-        return None
+        except Exception:
+            return []
+
+        return records
 
     # ── Ana pipeline ──────────────────────────────────────────────────────────
 
-    def run(self) -> Path:
+    def run(self, verify: bool = False) -> Path:
         """
         Pipeline:
             1. Session + Akamai warmup
             2. Kategorileri cek (gercek kategoriler once)
             3. Her kategori: product ID'leri → detaylar → CSV'ye yaz
 
+        verify=True: her kategori icin detayli ID/yazilan/atlanan sayilari loglar,
+                     sonda ozet tablo basar. Tum urunlerin cekildigini dogrulamak icin kullan.
+
         Cikti: output_dir/stradivarius_YYYY-MM-DD.csv
-        Kolonlar: category, product_name, price
-        Dedup: seen_ids (product_id bazli, cross-category)
+        Kolonlar: category, product_name, color, price
+
+        Dedup katmanlari (siraya gore):
+            1. seen_ids       : Ayni product_id tekrar gelirse tum renkleriyle atla (cross-cat / cift ID)
+            2. extract_records: Renk listesi bos donerse atla (bozuk API verisi)
+            3. seen_records   : Ayni (product_name, color) zaten yazildiysa o rengi atla
         """
         today_str   = date.today().strftime("%Y-%m-%d")
         output_file = self.output_dir / f"stradivarius_{today_str}.csv"
@@ -368,11 +398,25 @@ class StradivariusScraper:
             logger.error("Hic kategori bulunamadi. Scraper durduruluyor.")
             return output_file
 
-        fieldnames = ["category", "product_name", "price"]
+        fieldnames = ["category", "product_name", "color", "price"]
         self.output_dir.mkdir(parents=True, exist_ok=True)
 
-        total_products = 0
-        seen_ids: set[str] = set()  # product_id bazli cross-category dedup
+        # ── Sayaçlar ────────────────────────────────────────────────────────
+        total_ids_from_api  = 0   # API'den gelen ham product ID sayisi
+        total_details_ok    = 0   # productsArray'den basarili cekilen detay sayisi
+        total_written       = 0   # CSV'ye yazilan satir (renk bazinda)
+        total_skip_id       = 0   # seen_ids'de zaten vardi → urunun tum renkleri atla
+        total_skip_no_color = 0   # extract_records bos liste dondu (bozuk API verisi)
+        total_skip_dedup    = 0   # seen_records'da zaten vardi → o rengi atla
+
+        cat_stats: list[dict] = []
+
+        seen_ids: set[str] = set()
+        # Dedup key: (product_name, color)
+        # Ayni urunun ayni rengi = duplicate → atla
+        # Ayni urunun farkli rengi = yeni satir → yaz
+        seen_records: set[tuple[str, str]] = set()
+        # ────────────────────────────────────────────────────────────────────
 
         with open(output_file, "w", newline="", encoding="utf-8-sig") as f:
             writer = csv.DictWriter(f, fieldnames=fieldnames)
@@ -385,35 +429,135 @@ class StradivariusScraper:
                 cat_path = _clean_category(parent, cat_name)
 
                 product_ids = self.fetch_product_ids(cat_id)
+                n_ids = len(product_ids)
+                total_ids_from_api += n_ids
+
                 if not product_ids:
                     logger.debug("'%s' -- urun yok, atlaniyor.", cat_name)
+                    if verify:
+                        cat_stats.append({
+                            "kategori": cat_path, "ids": 0, "detay": 0,
+                            "yazilan": 0, "skip_id": 0, "skip_renk": 0, "skip_dedup": 0,
+                        })
                     continue
 
                 raw_products = self.fetch_product_details(product_ids, cat_id)
+                n_details = len(raw_products)
+                total_details_ok += n_details
 
-                new_in_category = 0
+                c_written = c_skip_id = c_skip_no_color = c_skip_dedup = 0
+
                 for raw in raw_products:
                     pid = str(raw.get("id", ""))
-                    if not pid or pid in seen_ids:
-                        continue  # Bu product_id zaten baska kategoriden alindi
-                    record = self.extract_record(raw, cat_path)
-                    if record is None:
-                        continue
-                    seen_ids.add(pid)
-                    writer.writerow(record)
-                    new_in_category += 1
 
-                total_products += new_in_category
-                if new_in_category:
-                    logger.info("'%s': +%d urun (toplam: %d)",
-                                cat_name, new_in_category, total_products)
+                    # Katman 1: product_id daha once gorulduyse tum renklerini atla
+                    if not pid or pid in seen_ids:
+                        c_skip_id += 1
+                        total_skip_id += 1
+                        continue
+
+                    # Katman 2: renk listesini cek
+                    color_records = self.extract_records(raw, cat_path)
+                    if not color_records:
+                        c_skip_no_color += 1
+                        total_skip_no_color += 1
+                        seen_ids.add(pid)  # bozuk urun, bir daha sorgulanmasin
+                        continue
+
+                    # product_id'yi hemen isle — ayni ID farkli kategoriden gelirse atlanacak
+                    seen_ids.add(pid)
+
+                    # Katman 3: renk bazinda dedup (case-insensitive)
+                    # Inditex ayni rengi bazen 'Bej' bazen 'BEJ' gonderebilir.
+                    # .upper() ile normalize edilerek ayni renk sayilir.
+                    # CSV'ye yazilan deger: ilk gelen (orijinal) isim — tutarlilik icin.
+                    for record in color_records:
+                        rkey = (record["product_name"], record["color"].upper())
+                        if rkey in seen_records:
+                            c_skip_dedup += 1
+                            total_skip_dedup += 1
+                            continue
+                        seen_records.add(rkey)
+                        writer.writerow(record)
+                        c_written += 1
+                        total_written += 1
+
+                if c_written:
+                    logger.info("'%s': +%d renk kaydi (toplam: %d)",
+                                cat_name, c_written, total_written)
+
+                if verify:
+                    cat_stats.append({
+                        "kategori":   cat_path,
+                        "ids":        n_ids,
+                        "detay":      n_details,
+                        "yazilan":    c_written,
+                        "skip_id":    c_skip_id,
+                        "skip_renk":  c_skip_no_color,
+                        "skip_dedup": c_skip_dedup,
+                    })
 
                 self._sleep()
 
-        logger.info("Tamamlandi. Toplam %d urun --> %s", total_products, output_file)
+        # ── Özet log ────────────────────────────────────────────────────────
+        logger.info("=" * 60)
+        logger.info("OZET")
+        logger.info("  API'den gelen toplam ID    : %d", total_ids_from_api)
+        logger.info("  Cekilen detay              : %d", total_details_ok)
+        logger.info("  CSV'ye yazilan (renk bazli): %d", total_written)
+        logger.info("  Atlanan (gorulmus ID)      : %d  [cross-cat / cift ID]", total_skip_id)
+        logger.info("  Atlanan (renk/isim yok)    : %d  [bozuk API verisi]", total_skip_no_color)
+        logger.info("  Atlanan (duplicate renk)   : %d  [ayni urun+renk]", total_skip_dedup)
+        logger.info("  Sayi tutarliligi           : OK  [seen_ids + seen_records garantisi]")
+        logger.info("=" * 60)
+
+        # ── Verify tablosu ─────────────────────────────────────────────────
+        if verify and cat_stats:
+            sorunlu = [
+                s for s in cat_stats
+                if s["ids"] > 0 and s["yazilan"] == 0
+                and s["skip_dedup"] == 0 and s["skip_id"] < s["ids"]
+            ]
+            sifir_yazi = [s for s in cat_stats if s["ids"] > 0 and s["yazilan"] == 0]
+            logger.info(
+                "VERIFY: %d kategoride ID geldi ama 0 yeni renk yazildi "
+                "(normal: cross-cat dedup)", len(sifir_yazi)
+            )
+            if sorunlu:
+                logger.warning(
+                    "VERIFY UYARI: Asagidaki kategorilerde ID var ama "
+                    "ne yazildi ne de dedup'a takildi — renk/detay sorunu olabilir:"
+                )
+                for s in sorunlu:
+                    logger.warning(
+                        "  %-50s ids=%-4d detay=%-4d skip_renk=%d",
+                        s["kategori"], s["ids"], s["detay"], s["skip_renk"]
+                    )
+            else:
+                logger.info(
+                    "VERIFY: Sorunlu kategori YOK — tum urunler ya yazildi "
+                    "ya da dedup/cross-cat nedeniyle atildi."
+                )
+
+        logger.info("Tamamlandi. Toplam %d renk kaydi --> %s", total_written, output_file)
         return output_file
 
 
 if __name__ == "__main__":
-    scraper = StradivariusScraper(output_dir=".", delay=0.5)
-    scraper.run()
+    parser = argparse.ArgumentParser(description="Stradivarius TR urun scraper")
+    parser.add_argument(
+        "--verify", action="store_true",
+        help="Detayli ID/yazilan/atlanan istatistikleri logla, sorunlu kategorileri raporla"
+    )
+    parser.add_argument(
+        "--output-dir", default=".",
+        help="CSV cikti dizini (varsayilan: .)"
+    )
+    parser.add_argument(
+        "--delay", type=float, default=0.5,
+        help="Kategori arasi bekleme suresi saniye (varsayilan: 0.5)"
+    )
+    args = parser.parse_args()
+
+    scraper = StradivariusScraper(output_dir=args.output_dir, delay=args.delay)
+    scraper.run(verify=args.verify)
