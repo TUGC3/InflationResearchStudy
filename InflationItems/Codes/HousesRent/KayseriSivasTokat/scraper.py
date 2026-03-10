@@ -129,7 +129,7 @@ def wait_for_challenge(driver, url, max_wait=20):
     """Waits for a Cloudflare-style challenge to resolve. Returns True if resolved."""
     print(f"⏳ Waiting for challenge page to resolve (up to {max_wait}s)...")
     for i in range(max_wait // 2):
-        time.sleep(2)
+        time.sleep(random.uniform(4.0, 6.0))
         page = driver.page_source
         if not is_waiting_page(page):
             print(f"✅ Challenge resolved after ~{(i + 1) * 2}s")
@@ -170,7 +170,7 @@ def scrape_city(driver, city_url_name, folder_name, brackets):
         driver.get(url)
 
         while True:
-            time.sleep(random.uniform(2.5, 4.5))
+            time.sleep(random.uniform(4.0, 6.0))
 
             page_source = driver.page_source
 
@@ -256,7 +256,7 @@ def scrape_city(driver, city_url_name, folder_name, brackets):
                 next_url = "https://www.sahibinden.com" + next_button['href']
                 driver.get(next_url)
                 page_num += 1
-                time.sleep(random.uniform(2, 4))
+                time.sleep(random.uniform(4.0, 6.0))
             else:
                 print(f"Finished gathering all houses in the {min_price}-{max_price} TL range.")
                 break
@@ -282,7 +282,7 @@ def main():
         # Loop through the cities
         for city_url_name, city_data in CITIES.items():
             driver = scrape_city(driver, city_url_name, city_data['folder'], city_data['brackets'])
-            time.sleep(3)
+            time.sleep(random.uniform(4.0, 6.0))
     finally:
         close_driver(driver)
         cleanup_profiles()
