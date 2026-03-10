@@ -45,7 +45,7 @@ def scrape():
         index += 1
 
     # Save to CSV file - Updated for the new directory structure
-    # Path: InflationResearchStudy/Datas/Markets/Baskent/
+    # Path: InflationResearchStudy/InflationItems/Datas/Markets/Baskent/
     base_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
     folder_path = os.path.join(base_dir, "Datas", "Markets", "Baskent")
 
