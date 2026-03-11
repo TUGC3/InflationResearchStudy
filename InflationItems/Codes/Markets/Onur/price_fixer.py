@@ -4,7 +4,10 @@ import re
 from typing import Optional
 
 
-DATA_DIR = r"C:\Users\EXCALIBUR\OneDrive\Masaüstü\AI201\InflationResearchStudy\Datas\Markets\Onur"
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+DATA_DIR = os.path.abspath(
+    os.path.join(SCRIPT_DIR, "..", "..", "..", "Datas", "Markets", "Onur")
+)
 #change price to float from string
 
 def _normalize_numeric_string(text: str) -> Optional[str]:

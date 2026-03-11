@@ -48,7 +48,7 @@ def repo_root() -> str:
     return os.path.abspath(os.path.dirname(__file__))
 
 def data_dir_for_city(city: str) -> str:
-    return os.path.join("Datas", "HousesRent", city)
+    return os.path.join("InflationItems", "Datas", "HousesRent", city)
 
 def setup_driver() -> uc.Chrome:
     options = uc.ChromeOptions()
