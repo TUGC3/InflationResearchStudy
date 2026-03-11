@@ -10,7 +10,9 @@ from bs4 import BeautifulSoup
 BASE_URL = "https://basdasonline.com"
 LIST_URL = f"{BASE_URL}/tab-lists.asp"
 
-CSV_PATH = "basdas_fiyat_takip.csv"
+TODAY = datetime.now().strftime("%Y-%m-%d")
+CSV_PATH = f"basdas_{TODAY}.csv"
+
 HEADERS = ["tarih", "grup_id", "urun_adi", "fiyat"]
 
 _price_clean_re = re.compile(r"[^\d,\.]")
@@ -21,7 +23,6 @@ def parse_price(text: str) -> Optional[float]:
         return None
 
     t = _price_clean_re.sub("", text.strip())
-
 
     if "," in t and "." in t:
         t = t.replace(".", "").replace(",", ".")
@@ -57,7 +58,6 @@ def parse_products(html: str) -> List[Tuple[str, float]]:
 
 
 def load_existing_keys() -> set:
-
     existing = set()
 
     if not os.path.exists(CSV_PATH):
@@ -65,10 +65,9 @@ def load_existing_keys() -> set:
 
     with open(CSV_PATH, "r", newline="", encoding="utf-8") as f:
         reader = csv.reader(f)
-        header = next(reader, None)
+        next(reader, None)  # header'ı geç
 
         for row in reader:
-
             if len(row) < 3:
                 continue
             existing.add((row[0], row[1], row[2]))
@@ -76,7 +75,7 @@ def load_existing_keys() -> set:
     return existing
 
 
-def append_rows(rows: List[Tuple[str, int, str, float]]):
+def append_rows(rows: List[Tuple[str, int, str, float]]) -> None:
     if not rows:
         return
 
@@ -88,12 +87,10 @@ def append_rows(rows: List[Tuple[str, int, str, float]]):
     with open(CSV_PATH, "a", newline="", encoding="utf-8") as f:
         writer = csv.writer(f)
 
-
         if not file_exists:
             writer.writerow(HEADERS)
 
         for r in rows:
-
             key = (str(r[0]), str(r[1]), str(r[2]))
 
             if key not in existing:
@@ -115,7 +112,7 @@ def main():
         "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
     })
 
-    
+    # Siteye ilk giriş
     s.get(BASE_URL + "/", timeout=20)
 
     now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
