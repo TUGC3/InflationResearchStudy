@@ -1,6 +1,7 @@
 import csv
 import html
 import json
+import os
 import re
 import sys
 from datetime import datetime
@@ -10,7 +11,10 @@ from urllib.request import Request, urlopen
 
 
 BASE_URL = "https://www.onur360.com/supermarket"
-OUTPUT_DIR = r"C:\Users\EXCALIBUR\OneDrive\Masaüstü\AI201\InflationResearchStudy\Datas\Markets\Onur"
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+OUTPUT_DIR = os.path.abspath(
+    os.path.join(SCRIPT_DIR, "..", "..", "..", "Datas", "Markets", "Onur")
+)
 WARN_MIN_PRODUCTS = 500
 #scrape products from onur360.com and save to csv. use price_fixer.py to fix prices.
 
