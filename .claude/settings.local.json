@@ -1,8 +1,0 @@
-{
-  "permissions": {
-    "allow": [
-      "WebFetch(domain:www.nalburcuk.com)",
-      "WebFetch(domain:www.loft.com.tr)"
-    ]
-  }
-}

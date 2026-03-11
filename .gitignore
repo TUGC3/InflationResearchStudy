@@ -35,6 +35,7 @@ venv/
 
 .ai/
 SeleniumProfile/
+.claude/
 
 # --- Python bytecode (extra) ---
 **/__pycache__/
