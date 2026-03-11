@@ -138,7 +138,7 @@ def extract_original_price_from_container(container: Tag) -> Optional[str]:
     prices = PRICE_RE.findall(text)
     if not prices:
         return None
-    return normalize_price(prices[0])
+    return normalize_price(prices[-1])
 
 
 def parse_products_from_page(soup: BeautifulSoup) -> List[Tuple[str, str, str, str]]:
