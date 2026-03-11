@@ -35,12 +35,12 @@ CITIES = {
 }
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-DATA_BASE_DIR = os.path.abspath(os.path.join(SCRIPT_DIR, "../../../Datas/HousesRent/"))
+DATA_BASE_DIR = os.path.abspath(os.path.join(SCRIPT_DIR, "../../../../Datas/HousesRent/"))
 
 # --- IMPROVEMENT 1: Resume tracking ---
 # A JSON file tracks which (city, bracket) pairs are already done today.
 # Re-running the script will skip completed brackets instantly.
-PROGRESS_FILE = os.path.join(SCRIPT_DIR, "../scrape_progress.json")
+PROGRESS_FILE = os.path.join(SCRIPT_DIR, "../../scrape_progress.json")
 
 
 def load_progress():
