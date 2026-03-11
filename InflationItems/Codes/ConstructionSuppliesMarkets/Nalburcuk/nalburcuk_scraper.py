@@ -1,19 +1,3 @@
-"""
-nalburcuk_scraper.py — Daily product scraper for https://www.nalburcuk.com
-
-Strategy:
-  - Fetch the main sitemap.xml to discover all product sub-sitemap URLs.
-  - Parse each product sitemap to collect every /urun/ page URL.
-  - Fetch each product page and extract data from the embedded JavaScript
-    variable `pageParams` (product name, price, SKU, category).
-  - Deduplicate by SKU and save a dated CSV.
-
-Output:
-  InflationItems/Datas/ConstructionSuppliesMarkets/Nalburcuk/nalburcuk_YYYY-MM-DD.csv
-
-Columns: ID, SKU, Product Name, Category, Price (TL)
-"""
-
 import csv
 import os
 import re
