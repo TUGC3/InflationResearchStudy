@@ -36,6 +36,7 @@ venv/
 .ai/
 SeleniumProfile/
 .claude/
+scrape_progress.json/
 
 # --- Python bytecode (extra) ---
 **/__pycache__/
@@ -72,3 +73,4 @@ SeleniumProfile*/
 **/SeleniumProfile*/
 _selenium_profile/
 **/_selenium_profile/
+
