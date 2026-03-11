@@ -135,9 +135,14 @@ def extract_name_from_container(container: Tag) -> Optional[str]:
 
 def extract_original_price_from_container(container: Tag) -> Optional[str]:
     text = clean_text(container.get_text(" ", strip=True))
+    # Remove "Kazancınız X TL" (savings amount, not a real price)
+    idx = text.lower().find("kazancınız")
+    if idx != -1:
+        text = text[:idx]
     prices = PRICE_RE.findall(text)
     if not prices:
         return None
+    # Last price = cheapest available (sepette price if exists, else discounted, else normal)
     return normalize_price(prices[-1])
 
 
