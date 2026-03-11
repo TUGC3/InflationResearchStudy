@@ -27,9 +27,10 @@ HEADERS = {
     "Accept-Language": "tr-TR,tr;q=0.9,en-US;q=0.8,en;q=0.7",
 }
 
-REQUEST_DELAY = 0.3   # seconds of sleep after each product request (per thread)
-MAX_WORKERS   = 3     # parallel threads
-REQUEST_TIMEOUT = 30  # seconds
+REQUEST_DELAY   = 0.6  # seconds of sleep after each product request (per thread)
+MAX_WORKERS     = 3    # parallel threads
+REQUEST_TIMEOUT = 30   # seconds
+RETRY_WAITS     = [10, 20, 40]  # seconds to wait on 429 before each retry
 
 # XML sitemap namespace
 SITEMAP_NS = {"sm": "http://www.sitemaps.org/schemas/sitemap/0.9"}
@@ -70,8 +71,16 @@ def inflationitems_root() -> str:
 # ---------------------------------------------------------------------------
 
 def _get(session: requests.Session, url: str) -> requests.Response:
-    resp = session.get(url, headers=HEADERS, timeout=REQUEST_TIMEOUT)
-    resp.raise_for_status()
+    """GET with automatic retry on 429 (rate limit)."""
+    for attempt, wait in enumerate(RETRY_WAITS + [None]):
+        resp = session.get(url, headers=HEADERS, timeout=REQUEST_TIMEOUT)
+        if resp.status_code == 429 and wait is not None:
+            print(f"    [429] Rate limited, waiting {wait}s before retry ({attempt+1}/{len(RETRY_WAITS)}) ...")
+            time.sleep(wait)
+            continue
+        resp.raise_for_status()
+        return resp
+    resp.raise_for_status()  # raise after final attempt
     return resp
 
 # ---------------------------------------------------------------------------
@@ -179,8 +188,7 @@ def scrape_one_product(url: str) -> Optional[Dict]:
     """Fetch a single product page, parse it, sleep politely, return data or None."""
     session = _get_thread_session()
     try:
-        resp = session.get(url, headers=HEADERS, timeout=REQUEST_TIMEOUT)
-        resp.raise_for_status()
+        resp = _get(session, url)
         data = parse_product_page(resp.text)
         time.sleep(REQUEST_DELAY)
         if data is not None:
@@ -209,7 +217,7 @@ def main() -> None:
         urls = get_product_urls_from_sitemap(setup_session, smap_url)
         all_product_urls.extend(urls)
         print(f"  [{idx:>2}/{len(sitemap_urls)}] {len(urls):>4} products  ({smap_url.split('/')[-1].split('?')[0]})")
-        time.sleep(0.1)
+        time.sleep(1.5)
 
     # Deduplicate while preserving order
     seen_urls: set = set()
