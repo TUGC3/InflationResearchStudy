@@ -27,7 +27,7 @@ import time
 from typing import Optional
 
 import requests
-from bs4 import BeautifulSoup
+from lxml import html
 
 import config
 
@@ -49,6 +49,17 @@ def _make_session() -> requests.Session:
     headers = dict(config.DEFAULT_HEADERS)  # shallow copy
     headers["User-Agent"] = random.choice(config.USER_AGENTS)
     session.headers.update(headers)
+    
+    # Enable connection pooling for faster requests
+    adapter = requests.adapters.HTTPAdapter(
+        pool_connections=10,
+        pool_maxsize=20,
+        max_retries=0,  # We handle retries manually
+        pool_block=False
+    )
+    session.mount('https://', adapter)
+    session.mount('http://', adapter)
+    
     return session
 
 
@@ -87,7 +98,28 @@ def _parse_ga4(raw_text: str) -> dict:
         return {}
 
 
-def _parse_product(wrapper: "BeautifulSoup", category_name: str) -> Optional[dict]:
+def _extract_json_blobs(wrapper):
+    """
+    Extract both insider and GA4 JSON blobs from a wrapper in one pass.
+    Returns tuple of (insider_dict, ga4_dict).
+    """
+    insider: dict = {}
+    ga4: dict = {}
+    
+    # Single XPath query to get both divs at once
+    json_divs = wrapper.xpath('.//div[contains(@class, "js-insider-product") or contains(@class, "js-ga4-product-item")]')
+    
+    for div in json_divs:
+        class_attr = div.get("class", "")
+        if "js-insider-product" in class_attr:
+            insider = _parse_insider(div.text_content())
+        elif "js-ga4-product-item" in class_attr:
+            ga4 = _parse_ga4(div.text_content())
+    
+    return insider, ga4
+
+
+def _parse_product(wrapper, category_name: str) -> Optional[dict]:
     """
     Extract a clean product record from a .js-product-wrapper element.
 
@@ -98,17 +130,8 @@ def _parse_product(wrapper: "BeautifulSoup", category_name: str) -> Optional[dic
     sku   = wrapper.get("data-sku", "")
     price = wrapper.get("data-price", "")
 
-    # ── Insider JSON blob ─────────────────────────────────────────────────────
-    insider_div = wrapper.find("div", class_="js-insider-product")
-    insider: dict = {}
-    if insider_div:
-        insider = _parse_insider(insider_div.get_text(strip=False))
-
-    # ── GA4 JSON blob ─────────────────────────────────────────────────────────
-    ga4_div = wrapper.find("div", class_="js-ga4-product-item")
-    ga4: dict = {}
-    if ga4_div:
-        ga4 = _parse_ga4(ga4_div.get_text(strip=False))
+    # ── Extract JSON blobs in one pass ────────────────────────────────────────
+    insider, ga4 = _extract_json_blobs(wrapper)
 
     # ── Combine into a flat record ────────────────────────────────────────────
     name = insider.get("name") or ga4.get("item_name") or ""
@@ -167,15 +190,16 @@ def _fetch_page(
     session: requests.Session,
     category_url: str,
     page: int,
-) -> Optional[BeautifulSoup]:
+):
     """
     Fetch one page of a category listing.
-    Returns a BeautifulSoup object or None on permanent failure.
+    Returns tuple of (lxml HtmlElement or None, response_time in seconds).
 
     Handles 429 / 403 rate-limit responses with a longer back-off pause
     before retrying so the scraper recovers gracefully instead of giving up.
     """
     params = {"page": page} if page > 1 else {}
+    response_time = 0.0
 
     # Update Referer to look like natural browser navigation:
     # first page comes from the homepage, subsequent pages come from page N-1.
@@ -191,7 +215,7 @@ def _fetch_page(
 
             # 404 → category or page genuinely doesn't exist
             if resp.status_code == 404:
-                return None
+                return None, 0.0
 
             # 429 / 403 → rate-limited / blocked; pause and retry
             if resp.status_code in (403, 429):
@@ -207,7 +231,8 @@ def _fetch_page(
                 continue
 
             resp.raise_for_status()
-            return BeautifulSoup(resp.text, "lxml")
+            response_time = resp.elapsed.total_seconds()
+            return html.fromstring(resp.text), response_time
 
         except requests.RequestException as exc:
             if attempt == config.MAX_RETRIES:
@@ -215,13 +240,13 @@ def _fetch_page(
                     "All %d attempts failed for %s page %d: %s",
                     config.MAX_RETRIES, category_url, page, exc,
                 )
-                return None
+                return None, 0.0
             wait = config.RETRY_BACKOFF * attempt
             logger.warning(
                 "Attempt %d failed (%s). Retrying in %ds…", attempt, exc, wait
             )
             time.sleep(wait)
-    return None
+    return None, 0.0
 
 
 def fetch_products_for_category(
@@ -256,15 +281,15 @@ def fetch_products_for_category(
         if page_limit and page > page_limit:
             break
 
-        soup = _fetch_page(session, category_url, page)
-        if soup is None:
+        tree, response_time = _fetch_page(session, category_url, page)
+        if tree is None:
             break
 
-        # Find all product wrapper divs on this page
-        wrappers = soup.find_all("div", class_="js-product-wrapper")
+        # Find all product wrapper divs on this page using XPath (faster than CSS selectors)
+        wrappers = tree.xpath('//div[contains(@class, "js-product-wrapper")]')
         if not wrappers:
             # Also try with the broader selector used on some pages
-            wrappers = soup.find_all("div", attrs={"data-url": True, "data-price": True})
+            wrappers = tree.xpath('//div[@data-url and @data-price]')
 
         page_count = 0
         new_on_page = 0
@@ -298,6 +323,15 @@ def fetch_products_for_category(
             break
 
         page += 1
-        time.sleep(delay * random.uniform(0.5, 1.5))
+        
+        # Adaptive delay: faster for quick responses, but respect minimum delay
+        # If server responds in 0.5s, we can be more aggressive
+        # If server is slow (2s+), we back off more
+        adaptive_delay = delay * random.uniform(0.5, 1.5)
+        if response_time > 0:
+            # Adjust based on response time: faster responses = shorter delays
+            adaptive_delay = max(0.3, min(delay * 2, response_time * 0.8 + delay * 0.5))
+        
+        time.sleep(adaptive_delay)
 
     return all_products
