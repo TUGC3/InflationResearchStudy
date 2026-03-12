@@ -50,12 +50,8 @@ def clean_price(price_str):
     if not price_str:
         return 0.0
     # "5.950,00 TL" -> 5950.0
-    # Remove " TL"
-    price_str = price_str.replace("TL", "").strip()
-    # Remove thousand separators
-    price_str = price_str.replace(".", "")
-    # Replace comma decimal with dot
-    price_str = price_str.replace(",", ".")
+    # Optimized: single pass string cleaning
+    price_str = price_str.replace("TL", "").replace(".", "").replace(",", ".")
     try:
         return float(price_str)
     except ValueError:
@@ -88,6 +84,11 @@ def fetch_products_for_category(category_dict, session=None, limit_pages=0):
     page = 1
     last_page_skus = set()
     
+    # Adaptive rate limiting variables
+    adaptive_delay = config.REQUEST_DELAY
+    consecutive_successes = 0
+    consecutive_429s = 0
+    
     logger.info(f"[{name}] Starting scrape from {cat_url}")
     
     while True:
@@ -101,14 +102,40 @@ def fetch_products_for_category(category_dict, session=None, limit_pages=0):
         try:
             resp = req_session.get(url, timeout=15)
             resp.raise_for_status()
+            
+            # Adaptive delay adjustment on success
+            if resp.status_code == 200:
+                consecutive_successes += 1
+                consecutive_429s = 0
+                
+                # Gradually reduce delay after consecutive successes
+                if consecutive_successes >= 3 and adaptive_delay > config.REQUEST_DELAY * 0.5:
+                    adaptive_delay *= 0.9
+                    logger.debug(f"[{name}] Reduced delay to {adaptive_delay:.2f}s after {consecutive_successes} successes")
+                    
         except Exception as e:
             logger.error(f"[{name}] Error fetching page {page}: {e}")
-            break
             
-        soup = BeautifulSoup(resp.text, 'html.parser')
+            # Adaptive delay adjustment on errors
+            if "429" in str(e):
+                consecutive_429s += 1
+                consecutive_successes = 0
+                
+                # Increase delay significantly on 429 errors
+                adaptive_delay = min(adaptive_delay * 2.0, 10.0)  # Cap at 10 seconds
+                logger.warning(f"[{name}] 429 error detected, increased delay to {adaptive_delay:.2f}s")
+                
+                # Skip this page on 429
+                page += 1
+                time.sleep(adaptive_delay)
+                continue
+            else:
+                break
+            
+        soup = BeautifulSoup(resp.text, 'lxml')
         
         # Look for product cards
-        items = soup.find_all('li', class_=lambda c: c and 'col-6' in c and 'col-sm-4' in c)
+        items = soup.select('li.col-6.col-sm-4')
         
         if not items:
             logger.info(f"[{name}] No items found on page {page}. Ending pagination.")
@@ -119,15 +146,15 @@ def fetch_products_for_category(category_dict, session=None, limit_pages=0):
         
         for item in items:
             # Check price, some items without price might be hidden or placeholders
-            price_span = item.find('span', class_='price')
+            price_span = item.select_one('span.price')
             if not price_span:
                 continue
                 
-            sku_span = item.find('span', class_='addToWishlist')
+            sku_span = item.select_one('span.addToWishlist')
             sku = sku_span['data-sku'] if sku_span and sku_span.has_attr('data-sku') else None
             
             # If SKU is completely missing, we might need to look at href
-            a_tag = item.find('a', href=True)
+            a_tag = item.select_one('a[href]')
             if not sku and a_tag:
                 sku = a_tag['href'].split('-')[-1]
             if not sku:
@@ -136,16 +163,16 @@ def fetch_products_for_category(category_dict, session=None, limit_pages=0):
             current_page_skus.add(sku)
             
             # Extract data
-            title_tag = item.find('h3', class_='prodName')
+            title_tag = item.select_one('h3.prodName')
             title = title_tag.text.strip() if title_tag else ""
             
-            brand_tag = item.find('span', class_='subInfo')
+            brand_tag = item.select_one('span.subInfo')
             brand = brand_tag.text.strip() if brand_tag else ""
             
             price_val = clean_price(price_span.text)
             
             # Determine images
-            img_tag = item.find('img', class_='owl-lazy')
+            img_tag = item.select_one('img.owl-lazy')
             if img_tag and img_tag.has_attr('data-src'):
                 image_url = img_tag['data-src']
             elif img_tag and img_tag.has_attr('src'):
@@ -180,8 +207,8 @@ def fetch_products_for_category(category_dict, session=None, limit_pages=0):
         last_page_skus = current_page_skus
         page += 1
         
-        # Jitter delay
-        delay = config.REQUEST_DELAY * random.uniform(config.JITTER_MIN, config.JITTER_MAX)
+        # Use adaptive delay instead of fixed delay
+        delay = adaptive_delay * random.uniform(config.JITTER_MIN, config.JITTER_MAX)
         time.sleep(delay)
         
     logger.info(f"[{name}] Completed. Found {len(products)} products across {page-1} pages.")

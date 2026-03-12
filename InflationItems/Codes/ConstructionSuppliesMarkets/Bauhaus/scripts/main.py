@@ -97,22 +97,22 @@ def save_checkpoint(cp_path, completed):
     with open(cp_path, 'w', encoding='utf-8') as f:
         json.dump(list(completed), f)
 
-def scrape_category_worker(cat, limit, cp_path, completed_ids):
+def scrape_category_worker(cat, limit, session, cp_path, completed_ids):
     """
     Worker function to scrape a single category. Writes its ID to the checkpoint when done.
 
     Args:
         cat (dict): The category directory to fetch.
         limit (int): The page limit (for testing).
+        session (requests.Session): Reusable HTTP session for this worker.
         cp_path (str): The checkpoint file to update.
         completed_ids (set): The shared set of completed IDs.
 
     Returns:
         list[dict]: Extracted product data for the category.
     """
-    products = product_fetcher.fetch_products_for_category(cat, limit_pages=limit)
+    products = product_fetcher.fetch_products_for_category(cat, session, limit)
     completed_ids.add(cat["id"])
-    save_checkpoint(cp_path, completed_ids)
     return products
 
 def main():
@@ -167,23 +167,39 @@ def main():
 
     completed_count = 0
     count_lock = threading.Lock()
+    checkpoint_interval = 5  # Save checkpoint every 5 categories
+
+    # Create sessions for each worker
+    worker_sessions = [product_fetcher.create_session() for _ in range(args.workers)]
 
     with ThreadPoolExecutor(max_workers=args.workers) as executor:
-        future_to_cat = {executor.submit(product_fetcher.fetch_products_for_category, c, None, args.limit): c for c in cats_to_scrape}
+        # Assign each category a session based on worker index
+        future_to_cat = {}
+        for i, cat in enumerate(cats_to_scrape):
+            worker_session = worker_sessions[i % args.workers]
+            future = executor.submit(scrape_category_worker, cat, args.limit, worker_session, checkpoint_file, completed_ids)
+            future_to_cat[future] = cat
+            
         for future in as_completed(future_to_cat):
             cat = future_to_cat[future]
             try:
                 cat_prods = future.result()
                 all_products.extend(cat_prods)
-                completed_ids.add(cat["id"])
-                save_checkpoint(checkpoint_file, completed_ids)
                 
                 with count_lock:
                     completed_count += 1
                     logger.info(f"[{completed_count}/{cat_count}] Merged {len(cat_prods)} products from {cat['name']}")
                     
+                    # Batch checkpoint updates
+                    if completed_count % checkpoint_interval == 0 or completed_count == cat_count:
+                        save_checkpoint(checkpoint_file, completed_ids)
+                        logger.info(f"Checkpoint saved: {completed_count}/{cat_count} categories completed")
+                    
             except Exception as exc:
                 logger.error(f"Category {cat['id']} generated an exception: {exc}")
+        
+        # Final checkpoint save
+        save_checkpoint(checkpoint_file, completed_ids)
 
     # Deduplicate
     unique_products = {p["id"]: p for p in all_products}.values()

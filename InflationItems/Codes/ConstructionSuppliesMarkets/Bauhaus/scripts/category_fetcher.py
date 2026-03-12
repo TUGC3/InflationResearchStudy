@@ -42,7 +42,7 @@ def fetch_categories(session=None):
         logger.error(f"Failed to fetch homepage for categories: {e}")
         return []
 
-    soup = BeautifulSoup(response.text, 'html.parser')
+    soup = BeautifulSoup(response.text, 'lxml')
     
     categories = {}
     
