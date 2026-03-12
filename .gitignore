@@ -23,6 +23,7 @@ build/
 .venv
 env/
 venv/
+.conda
 
 # Jupyter
 .ipynb_checkpoints/
