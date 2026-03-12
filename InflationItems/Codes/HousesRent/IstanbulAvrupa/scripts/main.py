@@ -1,47 +1,88 @@
 """
-main.py — Istanbul Avrupa Rent Scraper — CLI entry point & orchestrator
+Istanbul Avrupa Rent Scraper - Main Entry Point and Orchestration Layer
 ========================================================================
 
-This module is the top-level entry point for the Istanbul Avrupa rent scraper.
-It orchestrates bracket extraction, scraper iteration, checkpoint management,
-and terminal logging.
+This module serves as the primary interface for the Istanbul European side rental
+listing scraper, providing comprehensive CLI functionality and coordinating all
+scraping operations through a sophisticated browser automation architecture.
 
-Pipeline
---------
-1. **Adaptive bracket discovery** — ``scraper.scrape_and_resolve()`` probes
-   the listing count for wide price ranges and recursively splits them until
-   every leaf bracket is safely under the limit.
-2. **Page scraping** — ``scraper.scrape_leaf_bracket()`` iterates over the
-   pages of safe brackets, extracting listing records.
-3. **Checkpoint loading** — when ``--resume`` is passed, today's checkpoint
-   file is loaded, and already-completed brackets and cached resolutions are
-   re-used to skip redunant work.
-4. **Incremental saving** — product data and checkpoint state are written to
-   disk incrementally after safe boundaries.
+Core Responsibilities
+----------------------
+- Command-line argument parsing and validation
+- Adaptive price bracket discovery coordination
+- Selenium-based browser automation management
+- Checkpoint-based session management and resume capability
+- CSV data export with standardized formatting
+- Interactive CAPTCHA handling workflow
 
-Output files
-------------
-All paths are configured in ``config.py`` and derived from the project structure.
+Execution Pipeline
+-----------------
+1. Adaptive Bracket Discovery: Probes listing counts and recursively splits price ranges
+2. Checkpoint Management: Loads previous session state when resume mode is enabled
+3. Browser Initialization: Configures Selenium with stealth settings and persistent profiles
+4. Bracket Processing: Iterates through safe price brackets with pagination
+5. Data Extraction: Parses HTML content to extract rental listing information
+6. Incremental Persistence: Saves data and checkpoints during scraping process
 
-    InflationItems/Datas/HousesRent/IstanbulAvrupa/IstanbulAvrupa_<DATE>.csv
-    InflationItems/Codes/HousesRent/IstanbulAvrupa/checkpoints/checkpoint_<DATE>.json
+Adaptive Algorithm
+-----------------
+The system implements a sophisticated algorithm to overcome sahibinden.com's
+1,000 listing limit per query:
 
-Usage examples
+- **Initial Seed Ranges**: Five wide price ranges covering the full market spectrum
+- **Recursive Splitting**: Binary division of ranges exceeding the listing threshold
+- **Optimal Bracket Generation**: Creates safe brackets under the 1,000 listing limit
+- **Efficient Caching**: Stores resolved boundaries for faster resume operations
+
+Browser Automation Features
+---------------------------
+- **Selenium Integration**: Full browser automation with undetected-chromedriver
+- **CAPTCHA Handling**: Interactive prompts for manual challenge resolution
+- **Profile Persistence**: Saves browser state and cookies between sessions
+- **Anti-Detection**: Stealth mode configuration to avoid bot detection
+
+Output Management
+-----------------
+All file paths are resolved relative to the config.py location, ensuring
+consistent operation regardless of execution directory:
+
+- CSV Export: UTF-8 formatted rental listing data
+- Checkpoint Files: Daily session state for resume capability
+- Selenium Profile: Persistent browser state storage
+
+CLI Interface
+-------------
+The module provides comprehensive command-line options including:
+- Delay configuration for page load timing
+- Bracket limiting for testing and development
+- Session management (resume functionality)
+- Debug mode with verbose logging
+
+Usage Examples
 --------------
-  # Full scrape (starts fresh)
-  python main.py
+```bash
+# Full scrape with default settings
+python main.py
 
-  # Resume an interrupted run (skips already-done brackets)
-  python main.py --resume
+# Custom page load delay for rate limiting
+python main.py --delay 4.0
 
-  # Limit number of leaf brackets (useful for quick testing)
-  python main.py --limit-brackets 3
+# Limited scrape for testing (3 brackets only)
+python main.py --limit-brackets 3
 
-  # Slow down page requests
-  python main.py --delay 4.0
+# Resume interrupted session
+python main.py --resume
 
-  # Enable verbose / debug-level logging
-  python main.py -v
+# Enable debug logging for troubleshooting
+python main.py -v
+```
+
+Data Schema
+-----------
+Extracted rental listings contain:
+- District: District or neighborhood name
+- Rooms: Room count specification (raw from listing)
+- Price: Monthly rent amount (raw from site)
 """
 
 import argparse

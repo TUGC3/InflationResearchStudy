@@ -1,20 +1,118 @@
 """
-scraper.py — Core scraping logic for the Istanbul Avrupa rent scraper.
-======================================================================
+Istanbul Avrupa Rent Scraper - Core Scraping Logic Module
+=========================================================
 
-Adaptive bracket splitting
---------------------------
-Sahibinden.com caps search results at 1 000 listings per query. To capture
-all data, the scraper works with price-range brackets:
+This module implements the sophisticated scraping algorithms for Istanbul's European
+side rental listings, featuring adaptive price bracket splitting, Selenium-based
+browser automation, and comprehensive data extraction with CAPTCHA handling.
 
-  scrape_and_resolve()  peeks at the total listing count for a given range.
-  If the count exceeds 1 000, it splits the range in half and recurses. When
-  the count is safe, it scrapes all pages immediately using the already-loaded
-  page 1 — so every URL is fetched exactly once.
+Core Algorithms
+---------------
 
-  scrape_leaf_bracket()  scrapes a single bracket whose price bounds are
-  already known to be safe (used on --resume when the bracket list has been
-  cached from a previous run, avoiding any resolution overhead).
+Adaptive Bracket Splitting Algorithm
+------------------------------------
+Sahibinden.com enforces a strict limit of 1,000 listings per query (20 pages × 50 listings).
+To capture complete market data, the scraper implements an intelligent bracket splitting
+strategy:
+
+scrape_and_resolve() -> tuple[list[dict], list[dict]]
+    Recursive algorithm that probes listing counts for price ranges and splits them
+    until all brackets fall safely under the 1,000 listing threshold.
+
+Algorithm Steps:
+1. **Range Probing**: Query wide price ranges to determine listing density
+2. **Count Analysis**: Extract total listing count from page 1 results
+3. **Recursive Splitting**: Divide ranges exceeding 1,000 listings in half
+4. **Optimal Generation**: Create "safe" leaf brackets under the threshold
+5. **Efficient Scraping**: Use already-loaded page 1 for immediate scraping
+
+scrape_leaf_bracket() -> list[dict]
+    Scrapes a single safe bracket with known price boundaries, handling pagination
+    and data extraction without additional resolution overhead.
+
+Browser Automation Features
+---------------------------
+Selenium Integration
+- undetected-chromedriver for stealth operation
+- Persistent browser profiles for session continuity
+- Automatic ChromeDriver version management
+- Headless mode support for server deployment
+
+CAPTCHA Handling Workflow
+- Interactive detection of CAPTCHA challenges and login walls
+- User notification with clear instructions
+- Manual resolution through Chrome browser interface
+- Automatic verification of successful page loading
+
+Data Extraction Strategy
+------------------------
+Listing Data Sources
+1. **Search Results Page**: Main listing grid with rental properties
+2. **Listing Cards**: Individual property cards with key information
+3. **Pagination Controls**: Navigation elements for multi-page results
+
+Data Fields Extracted
+- District: Neighborhood or district name
+- Rooms: Room count specification (raw format)
+- Price: Monthly rent amount (raw from site)
+
+Performance Features
+-------------------
+- **Memory Efficiency**: Streaming HTML processing with lxml
+- **Connection Reuse**: Persistent browser sessions across requests
+- **Incremental Saving**: Progressive CSV writing during scraping
+- **Checkpoint Integration**: Session state management for resume capability
+
+Error Handling & Recovery
+-------------------------
+- **Browser Crashes**: Automatic restart with session recovery
+- **Network Issues**: Retry logic with exponential backoff
+- **CAPTCHA Events**: Graceful pausing with user notification
+- **Data Validation**: Malformed listing filtering with logging
+
+Session Management
+-----------------
+Browser Profile Persistence
+- SeleniumProfile directory stores browser state
+- Cookie preservation across sessions
+- Login state maintenance when available
+- Cache utilization for performance optimization
+
+Checkpoint Integration
+---------------------
+The module integrates tightly with the checkpoint system:
+- Resolved bracket caching for faster resume operations
+- Completed bracket tracking for incremental progress
+- Session state persistence across browser restarts
+- Efficient resumption without redundant work
+
+Configuration Dependencies
+------------------------
+The module relies on config.py for:
+- Seed price ranges for initial bracket generation
+- Rate limiting parameters for server compatibility
+- Path configurations for data export
+- Browser settings and profile locations
+
+Usage Patterns
+--------------
+```python
+# Full scraping with adaptive bracket discovery
+brackets, listings = scrape_and_resolve()
+
+# Resume operation with cached brackets
+brackets, listings = scrape_and_resolve(resume=True)
+
+# Direct scraping of known safe brackets
+listings = scrape_leaf_bracket(bracket)
+```
+
+Technical Architecture
+----------------------
+- **Single-threaded Design**: Browser automation requires sequential processing
+- **Memory Optimization**: Efficient DOM parsing and data extraction
+- **Error Resilience**: Comprehensive exception handling and recovery
+- **Modular Design**: Clear separation of bracket resolution and scraping logic
 """
 
 import csv
