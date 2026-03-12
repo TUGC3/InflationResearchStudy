@@ -1,11 +1,94 @@
 """
-main.py — Bauhaus Scraper Orchestrator
+Bauhaus Türkiye Product Scraper - Main Entry Point and Orchestration Layer
+==========================================================================
 
-This script drives the entire Bauhaus scraping process. It discovers all categories,
-filters out those that were already completed (if `--resume` is used), sets up
-a ThreadPoolExecutor to scrape multiple categories simultaneously, saves incremental
-checkpoints to prevent data loss on crashes, deduplicates the final dataset,
-saves the output to CSV/JSON, and finally triggers the inflation calculation module.
+This module serves as the primary interface for the Bauhaus product scraping system,
+providing comprehensive CLI functionality and coordinating all scraping operations
+through a high-performance, multi-threaded architecture.
+
+Core Responsibilities
+----------------------
+- Command-line argument parsing and validation
+- HTML navigation-based category discovery coordination
+- Parallel product extraction using ThreadPoolExecutor
+- Incremental data persistence and batched checkpoint management
+- Cross-category product deduplication
+- CSV data export with standardized formatting
+
+Execution Pipeline
+-----------------
+1. Category Discovery: Parses homepage HTML navigation to extract complete taxonomy
+2. Checkpoint Management: Loads previous session state when resume mode is enabled
+3. Parallel Processing: Dispatches categories to worker threads with optimized sessions
+4. Batched Persistence: Saves data and checkpoints every 5 categories for performance
+5. Data Deduplication: Removes duplicate products across category boundaries
+6. Export Generation: Creates CSV output file with UTF-8 BOM formatting
+
+Performance Architecture
+------------------------
+- lxml parser for 3-5x faster HTML processing compared to default parsers
+- CSS selectors for efficient DOM traversal and element extraction
+- HTTP session reuse across categories for connection pooling
+- Batched I/O operations to reduce filesystem overhead
+- Adaptive rate limiting to prevent detection while optimizing speed
+
+Threading Model
+---------------
+- ThreadPoolExecutor manages concurrent category processing
+- Each worker maintains an independent requests.Session object
+- Configurable worker count (default: 2) for performance tuning
+- Batched checkpoint writing reduces I/O contention
+
+Optimization Features
+---------------------
+The scraper implements six key performance optimizations:
+1. **lxml Parser**: High-performance XML/HTML processing
+2. **CSS Selectors**: Efficient DOM element targeting
+3. **Session Reuse**: Persistent HTTP connections
+4. **Batched Checkpoints**: Reduced I/O overhead (every 5 categories)
+5. **String Optimization**: Efficient price cleaning operations
+6. **Adaptive Rate Limiting**: Intelligent request timing
+
+Output Management
+-----------------
+All file paths are resolved relative to the config.py location, ensuring
+consistent operation regardless of execution directory:
+
+- CSV Export: UTF-8 with BOM formatting for Excel compatibility
+- Checkpoint Files: Daily session state for resume capability
+
+CLI Interface
+-------------
+The module provides comprehensive command-line options including:
+- Category listing and selective scraping
+- Performance tuning (workers, delays, limits)
+- Session management (resume functionality)
+- Debug mode with verbose logging
+
+Usage Examples
+--------------
+```bash
+# List all available categories
+python main.py --list-categories
+
+# Scrape single category for testing
+python main.py --category bauhaus-oto --limit 2
+
+# Full catalog extraction with default settings
+python main.py
+
+# Parallel processing with custom worker count
+python main.py --workers 4
+
+# Rate-limited scraping with custom delay
+python main.py --delay 3.0
+
+# Resume interrupted session
+python main.py --resume
+
+# Enable debug logging
+python main.py --category bauhaus-oto -v
+```
 """
 
 import sys
@@ -67,9 +150,7 @@ def save_csv(products, out_path):
         writer = csv.DictWriter(f, fieldnames=fieldnames)
         writer.writeheader()
         writer.writerows(products)
-    logger.info(f"Saved {len(products)} products to {out_path}")
-
-    logger.info(f"Saved {len(products)} products to {out_path}")
+    logger.info(f"✅ Saved {len(products)} products")
 
 def load_checkpoint(cp_path):
     """
@@ -124,14 +205,14 @@ def main():
     logging.basicConfig(
         level=logging.DEBUG if args.verbose else logging.INFO,
         format='%(asctime)s [%(levelname)s] %(message)s',
-        datefmt='%Y-%m-%d %H:%M:%S'
+        datefmt='%H:%M:%S'
     )
     
     config.REQUEST_DELAY = args.delay
 
     cats = category_fetcher.fetch_categories()
     if not cats:
-        logger.error("Failed to load categories.")
+        logger.error("✗  Failed to load categories.")
         sys.exit(1)
 
     if args.list_categories:
@@ -143,7 +224,7 @@ def main():
     if args.category:
         cats = [c for c in cats if c["id"] == args.category]
         if not cats:
-            logger.error(f"Category {args.category} not found.")
+            logger.error(f"✗  Category '{args.category}' not found.")
             sys.exit(1)
 
     date_str = datetime.now().strftime("%Y-%m-%d")
@@ -152,13 +233,13 @@ def main():
     completed_ids = set()
     if args.resume:
         completed_ids = load_checkpoint(checkpoint_file)
-        logger.info(f"Resuming with {len(completed_ids)} categories already completed.")
+        logger.info(f"↩  Resuming: {len(completed_ids)} categories already completed.")
 
     all_products = []
     
     cats_to_scrape = [c for c in cats if c["id"] not in completed_ids]
     cat_count = len(cats_to_scrape)
-    logger.info(f"Beginning scrape for {cat_count} categories using {args.workers} workers...")
+    logger.info(f"▶  Scraping {cat_count} categor{'y' if cat_count == 1 else 'ies'} with {args.workers} worker(s)…")
 
     # For thread safety of checking checkpoints
     # Though set operations in python are thread safe, saving is not. 
@@ -168,6 +249,9 @@ def main():
     completed_count = 0
     count_lock = threading.Lock()
     checkpoint_interval = 5  # Save checkpoint every 5 categories
+    
+    import time
+    start_time = time.time()
 
     # Create sessions for each worker
     worker_sessions = [product_fetcher.create_session() for _ in range(args.workers)]
@@ -188,21 +272,31 @@ def main():
                 
                 with count_lock:
                     completed_count += 1
-                    logger.info(f"[{completed_count}/{cat_count}] Merged {len(cat_prods)} products from {cat['name']}")
+                    logger.info(f"✓  Category '{cat['name']}': +{len(cat_prods)} products (total: {len(all_products)})")
                     
                     # Batch checkpoint updates
                     if completed_count % checkpoint_interval == 0 or completed_count == cat_count:
                         save_checkpoint(checkpoint_file, completed_ids)
-                        logger.info(f"Checkpoint saved: {completed_count}/{cat_count} categories completed")
+                        logger.info(f"💾 Checkpoint saved: {completed_count}/{cat_count} categories completed")
                     
             except Exception as exc:
-                logger.error(f"Category {cat['id']} generated an exception: {exc}")
+                logger.error(f"✗  Category '{cat['id']}' failed: {exc}")
         
         # Final checkpoint save
         save_checkpoint(checkpoint_file, completed_ids)
 
+    # Calculate elapsed time
+    elapsed_time = time.time() - start_time
+    logger.info("Scraping completed in %.1f seconds (%.1f min)", elapsed_time, elapsed_time / 60)
+    
     # Deduplicate
-    unique_products = {p["id"]: p for p in all_products}.values()
+    before_count = len(all_products)
+    unique_products = list({p["id"]: p for p in all_products}.values())
+    after_count = len(unique_products)
+    
+    if before_count > after_count:
+        logger.info(f"Running final deduplication…")
+        logger.info(f"Removed {before_count - after_count} duplicate records. Final count: {after_count}")
     
     # Save Outputs
     if not os.path.exists(config.OUTPUT_DIR):
@@ -212,15 +306,17 @@ def main():
     csv_path = os.path.join(config.OUTPUT_DIR, f"{base_name}.csv")
 
     save_csv(unique_products, csv_path)
+    logger.info("Done! ✓  Total unique products: %d", after_count)
+    logger.info("Output → %s", csv_path)
 
     if inflation:
         logger.info("Calculating inflation metrics...")
         try:
             inflation.calculate_inflation()
         except Exception as e:
-            logger.error(f"Failed to calculate inflation: {e}")
+            logger.error(f"✗  Failed to calculate inflation: {e}")
     else:
-        logger.warning("Skipping inflation calculation because the module could not be imported.")
+        logger.warning("⚠  Skipping inflation calculation (module not imported).")
 
 if __name__ == "__main__":
     main()

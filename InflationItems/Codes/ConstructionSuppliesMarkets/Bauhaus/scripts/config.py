@@ -1,10 +1,102 @@
 """
-config.py — Bauhaus scraper configuration settings.
+Bauhaus Scraper Configuration Module
+==================================
 
-This module defines the constants, headers, paths, and delay settings used
-by the Bauhaus scraper pipeline. It centralized all configuration so that
-the scraper components (category_fetcher, product_fetcher, main) can reference
-a single source of truth.
+This module serves as the centralized configuration repository for the Bauhaus
+product scraping system, providing all constants, headers, performance settings,
+and path management functionality optimized for high-speed operation.
+
+Configuration Sections
+----------------------
+HTTP Request Configuration
+    Headers, authentication parameters, and request settings required
+    for successful website communication
+
+Performance Parameters
+    Tunable knobs that control request rate, retry behavior, concurrency,
+    and rate limiting settings optimized for speed
+
+Path Management
+    Computed file paths for data exports, checkpoints, and session storage
+    relative to the configuration file location
+
+Request Configuration
+---------------------
+DEFAULT_HEADERS: dict
+    Realistic browser headers for anti-detection:
+    - Chrome-based User-Agent for compatibility
+    - Standard accept headers for proper content negotiation
+    - Turkish language preference for localized content
+
+Base URL Configuration
+----------------------
+BASE_URL: str
+    Root domain for Bauhaus e-commerce platform
+
+Performance Parameters
+---------------------
+REQUEST_DELAY: float (default: 2.0 seconds)
+    Base delay between paginated requests with random jitter applied
+
+JITTER_RANGE: tuple (default: (1.0, 2.0))
+    Random multiplier range applied to base delay for request distribution
+
+MAX_RETRIES: int (default: 5)
+    Maximum retry attempts for failed HTTP requests before skipping
+
+RETRY_BACKOFF: float (default: 3.0 seconds)
+    Seed value for exponential backoff calculation (actual wait = seed × attempt)
+
+DEFAULT_WORKERS: int (default: 2)
+    Thread pool size for parallel category processing
+
+Path Resolution
+--------------
+All paths are computed relative to this configuration file to ensure
+consistent operation regardless of execution directory:
+
+OUTPUT_DIR: str
+    Target directory for CSV data exports
+
+CHECKPOINT_DIR: str
+    Storage location for daily session checkpoint files
+
+Performance Optimization Features
+----------------------------------
+Configuration supports the six key optimizations:
+- lxml parser integration for fast HTML processing
+- CSS selector targeting for efficient DOM traversal
+- Session reuse for connection pooling
+- Batched checkpoint writing (every 5 categories)
+- String optimization for price cleaning
+- Adaptive rate limiting for intelligent timing
+
+Daily File Naming
+----------------
+Files use YYYY-MM-DD format for daily organization:
+- CSV Export: bauhaus_YYYY-MM-DD.csv
+- Checkpoint: bauhaus_checkpoint_YYYY-MM-DD.json
+
+Directory Structure
+------------------
+Paths are automatically computed relative to project structure:
+- Scripts directory location detection
+- Project root path resolution
+- Output directory creation if needed
+- Checkpoint directory management
+
+Import Usage
+-------------
+Import with 'import config' from any sibling script. All constants are
+available as config.CONSTANT_NAME for easy reference throughout the scraper.
+
+Performance Tuning
+------------------
+The configuration is optimized for:
+- Maximum throughput while maintaining server compatibility
+- Minimal memory footprint during operation
+- Efficient file I/O with batched operations
+- Robust error recovery with exponential backoff
 """
 
 import os

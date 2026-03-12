@@ -1,9 +1,97 @@
 """
-config.py — Single source of truth for Koton Türkiye scraper configurations
-=============================================================================
+Koton Scraper Configuration Module
+==================================
 
-This module contains all constants, settings, and file paths used across
-the scraper. It contains no execution logic, only declarations.
+This module serves as the centralized configuration repository for the Koton
+product scraping system, providing all constants, settings, User-Agent pools,
+and path management functionality.
+
+Configuration Sections
+----------------------
+Base URLs and Endpoints
+    Root domain and category URL definitions for all scraper operations
+
+User-Agent Management
+    Rotating pool of realistic browser signatures for anti-detection
+
+Scraping Parameters
+    Performance tuning parameters including delays, retries, concurrency,
+    and rate limiting settings
+
+Path Management
+    Computed file paths for data exports, checkpoints, and session storage
+    relative to the configuration file location
+
+Anti-Detection Configuration
+---------------------------
+User-Agent Pool
+- 7 realistic browser signatures covering Chrome, Firefox, Safari, and Edge
+- Multiple operating systems (Windows, macOS, Linux, Android)
+- Per-thread assignment for consistent fingerprinting
+- Rotation strategy to distribute request patterns
+
+Base URL Configuration
+----------------------
+BASE_URL: str
+    Root domain for Koton e-commerce platform
+
+Category Sitemap URL
+------------------
+CATEGORY_SITEMAP_URL: str
+    AWS S3 endpoint for compressed XML sitemap containing complete taxonomy
+
+Performance Parameters
+---------------------
+REQUEST_DELAY: float (default: 2.0 seconds)
+    Base delay between paginated requests with random jitter applied
+
+MAX_RETRIES: int (default: 5)
+    Maximum retry attempts for failed HTTP requests before skipping
+
+RETRY_BACKOFF: float (default: 3.0 seconds)
+    Seed value for exponential backoff calculation (actual wait = seed × attempt)
+
+RATE_LIMIT_BACKOFF: float (default: 60.0 seconds)
+    Minimum explicit delay when 429/403 responses are received
+
+DEFAULT_WORKERS: int (default: 1)
+    Thread pool size for parallel category processing
+
+JITTER_RANGE: tuple (default: (0.5, 1.5))
+    Random multiplier range applied to base delay for request distribution
+
+Path Resolution
+--------------
+All paths are computed relative to this configuration file to ensure
+consistent operation regardless of execution directory:
+
+OUTPUT_DIR: str
+    Target directory for CSV data exports
+
+CHECKPOINT_DIR: str
+    Storage location for daily session checkpoint files
+
+Daily File Naming
+----------------
+Files use YYYY-MM-DD format for daily organization:
+- CSV Export: koton_YYYY-MM-DD.csv
+- Checkpoint: koton_checkpoint_YYYY-MM-DD.json
+
+User-Agent Specifications
+------------------------
+The User-Agent pool includes:
+- Chrome on macOS (latest version)
+- Chrome on Windows (latest version)
+- Firefox on Windows (latest version)
+- Firefox on Linux (latest version)
+- Safari on macOS (latest version)
+- Edge on Windows (latest version)
+- Chrome on Android (mobile version)
+
+Import Usage
+-------------
+Import with 'import config' from any sibling script. All constants are
+available as config.CONSTANT_NAME for easy reference throughout the scraper.
 """
 
 # ── Base URLs ────────────────────────────────────────────────────────────────

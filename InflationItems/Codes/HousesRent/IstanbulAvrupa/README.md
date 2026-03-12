@@ -1,15 +1,39 @@
 # Istanbul Avrupa Rent Scraper
 
-A Python tool to scrape residential rental listings for **Istanbul's European side** from [sahibinden.com](https://www.sahibinden.com).
+A Python-based web scraping system that systematically extracts residential rental listings for **Istanbul's European side** from [sahibinden.com](https://www.sahibinden.com) using Selenium-based browser automation and adaptive price bracket splitting.
 
-## Features
+## Architecture Overview
 
-- 🗂️ Discovers **all price brackets** automatically using adaptive splitting
-- 📄 **Pagination** handled seamlessly — fetches every page per bracket
-- ♻️ **Resume support** — restart an interrupted run without re-scraping completed brackets
-- ⏱️ Configurable **rate limiting** with per-request jitter to avoid detection
-- 🛡️ Interactive **CAPTCHA handling** — alerts user and waits for manual solving
-- 💾 Output as **CSV**, named with today's date
+The scraper implements a modular architecture with three core components:
+
+- **`main.py`** - CLI interface and orchestration controller
+- **`scraper.py`** - Core scraping logic with bracket splitting and page parsing
+- **`config.py`** - Centralized configuration and constants management
+
+## Core Functionality
+
+### Adaptive Bracket Discovery
+
+Implements an intelligent algorithm to overcome sahibinden.com's 1,000 listing limit per query:
+
+- **Initial Range Definition**: 5 wide seed price ranges (0-20,000 TL)
+- **Recursive Splitting**: Automatically divides ranges exceeding 1,000 listings
+- **Optimal Bracket Generation**: Creates "safe" leaf brackets under the limit
+- **Efficient Caching**: Stores resolved boundaries for faster restart
+
+### Browser Automation
+
+- **Selenium Integration**: Full browser automation with undetected-chromedriver
+- **CAPTCHA Handling**: Interactive prompts for manual CAPTCHA resolution
+- **Persistent Profiles**: Saves browser state and cookies between sessions
+- **Anti-Detection**: Stealth mode to avoid bot detection mechanisms
+
+### Data Extraction
+
+- **Real-time Parsing**: BeautifulSoup-based HTML parsing from live browser content
+- **Listing Normalization**: Structured data extraction from rental listings
+- **Incremental Saving**: Progressive CSV writing during scraping process
+- **Session Persistence**: Checkpoint-based resume capability
 
 ## Project Structure
 
@@ -57,114 +81,246 @@ main.py
           Caches resolved bounds for faster restart.
 ```
 
-## Output Fields
+## Data Schema
 
-| Field      | Type   | Description                   |
-| ---------- | ------ | ----------------------------- |
-| `District` | string | District / neighbourhood      |
-| `Rooms`    | string | Room count (raw from listing) |
-| `Price`    | string | Monthly rent (raw from site)  |
+The scraper extracts rental listing information with the following structure:
 
-## Setup
+| Field      | Type   | Description                                 |
+| ---------- | ------ | ------------------------------------------- |
+| `District` | string | District or neighborhood name               |
+| `Rooms`    | string | Room count specification (raw from listing) |
+| `Price`    | string | Monthly rent amount (raw from site)         |
+
+## Installation & Setup
+
+### Prerequisites
+
+- Python 3.8 or higher
+- Virtual environment (recommended)
+- Chrome browser (required for Selenium)
+
+### Installation Steps
 
 ```bash
-# 1. Go to the project root
+# Navigate to project root
 cd InflationResearchStudy
 
-# 2. Create a virtual environment (recommended)
+# Create virtual environment
 python3 -m venv venv
-source venv/bin/activate
+source venv/bin/activate  # macOS/Linux
+# venv\Scripts\activate     # Windows
 
-# 3. Install dependencies
+# Install dependencies
 pip install -r InflationItems/Codes/HousesRent/IstanbulAvrupa/requirements.txt
 ```
 
-> Chrome must be installed. The `undetected-chromedriver` version is pinned in `scraper.py` (`version_main=145`).
+### Dependencies
 
-## Usage
+- `beautifulsoup4` - HTML parsing library
+- `lxml` - XML parser for efficient HTML processing
+- `undetected-chromedriver` - Stealth Chrome driver for anti-detection
+- `selenium` - Browser automation framework
+- `tqdm` - Progress bar visualization
 
-Run all commands from inside the `scripts/` directory:
+### Browser Requirements
+
+- Chrome browser must be installed on the system
+- `undetected-chromedriver` automatically manages ChromeDriver compatibility
+- SeleniumProfile directory stores persistent browser state
+
+## Operation Guide
+
+### Execution Requirements
+
+All commands must be executed from the `scripts/` directory:
 
 ```bash
 cd InflationItems/Codes/HousesRent/IstanbulAvrupa/scripts
+```
 
-# Full scrape (starts fresh, clears today's CSV if it exists)
+### Command Line Interface
+
+#### Full Dataset Extraction
+
+```bash
+# Complete scrape with default settings
 python main.py
 
-# Resume an interrupted run (skips already-completed brackets)
-python main.py --resume
+# Custom page load delay
+python main.py --delay 4.0
+```
 
-# Quick smoke-test — scrape only the first 3 brackets
+#### Testing & Development
+
+```bash
+# Limited scrape for testing (3 brackets only)
 python main.py --limit-brackets 3
 
-# Increase per-page wait time (default: 2.5 s)
-python main.py --delay 4.0
-
-# Verbose debug output
+# Verbose logging for debugging
 python main.py -v
 ```
 
-### CLI Reference
+#### Session Management
 
-| Argument             | Default         | Description                                                    |
-| -------------------- | --------------- | -------------------------------------------------------------- |
-| `--delay SECONDS`    | `2.5`           | Per-page wait time in seconds. Actual waits are ±50% jittered. |
-| `--limit-brackets N` | `0` (unlimited) | Stop after scraping N leaf brackets. Useful for testing.       |
-| `--resume`           | —               | Skip brackets already completed in today’s checkpoint.         |
-| `-v` / `--verbose`   | —               | Enable DEBUG-level logging.                                    |
-
-## How It Works
-
-### Adaptive Bracket Splitting
-
-sahibinden.com caps results at **1,000 listings** per query (20 pages of 50).
-To capture all data across high-density areas like Istanbul, the scraper uses adaptive bracket splitting:
-
-1. It starts with wide **Seed Ranges** (e.g., 0 – 20,000 TL).
-2. For each range, it loads page 1 and reads the total listing count.
-3. If the count exceeds 1,000, it splits the range in half and recurses.
-4. Once a range is safe (≤ 1,000 listings), it scrapes all pages immediately using the already-loaded page 1 — no URL is ever fetched twice.
-
-### Resume Support
-
-Progress is tracked in a checkpoint file:
-
-```
-InflationItems/Codes/HousesRent/IstanbulAvrupa/checkpoints/checkpoint_<DATE>.json
+```bash
+# Resume interrupted scraping session
+python main.py --resume
 ```
 
-The checkpoint stores both the list of **completed brackets** and the full **resolved bracket list** from the current day. When `--resume` is used and the bracket list is present, the scraper skips all listing-count checks and jumps straight to scraping the remaining brackets.
+### CLI Parameters
 
-### CAPTCHA Handling
+| Parameter            | Default         | Description                              |
+| -------------------- | --------------- | ---------------------------------------- |
+| `--delay SECONDS`    | `2.5`           | Per-page wait time (±50% jittered)       |
+| `--limit-brackets N` | `0` (unlimited) | Stop after N leaf brackets (for testing) |
+| `--resume`           | N/A             | Skip completed brackets from checkpoint  |
+| `-v, --verbose`      | N/A             | Enable debug-level logging               |
 
-If a CAPTCHA or login wall is detected:
+### Output Files
 
-1. The scraper pauses and alerts you in the terminal.
-2. Solve the challenge manually in the Chrome window.
-3. Press **ENTER** in the terminal once the listings are visible.
+| File Path                                                                           | Description           |
+| ----------------------------------------------------------------------------------- | --------------------- |
+| `InflationItems/Datas/HousesRent/IstanbulAvrupa/IstanbulAvrupa_<DATE>.csv`          | CSV dataset (UTF-8)   |
+| `InflationItems/Codes/HousesRent/IstanbulAvrupa/checkpoints/checkpoint_<DATE>.json` | Resume state tracking |
 
-The scraper re-checks after each ENTER press and will prompt again if the page has not fully loaded yet.
+File paths are automatically resolved relative to the script location.
 
-## Configuration
+## Configuration Management
 
-Edit `scripts/config.py` to customise behaviour:
+### Core Settings
 
-| Setting                  | Default       | Description                                                 |
-| ------------------------ | ------------- | ----------------------------------------------------------- |
-| `SEED_RANGES`            | 5 wide ranges | Starting price ranges for bracket splitting                 |
-| `MAX_LISTINGS_PER_QUERY` | `1000`        | Listing count threshold that triggers a split               |
-| `MIN_BRACKET_WIDTH`      | `50` TL       | Prevents infinite splits when many listings share one price |
-| `PAGE_LOAD_DELAY`        | `2.5` s       | Base wait after each page loads (also `--delay`)            |
-| `BETWEEN_BRACKET_DELAY`  | `1.0 – 2.0` s | Random delay between bracket splits                         |
+Configuration parameters are centralized in `scripts/config.py`:
 
-## Developer Notes
+| Parameter                | Default           | Function                                         |
+| ------------------------ | ----------------- | ------------------------------------------------ |
+| `SEED_RANGES`            | 5 wide ranges     | Initial price ranges for adaptive splitting      |
+| `MAX_LISTINGS_PER_QUERY` | `1000`            | Threshold triggering bracket division            |
+| `MIN_BRACKET_WIDTH`      | `50` TL           | Minimum bracket width to prevent infinite splits |
+| `PAGE_LOAD_DELAY`        | `2.5` seconds     | Base wait time after page loads                  |
+| `BETWEEN_BRACKET_DELAY`  | `1.0-2.0` seconds | Random delay between bracket operations          |
 
-The scraper logic is compartmentalized:
+### City Configuration
 
-- **`config.py`** — single source of truth for all constants and file paths. No logic.
-- **`scraper.py`** — core logic utilizing BeautifulSoup and undetected_chromedriver for HTML interaction, parsing, and caching.
-- **`main.py`** — CLI orchestrator combining bracket retrieval, terminal logging, and state checkpointing.
+- **City URL Name**: `istanbul-avrupa` for URL construction
+- **Folder Name**: `IstanbulAvrupa` for file path generation
+- **Target Area**: European side of Istanbul
+
+### Path Configuration
+
+All file paths are computed relative to the config file location:
+
+- `OUTPUT_DIR`: Target directory for CSV exports
+- `CHECKPOINT_DIR`: Location for session checkpoint files
+- `SELENIUM_PROFILE_DIR`: Persistent browser profile storage
+
+## Adaptive Bracket Algorithm
+
+### Algorithm Overview
+
+The scraper implements a sophisticated algorithm to overcome sahibinden.com's query limitations:
+
+1. **Initial Seed Ranges**: Five wide price ranges covering the market spectrum
+2. **Listing Count Detection**: Analyzes total listings per range from page 1
+3. **Recursive Splitting**: Divides ranges exceeding 1,000 listings
+4. **Optimal Bracket Generation**: Creates safe brackets under the threshold
+5. **Efficient Scraping**: Uses already-loaded page 1 for immediate scraping
+
+### Seed Range Configuration
+
+Default seed ranges cover the full price spectrum:
+
+- Range 1: 0 - 19,999 TL (High density, will trigger multiple splits)
+- Range 2: 20,000 - 39,999 TL (High density)
+- Range 3: 40,000 - 59,999 TL
+- Range 4: 60,000 - 99,999 TL
+- Range 5: 100,000 - 9,999,999 TL (Low density, likely won't split at all)
+
+### Splitting Logic
+
+- **Threshold**: 1,000 listings per query
+- **Strategy**: Binary splitting (divide range in half)
+- **Termination**: When range falls below threshold
+- **Safety Margin**: Prevents infinite splitting with minimum width
+
+## Browser Automation & CAPTCHA Handling
+
+### Selenium Configuration
+
+- **Driver**: undetected-chromedriver for stealth operation
+- **Profile Persistence**: Saves cookies and session state
+- **Version Management**: Automatic ChromeDriver version matching
+- **Headless Mode**: Optional for server operation
+
+### CAPTCHA Resolution Process
+
+When anti-bot measures are triggered:
+
+1. **Detection**: Scraper identifies CAPTCHA or login walls
+2. **Pause**: Automated pause with user notification
+3. **Manual Resolution**: User solves CAPTCHA in Chrome window
+4. **Resume**: User presses ENTER to continue scraping
+5. **Verification**: Scraper confirms page load before proceeding
+
+### Anti-Detection Measures
+
+- **Random Delays**: Jittered timing between requests
+- **Human-like Behavior**: Realistic browsing patterns
+- **Session Persistence**: Maintains login state across sessions
+- **Stealth Mode**: Undetectable Chrome driver configuration
+
+## Error Handling & Troubleshooting
+
+### Common Issues
+
+| Symptom              | Cause                        | Resolution                                           |
+| -------------------- | ---------------------------- | ---------------------------------------------------- |
+| CAPTCHA频繁出现      | Aggressive scraping patterns | Increase `--delay`; reduce concurrent operations     |
+| Chrome driver errors | Browser version mismatch     | Update Chrome; verify undetected-chromedriver        |
+| Empty output files   | Page structure changes       | Verify CSS selectors in scraper.py                   |
+| Resume failure       | Checkpoint file corruption   | Delete checkpoint; restart fresh                     |
+| Browser crashes      | Memory/resource issues       | Reduce concurrent operations; check system resources |
+
+### Debug Mode
+
+Enable verbose logging with `-v` flag for detailed execution information:
+
+```bash
+python main.py -v
+```
+
+### Performance Optimization
+
+- **Memory Management**: Monitor browser memory usage
+- **Network Stability**: Ensure consistent internet connectivity
+- **Resource Allocation**: Sufficient system resources for Chrome
+- **Timing Optimization**: Adjust delays based on server response
+
+## Technical Architecture
+
+### Module Separation
+
+The scraper follows a modular design pattern:
+
+- **`config.py`** - Configuration constants, paths, and algorithm parameters
+- **`scraper.py`** - Core scraping logic with bracket splitting and browser automation
+- **`main.py`** - CLI orchestration and session management
+
+### Browser Integration
+
+- **Selenium WebDriver**: Full browser automation capabilities
+- **BeautifulSoup Integration**: HTML parsing from rendered content
+- **Profile Management**: Persistent browser state storage
+- **Error Recovery**: Automatic browser restart on crashes
+
+### Data Flow
+
+1. Adaptive bracket discovery and resolution
+2. Browser initialization and profile loading
+3. Sequential bracket processing with page scraping
+4. Real-time data extraction and normalization
+5. Incremental CSV writing and checkpointing
+6. Final dataset export and validation
 
 ---
 
-> **Disclaimer**: This tool is for educational / research purposes. Always respect `robots.txt` and the site's Terms of Service. Do not overload the server.
+**Technical Notice**: This tool is designed for research and data analysis purposes. Users must comply with applicable terms of service and rate limiting policies.

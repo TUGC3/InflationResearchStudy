@@ -1,32 +1,79 @@
 """
-product_fetcher.py — Fetches all products for a single Migros category.
-=======================================================================
+Migros Product Data Extraction Module
+=====================================
 
-Public API
-----------
-fetch_products_for_category(category, session=None, delay=…, page_limit=0)
-    Paginates through the Migros search API for the given category dict
-    (as returned by ``category_fetcher.fetch_categories``) and returns
-    every product as a normalised flat dict.
+This module handles comprehensive product data extraction from the Migros REST API
+for individual categories, including pagination, rate limiting, and data normalization.
 
-API parameter mapping
+Public Interface
+----------------
+fetch_products_for_category(category, session=None, delay=0.5, page_limit=0) -> list[dict]
+    Extracts all products from a specified category with pagination support.
+    Returns normalized product dictionaries with consistent field structure.
+
+API Parameter Mapping
 ---------------------
-The Migros REST search endpoint accepts two category-selection parameters:
+The Migros search endpoint accepts category selection through two parameters:
 
-``category-id`` (required)
-    The top-level category bucket.  Passed as ``parent_id`` when the
-    category has a parent, or as ``id`` for top-level fallback entries.
+category-id (required)
+    Top-level category bucket identifier. Passed as parent_id for subcategories
+    or as id for top-level fallback categories.
 
-``kategoriler`` (optional)
-    A sub-category filter discovered by the category fetcher from the API's
-    own ``aggregationGroups``.  Omitted when ``parent_id`` is ``None``.
+kategoriler (optional)
+    Subcategory filter discovered from API aggregation data. Omitted when
+    parent_id is None to indicate top-level scraping.
 
-Normalised product record
--------------------------
-Every raw product dict from the API is converted into a flat, consistent
-record by ``_parse_product``.  Prices are converted from kuruş (1/100 TL)
-to TL with two decimal places.  The image URL is resolved by priority:
-``PRODUCT_LIST`` > ``PRODUCT_DETAIL`` > ``PRODUCT_HD`` > first available.
+Pagination Strategy
+-------------------
+- Automatic detection of total pages from API response metadata
+- Sequential iteration through all available pages
+- Configurable page limits for testing and development
+- Rate limiting with jitter between requests to prevent detection
+
+Data Normalization
+------------------
+Raw API responses are converted to standardized product records:
+
+Price Processing
+- API returns prices in kuruş (1/100 TL)
+- Conversion to TL with two decimal place precision
+- Regular and shown prices processed independently
+- Discount rates calculated from price differences
+
+Image Resolution
+- Priority-based URL selection: PRODUCT_LIST > PRODUCT_DETAIL > PRODUCT_HD
+- Fallback to first available image if priorities fail
+- Full URL construction for reliable image access
+
+Product Fields
+-------------
+Each normalized product contains:
+- id: Unique product identifier
+- sku: SKU/barcode information
+- name: Product display name (Turkish)
+- brand: Manufacturer or brand name
+- category: Subcategory classification
+- regular_price: Standard retail price (TL)
+- shown_price: Current display price (TL)
+- discount_rate: Discount percentage (0 when none)
+- unit: Unit of measurement (GRAM, PIECE, etc.)
+- status: Availability status (IN_SALE, etc.)
+- image_url: Product image URL
+- product_url: Full product page URL
+
+Error Handling
+--------------
+- Network failures trigger exponential backoff retries
+- Invalid page responses are logged and skipped
+- Malformed product data is filtered with warnings
+- Rate limit detection triggers automatic delay increases
+
+Performance Features
+-------------------
+- Connection reuse through session persistence
+- Efficient JSON parsing with minimal memory overhead
+- Configurable rate limiting for server compatibility
+- Progress tracking for large category extraction
 """
 
 import random
@@ -290,7 +337,7 @@ def _fetch_with_retry(
                 return None
             wait = config.RETRY_BACKOFF * attempt
             logger.warning(
-                "Attempt %d failed (%s). Retrying in %ds…", attempt, exc, wait
+                "Attempt %d failed (%s). Retrying in %ds...", attempt, exc, wait
             )
             time.sleep(wait)
 

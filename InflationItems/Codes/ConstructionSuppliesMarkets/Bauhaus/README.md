@@ -1,18 +1,36 @@
 # Bauhaus Türkiye Product Scraper
 
-A Python tool to scrape all product data from [bauhaus.com.tr](https://www.bauhaus.com.tr) using HTML-based web scraping.
+A Python-based web scraping system that systematically extracts product data from [bauhaus.com.tr](https://www.bauhaus.com.tr) through optimized HTML parsing and CSS selector-based extraction.
 
-## Features
+## Architecture Overview
 
-- 🗂️ Discovers **~600 subcategories** automatically via HTML navigation parsing
-- 📄 **Pagination** handled seamlessly — fetches every page per category
-- 🔀 **Parallel scraping** with a configurable number of worker threads (`--workers`)
-- ⚡ **Performance optimized** with lxml parser, CSS selectors, and session reuse (35-55% faster)
-- 💾 Output as **CSV**, named with today's date
-- ♻️ **Resume support** — restart an interrupted run without re-scraping completed categories
-- ⏱️ **Adaptive rate limiting** with per-request jitter to avoid triggering rate limits
-- 🔄 Automatic **retry** with exponential back-off on failed or timeout requests
-- 🧹 Final **deduplication** pass removes any cross-category duplicate products
+The scraper implements a modular architecture with four core components:
+
+- **`main.py`** - CLI interface and orchestration controller
+- **`category_fetcher.py`** - HTML navigation-based category discovery
+- **`product_fetcher.py`** - Optimized product data extraction with lxml
+- **`config.py`** - Centralized configuration and constants management
+
+## Core Functionality
+
+### Category Discovery
+
+Automatically maps the complete product catalog by parsing the homepage HTML navigation structure. Extracts all category links following the `bauhaus-` URL pattern, currently identifying ~600 subcategories across all product departments.
+
+### Data Extraction
+
+- **Optimized Parsing**: lxml parser for 3-5x faster HTML processing
+- **CSS Selectors**: Efficient DOM traversal for product element extraction
+- **Session Management**: HTTP connection reuse across categories
+- **Adaptive Rate Limiting**: Intelligent delays to prevent detection
+- **Performance Optimization**: 35-55% speedup through multiple optimizations
+
+### Output Management
+
+- **CSV Export**: UTF-8 with BOM formatting for Excel compatibility
+- **Batched Checkpoints**: Reduced I/O overhead (saves every 5 categories)
+- **Deduplication**: Automatic removal of cross-category duplicate products
+- **Session Persistence**: Daily checkpoint files with completed category tracking
 
 ## Project Structure
 
@@ -62,140 +80,250 @@ main.py
   └─ 5. Final deduplication pass  →  CSV output file
 ```
 
-## Output Fields
+## Data Schema
 
-| Field           | Type   | Description                                      |
-| --------------- | ------ | ------------------------------------------------ |
-| `id`            | string | Unique product ID (SKU)                          |
-| `sku`           | string | SKU / barcode                                    |
-| `name`          | string | Product name (Turkish)                           |
-| `brand`         | string | Brand name                                       |
-| `category`      | string | Subcategory label                                |
-| `regular_price` | float  | Original shelf price in TL                       |
-| `shown_price`   | float  | Currently displayed price in TL                  |
-| `discount_rate` | int    | Discount percentage (0 when no active promotion) |
-| `unit`          | string | Unit of measurement (default: "PIECE")           |
-| `status`        | string | Availability status (default: "IN_SALE")         |
+The scraper extracts comprehensive product information with the following structure:
+
+| Field           | Type    | Description                               |
+| --------------- | ------- | ----------------------------------------- |
+| `id`            | string  | Unique product identifier (SKU)           |
+| `sku`           | string  | SKU or barcode number                     |
+| `name`          | string  | Product display name (Turkish)            |
+| `brand`         | string  | Manufacturer or brand name                |
+| `category`      | string  | Subcategory classification                |
+| `regular_price` | float   | Standard retail price (TRY)               |
+| `shown_price`   | float   | Current display price (TRY)               |
+| `discount_rate` | integer | Discount percentage (0 when no promotion) |
+| `unit`          | string  | Unit of measurement (default: "PIECE")    |
+| `status`        | string  | Availability status (default: "IN_SALE")  |
 
 ## Performance Optimizations
 
-This scraper includes 6 performance optimizations that achieve **35-55% speedup** without increasing request rate:
+The scraper implements six key optimizations achieving **35-55% performance improvement**:
 
-1. **lxml parser** - 3-5x faster HTML parsing vs default parser
-2. **CSS selectors** - Faster DOM traversal vs lambda-based selectors
-3. **Session reuse** - Reuses HTTP connections across categories
-4. **Batched checkpoints** - Reduces I/O overhead (saves every 5 categories)
-5. **String optimization** - Faster price cleaning with chained operations
-6. **Adaptive rate limiting** - Intelligent delays prevent rate limiting while optimizing speed
+1. **lxml Parser**: 3-5x faster HTML parsing compared to default parser
+2. **CSS Selectors**: Faster DOM traversal vs lambda-based selectors
+3. **Session Reuse**: Persistent HTTP connections across category requests
+4. **Batched Checkpoints**: Reduced I/O overhead (saves every 5 categories)
+5. **String Optimization**: Efficient price cleaning with chained operations
+6. **Adaptive Rate Limiting**: Intelligent delays prevent rate limiting while optimizing speed
 
-## Setup
+## Installation & Setup
+
+### Prerequisites
+
+- Python 3.8 or higher
+- Virtual environment (recommended)
+
+### Installation Steps
 
 ```bash
-# 1. Go to the project root
+# Navigate to project root
 cd InflationResearchStudy
 
-# 2. Create a virtual environment (recommended)
+# Create virtual environment
 python3 -m venv venv
-source venv/bin/activate   # macOS / Linux
-# venv\Scripts\activate    # Windows
+source venv/bin/activate  # macOS/Linux
+# venv\Scripts\activate     # Windows
 
-# 3. Install dependencies
+# Install dependencies
 pip install -r InflationItems/Codes/ConstructionSuppliesMarkets/Bauhaus/requirements.txt
 ```
 
-## Usage
+### Dependencies
 
-Run all commands from inside the `scripts/` directory (so that relative imports resolve correctly):
+- `requests==2.32.3` - HTTP client for web requests
+- `beautifulsoup4==4.12.3` - HTML parsing library with lxml integration
+
+## Operation Guide
+
+### Execution Requirements
+
+All commands must be executed from the `scripts/` directory to ensure proper module resolution:
 
 ```bash
 cd InflationItems/Codes/ConstructionSuppliesMarkets/Bauhaus/scripts
+```
 
-# List all discovered categories and their IDs
+### Command Line Interface
+
+#### Category Discovery
+
+```bash
+# Display all available categories with IDs
 python main.py --list-categories
+```
 
-# Scrape a single category (ID "bauhaus-oto") - CSV only
+#### Targeted Scraping
+
+```bash
+# Scrape single category (ID "bauhaus-oto")
 python main.py --category bauhaus-oto
 
-# Scrape all categories with default workers (2)
+# Test scrape with page limit
+python main.py --category bauhaus-oto --limit 2
+```
+
+#### Full Dataset Extraction
+
+```bash
+# Complete catalog scrape with default settings
 python main.py
 
-# Increase parallelism (use with care — higher values risk rate limiting)
+# Parallel processing with custom worker count
 python main.py --workers 4
 
-# Continue an interrupted full scrape
+# Custom rate limiting
+python main.py --delay 3.0
+```
+
+#### Session Management
+
+```bash
+# Resume interrupted scraping session
 python main.py --resume
 
-# Quick test — only 2 pages per category
-python main.py --category bauhaus-oto --limit 2
-
-# Verbose debug logging
+# Verbose logging for debugging
 python main.py --category bauhaus-oto -v
 ```
 
-### CLI Reference
+### CLI Parameters
 
-| Argument            | Default            | Description                                                                        |
-| ------------------- | ------------------ | ---------------------------------------------------------------------------------- |
-| `--list-categories` | —                  | Print all discovered categories with their IDs and exit.                           |
-| `--category ID`     | _(all categories)_ | Scrape only the specified category ID.                                             |
-| `--workers N`       | `2`                | Number of parallel category worker threads.                                        |
-| `--delay SECONDS`   | `2.0`              | Base delay between page requests per worker (actual delay includes random jitter). |
-| `--limit PAGES`     | `0` (unlimited)    | Maximum pages to fetch per category. Useful for quick tests.                       |
-| `--resume`          | —                  | Skip categories already recorded in the checkpoint file.                           |
-| `-v` / `--verbose`  | —                  | Enable DEBUG-level logging.                                                        |
+| Parameter           | Default         | Description                                   |
+| ------------------- | --------------- | --------------------------------------------- |
+| `--list-categories` | N/A             | Display category taxonomy and exit            |
+| `--category ID`     | All categories  | Limit scraping to specific category ID        |
+| `--workers N`       | `2`             | Parallel thread count for category processing |
+| `--delay SECONDS`   | `2.0`           | Base delay between requests (with jitter)     |
+| `--limit PAGES`     | `0` (unlimited) | Maximum pages per category for testing        |
+| `--resume`          | N/A             | Skip completed categories from checkpoint     |
+| `-v, --verbose`     | N/A             | Enable debug-level logging                    |
 
-## Output Files
+### Output Files
 
-| File                                                                                                  | Description                                            |
-| ----------------------------------------------------------------------------------------------------- | ------------------------------------------------------ |
-| `InflationItems/Datas/ConstructionSuppliesMarkets/Bauhaus/bauhaus_<DATE>.csv`                         | All unique products (UTF-8 with BOM for Excel compat.) |
-| `InflationItems/Codes/ConstructionSuppliesMarkets/Bauhaus/checkpoints/bauhaus_checkpoint_<DATE>.json` | Tracks completed category IDs for `--resume` support   |
+| File Path                                                                                             | Description                  |
+| ----------------------------------------------------------------------------------------------------- | ---------------------------- |
+| `InflationItems/Datas/ConstructionSuppliesMarkets/Bauhaus/bauhaus_<DATE>.csv`                         | CSV dataset (UTF-8 with BOM) |
+| `InflationItems/Codes/ConstructionSuppliesMarkets/Bauhaus/checkpoints/bauhaus_checkpoint_<DATE>.json` | Resume state tracking        |
 
-## Configuration
+File paths are automatically resolved relative to the script location, ensuring consistent operation regardless of execution directory.
 
-Edit `scripts/config.py` to change scraper behaviour:
+## Configuration Management
 
-| Setting           | Default                                                                 | Description                                                     |
-| ----------------- | ----------------------------------------------------------------------- | --------------------------------------------------------------- |
-| `REQUEST_DELAY`   | `2.0` s                                                                 | Base delay between paginated requests (jitter applied on top)   |
-| `MAX_RETRIES`     | `5`                                                                     | Retries before skipping a failed page                           |
-| `RETRY_BACKOFF`   | `3` s                                                                   | Back-off seed: actual wait = `RETRY_BACKOFF × attempt` seconds  |
-| `DEFAULT_WORKERS` | `2`                                                                     | Default number of parallel worker threads                       |
-| `JITTER_MIN`      | `1.0`                                                                   | Lower bound of the jitter multiplier applied to `REQUEST_DELAY` |
-| `JITTER_MAX`      | `2.0`                                                                   | Upper bound of the jitter multiplier applied to `REQUEST_DELAY` |
-| `OUTPUT_DIR`      | `InflationItems/Datas/ConstructionSuppliesMarkets/Bauhaus/`             | Directory where CSV files are written                           |
-| `CHECKPOINT_DIR`  | `InflationItems/Codes/ConstructionSuppliesMarkets/Bauhaus/checkpoints/` | Directory where checkpoint files are stored                     |
+### Core Settings
 
-## Category Discovery
+Configuration parameters are centralized in `scripts/config.py`:
 
-`category_fetcher.py` parses the **homepage HTML** to extract all navigation links that start with `bauhaus-` pattern. This automatically discovers ~600 subcategories across all product departments without requiring manual configuration.
+| Parameter         | Default       | Function                                   |
+| ----------------- | ------------- | ------------------------------------------ |
+| `REQUEST_DELAY`   | `2.0` seconds | Base interval between page requests        |
+| `MAX_RETRIES`     | `5`           | Maximum retry attempts per failed request  |
+| `RETRY_BACKOFF`   | `3` seconds   | Exponential backoff multiplier             |
+| `DEFAULT_WORKERS` | `2`           | Thread pool size for parallel processing   |
+| `JITTER_MIN`      | `1.0`         | Minimum delay multiplier for rate limiting |
+| `JITTER_MAX`      | `2.0`         | Maximum delay multiplier for rate limiting |
 
-Categories are extracted from `<a>` tags where `href` starts with either:
+### Request Configuration
 
-- `https://www.bauhaus.com.tr/bauhaus-` (full URLs)
-- `/bauhaus-` (relative URLs)
+- **Base URL**: `https://www.bauhaus.com.tr`
+- **Default Headers**: Realistic browser headers for anti-detection
+- **User-Agent**: Chrome-based User-Agent string
+- **Accept Headers**: Standard browser accept patterns
 
-## Troubleshooting
+### Path Configuration
 
-| Symptom                        | Likely cause                             | Fix                                                                                            |
-| ------------------------------ | ---------------------------------------- | ---------------------------------------------------------------------------------------------- |
-| HTTP 429 Too Many Requests     | Rate limit triggered                     | Increase `--delay` and reduce `--workers` (adaptive rate limiting helps)                       |
-| Empty CSV after full run       | HTML structure changed                   | Check CSS selectors in `product_fetcher.py` (`.col-6.col-sm-4`, etc.)                          |
-| Resume doesn't skip categories | Checkpoint file from a different date    | Delete old checkpoint or use the correct `--resume` on same day                                |
-| `ModuleNotFoundError: config`  | Script not run from `scripts/` directory | `cd InflationItems/Codes/ConstructionSuppliesMarkets/Bauhaus/scripts` before running `main.py` |
-| Slow performance               | Using default HTML parser                | Ensure lxml is installed (included in requirements.txt)                                        |
+All file paths are computed relative to the config file location:
 
-## Developer Notes
+- `OUTPUT_DIR`: Target directory for CSV exports
+- `CHECKPOINT_DIR`: Location for session checkpoint files
+- Daily file naming with YYYY-MM-DD format
 
-The scraper is split across four modules:
+## Category Discovery Process
 
-- **`config.py`** — single source of truth for all constants and file paths. No logic, only declarations.
-- **`category_fetcher.py`** — stateless; takes an optional session and returns a flat list of category dicts.
-- **`product_fetcher.py`** — stateless; takes a category dict and an optional session, returns a list of normalised product dicts. Includes adaptive rate limiting.
-- **`main.py`** — orchestrator only; handles CLI, threading, I/O, and checkpointing. Imports from the other three modules.
+### Navigation Parsing
 
-This separation makes each module independently testable and reusable.
+The scraper extracts category information from the homepage HTML navigation:
+
+1. Downloads and parses the homepage HTML
+2. Identifies all `<a>` tags with `href` attributes matching `bauhaus-` pattern
+3. Supports both full URLs (`https://www.bauhaus.com.tr/bauhaus-*`) and relative URLs (`/bauhaus-*`)
+4. Normalizes URLs to consistent format for processing
+
+### URL Pattern Matching
+
+Categories are identified using these patterns:
+
+- **Full URLs**: `https://www.bauhaus.com.tr/bauhaus-*`
+- **Relative URLs**: `/bauhaus-*`
+- **Pattern**: Any URL starting with `bauhaus-` prefix
+
+This approach automatically discovers all ~600 subcategories without manual configuration.
+
+## Error Handling & Troubleshooting
+
+### Common Issues
+
+| Symptom                    | Cause                         | Resolution                                       |
+| -------------------------- | ----------------------------- | ------------------------------------------------ |
+| HTTP 429 Too Many Requests | Rate limit exceeded           | Increase `--delay`; reduce worker count          |
+| Empty output files         | HTML structure changes        | Verify CSS selectors in product_fetcher.py       |
+| Resume failure             | Mismatched checkpoint date    | Use current day's checkpoint or clear checkpoint |
+| Module import errors       | Incorrect execution directory | Run from `scripts/` directory                    |
+| Slow performance           | Using default HTML parser     | Ensure lxml is properly installed                |
+
+### Debug Mode
+
+Enable verbose logging with `-v` flag for detailed execution information:
+
+```bash
+python main.py --category bauhaus-oto -v
+```
+
+### Performance Verification
+
+To ensure optimal performance:
+
+- Verify lxml installation: `pip show lxml`
+- Monitor memory usage during large scrapes
+- Check network connectivity for consistent request times
+- Validate CSS selector efficiency
+
+## Technical Architecture
+
+### Module Separation
+
+The scraper follows a modular design pattern:
+
+- **`config.py`** - Configuration constants, headers, and path management
+- **`category_fetcher.py`** - Stateless HTML navigation parsing and category extraction
+- **`product_fetcher.py`** - Optimized product data extraction with lxml and CSS selectors
+- **`main.py`** - Orchestration, CLI handling, and session management
+
+### Performance Architecture
+
+- **lxml Integration**: High-performance XML/HTML parsing
+- **CSS Selector Optimization**: Efficient DOM element targeting
+- **Connection Pooling**: HTTP session reuse across requests
+- **Batched I/O**: Reduced file system overhead
+- **Adaptive Rate Limiting**: Intelligent request timing
+
+### Concurrency Model
+
+- Thread-based parallel processing with `ThreadPoolExecutor`
+- Independent `requests.Session` per thread
+- Batched checkpoint writing (every 5 categories)
+- Final deduplication pass across all collected products
+
+### Data Flow
+
+1. Homepage download and navigation parsing
+2. Category URL extraction and normalization
+3. Parallel product extraction per category
+4. Real-time data validation and normalization
+5. Batched CSV writing and checkpointing
+6. Cross-category deduplication
+7. Final dataset export
 
 ---
 
-> **Disclaimer**: This tool is for educational / research purposes. Always respect `robots.txt` and the site's Terms of Service. Do not overload the server.
+**Technical Notice**: This tool is designed for research and data analysis purposes. Users must comply with applicable terms of service and rate limiting policies.

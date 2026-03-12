@@ -1,50 +1,85 @@
 """
-config.py — Configuration settings for the Migros Türkiye product scraper.
-===========================================================================
+Migros Scraper Configuration Module
+==================================
 
-This module is the single source of truth for every constant used by the
-scraper.  Import it with ``import config`` from any sibling script.
+This module serves as the centralized configuration repository for the Migros
+product scraping system, providing all constants, settings, and path management
+functionality.
 
-Sections
---------
-Base URLs
-    The root domain and the two API endpoints the scraper talks to.
+Configuration Sections
+----------------------
+Base URLs and Endpoints
+    Root domain and API endpoint definitions for all scraper operations
 
-Request Headers
-    HTTP headers injected into every request.  The custom ``X-Device-PWA``
-    and ``X-FORWARDED-REST`` headers are required by the Migros API; without
-    them the endpoint returns 403 Forbidden.
+HTTP Request Configuration
+    Headers, authentication parameters, and request settings required
+    for successful API communication
 
 Scraping Parameters
-    Tunable knobs that control request rate, retry behaviour, and concurrency.
+    Performance tuning parameters including delays, retries, concurrency,
+    and rate limiting settings
 
-    REQUEST_DELAY  : float  — base pause (seconds) between paginated requests.
-                             A random jitter factor (JITTER_MIN … JITTER_MAX) is
-                             multiplied in at runtime by ``product_fetcher.py``.
-    MAX_RETRIES    : int    — how many times a failed HTTP request is retried
-                             before the category is skipped.
-    RETRY_BACKOFF  : float  — seed value (seconds) for the exponential back-off
-                             delay.  Actual wait = RETRY_BACKOFF × attempt number.
-    DEFAULT_SORT   : str    — ``sirala`` query-parameter value sent to the API.
-                             "onerilenler" (recommended) is the stable default.
-    DEFAULT_WORKERS: int    — number of threads used by the
-                             ``ThreadPoolExecutor`` in ``main.py``.
-    JITTER_MIN/MAX : float  — uniform-random multiplier range applied on top of
-                             REQUEST_DELAY to spread out concurrent requests.
+Path Management
+    Computed file paths for data exports, checkpoints, and session storage
+    relative to the configuration file location
 
-Output Settings
-    All output paths are resolved relative to this file so the scraper works
-    correctly regardless of the directory from which ``main.py`` is called.
+API Configuration
+-----------------
+BASE_URL: str
+    Root domain for Migros e-commerce platform
 
-    OUTPUT_DIR     : str  — directory where CSV / JSON data files are written.
-    CHECKPOINT_DIR : str  — directory where daily checkpoint JSON files live.
-    CSV_OUTPUT_FILE: str  — full path to today's CSV output file.
-    JSON_OUTPUT_FILE: str — full path to today's JSON output file.
-    CHECKPOINT_FILE: str  — full path to today's checkpoint file.
+SEARCH_ENDPOINT: str
+    REST API endpoint for product search functionality
 
-    Files are named with today's date (``YYYY-MM-DD``) so each daily run
-    produces its own output set.  Passing ``--resume`` on the same day reuses
-    the existing checkpoint to pick up where the previous run left off.
+Required Headers
+---------------
+Custom headers are mandatory for Migros API access:
+- X-Device-PWA: Required for API authentication
+- X-FORWARDED-REST: Required for REST endpoint access
+- Standard browser headers for compatibility
+
+Performance Parameters
+---------------------
+REQUEST_DELAY: float (default: 0.5 seconds)
+    Base delay between paginated API requests with random jitter applied
+
+MAX_RETRIES: int (default: 3)
+    Maximum retry attempts for failed HTTP requests before skipping
+
+RETRY_BACKOFF: float (default: 2.0 seconds)
+    Seed value for exponential backoff calculation (actual wait = seed × attempt)
+
+DEFAULT_SORT: str (default: "onerilenler")
+    Product sorting parameter for API requests
+
+DEFAULT_WORKERS: int (default: 3)
+    Thread pool size for parallel category processing
+
+JITTER_RANGE: tuple (default: (0.5, 1.5))
+    Random multiplier range applied to base delay for request distribution
+
+Path Resolution
+--------------
+All paths are computed relative to this configuration file to ensure
+consistent operation regardless of execution directory:
+
+OUTPUT_DIR: str
+    Target directory for CSV and JSON data exports
+
+CHECKPOINT_DIR: str
+    Storage location for daily session checkpoint files
+
+Daily File Naming
+----------------
+Files use YYYY-MM-DD format for daily organization:
+- CSV Export: migros_YYYY-MM-DD.csv
+- JSON Export: migros_YYYY-MM-DD.json
+- Checkpoint: migros_checkpoint_YYYY-MM-DD.json
+
+Import Usage
+-------------
+Import with 'import config' from any sibling script. All constants are
+available as config.CONSTANT_NAME for easy reference throughout the scraper.
 """
 
 # ── Base URLs ────────────────────────────────────────────────────────────────

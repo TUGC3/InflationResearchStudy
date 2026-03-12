@@ -1,57 +1,76 @@
 """
-main.py — Migros Türkiye Product Scraper — CLI entry point & orchestrator
-==========================================================================
+Migros Türkiye Product Scraper - Main Entry Point and Orchestration Layer
+===========================================================================
 
-This module is the top-level entry point for the scraper.  It orchestrates
-category discovery, parallel product fetching, incremental output writing,
-checkpoint management, and a final deduplication pass.
+This module serves as the primary interface for the Migros product scraping system,
+providing CLI functionality and coordinating all scraping operations through
+a modular architecture.
 
-Pipeline
---------
-1. **Category discovery** — ``category_fetcher.fetch_categories()`` probes the
-   Migros REST API and returns all scrapable (sub)categories.
-2. **Checkpoint loading** — when ``--resume`` is passed, the today's checkpoint
-   file is loaded and already-completed category IDs are skipped.
-3. **Parallel scraping** — each remaining category is dispatched to a
-   ``ThreadPoolExecutor`` worker.  Every worker creates its own
-   ``requests.Session`` so sessions are never shared across threads.
-4. **Incremental saving** — product data and checkpoint state are written to
-   disk immediately after each category completes.  An interruption therefore
-   loses at most one in-flight category.
-5. **Deduplication** — a final pass removes any products whose ``id`` was seen
-   more than once across categories (can happen for multi-category items).
+Core Responsibilities
+----------------------
+- Command-line argument parsing and validation
+- Category discovery coordination via category_fetcher module
+- Parallel product extraction using ThreadPoolExecutor
+- Incremental data persistence and checkpoint management
+- Cross-category product deduplication
+- CSV export with standardized formatting
 
-Output files
-------------
-All paths are configured in ``config.py`` and are derived relative to that
-file, so the scraper works correctly regardless of the CWD.
+Execution Pipeline
+-----------------
+1. Category Discovery: Probes Migros REST API to extract complete product taxonomy
+2. Checkpoint Management: Loads previous session state when resume mode is enabled
+3. Parallel Processing: Dispatches categories to worker threads with independent sessions
+4. Incremental Persistence: Saves data and checkpoints after each category completion
+5. Data Deduplication: Removes duplicate products across category boundaries
+6. Export Generation: Creates CSV output file with standardized formatting
 
-    InflationItems/Datas/Markets/Migros/migros_<DATE>.csv    — UTF-8-with-BOM CSV
-    InflationItems/Datas/Markets/Migros/migros_<DATE>.json   — pretty-printed JSON array
-    InflationItems/Codes/Markets/Migros/checkpoints/migros_checkpoint_<DATE>.json
+Threading Model
+---------------
+- ThreadPoolExecutor manages concurrent category processing
+- Each worker maintains an independent requests.Session object
+- No session sharing across threads prevents race conditions
+- Configurable worker count allows performance tuning
 
-Usage examples
+Output Management
+-----------------
+All file paths are resolved relative to the config.py location, ensuring
+consistent operation regardless of execution directory:
+
+- CSV Export: UTF-8 with BOM formatting for Excel compatibility
+- Checkpoint Files: Daily session state for resume capability
+
+CLI Interface
+-------------
+The module provides comprehensive command-line options including:
+- Category listing and selective scraping
+- Output format selection (CSV)
+- Performance tuning (workers, delays, limits)
+- Session management (resume functionality)
+- Debug mode with verbose logging
+
+Usage Examples
 --------------
-  # List all available categories
-  python main.py --list-categories
+```bash
+# List all available categories
+python main.py --list-categories
 
-  # Scrape a single category (by ID) and save as CSV
-  python main.py --category 2 --output csv
+# Scrape single category with CSV output
+python main.py --category 2
 
-  # Scrape all categories with 3 parallel workers
-  python main.py --output both --workers 3
+# Full catalog extraction with parallel processing
+python main.py --workers 3
 
-  # Scrape all categories, save both CSV and JSON, with a 1-second delay
-  python main.py --output both --delay 1.0
+# Rate-limited scraping with custom delay
+python main.py --delay 1.0
 
-  # Limit pages per category (useful for quick testing)
-  python main.py --category 2 --output both --limit 2
+# Testing with page limits
+python main.py --category 2 --limit 2
 
-  # Resume an interrupted run (skips already-done categories)
-  python main.py --output csv --resume
+# Resume interrupted session
+python main.py --resume
 
   # Enable verbose / debug-level logging
-  python main.py --output csv -v
+  python main.py -v
 """
 
 import argparse
@@ -131,8 +150,8 @@ def _save_checkpoint(checkpoint: dict) -> None:
 
 # ── Output helpers ───────────────────────────────────────────────────────────
 
-def _append_products(new_products: list[dict], output_format: str) -> None:
-    """Thread-safely append ``new_products`` to the daily output files.
+def _append_products(new_products: list[dict]) -> None:
+    """Thread-safely append ``new_products`` to the daily CSV output file.
 
     Called immediately after each category is scraped so that data is
     persisted to disk even if the process is interrupted mid-run.
@@ -140,8 +159,6 @@ def _append_products(new_products: list[dict], output_format: str) -> None:
     - **CSV**: rows are appended with a header written only for the first
       batch (``mode="a"``).  Uses UTF-8-with-BOM encoding for wide Excel
       compatibility.
-    - **JSON**: the entire file is rewritten on every call to maintain a
-      valid JSON array.  Existing entries are preserved.
 
     Writing is serialised via ``_csv_lock`` so concurrent worker threads
     never interleave their writes.
@@ -151,8 +168,6 @@ def _append_products(new_products: list[dict], output_format: str) -> None:
     new_products : list[dict]
         Products scraped from a single category (as returned by
         ``fetch_products_for_category``).  A no-op when the list is empty.
-    output_format : str
-        One of ``"csv"``, ``"json"``, or ``"both"``.
     """
     if not new_products:
         return
@@ -161,28 +176,14 @@ def _append_products(new_products: list[dict], output_format: str) -> None:
     df_new = pd.DataFrame(new_products)
 
     with _csv_lock:
-        if output_format in ("csv", "both"):
-            write_header = not os.path.exists(config.CSV_OUTPUT_FILE)
-            df_new.to_csv(
-                config.CSV_OUTPUT_FILE,
-                mode="a",
-                index=False,
-                header=write_header,
-                encoding="utf-8-sig",
-            )
-
-        if output_format in ("json", "both"):
-            # Rewrite the whole JSON each time (needed for valid JSON array)
-            existing: list[dict] = []
-            if os.path.exists(config.JSON_OUTPUT_FILE):
-                try:
-                    with open(config.JSON_OUTPUT_FILE, "r", encoding="utf-8") as f:
-                        existing = json.load(f)
-                except Exception:
-                    existing = []
-            existing.extend(new_products)
-            with open(config.JSON_OUTPUT_FILE, "w", encoding="utf-8") as f:
-                json.dump(existing, f, ensure_ascii=False, indent=2)
+        write_header = not os.path.exists(config.CSV_OUTPUT_FILE)
+        df_new.to_csv(
+            config.CSV_OUTPUT_FILE,
+            mode="a",
+            index=False,
+            header=write_header,
+            encoding="utf-8-sig",
+        )
 
 
 def _dedup_csv() -> int:
@@ -207,27 +208,6 @@ def _dedup_csv() -> int:
     if len(df) < before:
         logger.info("Removed %d duplicate rows. Final count: %d", before - len(df), len(df))
     return len(df)
-
-
-def _dedup_json() -> None:
-    """Remove entries with duplicate product IDs from the JSON output file in-place.
-
-    Reads the JSON array, filters to the first occurrence of each ``id``, and
-    overwrites the file.  No-op when the file does not exist.
-    """
-    if not os.path.exists(config.JSON_OUTPUT_FILE):
-        return
-    with open(config.JSON_OUTPUT_FILE, "r", encoding="utf-8") as f:
-        data = json.load(f)
-    seen: set[str] = set()
-    deduped = []
-    for item in data:
-        pid = str(item.get("id", ""))
-        if pid not in seen:
-            seen.add(pid)
-            deduped.append(item)
-    with open(config.JSON_OUTPUT_FILE, "w", encoding="utf-8") as f:
-        json.dump(deduped, f, ensure_ascii=False, indent=2)
 
 
 # ── Per-worker session factory ───────────────────────────────────────────────────
@@ -300,11 +280,11 @@ def run_scraper(args: argparse.Namespace) -> None:
     ----
     args : argparse.Namespace
         Parsed command-line arguments as produced by ``_build_parser().parse_args()``.
-        Expected attributes: ``category``, ``output``, ``workers``, ``delay``,
+        Expected attributes: ``category``, ``workers``, ``delay``,
         ``limit``, ``resume``.
     """
     # 1. Fetch categories (single-threaded bootstrap)
-    logger.info("Fetching category list…")
+    logger.info("Fetching category list...")
     bootstrap_session = _make_session()
     try:
         categories = fetch_categories(session=bootstrap_session)
@@ -330,12 +310,11 @@ def run_scraper(args: argparse.Namespace) -> None:
     # 3. Load checkpoint for resume support
     checkpoint = _load_checkpoint() if args.resume else {"done": []}
 
-    # 4. On a fresh (non-resume) run, clear any old output files
+    # 4. On a fresh (non-resume) run, clear any old output file
     if not args.resume:
-        for fpath in [config.CSV_OUTPUT_FILE, config.JSON_OUTPUT_FILE]:
-            if os.path.exists(fpath):
-                os.remove(fpath)
-                logger.info("Cleared old output file: %s", fpath)
+        if os.path.exists(config.CSV_OUTPUT_FILE):
+            os.remove(config.CSV_OUTPUT_FILE)
+            logger.info("Cleared old output file: %s", config.CSV_OUTPUT_FILE)
 
     categories_to_scrape = [
         c for c in categories if c["id"] not in checkpoint["done"]
@@ -360,7 +339,7 @@ def run_scraper(args: argparse.Namespace) -> None:
             logger.warning("Could not count existing products: %s", exc)
 
     logger.info(
-        "Scraping %d categor%s with %d worker(s)…",
+        "Scraping %d categor%s with %d worker(s)...",
         len(categories_to_scrape),
         "y" if len(categories_to_scrape) == 1 else "ies",
         args.workers,
@@ -385,7 +364,7 @@ def run_scraper(args: argparse.Namespace) -> None:
 
                 # Save immediately after each category — no data lost on interruption
                 if cat_products:
-                    _append_products(cat_products, args.output)
+                    _append_products(cat_products)
                     with _counter_lock:
                         total_products += len(cat_products)
 
@@ -403,15 +382,11 @@ def run_scraper(args: argparse.Namespace) -> None:
                 pbar.update(1)
 
     # 5. Final deduplication pass
-    logger.info("Running final deduplication…")
+    logger.info("Running final deduplication...")
     final_count = _dedup_csv()
-    if args.output in ("json", "both"):
-        _dedup_json()
 
-    logger.info("Done! ✓  Total unique products: %d", final_count)
+    logger.info("Done! Total unique products: %d", final_count)
     logger.info("Output → %s", config.CSV_OUTPUT_FILE)
-    if args.output in ("json", "both"):
-        logger.info("Output → %s", config.JSON_OUTPUT_FILE)
 
     # 6. Calculate Inflation
     logger.info("Calculating inflation metrics...")
@@ -431,11 +406,11 @@ def _build_parser() -> argparse.ArgumentParser:
     -------
     argparse.ArgumentParser
         Configured parser with arguments: ``--list-categories``, ``--category``,
-        ``--output``, ``--workers``, ``--delay``, ``--limit``, ``--resume``, ``-v``.
+        ``--workers``, ``--delay``, ``--limit``, ``--resume``, ``-v``.
     """
     parser = argparse.ArgumentParser(
         prog="migros-scraper",
-        description="Scrape all product data from Migros Türkiye (migros.com.tr).",
+        description="Scrape all product data from Migros Türkiye (migros.com.tr) and output to CSV.",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog=__doc__,
     )
@@ -449,12 +424,6 @@ def _build_parser() -> argparse.ArgumentParser:
         metavar="ID",
         default=None,
         help="Scrape only this category ID (e.g. '2'). Omit to scrape all categories.",
-    )
-    parser.add_argument(
-        "--output",
-        choices=["csv", "json", "both"],
-        default="both",
-        help="Output format (default: both).",
     )
     parser.add_argument(
         "--workers",
