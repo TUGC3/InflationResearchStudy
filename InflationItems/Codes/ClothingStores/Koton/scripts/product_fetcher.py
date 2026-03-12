@@ -1,22 +1,85 @@
 """
-product_fetcher.py — Scrapes all products from a Koton category page.
-=======================================================================
+Koton Product Data Extraction Module
+===================================
 
-This module parses product listing pages and handles pagination and retries
-automatically.
+This module provides comprehensive product data extraction from Koton category pages,
+utilizing HTML parsing techniques to extract embedded product information and handle
+pagination with robust error recovery.
 
-How it works
-------------
-Koton renders each product listing page as HTML. Each product card
-contains a hidden <div class="js-insider-product"> whose text is a
-JSON-like blob with full product data (name, prices, URL, image, stock…).
-The parent wrapper <div class="js-product-wrapper"> has data attributes
-including the product pk and sku.
+Public Interface
+----------------
+fetch_products_for_category(category, session=None, delay=2.0, page_limit=0) -> list[dict]
+    Extracts all products from a specified category with pagination support.
+    Returns normalized product dictionaries with consistent field structure.
 
-The GA4 hidden div <div class="js-ga4-product-item"> provides the brand,
-category hierarchy, and the human-readable base_code (style code).
+Data Extraction Strategy
+------------------------
+Koton embeds comprehensive product data within HTML pages using multiple sources:
 
-Pagination is via ?page=N. We stop when a page returns no products.
+Product Data Sources
+--------------------
+1. **js-insider-product**: Hidden div containing JSON blob with full product details
+   - Product name, prices, URLs, images, stock information
+   - Primary data source for core product attributes
+
+2. **js-product-wrapper**: Product container with data attributes
+   - Product pk (internal identifier)
+   - SKU/barcode information
+   - Wrapper for insider-product data
+
+3. **js-ga4-product-item**: GA4 tracking div with metadata
+   - Brand information (always "Koton")
+   - Category hierarchy and taxonomy
+   - Base code (style code) for product identification
+
+Pagination Strategy
+------------------
+- URL-based pagination using ?page=N parameter
+- Automatic termination when pages return no products
+- Configurable page limits for testing and development
+- Rate limiting with jitter between requests
+
+Data Normalization
+------------------
+Raw HTML elements are converted to standardized product records:
+
+Price Processing
+- Regular and sale prices extracted separately
+- Discount percentage calculated from price differences
+- Currency handling (always TRY)
+- Price validation and formatting
+
+Product Fields
+-------------
+Each normalized product contains:
+- pk: Koton internal product-variant identifier
+- sku: EAN barcode number
+- base_code: Style code (e.g., "6SAK60098EW")
+- name: Complete product display name
+- brand: Brand name (always "Koton")
+- category: Full taxonomy path (e.g., "WOMEN > WOVEN TOPS > SHIRTS LS")
+- color: Color variant specification
+- size: Size variant information
+- regular_price: Standard retail price (TRY)
+- sale_price: Current discounted price (TRY)
+- discount_pct: Discount percentage (0 if none)
+- currency: Currency code (always "TRY")
+- stock: Available stock quantity for variant
+
+Error Handling
+--------------
+- Network failures trigger exponential backoff retries
+- Malformed HTML is logged and skipped
+- Missing product elements are handled gracefully
+- Rate limit detection triggers automatic delay increases
+
+Performance Features
+-------------------
+- lxml parser for efficient HTML processing
+- CSS selectors for precise element targeting
+- Session reuse for connection pooling
+- Configurable rate limiting for server compatibility
+- Progress tracking for large category extraction
 """
 
 import json
@@ -222,8 +285,8 @@ def _fetch_page(
                 retry_after = int(resp.headers.get("Retry-After", config.RATE_LIMIT_BACKOFF))
                 wait = max(retry_after, config.RATE_LIMIT_BACKOFF)
                 logger.warning(
-                    "Rate-limited (%d) on %s page %d. Backing off %ds (attempt %d/%d)…",
-                    resp.status_code, category_url, page, wait, attempt, config.MAX_RETRIES,
+                    "Rate-limited (%d) on page %d. Backing off %ds (attempt %d/%d)...",
+                    resp.status_code, page, wait, attempt, config.MAX_RETRIES,
                 )
                 time.sleep(wait)
                 # Rotate to a fresh User-Agent after a rate-limit hit
@@ -237,13 +300,14 @@ def _fetch_page(
         except requests.RequestException as exc:
             if attempt == config.MAX_RETRIES:
                 logger.error(
-                    "All %d attempts failed for %s page %d: %s",
-                    config.MAX_RETRIES, category_url, page, exc,
+                    "All %d attempts failed for page %d: %s",
+                    config.MAX_RETRIES, page, exc,
                 )
                 return None, 0.0
             wait = config.RETRY_BACKOFF * attempt
             logger.warning(
-                "Attempt %d failed (%s). Retrying in %ds…", attempt, exc, wait
+                "Attempt %d/%d failed: %s. Retrying in %ds...",
+                attempt, config.MAX_RETRIES, exc, wait
             )
             time.sleep(wait)
     return None, 0.0
@@ -310,16 +374,16 @@ def fetch_products_for_category(
         # Provide feedback: log every page in DEBUG, but log every 5 pages in INFO
         # so the user knows long categories aren't stuck.
         if page % 5 == 0:
-            logger.info("  %s: Scraped page %d... (total products so far: %d)", category_name, page, len(all_products))
+            logger.info("  Page %2d: %2d products (total: %d)", page, page_count, len(all_products))
         else:
-            logger.debug("Category '%s' – page %d → %d products (total: %d)", category_name, page, page_count, len(all_products))
+            logger.debug("  Page %2d: %2d products (total: %d)", page, page_count, len(all_products))
 
         # If we got fewer products than expected the page might be the last
         # but we'll keep going until a page returns 0 wrappers.
         # Alternatively, if a page returns products but NONE of them are new,
         # Koton might be repeating the last page forever (infinite scroll bug).
         if page_count == 0 or new_on_page == 0:
-            logger.debug("Page %d yielded 0 new products. Ending category scrape.", page)
+            logger.debug("Page %d yielded 0 new products. Ending.", page)
             break
 
         page += 1

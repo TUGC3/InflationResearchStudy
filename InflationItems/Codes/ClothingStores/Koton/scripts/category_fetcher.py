@@ -1,23 +1,78 @@
 """
-category_fetcher.py — Discovers all scrapable Koton product categories.
-=======================================================================
+Koton Category Discovery Module
+===============================
 
-Public API
-----------
+This module provides comprehensive category discovery functionality for the Koton
+product scraping system by downloading and parsing the compressed XML sitemap
+to extract the complete product taxonomy.
+
+Public Interface
+----------------
 fetch_categories(session=None) -> list[dict]
-    Returns the definitive list of all Koton categories from the XML sitemap.
-    Each dict contains the keys ``name``, ``slug``, ``url``,
-    ``parent_name``, and ``parent_slug``.
+    Downloads and parses the Koton XML sitemap to extract all available categories.
+    Each category dictionary contains name, slug, url, parent_name, and parent_slug.
 
-Discovery strategy
+Discovery Strategy
+-----------------
+The module leverages Koton's comprehensive XML sitemap for complete taxonomy mapping:
+
+Sitemap Source
+- URL: https://s3.eu-central-1.amazonaws.com/f58f3a/sitemaps/sitemaps/sitemap-categories-1.xml.gz
+- Format: Gzip-compressed XML containing over 2,500 category URLs
+- Coverage: 100% of all scrapable categories including nested and new sections
+
+Processing Pipeline
+1. **Download**: Retrieve compressed sitemap from AWS S3 endpoint
+2. **Decompression**: Extract XML content from gzip archive
+3. **Parsing**: Process XML structure to extract <loc> elements
+4. **URL Analysis**: Parse category URLs to extract slugs and hierarchy
+5. **Taxonomy Building**: Construct parent-child relationships between categories
+
+Data Structure
+--------------
+Each returned category dictionary contains:
+- name: Human-readable category name (URL-decoded)
+- slug: URL-friendly category identifier
+- url: Full category URL from sitemap
+- parent_name: Parent category name (None for top-level)
+- parent_slug: Parent category slug (None for top-level)
+
+URL Pattern Analysis
 ------------------
-Koton provides a comprehensive sitemap of all its categories:
-https://s3.eu-central-1.amazonaws.com/f58f3a/sitemaps/sitemaps/sitemap-categories-1.xml.gz
+Category URLs follow the pattern: https://www.koton.com/category-slug
+- Slug extraction removes domain and trailing slashes
+- Parent-child relationships inferred from URL path hierarchy
+- Special characters are URL-decoded for proper display
 
-This file contains over 2,500 <loc> URLs. By downloading and parsing this
-sitemap, we guarantee 100% coverage of all scrapable categories, including
-deeply nested or newly added sections that might not be visible in the
-top-level HTML navigation.
+Error Handling
+--------------
+- Network failures are handled with retry logic
+- Invalid XML structure triggers fallback processing
+- Malformed URLs are logged and excluded
+- Decompression errors are handled gracefully
+
+Performance Considerations
+-------------------------
+- Streaming XML parsing minimizes memory usage
+- Efficient gzip decompression for large sitemaps
+- Batch processing of URL entries for optimization
+- Configurable timeout settings for network requests
+
+Completeness Guarantee
+----------------------
+By using the official XML sitemap, this module ensures:
+- Complete coverage of all published categories
+- Inclusion of newly added categories
+- Access to deeply nested category structures
+- Consistent data with live website navigation
+
+Session Management
+-----------------
+Optional session parameter allows:
+- Connection reuse for multiple sitemap requests
+- Custom timeout configurations
+- Proxy support if needed
+- Consistent request headers across operations
 """
 
 import gzip
@@ -75,7 +130,7 @@ def fetch_categories(session: Optional[requests.Session] = None) -> list[dict]:
                 logger.error("Failed to download sitemap: %s", exc)
                 return []
             wait = config.RETRY_BACKOFF * attempt
-            logger.warning("Attempt %d failed (%s). Retrying in %ds…", attempt, exc, wait)
+            logger.warning("Attempt %d failed (%s). Retrying in %ds...", attempt, exc, wait)
             time.sleep(wait)
 
     try:

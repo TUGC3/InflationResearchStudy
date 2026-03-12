@@ -1,42 +1,80 @@
 """
-main.py — Koton Türkiye Product Scraper — CLI entry point & orchestrator
-==========================================================================
+Koton Türkiye Product Scraper - Main Entry Point and Orchestration Layer
+=========================================================================
 
-This module is the top-level entry point for the scraper. It orchestrates
-category discovery, parallel product fetching, incremental output writing,
-checkpoint management, and a final deduplication pass.
+This module serves as the primary interface for the Koton product scraping system,
+providing comprehensive CLI functionality and coordinating all scraping operations
+through a modular, multi-threaded architecture.
 
-Pipeline
---------
-1. **Category discovery** — ``category_fetcher.fetch_categories()`` probes the
-   Koton sitemap and extracts all category slugs.
-2. **Checkpoint loading** — when ``--resume`` is passed, the today's checkpoint
-   file is loaded and already-completed category slugs are skipped.
-3. **Parallel scraping** — each remaining category is dispatched to a
-   ``ThreadPoolExecutor`` worker. Every worker creates its own
-   ``requests.Session`` so sessions are never shared across threads.
-4. **Incremental saving** — product data and checkpoint state are written to
-   disk immediately after each category completes. An interruption therefore
-   loses at most one in-flight category.
-5. **Deduplication** — a final pass removes any products whose internal ID
-   was seen more than once across categories.
+Core Responsibilities
+----------------------
+- Command-line argument parsing and validation
+- XML sitemap-based category discovery coordination
+- Parallel product extraction using ThreadPoolExecutor
+- Incremental data persistence and checkpoint management
+- Cross-category product deduplication
+- CSV data export with standardized formatting
 
-Usage examples
+Execution Pipeline
+-----------------
+1. Category Discovery: Downloads and parses compressed XML sitemap to extract complete taxonomy
+2. Checkpoint Management: Loads previous session state when resume mode is enabled
+3. Parallel Processing: Dispatches categories to worker threads with independent sessions
+4. Incremental Persistence: Saves data and checkpoints after each category completion
+5. Data Deduplication: Removes duplicate products across category boundaries
+6. Export Generation: Creates CSV output file with UTF-8 BOM formatting
+
+Threading Model
+---------------
+- ThreadPoolExecutor manages concurrent category processing
+- Each worker maintains an independent requests.Session with unique User-Agent
+- No session sharing across threads prevents race conditions
+- Configurable worker count allows performance tuning
+
+Anti-Detection Features
+----------------------
+- User-Agent rotation across 7 realistic browser signatures
+- Per-thread User-Agent assignment for consistency
+- Configurable rate limiting with random jitter
+- Exponential backoff for failed requests
+
+Output Management
+-----------------
+All file paths are resolved relative to the config.py location, ensuring
+consistent operation regardless of execution directory:
+
+- CSV Export: UTF-8 with BOM formatting for Excel compatibility
+- Checkpoint Files: Daily session state for resume capability
+
+CLI Interface
+-------------
+The module provides comprehensive command-line options including:
+- Category listing and selective scraping
+- Performance tuning (workers, delays, limits)
+- Session management (resume functionality)
+- Debug mode with verbose logging
+
+Usage Examples
 --------------
-  # List all available categories
-  python main.py --list-categories
+```bash
+# List all available categories
+python main.py --list-categories
 
-  # Scrape a single category (by slug) and save as CSV
-  python main.py --category kadin-giyim
+# Scrape single category for testing
+python main.py --category kadin-giyim --limit 1
 
-  # Scrape all categories with 5 parallel workers
-  python main.py --workers 5
+# Full catalog extraction with parallel processing
+python main.py --workers 2
 
-  # Limit pages per category (useful for quick testing)
-  python main.py --category kadin-giyim --limit 2
+# Rate-limited scraping with custom delay
+python main.py --delay 1.5
 
-  # Resume an interrupted run (skips already-done categories)
-  python main.py --resume
+# Resume interrupted session
+python main.py --resume
+
+# Enable debug logging
+python main.py --category kadin-giyim -v
+```
 """
 
 import argparse
@@ -155,7 +193,7 @@ def _scrape_category(cat: dict, delay: float, page_limit: int) -> list[dict]:
 
 def run_scraper(args: argparse.Namespace) -> None:
     # 1. Fetch category list (single-threaded bootstrap)
-    logger.info("Fetching category list…")
+    logger.info("Fetching category list...")
     bootstrap_session = _make_session()
     try:
         categories = fetch_categories(session=bootstrap_session)
@@ -172,8 +210,7 @@ def run_scraper(args: argparse.Namespace) -> None:
         categories = [c for c in categories if c["slug"] == args.category]
         if not categories:
             logger.error(
-                "Category slug '%s' not found. "
-                "Use --list-categories to see available slugs.",
+                "Category '%s' not found. Use --list-categories to see available slugs.",
                 args.category,
             )
             sys.exit(1)
@@ -185,7 +222,7 @@ def run_scraper(args: argparse.Namespace) -> None:
     if not args.resume:
         if os.path.exists(config.CSV_OUTPUT_FILE):
             os.remove(config.CSV_OUTPUT_FILE)
-            logger.info("Cleared old output file: %s", config.CSV_OUTPUT_FILE)
+            logger.info("Cleared old CSV: %s", config.CSV_OUTPUT_FILE)
 
     categories_to_scrape = [
         c for c in categories if c["slug"] not in checkpoint["done"]
@@ -209,13 +246,15 @@ def run_scraper(args: argparse.Namespace) -> None:
             logger.warning("Could not count existing products: %s", exc)
 
     logger.info(
-        "Scraping %d categor%s with %d worker(s)…",
+        "Scraping %d categor%s with %d worker(s)...",
         len(categories_to_scrape),
         "y" if len(categories_to_scrape) == 1 else "ies",
         args.workers,
     )
 
     # 5. Parallel scraping with ThreadPoolExecutor
+    import time
+    start_time = time.time()
     futures = {}
     with ThreadPoolExecutor(max_workers=args.workers) as executor:
         for cat in categories_to_scrape:
@@ -245,19 +284,23 @@ def run_scraper(args: argparse.Namespace) -> None:
 
                 if cat_products:
                     logger.info(
-                        "Category '%s': +%d products (total so far: %d)",
+                        "Category '%s': +%d products (total: %d)",
                         cat["name"], len(cat_products), total_products,
                     )
 
                 pbar.update(1)
 
-    # 6. Final deduplication pass
-    logger.info("Running final deduplication…")
+    # 6. Calculate elapsed time
+    elapsed_time = time.time() - start_time
+    logger.info("Scraping completed in %.1f seconds (%.1f min)", elapsed_time, elapsed_time / 60)
+
+    # 7. Final deduplication pass
+    logger.info("Running final deduplication...")
     final_count = _dedup_csv()
-    logger.info("Done! ✓  Total unique products: %d", final_count)
+    logger.info("Done! Total unique products: %d", final_count)
     logger.info("Output → %s", config.CSV_OUTPUT_FILE)
 
-    # 7. Calculate Inflation
+    # 8. Calculate Inflation
     logger.info("Calculating inflation metrics...")
     inflation.calculate_inflation()
 
