@@ -1,6 +1,5 @@
 import os
 import csv
-import json
 import time
 import random
 from datetime import datetime
@@ -35,47 +34,14 @@ CITIES = {
 }
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-DATA_BASE_DIR = os.path.abspath(os.path.join(SCRIPT_DIR, "../../../../Datas/HousesRent/"))
-
-# --- IMPROVEMENT 1: Resume tracking ---
-# A JSON file tracks which (city, bracket) pairs are already done today.
-# Re-running the script will skip completed brackets instantly.
-PROGRESS_FILE = os.path.join(SCRIPT_DIR, "../../scrape_progress.json")
-
-
-def load_progress():
-    """Loads today's scraping progress from a JSON file."""
-    today_str = datetime.now().strftime("%Y-%m-%d")
-    if os.path.exists(PROGRESS_FILE):
-        with open(PROGRESS_FILE, "r", encoding="utf-8") as f:
-            data = json.load(f)
-        # Only reuse progress if it's from today; reset for a new day
-        if data.get("date") == today_str:
-            return data
-    return {"date": today_str, "completed": {}}
-
-
-def mark_bracket_done(progress, city_key, min_price, max_price):
-    """Marks a price bracket as completed in the progress file."""
-    bracket_key = f"{min_price}-{max_price}"
-    if city_key not in progress["completed"]:
-        progress["completed"][city_key] = []
-    if bracket_key not in progress["completed"][city_key]:
-        progress["completed"][city_key].append(bracket_key)
-    with open(PROGRESS_FILE, "w", encoding="utf-8") as f:
-        json.dump(progress, f, ensure_ascii=False, indent=2)
-
-
-def is_bracket_done(progress, city_key, min_price, max_price):
-    """Returns True if this bracket was already scraped successfully today."""
-    bracket_key = f"{min_price}-{max_price}"
-    return bracket_key in progress.get("completed", {}).get(city_key, [])
+DATA_BASE_DIR = os.path.abspath(os.path.join(SCRIPT_DIR, "../../../Datas/HousesRent/"))
 
 
 def setup_driver():
     """Sets up an undetected Chrome driver with a persistent profile."""
     options = uc.ChromeOptions()
-    profile_path = os.path.join(SCRIPT_DIR, "../SeleniumProfile")
+    # SeleniumProfile lives in the same directory as this script
+    profile_path = os.path.join(SCRIPT_DIR, "SeleniumProfile")
     options.add_argument(f"--user-data-dir={profile_path}")
     driver = uc.Chrome(options=options, version_main=145)
     return driver
@@ -99,10 +65,7 @@ def save_to_csv_incremental(folder_name, data_batch):
     print(f"✅ Appended {len(data_batch)} records to {file_path}")
 
 
-# --- IMPROVEMENT 2: Smart wait helper ---
-# Waits for the results table to appear (up to `timeout` seconds) instead of
-# always sleeping a fixed 2.5s. On fast connections this saves ~1s per page.
-def wait_for_listings(driver, timeout=10):
+def wait_for_listings(driver, timeout=15):
     """
     Waits up to `timeout` seconds for the results table to be present in the DOM.
     Falls back gracefully if the element never appears (e.g. CAPTCHA page).
@@ -119,19 +82,13 @@ def wait_for_listings(driver, timeout=10):
         return False
 
 
-def scrape_city(driver, city_url_name, folder_name, brackets, progress):
+def scrape_city(driver, city_url_name, folder_name, brackets):
     """Scrapes data by looping through dynamically assigned price brackets."""
     print(f"\n{'='*50}")
     print(f"STARTING FULL SCRAPE FOR: {folder_name}")
     print(f"{'='*50}")
 
     for min_price, max_price in brackets:
-
-        # --- IMPROVEMENT 3: Skip already-completed brackets ---
-        if is_bracket_done(progress, city_url_name, min_price, max_price):
-            print(f"⏭️  Skipping {min_price}-{max_price} TL (already done today).")
-            continue
-
         print(f"\n>>> Targeting Price Range: {min_price} TL to {max_price} TL")
 
         url = (
@@ -140,14 +97,16 @@ def scrape_city(driver, city_url_name, folder_name, brackets, progress):
         )
         driver.get(url)
 
+        # Initial page load delay — give the site time to breathe
+        time.sleep(random.uniform(3.0, 5.0))
+
         bracket_data = []
         page_num = 1
 
         while True:
-            # --- IMPROVEMENT 4: Smart wait replaces the blind 2.5s sleep ---
-            listings_visible = wait_for_listings(driver, timeout=10)
+            listings_visible = wait_for_listings(driver, timeout=15)
 
-            soup = BeautifulSoup(driver.page_source, 'lxml')  # IMPROVEMENT 5: lxml is 2-3x faster
+            soup = BeautifulSoup(driver.page_source, 'lxml')
             listings = soup.select("#searchResultsTable tbody tr.searchResultsItem")
 
             if not listings:
@@ -199,30 +158,20 @@ def scrape_city(driver, city_url_name, folder_name, brackets, progress):
                 next_url = "https://www.sahibinden.com" + next_button['href']
                 driver.get(next_url)
                 page_num += 1
-                # --- IMPROVEMENT 6: Tighter inter-page delay (was 2-4s) ---
-                time.sleep(random.uniform(1.2, 2.5))
+                # Slower inter-page delay to avoid getting banned
+                time.sleep(random.uniform(3.5, 6.0))
             else:
                 print(f"Finished gathering all houses in the {min_price}-{max_price} TL range.")
                 break
 
-        # Save this bracket's data, then mark it done so re-runs can skip it
         if bracket_data:
             save_to_csv_incremental(folder_name, bracket_data)
 
-        mark_bracket_done(progress, city_url_name, min_price, max_price)
-
-        # --- IMPROVEMENT 7: Tighter inter-bracket delay (was 2-4s) ---
-        time.sleep(random.uniform(1.0, 2.0))
+        # Slower inter-bracket delay to avoid getting banned
+        time.sleep(random.uniform(4.0, 7.0))
 
 
 def main():
-    # --- IMPROVEMENT 8: BUG FIX — no longer deletes today's CSV at startup ---
-    # The original code wiped the day's data every time main() ran, which would
-    # destroy partial results if the script crashed and was restarted.
-    # Now we just load progress and skip what's already done.
-
-    progress = load_progress()
-
     driver = setup_driver()
     try:
         for city_url_name, city_data in CITIES.items():
@@ -231,9 +180,9 @@ def main():
                 city_url_name,
                 city_data['folder'],
                 city_data['brackets'],
-                progress
             )
-            time.sleep(random.uniform(3, 5))
+            # Slower inter-city delay
+            time.sleep(random.uniform(6.0, 10.0))
     finally:
         driver.quit()
 
