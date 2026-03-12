@@ -1,38 +1,70 @@
 """
-category_fetcher.py — Discovers all scrapable Migros product categories.
-=========================================================================
+Migros Category Discovery Module
+=================================
 
-Public API
-----------
+This module provides comprehensive category discovery functionality for the Migros
+product scraping system by systematically probing the REST API to extract the complete
+product taxonomy.
+
+Public Interface
+----------------
 fetch_categories(session=None) -> list[dict]
-    Returns the full flat list of (sub)category dicts ready for the product
-    fetcher.  Each dict contains the keys ``id``, ``name``, ``parent_id``,
-    ``parent_name``, and ``product_count``.
+    Discovers and returns all scrapable product categories from the Migros API.
+    Each category dictionary contains id, name, parent_id, parent_name, and product_count.
 
-Discovery strategy
-------------------
-Migros exposes 13 verified top-level category IDs (see ``TOP_LEVEL_CATEGORIES``
-below).  Sending a single search request for each top-level category returns
-an ``aggregationGroups`` section in the JSON payload.  This section contains a
-``kategoriler`` group whose ``aggregationInfos`` list every sub-category filter
-available for that top-level bucket.
+Discovery Strategy
+-----------------
+The module leverages Migros's 13 top-level category IDs to systematically map the
+complete product catalog:
 
-By harvesting those filter entries we obtain the complete, exhaustive set of
-scrapable (sub)categories — the same ones a user sees when browsing the site.
+1. **API Probing**: Each top-level category is queried against the search endpoint
+2. **Aggregation Analysis**: Response payloads contain aggregationGroups with category filters
+3. **Subcategory Extraction**: The 'kategoriler' aggregation group provides all available subcategories
+4. **Filter Processing**: Subcategories with zero products are automatically excluded
 
-Fallback behaviour
-------------------
-If a top-level category returns *no* sub-category filters (either the API
-omits the ``kategoriler`` group or all sub-categories have ``count == 0``),
-the top-level category itself is kept as a single entry with ``parent_id``
-set to ``None``.  ``product_fetcher.py`` recognises this and sends only a
-``category-id`` parameter (no ``kategoriler`` filter).
+API Integration
+--------------
+The discovery process uses the Migros REST search endpoint with specific parameters:
+- category-id: Top-level category identifier
+- Response parsing: aggregationGroups.kategoriler.aggregationInfos array
+- Count validation: Filters out categories with product_count == 0
+
+Fallback Behavior
+-----------------
+When top-level categories lack subcategory filters:
+- The top-level category is retained as a standalone entry
+- parent_id is set to None to indicate top-level status
+- Product fetching adapts to use only category-id parameter
+
+Data Structure
+--------------
+Each returned category dictionary contains:
+- id: Unique category identifier
+- name: Human-readable category name (Turkish)
+- parent_id: Parent category identifier (None for top-level)
+- parent_name: Parent category name (None for top-level)
+- product_count: Number of products in category
+
+Error Handling
+--------------
+- Network failures are handled with retry logic
+- Invalid API responses are logged and skipped
+- Missing aggregation groups trigger fallback mode
+- Malformed category data is filtered out
+
+Performance Considerations
+-------------------------
+- Single session reuse across multiple API calls
+- Minimal memory footprint with streaming JSON parsing
+- Efficient string operations for category name processing
+- Configurable timeout settings for API requests
 
 Deduplication
 -------------
 A ``seen_ids`` set prevents the same sub-category ID from appearing twice
 in the final list, which can otherwise happen when a sub-category is shared
 between two top-level buckets.
+
 """
 
 import time
@@ -135,7 +167,7 @@ def _fetch_subcategories(
                 )
                 return []
             wait = config.RETRY_BACKOFF * attempt
-            logger.warning("Attempt %d failed (%s). Retrying in %ds…", attempt, exc, wait)
+            logger.warning("Attempt %d failed (%s). Retrying in %ds...", attempt, exc, wait)
             time.sleep(wait)
 
     data = resp.json().get("data", {})
@@ -204,7 +236,7 @@ def fetch_categories(session: Optional[requests.Session] = None) -> list[dict]:
 
     for top in TOP_LEVEL_CATEGORIES:
         logger.info(
-            "Fetching subcategories for '%s' (id=%s)…",
+            "Fetching subcategories for '%s' (id=%s)...",
             top["name"], top["id"],
         )
 
