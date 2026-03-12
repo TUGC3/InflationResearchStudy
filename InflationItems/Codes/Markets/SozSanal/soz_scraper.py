@@ -164,25 +164,36 @@ def main() -> None:
         visited.add(path_id)
 
         print(f"Scraping path={path_id} ...")
-        try:
-            products, discovered = scrape_path(path_id)
-            print(f"  -> {len(products)} items found on this path")
+        products, discovered = None, None
+        for attempt in range(1, 4):  # up to 3 attempts
+            try:
+                products, discovered = scrape_path(path_id)
+                break
+            except Exception as e:
+                if attempt < 3:
+                    wait = attempt * 10
+                    print(f"  !! Attempt {attempt} failed path={path_id}: {e} — retrying in {wait}s")
+                    time.sleep(wait)
+                else:
+                    print(f"  !! Failed path={path_id} after 3 attempts: {e}")
 
-            for p in discovered:
-                if p not in visited:
-                    q.append(p)
+        if products is None:
+            continue
 
-            for name, price in products:
-                key = (name, price)
-                if key in global_seen:
-                    continue
-                global_seen.add(key)
+        print(f"  -> {len(products)} items found on this path")
 
-                final_rows.append((next_id, name, price))
-                next_id += 1
+        for p in discovered:
+            if p not in visited:
+                q.append(p)
 
-        except Exception as e:
-            print(f"  !! Failed path={path_id}: {e}")
+        for name, price in products:
+            key = (name, price)
+            if key in global_seen:
+                continue
+            global_seen.add(key)
+
+            final_rows.append((next_id, name, price))
+            next_id += 1
 
     out_dir = os.path.join(repo_root(), "Datas", "Markets", "SozSanal")
     os.makedirs(out_dir, exist_ok=True)
