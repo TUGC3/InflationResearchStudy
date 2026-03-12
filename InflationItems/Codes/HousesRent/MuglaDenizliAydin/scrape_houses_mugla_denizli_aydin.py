@@ -34,12 +34,31 @@ def setup_driver():
     return driver
 
 
+def _safe_get(driver, url):
+    """Navigate to a URL, recreating driver if the session died."""
+    try:
+        driver.get(url)
+        return driver
+    except Exception as exc:
+        msg = str(exc).lower()
+        if "invalid session id" in msg or "session deleted" in msg or "disconnected" in msg:
+            print("Browser session lost. Restarting Chrome...")
+            try:
+                driver.quit()
+            except Exception:
+                pass
+            driver = setup_driver()
+            driver.get(url)
+            return driver
+        raise
+
+
 def scrape_city(driver, city_url_name, folder_name):
     """Scrapes data for a specific city, handling CAPTCHAs and all pages."""
     url = f"https://www.sahibinden.com/kiralik/{city_url_name}?pagingSize=50"
 
     print(f"\nLoading {url}...")
-    driver.get(url)
+    driver = _safe_get(driver, url)
 
     all_scraped_data = []
     page_num = 1
@@ -110,7 +129,7 @@ def scrape_city(driver, city_url_name, folder_name):
         next_button = soup.find("a", title="Sonraki")
         if next_button and "href" in next_button.attrs:
             next_url = "https://www.sahibinden.com" + next_button["href"]
-            driver.get(next_url)
+            driver = _safe_get(driver, next_url)
             page_num += 1
             time.sleep(random.uniform(2, 4))
         else:
@@ -119,6 +138,7 @@ def scrape_city(driver, city_url_name, folder_name):
 
     if all_scraped_data:
         save_to_csv(folder_name, all_scraped_data)
+    return driver
 
 
 def resolve_rooms_index(soup):
@@ -195,12 +215,48 @@ def normalize_price(price_text):
 def main():
     driver = setup_driver()
     try:
-        for city_url_name, folder_name in CITIES.items():
+        selected = select_cities()
+        for city_url_name, folder_name in selected.items():
             print(f"\n--- Scraping {folder_name} ---")
-            scrape_city(driver, city_url_name, folder_name)
+            try:
+                driver = scrape_city(driver, city_url_name, folder_name)
+            except KeyboardInterrupt:
+                print("\nStopping on user request. Exiting...")
+                return
             time.sleep(5)
     finally:
         driver.quit()
+
+
+def select_cities():
+    """Prompt user to choose which cities to scrape."""
+    keys = list(CITIES.keys())
+    print("Select cities to scrape:")
+    for idx, key in enumerate(keys, start=1):
+        print(f"{idx}) {CITIES[key]}")
+    print("A) All cities")
+    choice = input("Enter numbers separated by comma (or A for all): ").strip().lower()
+
+    if not choice or choice == "a":
+        return CITIES
+
+    selected_keys = []
+    for part in choice.split(","):
+        part = part.strip()
+        if not part:
+            continue
+        try:
+            idx = int(part)
+        except ValueError:
+            continue
+        if 1 <= idx <= len(keys):
+            selected_keys.append(keys[idx - 1])
+
+    if not selected_keys:
+        print("No valid selection. Defaulting to all cities.")
+        return CITIES
+
+    return {key: CITIES[key] for key in selected_keys}
 
 
 if __name__ == "__main__":
