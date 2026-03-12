@@ -164,19 +164,22 @@ def run(args: argparse.Namespace) -> None:
 
     driver = setup_driver()
     total_saved = 0
+    cached_rooms_idx = None  # Cache room column index across seed ranges
 
     try:
         brackets_scraped = 0
+        start_time = time.time()
 
         for seed_min, seed_max in config.SEED_RANGES:
             logger.info("Seed range: %d – %d TL", seed_min, seed_max)
-            saved = scrape_and_resolve(
+            saved, cached_rooms_idx = scrape_and_resolve(
                 driver, seed_min, seed_max,
                 done_ranges=done_ranges,
                 save_fn=_append_records,
                 mark_done_fn=mark_done,
                 bracket_cache=None,
                 delay=args.delay,
+                cached_rooms_idx=cached_rooms_idx,
             )
             total_saved += saved
             brackets_scraped += 1
@@ -196,6 +199,9 @@ def run(args: argparse.Namespace) -> None:
                 config.BETWEEN_BRACKET_DELAY_MIN,
                 config.BETWEEN_BRACKET_DELAY_MAX,
             ))
+        
+        elapsed_time = time.time() - start_time
+        logger.info("Scraping completed in %.1f seconds (%.1f min)", elapsed_time, elapsed_time / 60)
 
     finally:
         driver.quit()

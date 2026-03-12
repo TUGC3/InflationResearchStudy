@@ -24,9 +24,11 @@ import random
 import re
 import threading
 import time
+from typing import Optional
 
 import undetected_chromedriver as uc
-from bs4 import BeautifulSoup
+from lxml import html as lxml_html
+from lxml import etree
 
 import config
 
@@ -35,6 +37,99 @@ logger = logging.getLogger(__name__)
 # One CAPTCHA prompt at a time — prevents interleaved terminal output if the
 # scraper is ever adapted for concurrent use.
 _captcha_lock = threading.Lock()
+
+
+# ── Adaptive Delay Tracker ───────────────────────────────────────────────────
+
+class AdaptiveDelayTracker:
+    """Tracks request success/failure and dynamically adjusts delays.
+    
+    Attributes
+    ----------
+    current_delay : float
+        Current delay value in seconds.
+    consecutive_successes : int
+        Count of consecutive successful requests.
+    consecutive_failures : int
+        Count of consecutive failed requests.
+    """
+    
+    def __init__(self, initial_delay: float = config.PAGE_LOAD_DELAY):
+        self.current_delay = initial_delay
+        self.consecutive_successes = 0
+        self.consecutive_failures = 0
+        self._last_request_time = 0.0
+    
+    def record_success(self) -> None:
+        """Record a successful request and potentially reduce delay."""
+        if not config.ADAPTIVE_DELAY_ENABLED:
+            return
+            
+        self.consecutive_successes += 1
+        self.consecutive_failures = 0
+        
+        # Reduce delay after consecutive successes
+        if self.consecutive_successes >= config.SUCCESS_THRESHOLD:
+            old_delay = self.current_delay
+            self.current_delay = max(
+                config.MIN_DELAY,
+                self.current_delay * config.DELAY_DECREASE_FACTOR
+            )
+            if old_delay != self.current_delay:
+                logger.debug(
+                    "Reduced delay: %.2fs → %.2fs (after %d successes)",
+                    old_delay, self.current_delay, self.consecutive_successes
+                )
+    
+    def record_failure(self) -> None:
+        """Record a failed request and increase delay."""
+        if not config.ADAPTIVE_DELAY_ENABLED:
+            return
+            
+        self.consecutive_failures += 1
+        self.consecutive_successes = 0
+        
+        old_delay = self.current_delay
+        self.current_delay = min(
+            config.MAX_DELAY,
+            self.current_delay * config.DELAY_INCREASE_FACTOR
+        )
+        logger.warning(
+            "Increased delay: %.2fs → %.2fs (after %d failures)",
+            old_delay, self.current_delay, self.consecutive_failures
+        )
+    
+    def get_delay(self, jitter: bool = True) -> float:
+        """Get the current delay with optional jitter.
+        
+        Args
+        ----
+        jitter : bool
+            If True, apply random jitter to the delay.
+        
+        Returns
+        -------
+        float
+            Delay in seconds with jitter applied.
+        """
+        if jitter:
+            return self.current_delay * random.uniform(0.5, 1.5)
+        return self.current_delay
+    
+    def wait(self, jitter: bool = True) -> None:
+        """Wait for the adaptive delay period.
+        
+        Args
+        ----
+        jitter : bool
+            If True, apply random jitter to the delay.
+        """
+        delay = self.get_delay(jitter)
+        time.sleep(delay)
+
+
+# Global adaptive delay tracker instance
+_delay_tracker = AdaptiveDelayTracker()
 
 
 # ── Driver factory ────────────────────────────────────────────────────────────
@@ -60,34 +155,37 @@ def setup_driver(profile_dir: str | None = None) -> uc.Chrome:
 
 # ── HTML helpers ──────────────────────────────────────────────────────────────
 
-def _extract_total_listings(soup: BeautifulSoup) -> int | None:
+def _extract_total_listings(tree: etree._Element) -> int | None:
     """Finds the total number of listings from the summary text.
 
     Example: '"İstanbul Kiralık Ev"aramanızda3.193 ilanbulundu.' -> 3193
 
     Args
     ----
-    soup : BeautifulSoup
-        Parsed HTML of the sahibinden.com page.
+    tree : etree._Element
+        Parsed lxml HTML tree of the sahibinden.com page.
 
     Returns
     -------
     int | None
         Total listing integer if found, None otherwise.
     """
-    res_elem = soup.select_one(".result-text")
-    if res_elem:
-        text = res_elem.get_text(strip=True)
+    # Try to find the result-text element using XPath (faster than CSS selectors)
+    res_elems = tree.xpath(".//*[contains(@class, 'result-text')]") 
+    if res_elems:
+        text = res_elems[0].text_content().strip()
         clean_text = text.replace(".", "")
         match = re.search(r"(\d+)\s*ilan", clean_text, re.IGNORECASE)
         if match:
             return int(match.group(1))
 
-    for tag in soup.find_all(string=lambda t: t and "ilan" in t.lower()):
-        parent = tag.parent
-        if parent and parent.name not in ["script", "style", "title"]:
-            text = tag.strip()
-            clean_text = text.replace(".", "")
+    # Fallback: search all text nodes containing "ilan"
+    text_nodes = tree.xpath(".//text()[contains(translate(., 'İILAN', 'iilan'), 'ilan')]")
+    for text in text_nodes:
+        # Skip script, style, title tags
+        parent = text.getparent()
+        if parent is not None and parent.tag not in ["script", "style", "title"]:
+            clean_text = text.strip().replace(".", "")
             match = re.search(r"(\d+)\s*ilan\s*(?:bulundu|var)", clean_text, re.IGNORECASE)
             if match:
                 return int(match.group(1))
@@ -95,38 +193,36 @@ def _extract_total_listings(soup: BeautifulSoup) -> int | None:
     return None
 
 
-def _resolve_rooms_index(soup: BeautifulSoup) -> int | None:
+def _resolve_rooms_index(tree: etree._Element) -> int | None:
     """Identifies the index of the "Rooms" column in the search results table.
 
     Args
     ----
-    soup : BeautifulSoup
-        Parsed HTML of the sahibinden.com page.
+    tree : etree._Element
+        Parsed lxml HTML tree of the sahibinden.com page.
 
     Returns
     -------
     int | None
         0-based index of the "Oda" column, or None if not located.
     """
-    headers = [
-        th.get_text(strip=True)
-        for th in soup.select(
-            "#searchResultsTable thead th.searchResultsAttributeHeader"
-        )
-    ]
-    for idx, header in enumerate(headers):
-        if "oda" in header.lower().replace("ı", "i"):
+    # Use XPath for faster header extraction
+    headers = tree.xpath(".//table[@id='searchResultsTable']//thead//th[contains(@class, 'searchResultsAttributeHeader')]")
+    
+    for idx, th in enumerate(headers):
+        header_text = th.text_content().strip().lower().replace("ı", "i")
+        if "oda" in header_text:
             return idx
     return None
 
 
-def _parse_listings(soup: BeautifulSoup, rooms_idx: int | None) -> list[dict]:
+def _parse_listings(tree: etree._Element, rooms_idx: int | None) -> list[dict]:
     """Extracts listing metrics from the page's search results table.
 
     Args
     ----
-    soup : BeautifulSoup
-        Parsed HTML of the sahibinden.com page.
+    tree : etree._Element
+        Parsed lxml HTML tree of the sahibinden.com page.
     rooms_idx : int | None
         The column index containing the rooms data.
 
@@ -136,19 +232,29 @@ def _parse_listings(soup: BeautifulSoup, rooms_idx: int | None) -> list[dict]:
         A list of dictionaries containing District, Rooms, and Price keys.
     """
     records = []
-    for row in soup.select("#searchResultsTable tbody tr.searchResultsItem"):
+    # Use XPath for faster row extraction
+    rows = tree.xpath(".//table[@id='searchResultsTable']//tbody//tr[contains(@class, 'searchResultsItem')]")
+    
+    for row in rows:
         try:
-            price_elem = row.select_one(".searchResultsPriceValue")
-            price = price_elem.text.strip() if price_elem else None
+            # Extract price using XPath
+            price_elems = row.xpath(".//*[contains(@class, 'searchResultsPriceValue')]") 
+            price = price_elems[0].text_content().strip() if price_elems else None
 
-            loc_elem = row.select_one(".searchResultsLocationValue")
-            district = " / ".join(loc_elem.stripped_strings) if loc_elem else "N/A"
+            # Extract location/district using XPath
+            loc_elems = row.xpath(".//*[contains(@class, 'searchResultsLocationValue')]")
+            if loc_elems:
+                # Get all text content and join with " / "
+                district = " / ".join(loc_elems[0].text_content().split())
+            else:
+                district = "N/A"
 
-            attrs = row.select(".searchResultsAttributeValue")
+            # Extract attributes (rooms, etc.) using XPath
+            attrs = row.xpath(".//*[contains(@class, 'searchResultsAttributeValue')]")
             if rooms_idx is not None and len(attrs) > rooms_idx:
-                rooms = attrs[rooms_idx].text.strip()
+                rooms = attrs[rooms_idx].text_content().strip()
             elif len(attrs) > 1:
-                rooms = attrs[1].text.strip()
+                rooms = attrs[1].text_content().strip()
             else:
                 rooms = "N/A"
 
@@ -187,8 +293,60 @@ def _build_url(min_price: int, max_price: int, page: int = 1) -> str:
     return url
 
 
-def _wait_for_listings(driver: uc.Chrome) -> BeautifulSoup:
-    """Wait for the page to settle, then return its parsed soup.
+def _retry_with_backoff(func, max_retries: int = config.MAX_RETRIES, *args, **kwargs):
+    """Execute a function with exponential backoff retry logic.
+    
+    Args
+    ----
+    func : callable
+        Function to execute.
+    max_retries : int
+        Maximum number of retry attempts.
+    *args, **kwargs
+        Arguments to pass to the function.
+    
+    Returns
+    -------
+    Any
+        Result of the function call.
+    
+    Raises
+    ------
+    Exception
+        If all retries are exhausted.
+    """
+    last_exception = None
+    
+    for attempt in range(max_retries):
+        try:
+            result = func(*args, **kwargs)
+            _delay_tracker.record_success()
+            return result
+        except Exception as exc:
+            last_exception = exc
+            _delay_tracker.record_failure()
+            
+            if attempt < max_retries - 1:
+                backoff_delay = min(
+                    config.RETRY_BACKOFF_BASE * (2 ** attempt),
+                    config.RETRY_BACKOFF_MAX
+                )
+                logger.warning(
+                    "Attempt %d/%d failed: %s. Retrying in %.1fs...",
+                    attempt + 1, max_retries, str(exc), backoff_delay
+                )
+                time.sleep(backoff_delay)
+            else:
+                logger.error(
+                    "All %d retry attempts exhausted. Last error: %s",
+                    max_retries, str(exc)
+                )
+    
+    raise last_exception
+
+
+def _wait_for_listings(driver: uc.Chrome) -> etree._Element:
+    """Wait for the page to settle, then return its parsed lxml tree.
 
     If no listing rows are found and the page does not show a "no results"
     message, a CAPTCHA or login wall is assumed. The scraper pauses and
@@ -202,26 +360,27 @@ def _wait_for_listings(driver: uc.Chrome) -> BeautifulSoup:
 
     Returns
     -------
-    BeautifulSoup
-        Parsed HTML soup of the driver's current active page.
+    etree._Element
+        Parsed lxml HTML tree of the driver's current active page.
     """
-    time.sleep(config.PAGE_LOAD_DELAY)
+    _delay_tracker.wait(jitter=True)
     try:
         driver.switch_to.window(driver.window_handles[-1])
         driver.switch_to.default_content()
-        html = driver.execute_script("return document.documentElement.outerHTML;")
+        html_content = driver.execute_script("return document.documentElement.outerHTML;")
     except Exception:
-        html = driver.page_source
+        html_content = driver.page_source
 
-    soup = BeautifulSoup(html, "lxml")
-    listings = soup.select("#searchResultsTable tbody tr.searchResultsItem")
+    # Parse with lxml for 5-10x performance improvement
+    tree = lxml_html.fromstring(html_content)
+    listings = tree.xpath(".//table[@id='searchResultsTable']//tbody//tr[contains(@class, 'searchResultsItem')]")
 
     if listings:
-        return soup
+        return tree
 
-    page_lower = html.lower()
+    page_lower = html_content.lower()
     if "ilan bulunamadı" in page_lower or "bulunamamıştır" in page_lower:
-        return soup
+        return tree
 
     # CAPTCHA / login wall — prompt the user and keep retrying until the
     # listing table is visible or the page clearly shows no results.
@@ -238,17 +397,17 @@ def _wait_for_listings(driver: uc.Chrome) -> BeautifulSoup:
             try:
                 driver.switch_to.window(driver.window_handles[-1])
                 driver.switch_to.default_content()
-                html = driver.execute_script("return document.documentElement.outerHTML;")
+                html_content = driver.execute_script("return document.documentElement.outerHTML;")
             except Exception:
-                html = driver.page_source
+                html_content = driver.page_source
 
-            soup = BeautifulSoup(html, "lxml")
-            listings = soup.select("#searchResultsTable tbody tr.searchResultsItem")
+            tree = lxml_html.fromstring(html_content)
+            listings = tree.xpath(".//table[@id='searchResultsTable']//tbody//tr[contains(@class, 'searchResultsItem')]")
 
             if listings:
                 break
 
-            page_lower = html.lower()
+            page_lower = html_content.lower()
             if "ilan bulunamadı" in page_lower or "bulunamamıştır" in page_lower:
                 break
 
@@ -257,22 +416,23 @@ def _wait_for_listings(driver: uc.Chrome) -> BeautifulSoup:
             print("      (If you are stuck, simply navigate back to the search results in Chrome!)")
             print("      Please wait a moment longer or try refreshing the page manually.")
 
-    return soup
+    return tree
 
 
 # ── Shared page-scraping helper ───────────────────────────────────────────────
 
 def _scrape_pages_from_soup(
     driver: uc.Chrome,
-    soup: BeautifulSoup,
+    tree: etree._Element,
     min_price: int,
     max_price: int,
     delay: float,
     pad: str = "",
+    cached_rooms_idx: Optional[int] = None,
 ) -> list[dict]:
-    """Scrape all pages of a bracket, starting from an already-loaded soup.
+    """Scrape all pages of a bracket, starting from an already-loaded lxml tree.
 
-    page 1 soup is passed in directly (already fetched by the caller) so no
+    page 1 tree is passed in directly (already fetched by the caller) so no
     additional request is made for the first page. Subsequent pages are
     navigated using the "Sonraki" (Next) button. Stops at page 20, which is
     the hard cap imposed by sahibinden.com (20 pages × 50 listings = 1 000).
@@ -281,16 +441,18 @@ def _scrape_pages_from_soup(
     ----
     driver : uc.Chrome
         Active Chrome driver instance.
-    soup : BeautifulSoup
-        The fetched page 1 HTML data for iterative processing.
+    tree : etree._Element
+        The fetched page 1 lxml HTML tree for iterative processing.
     min_price : int
         Minimum price limit for logs.
     max_price : int
         Maximum price limit for logs.
     delay : float
-        Base delay value between pagination shifts.
+        Base delay value between pagination shifts (deprecated, uses adaptive delay).
     pad : str
         Padding for console display visuals.
+    cached_rooms_idx : Optional[int]
+        Pre-cached room column index to avoid re-parsing.
 
     Returns
     -------
@@ -298,36 +460,49 @@ def _scrape_pages_from_soup(
         Complete list of collected row dictionaries spanning all accessible pages.
     """
     records: list[dict] = []
-    rooms_idx: int | None = _resolve_rooms_index(soup)
+    # Use cached index if available, otherwise resolve it
+    rooms_idx: int | None = cached_rooms_idx if cached_rooms_idx is not None else _resolve_rooms_index(tree)
     page_num = 1
+    empty_pages = 0  # Track consecutive empty pages for early termination
 
     while True:
-        page_records = _parse_listings(soup, rooms_idx)
-        records.extend(page_records)
-
+        page_records = _parse_listings(tree, rooms_idx)
+        
         if page_records:
+            records.extend(page_records)
+            empty_pages = 0  # Reset empty page counter
             logger.info(
                 "%s  Page %2d: %2d listings (total: %d) | %d–%d TL",
                 pad, page_num, len(page_records), len(records),
                 min_price, max_price,
             )
+        else:
+            empty_pages += 1
+            # Early termination if we hit 2 consecutive empty pages
+            if empty_pages >= 2:
+                logger.info("%s  No more listings found after page %d. Stopping.", pad, page_num)
+                break
 
         # Sahibinden hard cap: 20 pages × 50 = 1 000 listings
         if page_num >= 20:
             break
 
-        has_next_btn = soup.find("a", title="Sonraki")
-        if not has_next_btn:
+        # Use XPath to find next button (faster than BeautifulSoup)
+        next_btns = tree.xpath(".//a[@title='Sonraki']")
+        if not next_btns:
             break
 
-        next_url = "https://www.sahibinden.com" + has_next_btn["href"]
+        next_url = "https://www.sahibinden.com" + next_btns[0].get("href")
         driver.get(next_url)
         page_num += 1
-        time.sleep(delay * random.uniform(0.5, 1.5))
-        soup = _wait_for_listings(driver)
+        
+        # Use adaptive delay instead of fixed delay
+        _delay_tracker.wait(jitter=True)
+        tree = _wait_for_listings(driver)
 
+        # Only re-resolve rooms index if we don't have it yet
         if rooms_idx is None:
-            rooms_idx = _resolve_rooms_index(soup)
+            rooms_idx = _resolve_rooms_index(tree)
 
     return records
 
@@ -344,7 +519,8 @@ def scrape_and_resolve(
     bracket_cache: list | None = None,
     delay: float = config.PAGE_LOAD_DELAY,
     indent: int = 0,
-) -> int:
+    cached_rooms_idx: Optional[int] = None,
+) -> tuple[int, Optional[int]]:
     """Recursively resolves and scrapes the price range [min_price, max_price].
 
     On the first page load, peeks at the total listing count:
@@ -386,40 +562,78 @@ def scrape_and_resolve(
 
     if (min_price, max_price) in done_ranges:
         logger.info("%s↩  Skipping completed: %d–%d TL", pad, min_price, max_price)
-        return 0
+        return 0, cached_rooms_idx
 
     width = max_price - min_price
     logger.info("%s▶  Checking range %d–%d TL…", pad, min_price, max_price)
 
     url = _build_url(min_price, max_price, page=1)
-    driver.get(url)
-    soup = _wait_for_listings(driver)
-    total_listings = _extract_total_listings(soup)
+    
+    # Use retry logic for page loading
+    def load_page():
+        driver.get(url)
+        return _wait_for_listings(driver)
+    
+    try:
+        tree = _retry_with_backoff(load_page)
+    except Exception as exc:
+        logger.error("%s✗  Failed to load range %d–%d TL: %s", pad, min_price, max_price, exc)
+        return 0, cached_rooms_idx
+    
+    total_listings = _extract_total_listings(tree)
+    
+    # Cache room index on first successful parse
+    if cached_rooms_idx is None:
+        cached_rooms_idx = _resolve_rooms_index(tree)
 
     # ── Split decision ────────────────────────────────────────────────────────
-    if (
+    # Intelligent splitting: split earlier for high-density ranges
+    should_split = (
         total_listings is not None
         and total_listings > config.MAX_LISTINGS_PER_QUERY
         and width > config.MIN_BRACKET_WIDTH
-    ):
-        logger.info(
-            "%s   ✂️ Range too dense (%d listings). Splitting…",
-            pad, total_listings,
-        )
+    )
+    
+    # Early split for high-density ranges to optimize performance
+    early_split = (
+        total_listings is not None
+        and total_listings > config.HIGH_DENSITY_THRESHOLD
+        and width > config.MIN_BRACKET_WIDTH * 2
+    )
+    
+    if should_split or early_split:
+        if early_split and not should_split:
+            logger.info(
+                "%s   ⚡ High density (%d listings). Early split for optimization…",
+                pad, total_listings,
+            )
+        else:
+            logger.info(
+                "%s   ✂️ Range too dense (%d listings). Splitting…",
+                pad, total_listings,
+            )
+        
         mid = (min_price + max_price) // 2
+        
+        # Use adaptive delay between splits
         time.sleep(random.uniform(
             config.BETWEEN_BRACKET_DELAY_MIN,
             config.BETWEEN_BRACKET_DELAY_MAX,
         ))
-        total = scrape_and_resolve(
+        
+        # Recursively split with cached room index
+        total, cached_rooms_idx = scrape_and_resolve(
             driver, min_price, mid,
             done_ranges, save_fn, mark_done_fn, bracket_cache, delay, indent + 1,
+            cached_rooms_idx,
         )
-        total += scrape_and_resolve(
+        count2, cached_rooms_idx = scrape_and_resolve(
             driver, mid + 1, max_price,
             done_ranges, save_fn, mark_done_fn, bracket_cache, delay, indent + 1,
+            cached_rooms_idx,
         )
-        return total
+        total += count2
+        return total, cached_rooms_idx
 
     elif total_listings is not None and total_listings > config.MAX_LISTINGS_PER_QUERY:
         logger.warning(
@@ -427,6 +641,11 @@ def scrape_and_resolve(
             "Scraping up to the 1000-listing limit only.",
             pad, width, total_listings,
         )
+    elif total_listings is not None and total_listings == 0:
+        logger.info("%s   ⊘ Empty range (0 listings). Skipping.", pad)
+        mark_done_fn(min_price, max_price)
+        done_ranges.add((min_price, max_price))
+        return 0, cached_rooms_idx
     elif total_listings is not None:
         logger.info(
             "%s   ✓ Safe range (%d listings). Scraping now…",
@@ -439,7 +658,9 @@ def scrape_and_resolve(
     if bracket_cache is not None:
         bracket_cache.append([min_price, max_price])
 
-    records = _scrape_pages_from_soup(driver, soup, min_price, max_price, delay, pad)
+    records = _scrape_pages_from_soup(
+        driver, tree, min_price, max_price, delay, pad, cached_rooms_idx
+    )
 
     if records:
         save_fn(records)
@@ -450,7 +671,7 @@ def scrape_and_resolve(
 
     mark_done_fn(min_price, max_price)
     done_ranges.add((min_price, max_price))
-    return len(records)
+    return len(records), cached_rooms_idx
 
 
 # ── Direct leaf-bracket scrape ────────────────────────────────────────────────
@@ -462,7 +683,8 @@ def scrape_leaf_bracket(
     save_fn,
     mark_done_fn,
     delay: float = config.PAGE_LOAD_DELAY,
-) -> int:
+    cached_rooms_idx: Optional[int] = None,
+) -> tuple[int, Optional[int]]:
     """Scrape a single price bracket whose bounds are already known to be safe.
 
     Used on --resume when the complete bracket list has been cached in the
@@ -482,26 +704,43 @@ def scrape_leaf_bracket(
     mark_done_fn : Callable
         Function for updating ongoing progress logs.
     delay : float
-        Pre-configured sleep buffer limit.
+        Pre-configured sleep buffer limit (deprecated, uses adaptive delay).
+    cached_rooms_idx : Optional[int]
+        Pre-cached room column index to avoid re-parsing.
 
     Returns
     -------
-    int
-        Valid records generated through iteration over accessible pages.
+    tuple[int, Optional[int]]
+        Tuple of (record count, cached room index).
     """
     logger.info("▶  Scraping bracket %d–%d TL…", min_price, max_price)
     url = _build_url(min_price, max_price, page=1)
-    driver.get(url)
-    soup = _wait_for_listings(driver)
+    
+    # Use retry logic for page loading
+    def load_page():
+        driver.get(url)
+        return _wait_for_listings(driver)
+    
+    try:
+        tree = _retry_with_backoff(load_page)
+    except Exception as exc:
+        logger.error("✗  Failed to load bracket %d–%d TL: %s", min_price, max_price, exc)
+        return 0, cached_rooms_idx
+    
+    # Cache room index if not already cached
+    if cached_rooms_idx is None:
+        cached_rooms_idx = _resolve_rooms_index(tree)
 
-    records = _scrape_pages_from_soup(driver, soup, min_price, max_price, delay)
+    records = _scrape_pages_from_soup(
+        driver, tree, min_price, max_price, delay, "", cached_rooms_idx
+    )
 
     if records:
         save_fn(records)
         logger.info("✅ Saved %d records for %d–%d TL.", len(records), min_price, max_price)
 
     mark_done_fn(min_price, max_price)
-    return len(records)
+    return len(records), cached_rooms_idx
 
 
 # ── CSV output ────────────────────────────────────────────────────────────────

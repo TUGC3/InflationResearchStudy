@@ -64,6 +64,10 @@ MAX_LISTINGS_PER_QUERY = 1000
 # listings share the exact same price.
 MIN_BRACKET_WIDTH = 50
 
+# Density-aware splitting: split more aggressively in high-density ranges
+HIGH_DENSITY_THRESHOLD = 800            # Split earlier if count exceeds this
+OPTIMAL_BRACKET_SIZE   = 500            # Target listings per bracket for efficiency
+
 # ── Request / Timing Settings ─────────────────────────────────────────────────
 PAGE_SIZE              = 50             # Listings per page (sahibinden max)
 PAGE_LOAD_DELAY        = 2.5            # Seconds to wait after a page loads
@@ -71,6 +75,19 @@ PAGE_LOAD_DELAY        = 2.5            # Seconds to wait after a page loads
                                         #   actual wait = PAGE_LOAD_DELAY * uniform(0.5, 1.5)
 BETWEEN_BRACKET_DELAY_MIN = 1.0         # Random range between splits during discovery (s)
 BETWEEN_BRACKET_DELAY_MAX = 2.0
+
+# ── Adaptive Rate Limiting Settings ───────────────────────────────────────────
+ADAPTIVE_DELAY_ENABLED = True           # Enable adaptive delay adjustments
+MIN_DELAY              = 1.5            # Minimum delay (seconds) - safety floor
+MAX_DELAY              = 8.0            # Maximum delay (seconds) - cap for errors
+DELAY_DECREASE_FACTOR  = 0.95           # Multiply delay by this on success
+DELAY_INCREASE_FACTOR  = 1.5            # Multiply delay by this on error
+SUCCESS_THRESHOLD      = 3              # Consecutive successes before reducing delay
+
+# ── Retry Settings ─────────────────────────────────────────────────────────────
+MAX_RETRIES            = 3              # Maximum retry attempts for failed requests
+RETRY_BACKOFF_BASE     = 2.0            # Base delay for exponential backoff (seconds)
+RETRY_BACKOFF_MAX      = 30.0           # Maximum backoff delay (seconds)
 
 # ── Browser Settings ──────────────────────────────────────────────────────────
 SELENIUM_PROFILE_DIR = str(_SCRAPER_DIR / "SeleniumProfile")
