@@ -60,3 +60,36 @@ def percentage_change(date1, date2):
 change = percentage_change("2026-03-02", "2026-03-13")
 
 print(f"Price average changed by {change:.2f}% between the selected dates.")
+
+
+def product_based_change(products, date1, date2):
+    
+    file1 = os.path.join(DATA_FOLDER, f"arden_urunler_{date1}.csv")
+    file2 = os.path.join(DATA_FOLDER, f"arden_urunler_{date2}.csv")
+
+    df1 = pd.read_csv(file1)
+    df2 = pd.read_csv(file2)
+
+    df1 = clean_price_column(df1)
+    df2 = clean_price_column(df2)
+
+    df1 = df1[df1["isim"].isin(products)]
+    df2 = df2[df2["isim"].isin(products)]
+
+    merged = pd.merge(
+        df1[["isim", "fiyat"]],
+        df2[["isim","fiyat"]],
+        on = "isim",
+        suffixes=("_old" , "_new")
+    )
+
+    merged["change_percent"] = (
+        (merged["fiyat_new"] - merged["fiyat_old"])
+        / merged["fiyat_old"]
+    ) *100
+
+    return merged
+
+
+result = product_based_change(["Dana Rosto Kg"], "2026-03-02", "2026-03-12")
+print(result)
