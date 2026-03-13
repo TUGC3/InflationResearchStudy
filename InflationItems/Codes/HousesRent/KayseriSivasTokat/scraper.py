@@ -6,6 +6,9 @@ import shutil
 from datetime import datetime
 from bs4 import BeautifulSoup
 import undetected_chromedriver as uc
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
 # ============================================================
 # Per-city price brackets, calibrated from real data (2026-02-27)
@@ -38,14 +41,13 @@ TOKAT_BRACKETS = [
 ]
 
 
-
 CITIES = {
     'kayseri': {'folder': 'Kayseri', 'brackets': KAYSERI_BRACKETS},
-    'sivas': {'folder': 'Sivas', 'brackets': SIVAS_BRACKETS},
-    'tokat': {'folder': 'Tokat', 'brackets': TOKAT_BRACKETS}
+    'sivas':   {'folder': 'Sivas',   'brackets': SIVAS_BRACKETS},
+    'tokat':   {'folder': 'Tokat',   'brackets': TOKAT_BRACKETS}
 }
 
-SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+SCRIPT_DIR    = os.path.dirname(os.path.abspath(__file__))
 DATA_BASE_DIR = os.path.abspath(os.path.join(SCRIPT_DIR, "../../../Datas/HousesRent/"))
 
 _profile_counter = 0
@@ -62,7 +64,6 @@ def _detect_chrome_version():
     ]:
         try:
             out = subprocess.check_output(cmd, stderr=subprocess.DEVNULL).decode().strip()
-            # e.g. "Google Chrome 145.0.7632.116"
             ver = int(out.split()[-1].split(".")[0])
             print(f"🔍 Detected Chrome version: {ver}")
             return ver
@@ -77,14 +78,13 @@ def setup_driver():
     global _profile_counter
     _profile_counter += 1
 
-
     options = uc.ChromeOptions()
     profile_path = os.path.join(SCRIPT_DIR, f"SeleniumProfile_{_profile_counter}")
     options.add_argument(f"--user-data-dir={profile_path}")
     if os.environ.get('HEADLESS', '').lower() in ('1', 'true', 'yes'):
         options.add_argument('--headless=new')
-    options.add_argument('--no-sandbox')
-    options.add_argument('--disable-dev-shm-usage')
+        options.add_argument('--no-sandbox')
+        options.add_argument('--disable-dev-shm-usage')
 
     driver = uc.Chrome(options=options, version_main=145)
     return driver
@@ -99,12 +99,35 @@ def close_driver(driver):
     print("🔒 Chrome instance closed.")
 
 
+def handle_browser_check(driver):
+    """Detects and clicks through Sahibinden's browser check page (Cloudflare Turnstile)."""
+    if "tarayıcınızı kontrol ediyoruz" not in driver.page_source.lower():
+        return
+    print("🤖 Browser check sayfası tespit edildi, Turnstile bekleniyor...")
+    try:
+        # Turnstile response input'u yüklenene kadar bekle (widget ID değişkendir, name ile yakala)
+        WebDriverWait(driver, 25).until(
+            EC.presence_of_element_located((By.CSS_SELECTOR, "input[name='cf-turnstile-response']"))
+        )
+        time.sleep(random.uniform(4.0, 6.0))  # Token'ın dolması için bekle
+
+        # Buton: <input type="button" id="btn-continue" value="Devam Et">
+        btn = WebDriverWait(driver, 15).until(
+            EC.element_to_be_clickable((By.ID, "btn-continue"))
+        )
+        btn.click()
+        print("✅ 'Devam Et' butonuna tıklandı, sayfa yükleniyor...")
+        time.sleep(random.uniform(4.0, 6.0))
+    except Exception as e:
+        print(f"⚠️ Browser check geçilemedi: {e}")
+
+
 def is_waiting_page(page_source):
     """Detects Sahibinden's Cloudflare 'please wait' challenge (resolves itself)."""
     lower = page_source.lower()
     wait_signals = [
-        "bir dakika lütfen",  # "Please wait a moment"
-        "lütfen bekleyiniz",  # "Please wait"
+        "bir dakika lütfen",
+        "lütfen bekleyiniz",
     ]
     return any(s in lower for s in wait_signals)
 
@@ -113,14 +136,12 @@ def is_login_page(page_source):
     """Detects if Sahibinden is showing an actual login/captcha page (needs Chrome restart)."""
     lower = page_source.lower()
     login_signals = [
-        "giriş yap",  # "Log in" button/page
-        "üye girişi",  # "Member login"
+        "giriş yap",
+        "üye girişi",
         "captcha",
-        "güvenlik doğrulama",  # "Security verification"
-        "robot olmadığınızı",  # "Verify you're not a robot"
+        "güvenlik doğrulama",
+        "robot olmadığınızı",
     ]
-    # Make sure the page is actually a login form, not just a normal page with a login link
-    # Check for multiple strong signals or a dedicated login form
     strong_hits = sum(1 for s in login_signals if s in lower)
     return strong_hits >= 1 and "searchresultstable" not in lower
 
@@ -139,13 +160,12 @@ def wait_for_challenge(driver, url, max_wait=20):
 
 
 def save_to_csv_incremental(folder_name, data_batch):
-    today_str = datetime.now().strftime("%Y-%m-%d")
+    today_str  = datetime.now().strftime("%Y-%m-%d")
     target_dir = os.path.join(DATA_BASE_DIR, folder_name)
     os.makedirs(target_dir, exist_ok=True)
-    file_path = os.path.join(target_dir, f"{today_str}.csv")
+    file_path  = os.path.join(target_dir, f"{today_str}.csv")
 
     file_exists = os.path.isfile(file_path)
-
     with open(file_path, mode='a', newline='', encoding='utf-8') as file:
         writer = csv.DictWriter(file, fieldnames=["District", "Rooms", "Price"])
         if not file_exists:
@@ -164,13 +184,19 @@ def scrape_city(driver, city_url_name, folder_name, brackets):
         print(f"\n>>> Targeting Price Range: {min_price} TL to {max_price} TL")
 
         bracket_data = []
-        page_num = 1
+        page_num     = 1
 
-        url = f"https://www.sahibinden.com/kiralik/{city_url_name}?pagingSize=50&price_min={min_price}&price_max={max_price}"
+        url = (
+            f"https://www.sahibinden.com/kiralik/{city_url_name}"
+            f"?pagingSize=50&price_min={min_price}&price_max={max_price}"
+        )
         driver.get(url)
 
         while True:
             time.sleep(random.uniform(4.0, 6.0))
+
+            # --- STAGE 0: Browser check page (requires button click) ---
+            handle_browser_check(driver)
 
             page_source = driver.page_source
 
@@ -178,18 +204,20 @@ def scrape_city(driver, city_url_name, folder_name, brackets):
             if is_waiting_page(page_source):
                 resolved = wait_for_challenge(driver, url)
                 if resolved:
+                    handle_browser_check(driver)
                     page_source = driver.page_source
                 else:
-                    # Challenge didn't resolve, restart Chrome
                     print("🔄 Challenge stuck. Restarting Chrome...")
                     close_driver(driver)
                     time.sleep(random.uniform(5, 10))
                     driver = setup_driver()
                     driver.get(url)
                     time.sleep(random.uniform(4, 7))
+                    handle_browser_check(driver)
                     page_source = driver.page_source
                     if is_waiting_page(page_source):
                         wait_for_challenge(driver, url)
+                        handle_browser_check(driver)
                         page_source = driver.page_source
 
             # --- STAGE 2: Handle actual login/captcha walls ---
@@ -200,19 +228,19 @@ def scrape_city(driver, city_url_name, folder_name, brackets):
                 driver = setup_driver()
                 driver.get(url)
                 time.sleep(random.uniform(4, 7))
+                handle_browser_check(driver)
                 page_source = driver.page_source
 
-                # Wait out any challenge on the new instance
                 if is_waiting_page(page_source):
                     wait_for_challenge(driver, url)
+                    handle_browser_check(driver)
                     page_source = driver.page_source
 
-                # If still blocked after restart, skip this bracket
                 if is_login_page(page_source):
                     print("❌ Still blocked after Chrome restart. Skipping this bracket.")
                     break
 
-            soup = BeautifulSoup(page_source, 'html.parser')
+            soup     = BeautifulSoup(page_source, 'html.parser')
             listings = soup.select("#searchResultsTable tbody tr.searchResultsItem")
 
             if not listings:
@@ -228,19 +256,19 @@ def scrape_city(driver, city_url_name, folder_name, brackets):
             for row in listings:
                 try:
                     price_elem = row.select_one(".searchResultsPriceValue")
-                    price = price_elem.text.strip() if price_elem else "N/A"
+                    price      = price_elem.text.strip() if price_elem else "N/A"
 
                     location_elem = row.select_one(".searchResultsLocationValue")
-                    district = " / ".join(location_elem.stripped_strings) if location_elem else "N/A"
+                    district      = " / ".join(location_elem.stripped_strings) if location_elem else "N/A"
 
                     attributes = row.select(".searchResultsAttributeValue")
-                    rooms = attributes[1].text.strip() if len(attributes) > 1 else "N/A"
+                    rooms      = attributes[1].text.strip() if len(attributes) > 1 else "N/A"
 
                     if price != "N/A" and district != "N/A":
                         bracket_data.append({
                             "District": district,
-                            "Rooms": rooms,
-                            "Price": price
+                            "Rooms":    rooms,
+                            "Price":    price
                         })
                 except Exception as e:
                     print(f"Error parsing a row: {e}")
@@ -248,7 +276,7 @@ def scrape_city(driver, city_url_name, folder_name, brackets):
 
             if bracket_data:
                 save_to_csv_incremental(folder_name, bracket_data)
-                bracket_data = []  # clear for next page
+                bracket_data = []
 
             # Pagination
             next_button = soup.find('a', title='Sonraki')
@@ -261,7 +289,7 @@ def scrape_city(driver, city_url_name, folder_name, brackets):
                 print(f"Finished gathering all houses in the {min_price}-{max_price} TL range.")
                 break
 
-    return driver  # Return the (possibly new) driver instance
+    return driver
 
 
 def cleanup_profiles():
@@ -279,7 +307,6 @@ def cleanup_profiles():
 def main():
     driver = setup_driver()
     try:
-        # Loop through the cities
         for city_url_name, city_data in CITIES.items():
             driver = scrape_city(driver, city_url_name, city_data['folder'], city_data['brackets'])
             time.sleep(random.uniform(4.0, 6.0))
