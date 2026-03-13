@@ -1,7 +1,7 @@
 """
 scraper.py — Core scraping logic for the Izmir rent scraper.
 
-Key design: SMART ADAPTIVE BRACKETS (EARLY PEEK)
+Key design: SMART ADAPTIVE BRACKETS (EARLY PEEK) + ACTIVE CLOUDFLARE BYPASS
 ------------------------------------------------
 For any price range, the scraper loads page 1 and looks for the text telling
 us the total number of listings.
@@ -10,10 +10,10 @@ us the total number of listings.
   recursively tries again.
 
 Anti-Bot Evasion & Resuming:
-If a CAPTCHA or Login wall is detected, it raises a CaptchaDetectedException.
+Actively clicks through Cloudflare Turnstile "Devam Et" buttons.
+If a hard CAPTCHA or Login wall is detected, it raises a CaptchaDetectedException.
 The main process deletes the profile (force-killing tasks to avoid file locks)
-and restarts. The scraper remembers exactly which page it was on and resumes
-without duplicating data.
+and restarts.
 """
 
 import csv
@@ -23,17 +23,18 @@ import random
 import re
 import time
 import shutil
-import subprocess  # Added to resolve locked files (taskkill)
+import subprocess
 
 import undetected_chromedriver as uc
 from bs4 import BeautifulSoup
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
 import config
 
 logger = logging.getLogger(__name__)
 
-# Global dictionary to remember the page we left off on (kept in memory)
-# Format: {(min_price, max_price): last_attempted_page_number}
 progress_tracker = {}
 
 # ── Custom Exception Class ────────────────────────────────────────────────────
@@ -43,26 +44,17 @@ class CaptchaDetectedException(Exception):
 
 # ── Profile Cleanup ───────────────────────────────────────────────────────────
 def delete_selenium_profile():
-    """Completely deletes the existing Selenium profile directory (resets cookies and history).
-       Force-closes the browser to prevent Windows file lock issues.
-    """
     profile_dir = getattr(config, 'SELENIUM_PROFILE_DIR', None)
 
     if profile_dir and os.path.exists(profile_dir):
         logger.info("🗑️ Deleting old Selenium profile (Resetting identity)...")
-
-        # 1. Force kill hanging Chrome tasks in the background on Windows
         if os.name == 'nt':
             try:
                 subprocess.call("taskkill /F /IM chrome.exe /T", shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
                 subprocess.call("taskkill /F /IM chromedriver.exe /T", shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
             except Exception:
                 pass
-
-        # 2. Wait a short time for the OS to release file locks
         time.sleep(3)
-
-        # 3. Attempt to delete the directory
         try:
             shutil.rmtree(profile_dir)
             logger.info("✅ Profile deleted successfully.")
@@ -70,7 +62,6 @@ def delete_selenium_profile():
             logger.warning(f"⚠️ First deletion attempt failed: {e}. Retrying...")
             time.sleep(2)
             try:
-                # Force delete the directory, ignoring stubborn locked files
                 shutil.rmtree(profile_dir, ignore_errors=True)
                 logger.info("✅ Profile force-deleted.")
             except Exception as final_e:
@@ -146,41 +137,90 @@ def _parse_listings(soup: BeautifulSoup, rooms_idx: int | None) -> list[dict]:
                 records.append({"District": district, "Rooms": rooms, "Price": price})
         except Exception as exc:
             logger.debug("Row parse error: %s", exc)
-
     return records
 
+# ── Active Bypass Logic (Imported from First Script) ──────────────────────────
+def handle_browser_check(driver: uc.Chrome):
+    """Detects and clicks through Sahibinden's browser check page (Cloudflare Turnstile)."""
+    if "tarayıcınızı kontrol ediyoruz" not in driver.page_source.lower():
+        return
+    logger.info("🤖 Browser check page detected, waiting for Turnstile...")
+    try:
+        WebDriverWait(driver, 25).until(
+            EC.presence_of_element_located((By.CSS_SELECTOR, "input[name='cf-turnstile-response']"))
+        )
+        time.sleep(random.uniform(4.0, 6.0))  # Wait for token to fill
 
-def _wait_for_listings(driver: uc.Chrome, timeout: int = 15) -> BeautifulSoup:
-    """
-    Waits dynamically for the listings to appear on the page.
-    Polls the DOM every second up to the timeout limit.
-    """
-    # Let the initial base load happen
-    time.sleep(config.PAGE_LOAD_DELAY)
+        btn = WebDriverWait(driver, 15).until(
+            EC.element_to_be_clickable((By.ID, "btn-continue"))
+        )
+        btn.click()
+        logger.info("✅ Clicked 'Devam Et' (Continue), loading page...")
+        time.sleep(random.uniform(4.0, 6.0))
+    except Exception as e:
+        logger.warning(f"⚠️ Could not bypass browser check: {e}")
 
+def is_waiting_page(page_source: str) -> bool:
+    """Detects Sahibinden's Cloudflare 'please wait' challenge."""
+    lower = page_source.lower()
+    return any(s in lower for s in ["bir dakika lütfen", "lütfen bekleyiniz"])
+
+def is_login_page(page_source: str) -> bool:
+    """Detects if Sahibinden is showing an actual login/captcha page."""
+    lower = page_source.lower()
+    login_signals = ["giriş yap", "üye girişi", "captcha", "güvenlik doğrulama", "robot olmadığınızı"]
+    strong_hits = sum(1 for s in login_signals if s in lower)
+    return strong_hits >= 1 and "searchresultstable" not in lower
+
+def wait_for_challenge(driver: uc.Chrome, max_wait=20) -> bool:
+    """Waits for a Cloudflare-style challenge to resolve."""
+    logger.info(f"⏳ Waiting for challenge page to resolve (up to {max_wait}s)...")
+    for i in range(max_wait // 2):
+        time.sleep(random.uniform(4.0, 6.0))
+        if not is_waiting_page(driver.page_source):
+            logger.info(f"✅ Challenge resolved after ~{(i + 1) * 2}s")
+            return True
+    logger.warning("⏰ Challenge did not resolve in time.")
+    return False
+
+def load_and_bypass(driver: uc.Chrome, url: str) -> BeautifulSoup:
+    """
+    Actively loads a URL and navigates Sahibinden's security checkpoints.
+    Replaces the old passive _wait_for_listings function.
+    """
+    driver.get(url)
+    time.sleep(random.uniform(4.0, 6.0))
+
+    # STAGE 0: Turnstile Check
+    handle_browser_check(driver)
+    page_source = driver.page_source
+
+    # STAGE 1: Cloudflare Auto-Wait
+    if is_waiting_page(page_source):
+        if wait_for_challenge(driver):
+            handle_browser_check(driver)
+            page_source = driver.page_source
+        else:
+            raise CaptchaDetectedException("Challenge stuck. Restart required.")
+
+    # STAGE 2: Hard Block
+    if is_login_page(page_source):
+        raise CaptchaDetectedException("Login/CAPTCHA wall detected! Restart required.")
+
+    # STAGE 3: Final validation that listings are visible
     start_time = time.time()
-
-    while time.time() - start_time < timeout:
+    while time.time() - start_time < 15: # 15 second timeout for DOM to render
         soup = BeautifulSoup(driver.page_source, "html.parser")
-        listings = soup.select("#searchResultsTable tbody tr.searchResultsItem")
-
-        # Condition 1: We found the listings! The page loaded successfully.
-        if listings:
+        if soup.select("#searchResultsTable tbody tr.searchResultsItem"):
             return soup
 
-        # Condition 2: The page loaded, but there are legitimately zero listings for this price.
         page_lower = driver.page_source.lower()
         if "ilan bulunamadı" in page_lower or "bulunamamıştır" in page_lower:
             return soup
 
-        # If neither condition is met, the page is probably still loading or showing a Cloudflare check.
-        # Wait 1 second and check again.
         time.sleep(1)
 
-    # If the loop finishes (15 seconds pass) and we STILL don't have listings,
-    # it is definitely a hard CAPTCHA or a dead block.
-    logger.warning("🚨 CAPTCHA, Login screen, or extreme lag detected!")
-    raise CaptchaDetectedException("Hit the bot protection wall or page timed out.")
+    raise CaptchaDetectedException("Page loaded but listings never appeared (Silent block).")
 
 
 # ── Core: Adaptive Scrape ─────────────────────────────────────────────────────
@@ -196,14 +236,11 @@ def scrape_range(
     pad = "  " * indent
     bracket_key = (min_price, max_price)
 
-    # Skip if the range is marked as "completely done" in the JSON file
     if bracket_key in done_ranges:
         logger.info("%s↩  Skipping already-completed range %d–%d TL", pad, min_price, max_price)
         return 0
 
     width = max_price - min_price
-
-    # Check if there's a page we previously left off on for this range
     start_page = progress_tracker.get(bracket_key, 1)
 
     if start_page == 1:
@@ -217,15 +254,14 @@ def scrape_range(
         f"&price_min={min_price}&price_max={max_price}"
     )
 
-    # If not starting from page 1, add an Offset to the URL to go directly to that page
     if start_page > 1:
         offset = (start_page - 1) * config.PAGE_SIZE
         url += f"&pagingOffset={offset}"
 
-    driver.get(url)
-    soup = _wait_for_listings(driver)
+    # Use the active bypass loader instead of driver.get + passive wait
+    soup = load_and_bypass(driver, url)
 
-    # ── SPLIT DECISION (We only make split decisions if we are on page 1) ──
+    # ── SPLIT DECISION ──
     if start_page == 1:
         total_listings = _extract_total_listings(soup)
 
@@ -254,17 +290,13 @@ def scrape_range(
         page_records = _parse_listings(soup, rooms_idx)
 
         if page_records:
-            # 1. Save data IMMEDIATELY (So data isn't lost if the next page crashes)
             save_fn(page_records)
             total_records_saved_this_run += len(page_records)
-
-            # 2. Save the successfully completed page to the tracker
             progress_tracker[bracket_key] = current_page + 1
 
             logger.info("%s      Page %2d: %2d listings saved | %d–%d TL",
                 pad, current_page, len(page_records), min_price, max_price)
 
-        # --- HUMAN-LIKE PAUSE EVERY 3 PAGES ---
         if current_page > 0 and current_page % 3 == 0:
             pause_time = random.uniform(3, 6)
             logger.info("%s      ⏳ Taking a human-like pause of %.2f seconds...", pad, pause_time)
@@ -278,12 +310,9 @@ def scrape_range(
         if has_next:
             next_btn = soup.find("a", title="Sonraki")
             next_url = "https://www.sahibinden.com" + next_btn["href"]
-            driver.get(next_url)
-            time.sleep(random.uniform(config.PAGE_TURN_DELAY_MIN, config.PAGE_TURN_DELAY_MAX))
 
-            # This might throw a CAPTCHA. If it does, the while loop breaks,
-            # and 'current_page + 1' saved in progress_tracker stays in memory!
-            soup = _wait_for_listings(driver)
+            # Use the active bypass loader for pagination as well
+            soup = load_and_bypass(driver, next_url)
 
             current_page += 1
             if rooms_idx is None:
@@ -293,16 +322,13 @@ def scrape_range(
 
     logger.info("%s✅ Finished entirely. Saved %d records this run for %d–%d TL.", pad, total_records_saved_this_run, min_price, max_price)
 
-    # Save to JSON if the entire range finished completely
     save_checkpoint_fn(min_price, max_price)
     done_ranges.add(bracket_key)
 
-    # Clear the record in the tracker since the range is done
     if bracket_key in progress_tracker:
         del progress_tracker[bracket_key]
 
     return total_records_saved_this_run
-
 
 # ── CSV Output ────────────────────────────────────────────────────────────────
 def save_incremental(data_batch: list[dict]) -> None:
