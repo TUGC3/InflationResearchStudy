@@ -193,43 +193,57 @@ def _scrape_category(cat: dict, delay: float, page_limit: int) -> list[dict]:
 
 def run_scraper(args: argparse.Namespace) -> None:
     # 1. Fetch category list (single-threaded bootstrap)
-    logger.info("Fetching category list...")
+    logger.info("▶  Fetching category list...")
     bootstrap_session = _make_session()
     try:
         categories = fetch_categories(session=bootstrap_session)
     except Exception as exc:
-        logger.error("Could not fetch categories: %s", exc)
+        logger.error("✗  Could not fetch categories: %s", exc)
         sys.exit(1)
 
     if not categories:
-        logger.error("No categories found. Exiting.")
+        logger.error("✗  No categories found. Exiting.")
         sys.exit(1)
 
-    # 2. Filter to a single category if requested
+    # 2. Filter to main categories only (single-word or short categories)
+    # Main categories according to Koton's sitemap slugs.
+    # "cocuk" already contains all cocuk-kiz-cocuk + cocuk-erkek-cocuk products.
+    # "bebek" already contains all bebek-kiz-bebek + bebek-erkek-bebek products.
+    # Including both parent and children would double the work for those segments.
+    MAIN_CATEGORIES = [
+        "kadin", "erkek", "cocuk", "bebek", "evcil-hayvan-kiyafetleri"
+    ]
+    
+    # Filter to main categories only
+    categories = [c for c in categories if c["slug"] in MAIN_CATEGORIES]
+    logger.info("✓  Filtered to %d main categories: %s", 
+                len(categories), ", ".join(c["slug"] for c in categories))
+    
+    # 3. Filter to a single category if requested
     if args.category:
         categories = [c for c in categories if c["slug"] == args.category]
         if not categories:
             logger.error(
-                "Category '%s' not found. Use --list-categories to see available slugs.",
+                "✗  Category '%s' not found. Use --list-categories to see available slugs.",
                 args.category,
             )
             sys.exit(1)
 
-    # 3. Load checkpoint for resume support
+    # 4. Load checkpoint for resume support
     checkpoint = _load_checkpoint() if args.resume else {"done": []}
 
-    # 4. On a fresh run, clear old output file for today
+    # 5. On a fresh run, clear old output file for today
     if not args.resume:
         if os.path.exists(config.CSV_OUTPUT_FILE):
             os.remove(config.CSV_OUTPUT_FILE)
-            logger.info("Cleared old CSV: %s", config.CSV_OUTPUT_FILE)
+            logger.info("🗑  Cleared old CSV: %s", config.CSV_OUTPUT_FILE)
 
     categories_to_scrape = [
         c for c in categories if c["slug"] not in checkpoint["done"]
     ]
 
     if not categories_to_scrape:
-        logger.info("All categories already scraped. Run without --resume to start fresh.")
+        logger.info("✓  All categories already scraped. Run without --resume to start fresh.")
         return
 
     total_products = 0
@@ -240,19 +254,19 @@ def run_scraper(args: argparse.Namespace) -> None:
             existing_df = pd.read_csv(config.CSV_OUTPUT_FILE, encoding="utf-8-sig")
             total_products = len(existing_df)
             logger.info(
-                "Resuming: %d existing products already saved.", total_products
+                "↩  Resuming: %d existing products already saved.", total_products
             )
         except Exception as exc:
-            logger.warning("Could not count existing products: %s", exc)
+            logger.warning("⚠  Could not count existing products: %s", exc)
 
     logger.info(
-        "Scraping %d categor%s with %d worker(s)...",
+        "▶  Scraping %d categor%s with %d worker(s)...",
         len(categories_to_scrape),
         "y" if len(categories_to_scrape) == 1 else "ies",
         args.workers,
     )
 
-    # 5. Parallel scraping with ThreadPoolExecutor
+    # 6. Parallel scraping with ThreadPoolExecutor
     import time
     start_time = time.time()
     futures = {}
@@ -268,7 +282,7 @@ def run_scraper(args: argparse.Namespace) -> None:
                 try:
                     cat_products = future.result()
                 except Exception as exc:
-                    logger.error("Category '%s' failed: %s", cat["name"], exc)
+                    logger.error("✗  Category '%s' failed: %s", cat["name"], exc)
                     cat_products = []
 
                 # Save immediately after each category — no data lost on interruption
@@ -284,25 +298,30 @@ def run_scraper(args: argparse.Namespace) -> None:
 
                 if cat_products:
                     logger.info(
-                        "Category '%s': +%d products (total: %d)",
+                        "✓  Category '%s': +%d products (total: %d)",
                         cat["name"], len(cat_products), total_products,
                     )
+                    logger.info("💾 Checkpoint saved")
 
                 pbar.update(1)
 
-    # 6. Calculate elapsed time
+    # 7. Calculate elapsed time
     elapsed_time = time.time() - start_time
-    logger.info("Scraping completed in %.1f seconds (%.1f min)", elapsed_time, elapsed_time / 60)
+    logger.info("⏱  Scraping completed in %.1f seconds (%.1f min)", elapsed_time, elapsed_time / 60)
 
-    # 7. Final deduplication pass
-    logger.info("Running final deduplication...")
+    # 8. Final deduplication pass
+    logger.info("🔄 Running final deduplication...")
     final_count = _dedup_csv()
-    logger.info("Done! Total unique products: %d", final_count)
+    logger.info("Done! ✓  Total unique products: %d", final_count)
     logger.info("Output → %s", config.CSV_OUTPUT_FILE)
 
-    # 8. Calculate Inflation
-    logger.info("Calculating inflation metrics...")
-    inflation.calculate_inflation()
+    # 9. Calculate Inflation
+    logger.info("📈 Calculating inflation metrics...")
+    try:
+        inflation.calculate_inflation()
+        logger.info("✅ Inflation calculation complete")
+    except Exception as e:
+        logger.error("✗  Failed to calculate inflation: %s", e)
 
 
 
