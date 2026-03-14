@@ -280,8 +280,8 @@ def _fetch_page(
             if resp.status_code == 404:
                 return None, 0.0
 
-            # 429 / 403 → rate-limited / blocked; pause and retry
-            if resp.status_code in (403, 429):
+            # 429 / 405 / 403 → rate-limited / blocked; pause and retry
+            if resp.status_code in (403, 405, 429):
                 retry_after = int(resp.headers.get("Retry-After", config.RATE_LIMIT_BACKOFF))
                 wait = max(retry_after, config.RATE_LIMIT_BACKOFF)
                 logger.warning(
