@@ -1,10 +1,5 @@
 """
-main.py — Izmir Rent Scraper (Continuous Full-Scrape Version)
-=========================================================
-
-This version is designed to run continuously. It will iterate through
-EVERY price range defined in config.SEED_RANGES without stopping,
-while still utilizing the anti-bot evasion and resuming features.
+main.py — Izmir Rent Scraper (Modular Architecture)
 """
 
 import argparse
@@ -15,24 +10,26 @@ import time
 import random
 
 import config
-# All necessary functions are imported from scraper.py
-from scraper import setup_driver, scrape_range, save_incremental, CaptchaDetectedException, delete_selenium_profile
+from scraper import setup_driver, CategoryScanner, DataExtractor, CaptchaDetectedException, delete_selenium_profile
 
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s [%(levelname)s] %(message)s",
-    datefmt="%H:%M:%S",
-)
+logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s", datefmt="%H:%M:%S")
 logger = logging.getLogger(__name__)
 
-
-# ── Checkpoint Operations ─────────────────────────────────────────────────────
-
 def _load_checkpoint() -> dict:
+    default_state = {"scraped_urls": [], "completed_brackets": []}
     if os.path.exists(config.CHECKPOINT_FILE):
-        with open(config.CHECKPOINT_FILE, "r", encoding="utf-8") as f:
-            return json.load(f)
-    return {"done_ranges": []}
+        try:
+            with open(config.CHECKPOINT_FILE, "r", encoding="utf-8") as f:
+                data = json.load(f)
+                if "completed_brackets" not in data:
+                    data["completed_brackets"] = []
+                if "scraped_urls" not in data:
+                    data["scraped_urls"] = []
+                return data
+        except json.JSONDecodeError:
+            logger.error("Checkpoint file corrupted. Starting fresh.")
+            return default_state
+    return default_state
 
 def _save_checkpoint(data: dict) -> None:
     os.makedirs(config.CHECKPOINT_DIR, exist_ok=True)
@@ -40,126 +37,111 @@ def _save_checkpoint(data: dict) -> None:
         json.dump(data, f, ensure_ascii=False, indent=2)
 
 
-# ── Main Execution Function ───────────────────────────────────────────────────
-
 def run(args: argparse.Namespace) -> None:
-    # Always resume from where it left off unless --restart is used
-    checkpoint = _load_checkpoint() if not args.restart else {"done_ranges": []}
+    checkpoint = _load_checkpoint() if not args.restart else {"scraped_urls": [], "completed_brackets": []}
 
-    done_ranges: set[tuple[int, int]] = {
-        tuple(r) for r in checkpoint["done_ranges"]
-    }
+    scraped_urls: set[str] = set(checkpoint["scraped_urls"])
+    completed_brackets: set[tuple[int, int]] = {tuple(b) for b in checkpoint["completed_brackets"]}
 
     if args.restart and os.path.exists(config.CSV_OUTPUT_FILE):
         os.remove(config.CSV_OUTPUT_FILE)
-        logger.info("Cleared old CSV file: %s", config.CSV_OUTPUT_FILE)
-        _save_checkpoint({"done_ranges": []})
-        done_ranges = set()
-
-    def mark_done(min_p: int, max_p: int) -> None:
-        done_ranges.add((min_p, max_p))
-        checkpoint["done_ranges"] = [list(r) for r in done_ranges]
-        _save_checkpoint(checkpoint)
-
-    logger.info(
-        "Starting continuous Izmir data scraping... "
-        "(Total %d ranges in config, %d already completed)",
-        len(config.SEED_RANGES),
-        len(done_ranges),
-    )
+        logger.info("Restart flag used. Cleared old CSV and checkpoints.")
+        _save_checkpoint({"scraped_urls": [], "completed_brackets": []})
+        scraped_urls = set()
+        completed_brackets = set()
 
     total_saved = 0
 
-    try:
-        # Iterate through every single range defined in config.py
-        for seed_min, seed_max in config.SEED_RANGES:
-            if (seed_min, seed_max) in done_ranges:
-                continue
+    # 1. Initialize driver variable OUTSIDE the loops
+    driver = None
 
-            success = False
+    for seed_min, seed_max in config.SEED_RANGES:
+        if (seed_min, seed_max) in completed_brackets:
+            logger.info(f"⏭️ Skipping fully completed bracket: {seed_min} - {seed_max} TL")
+            continue
 
-            while not success:
-                logger.info(f"\n--- STARTING NEW BROWSER SESSION ({seed_min} - {seed_max} TL) ---")
+        bracket_complete = False
+
+        while not bracket_complete:
+            # 2. Only spin up a new browser if we don't currently have one
+            if driver is None:
                 driver = setup_driver()
 
-                try:
-                    saved = scrape_range(
-                        driver=driver,
-                        min_price=seed_min,
-                        max_price=seed_max,
-                        done_ranges=done_ranges,
-                        save_fn=save_incremental,
-                        save_checkpoint_fn=mark_done,
-                        indent=0,
-                    )
-                    total_saved += saved
-                    success = True  # Mark as success to exit the while loop and move to next range
+            scanner = CategoryScanner(driver)
+            extractor = DataExtractor(driver)
 
-                except CaptchaDetectedException:
-                    logger.warning(f"🛑 Blocked while scraping the {seed_min}-{seed_max} range!")
-                    driver.quit()  # Close the flagged browser
-                    delete_selenium_profile()  # Wipe the identity
+            try:
+                # --- PHASE 1: DISCOVERY ---
+                logger.info(f"\n--- 🔍 PHASE 1: DISCOVERING URLS ({seed_min} - {seed_max} TL) ---")
+                target_urls = scanner.discover_bracket(seed_min, seed_max)
 
-                    sleep_time = random.randint(60, 120)
-                    logger.info(f"⏳ Waiting {sleep_time} seconds before retrying with a new identity...")
-                    time.sleep(sleep_time)
-                    # Loop restarts to try the same range again
+                pending_urls = [url for url in target_urls if url not in scraped_urls]
+                logger.info(f"Generated {len(target_urls)} URLs. {len(pending_urls)} left to scrape.")
 
-                except Exception as e:
-                    logger.error(f"An error occurred: {e}")
-                    break  # Break out of the while loop to skip this specific range if it's a critical unknown error
+                # --- PHASE 2: EXTRACTION ---
+                if pending_urls:
+                    logger.info(f"\n--- ⛏️ PHASE 2: EXTRACTING DATA ---")
 
-                finally:
-                    try:
-                        if 'driver' in locals() and driver is not None:
-                            driver.quit()
-                    except Exception:
-                        pass
+                    for idx, url in enumerate(pending_urls):
+                        logger.info(f"Extracting page {idx + 1}/{len(pending_urls)}...")
 
-            # Once the range is fully scraped, take a short breather before starting the next one
-            if success:
-                logger.info("✅ Range %d–%d TL successfully scraped.", seed_min, seed_max)
+                        records = extractor.extract_from_url(url)
 
-                # Check if it's the very last range in the list to avoid unnecessary sleeping at the end
-                if (seed_min, seed_max) != config.SEED_RANGES[-1]:
-                    cool_down = random.randint(30, 60)
-                    logger.info(f"⏳ Cooling down for {cool_down} seconds before tackling the next bracket...")
-                    time.sleep(cool_down)
+                        if not records:
+                            logger.info("📭 No listings found on this page. Reached the end.")
+                            scraped_urls.add(url)
+                            checkpoint["scraped_urls"] = list(scraped_urls)
+                            _save_checkpoint(checkpoint)
+                            break
 
-    except KeyboardInterrupt:
-        logger.info("Manually stopped by the user.")
+                        extractor.save_to_csv(records)
+                        total_saved += len(records)
+                        scraped_urls.add(url)
 
-    logger.info("\nProcess Complete! 🎉")
-    logger.info("Number of new listings saved in this session: %d", total_saved)
-    logger.info("Output File → %s", config.CSV_OUTPUT_FILE)
+                        checkpoint["scraped_urls"] = list(scraped_urls)
+                        _save_checkpoint(checkpoint)
 
+                        time.sleep(random.uniform(1, 3))
 
-# ── Command Line Interface (CLI) Settings ─────────────────────────────────────
+                bracket_complete = True
+                completed_brackets.add((seed_min, seed_max))
+                checkpoint["completed_brackets"] = [list(b) for b in completed_brackets]
+                _save_checkpoint(checkpoint)
 
-def _build_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(
-        prog="izmir-scraper",
-        description="Scrape house rental listings for Izmir continuously from sahibinden.com.",
-    )
-    parser.add_argument(
-        "--restart",
-        action="store_true",
-        help="Deletes all records and the CSV file for the day and starts over.",
-    )
-    parser.add_argument(
-        "-v", "--verbose",
-        action="store_true",
-        help="Shows detailed (debug) logs.",
-    )
-    return parser
+                bracket_sleep = random.randint(15, 45)
+                logger.info(f"☕ Bracket complete! Taking a {bracket_sleep}-second break...")
+                time.sleep(bracket_sleep)
+
+            except CaptchaDetectedException:
+                logger.warning("🛑 CAPTCHA/Block detected! Wiping identity and restarting...")
+
+                # 3. Quit the current blocked driver and set it to None so a new one is made next loop
+                if driver:
+                    driver.quit()
+                driver = None
+
+                delete_selenium_profile()
+                time.sleep(random.randint(60, 120))
+
+            except Exception as e:
+                logger.error(f"Critical Error: {e}")
+                break
+
+            # 4. REMOVED the `finally` block from here so the browser doesn't quit on success!
+
+    # 5. Quit the driver safely when all brackets are completely done
+    if driver:
+        try:
+            driver.quit()
+        except Exception:
+            pass
+
+    logger.info(f"\nProcess Complete! 🎉 Saved {total_saved} new records.")
 
 def main() -> None:
-    parser = _build_parser()
+    parser = argparse.ArgumentParser(description="Modular Izmir Rent Scraper")
+    parser.add_argument("--restart", action="store_true", help="Start over from scratch.")
     args = parser.parse_args()
-
-    if args.verbose:
-        logging.getLogger().setLevel(logging.DEBUG)
-
     run(args)
 
 if __name__ == "__main__":
