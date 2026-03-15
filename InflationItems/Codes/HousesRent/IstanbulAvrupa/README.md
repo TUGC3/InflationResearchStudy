@@ -144,27 +144,27 @@ cd InflationItems/Codes/HousesRent/IstanbulAvrupa/scripts
 
 ```bash
 # Complete scrape with default settings
-python main.py
+python tasci_Scraper.py
 
 # Custom page load delay
-python main.py --delay 4.0
+python tasci_Scraper.py --delay 4.0
 ```
 
 #### Testing & Development
 
 ```bash
 # Limited scrape for testing (3 brackets only)
-python main.py --limit-brackets 3
+python tasci_Scraper.py --limit-brackets 3
 
 # Verbose logging for debugging
-python main.py -v
+python tasci_Scraper.py -v
 ```
 
 #### Session Management
 
 ```bash
 # Resume interrupted scraping session
-python main.py --resume
+python tasci_Scraper.py --resume
 ```
 
 ### CLI Parameters
@@ -285,7 +285,7 @@ When anti-bot measures are triggered:
 Enable verbose logging with `-v` flag for detailed execution information:
 
 ```bash
-python main.py -v
+python tasci_Scraper.py -v
 ```
 
 ### Performance Optimization
