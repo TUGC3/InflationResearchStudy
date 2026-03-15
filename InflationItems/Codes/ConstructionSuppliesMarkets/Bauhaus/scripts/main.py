@@ -220,7 +220,29 @@ def main():
             print(f"{c['id']} - {c['name']}")
         sys.exit(0)
 
-    # Filter categories
+    # Filter to main categories only to avoid redundant product fetching.
+    # Subcategories are subsets of main categories, so scraping only the main
+    # ones eliminates ~70k duplicate product fetches (110k -> ~37k unique).
+    MAIN_CATEGORIES = [
+        "bauhaus-bahce",
+        "bauhaus-banyo",
+        "bauhaus-mutfak",
+        "bauhaus-mobilya",
+        "bauhaus-hirdavat",
+        "bauhaus-aydinlatma-ve-elektro",
+        "bauhaus-makine-ve-el-aletleri",
+        "bauhaus-dekorasyon-ve-ev-gerecleri",
+        "bauhaus-isitma-ve-sogutma",
+        "bauhaus-parke-ve-kapilar",
+        "bauhaus-boya-ve-insaat",
+        "bauhaus-oto",
+    ]
+
+    cats = [c for c in cats if c["id"] in MAIN_CATEGORIES]
+    logger.info("✓  Filtered to %d main categories: %s",
+                len(cats), ", ".join(c["id"] for c in cats))
+
+    # Filter to a single category if requested
     if args.category:
         cats = [c for c in cats if c["id"] == args.category]
         if not cats:

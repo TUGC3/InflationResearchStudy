@@ -84,3 +84,6 @@ def get_city_csv_path(city_name: str) -> str:
 
 def get_checkpoint_file() -> str:
     return str(_Path(CHECKPOINT_DIR) / f"checkpoint_{TODAY}.json")
+
+# -- Browser Settings ------------------------------------------------------
+SELENIUM_PROFILE_DIR = str(_SCRAPER_DIR / "SeleniumProfile")

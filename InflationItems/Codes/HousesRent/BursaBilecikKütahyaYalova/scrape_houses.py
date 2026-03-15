@@ -98,7 +98,7 @@ def scrape_city(driver, city_url_name, folder_name, brackets):
         driver.get(url)
 
         # Initial page load delay — give the site time to breathe
-        time.sleep(random.uniform(3.0, 5.0))
+        time.sleep(random.uniform(3.5, 5.0))
 
         bracket_data = []
         page_num = 1
@@ -159,7 +159,7 @@ def scrape_city(driver, city_url_name, folder_name, brackets):
                 driver.get(next_url)
                 page_num += 1
                 # Slower inter-page delay to avoid getting banned
-                time.sleep(random.uniform(3.5, 6.0))
+                time.sleep(random.uniform(3.0, 5.0))
             else:
                 print(f"Finished gathering all houses in the {min_price}-{max_price} TL range.")
                 break
@@ -168,7 +168,7 @@ def scrape_city(driver, city_url_name, folder_name, brackets):
             save_to_csv_incremental(folder_name, bracket_data)
 
         # Slower inter-bracket delay to avoid getting banned
-        time.sleep(random.uniform(4.0, 7.0))
+        time.sleep(random.uniform(3.5, 7.0))
 
 
 def main():
@@ -182,7 +182,7 @@ def main():
                 city_data['brackets'],
             )
             # Slower inter-city delay
-            time.sleep(random.uniform(6.0, 10.0))
+            time.sleep(random.uniform(4.0, 8.0))
     finally:
         driver.quit()
 
