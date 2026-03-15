@@ -75,3 +75,14 @@ SeleniumProfile*/
 _selenium_profile/
 **/_selenium_profile/
 
+playwright_profile/
+playwright_profile/
+*.db
+*.db-journal
+*.db-wal
+GrShaderCache/
+GraphiteDawnCache/
+ShaderCache/
+downloaded_files/
+checkpoints/
+test_*.py
