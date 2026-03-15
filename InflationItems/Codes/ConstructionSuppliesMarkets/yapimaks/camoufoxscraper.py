@@ -21,7 +21,7 @@ from camoufox.sync_api import Camoufox
 SITEMAP_URL        = "https://yapimaks.com/sitemap/products1.xml"
 LOCAL_SITEMAP_PATH = "products1.xml"
 OUTPUT_DIR         = "InflationItems/Datas/ConstructionSuppliesMarkets/yapimaks"
-DELAY              = 1.0
+DELAY              = 0.0
 FIELDNAMES         = ["product_id", "name", "sku", "marka", "stok_durumu",
                       "birim", "price", "currency", "url", "scraped_at"]
 HEADERS            = {
