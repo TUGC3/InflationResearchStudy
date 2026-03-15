@@ -1,0 +1,908 @@
+tarih,grup_id,urun_adi,fiyat
+2026-03-15 20:34:36,0,Torku Tam Yağlı Taze Kaşar Peyniri 600 G,279.95
+2026-03-15 20:34:36,0,Meysu Anadolu Şerbeti 1 Lt,69.95
+2026-03-15 20:34:36,0,Torku Tereyağı 1 Kg,739.95
+2026-03-15 20:34:36,0,Sugar House Ecomix Bulaşık Süngeri 5'li,99.95
+2026-03-15 20:34:36,0,Ülker Çikolata İstanbul Fındıklı & Çıtır Kadayıflı 35 Gr,45.0
+2026-03-15 20:34:36,0,Nestle Kitkat Chunky Hazelnut 38 G,32.0
+2026-03-15 20:34:36,0,Nestle Kitkat Chunky Bitter 38 G,32.0
+2026-03-15 20:34:36,0,Cedid Hurma Yumuşak 500 Gr,99.95
+2026-03-15 20:34:36,0,Ülker Pötibör Çokokrem Kremalı Sandviç 229 G,60.0
+2026-03-15 20:34:36,0,"Fanta Mandalina 2,5 L",79.95
+2026-03-15 20:34:36,0,Sofia Pamuk Katkılı Kağıt Havlu 8'li,129.95
+2026-03-15 20:34:36,0,Rebbi İran Hurma 300 Gr,39.95
+2026-03-15 20:34:36,0,Nestle Nesquik Kakaolu Buğday ve Mısır Gevreği 450 G,149.95
+2026-03-15 20:34:36,0,Beypiliç M Boy Yumurta 30 lu Beyaz,179.95
+2026-03-15 20:34:36,0,Beypiliç M Boy Yumurta 30 lu Kahverengi,179.95
+2026-03-15 20:34:36,0,Yufka Günlük 5'li,74.95
+2026-03-15 20:34:36,0,Leva Çok Amaçlı Saklama Seti 6+1,99.95
+2026-03-15 20:34:36,0,Cem Kuru Sele Zeytin Kg,269.95
+2026-03-15 20:34:36,0,Pesotti Kedidili 200 Gr,69.95
+2026-03-15 20:34:36,0,Cam Şekerlik,99.95
+2026-03-15 20:34:36,0,Cam Büyük Sunumluk,199.95
+2026-03-15 20:34:36,0,Tasarım Bardak Cam İkili,199.95
+2026-03-15 20:34:36,0,Cam Büyük Çerezlik,49.95
+2026-03-15 20:34:36,0,Renkli Kupa Çeşitleri,69.95
+2026-03-15 20:34:36,0,Bakla Taze Paket,79.99
+2026-03-15 20:34:36,0,Smart Doğum Günü Mumu 24 lü,15.0
+2026-03-15 20:34:36,0,Evo 3 Katlı Havlu Kağıt 6 Lı,89.95
+2026-03-15 20:34:36,0,Evo 3 Katlı Tuvalet Kağıdı 16 Lı,129.95
+2026-03-15 20:34:36,0,Gondol Kat Kat Beslenme Kutusu,199.95
+2026-03-15 20:34:36,0,Su Geçirmez Yağmurluk Kadın-Erkek,99.95
+2026-03-15 20:34:36,0,Orkide Ayçiçek Yağı 5 L Pet,499.95
+2026-03-15 20:34:36,0,Evmoni Kılıflı Sıcak Su Torbası 2 Lt,99.95
+2026-03-15 20:34:36,1,Namet Dana Jambon 7/24 50 Gr,71.95
+2026-03-15 20:34:36,3,Yumoş Sakura Ev ve Tekstil Spreyi 450 Ml,144.95
+2026-03-15 20:34:36,3,Dalan Family Zeytin Mucizesi Sıvı Sabun 400 Ml,39.95
+2026-03-15 20:34:36,3,Nescafe Xpress Black Roast Soğuk Kahve 250 Ml,69.95
+2026-03-15 20:34:36,3,Nescafe Crema Latte Kahve 17 Gr,14.5
+2026-03-15 20:34:36,3,Vivident 45 Dakika Cüzdan Nane Sakız 26 Gr,47.5
+2026-03-15 20:34:36,3,Lipton Form Plus Kayısılı Çay 20'li,89.95
+2026-03-15 20:34:36,3,CM 9W 6500K E27 Beyaz Led Ampul,39.95
+2026-03-15 20:34:36,3,Peros Soft Mavi Orkide Lilyum Konsantre Çamaşır Yumuşatıcı 1440 Ml,149.95
+2026-03-15 20:34:36,3,Ülker Çilekli Mini Kekstra 150 Gr,54.95
+2026-03-15 20:34:36,3,Colgate Plax Nane Ferahlığı Ağız Bakım Suyu 250 Ml,149.95
+2026-03-15 20:34:36,3,Duru Kolajen & Zeytinyağı Şampuan 500 Ml,69.95
+2026-03-15 20:34:36,17,Miss Arap Sabunu 1 Lt,69.95
+2026-03-15 20:34:36,17,Dr.Oetker Çikolatalı Antep Fıstıklı Puding 100 Gr,45.95
+2026-03-15 20:34:36,17,Dr.Oetker Çikolatalı Muffin 345 Gr,153.45
+2026-03-15 20:34:36,17,Kinder Süt Dilimi 4'lü,74.95
+2026-03-15 20:34:36,17,Eti Limonlu Popkek 180 Gr,54.5
+2026-03-15 20:34:36,23,Ülker Halley Muzlu Pasta Tadında Sandviç Bisküvi 210 Gr,94.95
+2026-03-15 20:34:36,23,Ülker Halley Karadutlu Sandviç Bisküvi 236 G,94.95
+2026-03-15 20:34:36,24,Tahsildaroğlu Lüx Klasik Beyaz Peynir Kg,499.95
+2026-03-15 20:34:36,24,Semiz Otu Demet,64.99
+2026-03-15 20:34:36,24,Elma Fuji Kg,149.9
+2026-03-15 20:34:36,24,Şenpiliç Kemiksiz Derisiz İncik (Izgara Tava) Kg,269.0
+2026-03-15 20:34:36,24,Patlıcan Kg,199.9
+2026-03-15 20:34:36,24,Domates Sırık Kg,89.99
+2026-03-15 20:34:36,24,Çilek Kg,189.9
+2026-03-15 20:34:36,24,Kabak Kg,89.9
+2026-03-15 20:34:36,24,Biber Tatlı Kg,147.9
+2026-03-15 20:34:36,24,Dana Sotelik Kg,975.0
+2026-03-15 20:34:36,26,Ülker Kremalı Sandviç Bisküvi 8'li 488 Gr,94.5
+2026-03-15 20:34:36,26,Mutlu Tel Şehriye 500 Gr,24.95
+2026-03-15 20:34:36,26,Mutlu Arpa Şehriye 500 Gr,24.95
+2026-03-15 20:34:36,26,Sera Nergis Kokulu Büzgülü Orta Boy Çöp Poşeti Torbası 15 Li,49.95
+2026-03-15 20:34:36,26,Jacobs 2 Si 1 Arada Paket 10 Lu,94.95
+2026-03-15 20:34:36,26,Sera Nergis Kokulu Büzgülü Büyük Boy Çöp Poşeti Torbası 10 Lu,49.95
+2026-03-15 20:34:36,26,Sera Vanilya Kokulu Büzgülü Büyük Boy Çöp Poşeti Torbası 10 Lu,54.95
+2026-03-15 20:34:36,26,Hasata Mardin Kırmızı Mercimek 1 Kg,149.95
+2026-03-15 20:34:36,26,Hasata Köftelik Antep Bulguru 1 Kg,59.95
+2026-03-15 20:34:36,26,Hasata Pilavlık Antep Bulguru 1 Kg,59.95
+2026-03-15 20:34:36,26,Hasata Osmancık Pirinç 2 Kg,279.95
+2026-03-15 20:34:36,26,Vindex Fast Mikrofiber Temizlik Bezi 5 Li,79.99
+2026-03-15 20:34:36,26,Gürsüt Yayık Tereyağ Kg,699.95
+2026-03-15 20:34:36,26,Gürsüt Süzme Yoğurt Kg,149.95
+2026-03-15 20:34:36,26,Teksüt Lor 500 Gr,59.95
+2026-03-15 20:34:36,26,Dalan Family Okyanus Sıvı Sabun 3 Lt,119.95
+2026-03-15 20:34:36,26,Dalan Family Leylak Buketi Sıvı Sabun 3 Lt,119.95
+2026-03-15 20:34:36,26,Dalan Family Zeytin Mucizesi Sıvı Sabun 3 Lt,119.95
+2026-03-15 20:34:36,26,Asperox Temizliğin Kokusu Yüzey Temizleyici 2.5 Lt,129.95
+2026-03-15 20:34:36,26,Asperox Manolya - Frezya Yüzey Temizleyici 2.5 Lt,129.95
+2026-03-15 20:34:36,26,Eti Cicibebe Bebek Bisküvisi 700 Gr,149.95
+2026-03-15 20:34:36,26,Sera Vanilya Kokulu Orta Boy Büzgülü Çöp Poşeti Torbası 15 Li,54.95
+2026-03-15 20:34:36,26,Sütaş Örgü Peyniri 200 Gr,159.95
+2026-03-15 20:34:36,26,Sütaş Çeçil Peyniri 200 Gr,159.95
+2026-03-15 20:34:36,26,Familia Natural 1=3 Jumbo Kağıt Havlu,79.95
+2026-03-15 20:34:36,26,Peros Soft Yasemin Neroli Çiçeği Konsantre Çamaşır Yumuşatıcı 1440 Ml,149.95
+2026-03-15 20:34:36,26,Sarı Efe Çiftliği Gezen Tavuk Yumurtası 10 Lu,99.95
+2026-03-15 20:34:36,26,Torku Kakaolu Tahin Helvası 500 G,129.95
+2026-03-15 20:34:36,26,Torku Sade Helva 500 Gr,129.95
+2026-03-15 20:34:36,26,Gemvit Jumbo Gemlik Sele Zeytin Kg 230-260 Klb,299.95
+2026-03-15 20:34:36,26,İpek Çiftliği Bergama Tulum Peyniri Kg,479.95
+2026-03-15 20:34:36,30,Vindex Fast Sprey Mop,249.95
+2026-03-15 20:34:36,33,"Purina One Steril Sığır Etli Yetişkin Kedi Maması 1,5 Kg",695.0
+2026-03-15 20:34:36,33,"Purina One Tavuklu Yetişkin Kuru Kedi Maması 1,5 kg",695.0
+2026-03-15 20:34:36,33,Felix Sensations Sığır Etli ve Domatesli Yaş Kedi Maması 85 Gr,32.95
+2026-03-15 20:34:36,33,"Purina One Steril Sığır Etli Kısırlaştırılmış Kedi Maması 1,5 Kg",695.0
+2026-03-15 20:34:36,33,"Purina One Steril Somonlu Kedi Maması 1,5 Kg",695.0
+2026-03-15 20:34:36,33,Friskies Junior Tavuklu Yavru Yaş Kedi Maması 100 Gr,30.9
+2026-03-15 20:34:36,33,Friskies Somonlu Yaş Kedi Maması 85 Gr,30.9
+2026-03-15 20:34:36,33,Friskies Tavuklu Yaş Kedi Maması 85 Gr,30.9
+2026-03-15 20:34:36,33,Friskies Sığır Etli Yaş Kedi Maması 85 Gr,30.9
+2026-03-15 20:34:36,33,Friskies Yetişkin Kümes Hayvanlı Kuru Kedi Maması 300 Gr,95.9
+2026-03-15 20:34:36,33,Purina One Streril Kediler Sığır Etli Kısırlaştırılmış Kuru Kedi Maması 800 Gr,429.9
+2026-03-15 20:34:36,33,Purina One Steril Kediler Somonlu Kuru Kedi Maması 800 Gr,429.9
+2026-03-15 20:34:36,33,Purina One 1- 12 Ay Yavru Kedi Maması 800 Gr,429.9
+2026-03-15 20:34:36,33,Gourmet Gold Kıyılmış Hindili Konserve Yaş Kedi Maması 85 Gr,59.9
+2026-03-15 20:34:36,33,Gourmet Gold Kıyılmış Sığır Etli Konserve Yaş Kedi Maması 85 Gr,59.9
+2026-03-15 20:34:36,33,Gourmet Gold Kıyılmış Ton Balıklı Konserve Yaş Kedi Maması 85 Gr,59.9
+2026-03-15 20:34:36,33,Gourmet Gold Kıyılmış Tavuklu Konserve Yaş Kedi Maması 85 Gr,59.9
+2026-03-15 20:34:36,33,Felix Pouch Tasty Shreds Somonlu Yaş Kedi Maması 80 Gr,33.95
+2026-03-15 20:34:36,33,Felix Pouch Tasty Shreds Tavuklu Yaş Kedi Maması 80 Gr,33.95
+2026-03-15 20:34:36,33,Felix Pouch Tasty Shreds Ton Balıklı Yaş Kedi Maması 80 Gr,33.95
+2026-03-15 20:34:36,33,Felix Somon ve Sardalyalı Yaş Kedi Maması 85 Gr,32.95
+2026-03-15 20:34:36,33,Felix Junior Sığır Etli ve Tavuklu Yaş Yavru Kedi Maması 4x85 Gr,123.45
+2026-03-15 20:34:36,33,Felix Sensation Tavuklu ve Havuçlu Yaş Kedi Maması 85 Gr,32.95
+2026-03-15 20:34:36,33,Felix Sensations Somon ve Karidesli Yaş Kedi Maması 85 Gr,32.95
+2026-03-15 20:34:36,33,Felix Sığır Etli ve Tavuklu Yaş Kedi Maması 85 Gr,32.95
+2026-03-15 20:34:36,33,Felix Junior Tavuklu Yaş Yavru Kedi Maması 85 Gr,32.95
+2026-03-15 20:34:36,33,Felix Junior Sığır Etli Yaş Yavru Kedi Maması 85 Gr,32.95
+2026-03-15 20:34:36,33,Felix Sığır Etli Yaş Kedi Maması 85 Gr,32.95
+2026-03-15 20:34:36,33,Felix Ton Balıklı Yaş Kedi Maması 85 Gr,32.95
+2026-03-15 20:34:36,33,Felix Avantajlı Somonlu Ton Balıklı Yaş Kedi Maması 4x85 Gr,123.45
+2026-03-15 20:34:36,33,Felix Tavuklu Yaş Kedi Maması 85 Gr,32.95
+2026-03-15 20:34:36,33,Felix Somonlu Yaş Kedi Maması 85 Gr,32.95
+2026-03-15 20:34:36,33,Felix Sığır Etli ve Tavuklu Yaş Kedi Maması 4x85 Gr,123.45
+2026-03-15 20:34:36,33,Felix Kuzulu Yaş Kedi Maması 85 Gr,32.95
+2026-03-15 20:34:36,33,Friskies Junior Tavuklu Ve Havuçlu Yavru Yaş Köpek Maması 100 Gr,43.5
+2026-03-15 20:34:36,33,Friskies Sığır Etli ve Patatesli Yetişkin Yaş Köpek Maması 100 Gr,43.5
+2026-03-15 20:34:36,34,Palette Deluxe Saç Boyası 10-1 Küllü Açık Sarı,359.95
+2026-03-15 20:34:36,34,Emotion Natural Breeze Deodorant Roll On 50 Ml,99.99
+2026-03-15 20:34:36,34,Blade Green Dream Erkek Deodorant Roll On 50 Ml,149.95
+2026-03-15 20:34:36,34,Palette Göz Alıcı Renkler Saç Boyası 7-1 Küllü Kumral,169.95
+2026-03-15 20:34:36,34,Palette Göz Alıcı Renkler Saç Boyası 3-65 Çikolata Kahve,169.95
+2026-03-15 20:34:36,34,Blade Mountaın Fresh Roll On 50 Ml,149.95
+2026-03-15 20:34:36,34,Blade Cool Fresh Roll On 50 Ml,149.95
+2026-03-15 20:34:36,34,Palette Kalıcı Doğal Renkler Saç Boyası 3-68 Kızıl Çikolata,169.95
+2026-03-15 20:34:36,34,Palette Kalıcı Doğal Renkler Saç Boyası 7-0 Kumral,169.95
+2026-03-15 20:34:36,34,Palette Kalıcı Doğal Renkler Saç Boyası 8-0 Bal Köpüğü,169.95
+2026-03-15 20:34:36,36,Sera Orta Boy Çöp Poşeti Torbası 15 li,32.95
+2026-03-15 20:34:36,36,Sera Tüy Toplayıcı 30'lu,39.95
+2026-03-15 20:34:36,36,Sera Küçük Boy Çöp Poşeti Torbası 30 Lu,32.95
+2026-03-15 20:34:36,36,Sera Nergis Kokulu Büzgülü Orta Boy Çöp Poşeti Torbası 15 Li,49.95
+2026-03-15 20:34:36,36,Sera Nergis Kokulu Büzgülü Büyük Boy Çöp Poşeti Torbası 10 Lu,49.95
+2026-03-15 20:34:36,36,Sera Vanilya Kokulu Büzgülü Büyük Boy Çöp Poşeti Torbası 10 Lu,54.95
+2026-03-15 20:34:36,36,Sera Limon Kokulu Büzgülü Büyük Boy Çöp Poşeti Torbası 10 Lu,64.95
+2026-03-15 20:34:36,36,Sera Yeni Nesil Pişirme Kağıdı 10'lu,89.95
+2026-03-15 20:34:36,36,Sera Fırın Torbası 8 Adet,49.95
+2026-03-15 20:34:36,36,Sera Jumbo Boy Çöp Poşeti Torbası 10 Lu,99.95
+2026-03-15 20:34:36,36,Sera Battal Boy Çöp Poşeti Torbası 10 Lu,89.95
+2026-03-15 20:34:36,36,Sera Büyük Boy Çöp Poşeti Torbası 10 Lu,32.95
+2026-03-15 20:34:36,36,Sera Banyo Boy Çöp Poşeti Torbası 30 Lu,29.95
+2026-03-15 20:34:36,36,Sera Vanilya Kokulu Orta Boy Büzgülü Çöp Poşeti Torbası 15 Li,54.95
+2026-03-15 20:34:36,36,Sera 196 Lı Buz Küpü Buz Torbası 7 Adet,24.95
+2026-03-15 20:34:36,36,Sera Kilitli Poşet 12 Li,44.95
+2026-03-15 20:34:36,36,Sera Büyük Boy 20 Li Buzdolabı Poşeti,24.95
+2026-03-15 20:34:36,36,Sera Orta Boy 20 Li Buzdolabı Poşeti,24.95
+2026-03-15 20:34:36,36,Sera Küçük Boy Buzdolabı Poşeti 40 lı,24.95
+2026-03-15 20:34:36,36,Sera Orta Boy 20 Li Buzdolabı Poşeti 4 Al 3 Öde,64.95
+2026-03-15 20:34:36,36,Sera Streç Film 33 Mt,79.95
+2026-03-15 20:34:36,36,Sera Yağlı Pişirme Kağıdı 8 Mt,59.95
+2026-03-15 20:34:36,36,Sera Hazır Kesilmiş Yağlı Pişirme Kağıdı 16'lı,59.95
+2026-03-15 20:34:36,36,Sera Alüminyum Folyo 8 Mt,69.95
+2026-03-15 20:34:36,37,Macromax Klasik Tırnak Koruyucu Oluklu Bulaşık Süngeri 5'li,79.95
+2026-03-15 20:34:36,37,Macromax Fırsat Paketi 3'lü,149.95
+2026-03-15 20:34:36,37,Macromax Hazır Kesilmiş Yağlı Pişirme Kağıdı 16 Adet,99.95
+2026-03-15 20:34:36,37,Macromax Extra Güçlü Çöp Poşeti Torbası Orta Boy 15'li,39.95
+2026-03-15 20:34:36,37,Macromax Extra Güçlü Çöp Poşeti Torbası Küçük Boy 30'lu,39.95
+2026-03-15 20:34:36,37,Macromax Mikrofiber Cam Bezi 2'li,119.95
+2026-03-15 20:34:36,37,Macromax Extra Güçlü Çöp Poşeti Torbası Büyük Boy 10'lu,39.95
+2026-03-15 20:34:36,37,Macromax Mikrofiber Havlu Paspas,199.95
+2026-03-15 20:34:36,37,Macromax Orta Boy Buzdolabı Poşeti 75 li,99.95
+2026-03-15 20:34:36,37,Macromax Buzdolabı Poşeti Küçük Boy 100 li,99.95
+2026-03-15 20:34:36,37,Macromax Rengarenk Sünger 10'lu Paket,79.95
+2026-03-15 20:34:36,37,Macromax Klasik Yeşil Oluklu Sünger 8'li,99.95
+2026-03-15 20:34:36,37,Macromax Profesyonel Çöp Poşeti Torbası Battal Boy 10 lu,99.95
+2026-03-15 20:34:36,37,Macromax Streç Film 100 Mt Kesme Bıçağı Hediyeli,199.95
+2026-03-15 20:34:36,37,Macromax Comfort Sünger 2'li,89.95
+2026-03-15 20:34:36,37,Macromax Temizlik Bezi 5'li,99.95
+2026-03-15 20:34:36,37,Macromax Buzdolabı Poşeti Büyük Boy 50 li,99.95
+2026-03-15 20:34:36,37,Macromax Streç Film 33 Mt,99.95
+2026-03-15 20:34:36,37,Macromax Faster Yedek Mop,149.95
+2026-03-15 20:34:36,37,Macromax Ekonomik Temizlik Bezi 9'lu,99.95
+2026-03-15 20:34:36,37,Macromax Pişirme Kağıdı 8 Mt,99.95
+2026-03-15 20:34:36,37,Macromax Profesyonel Çöp Poşeti Torbası Jumbo Boy 10 lu,129.95
+2026-03-15 20:34:36,37,Macromax Çift Kilitli Poşet 12'li,89.95
+2026-03-15 20:34:36,37,Macromax Ovma Teli 3'lü,79.95
+2026-03-15 20:34:36,37,Macromax Fermuarlı Poşet 12'li,79.95
+2026-03-15 20:34:36,37,Macromax Easy Temizlik Seti,399.95
+2026-03-15 20:34:36,37,Macromax Klasik Yeşil Düz Sünger 5'li,79.95
+2026-03-15 20:34:36,37,Macromax Standart Paspas,129.95
+2026-03-15 20:34:36,39,Whiskas Tavuklu Kısır Kedi Maması 1.4 Kg,549.95
+2026-03-15 20:34:36,39,Sheba Delikatesse Jöleli Ton Balıklı Kedi Yaş Mama 85 Gr,58.95
+2026-03-15 20:34:36,39,Whiskas Biftekli Kuru Kedi Maması 1.4 Kg,549.95
+2026-03-15 20:34:36,39,Whiskas Kümes Hayvanlı Yavru Kedi Yaş Mama 85 Gr,37.95
+2026-03-15 20:34:36,39,Whiskas Ton Balıklı Kuru Kedi Maması 1.4 Kg,549.95
+2026-03-15 20:34:36,39,Whiskas Ton Balıklı Yaş Kedi Maması 85 Gr,37.95
+2026-03-15 20:34:36,39,Whiskas Tavuklu Yaş Kedi Maması 85 Gr,37.95
+2026-03-15 20:34:36,39,Whiskas Somonlu Yaş Kedi Maması 85 Gr,37.95
+2026-03-15 20:34:36,39,Whiskas Sığırlı Yaş Kedi Maması 85 Gr,37.95
+2026-03-15 20:34:36,39,Whiskas Klasik Öğünler Etli Seçim Yavru Kedi Yaş Maması 4x85 Gr,124.95
+2026-03-15 20:34:36,39,Whiskas Klasik Öğünler Etli Seçim Yaş Kedi Maması 4x85 Gr,124.95
+2026-03-15 20:34:36,39,Whiskas Yavru Tavuklu Kuru Mama 300 Gr,129.95
+2026-03-15 20:34:36,39,Whiskas Tavuklu Kuru Mama 300 Gr,129.95
+2026-03-15 20:34:36,39,Whiskas Tavuklu Kuru Kedi Maması 1.4 Kg,549.95
+2026-03-15 20:34:36,39,Whiskas Biftekli Kuru Kedi Maması 300 Gr,129.95
+2026-03-15 20:34:36,39,Whiskas Ton Balıklı Kuru Kedi Maması 300 Gr,129.95
+2026-03-15 20:34:36,39,Whiskas Tavuklu ve Gravy Soslu Konserve Kedi Maması 400 Gr,164.95
+2026-03-15 20:34:36,39,Whiskas Sığır Etli ve Gravy Soslu Konserve Kedi Maması 400 Gr,164.95
+2026-03-15 20:34:36,39,Whiskas Ton Balıklı Konserve Yaş Kedi Maması 400 Gr,164.95
+2026-03-15 20:34:36,39,Whiskas Tasty Mix Somonlu ve Havuçlu Yaş Kedi Maması 85 Gr,37.95
+2026-03-15 20:34:36,39,Whiskas Tasty Mix Kuzulu ve Hindili Yaş Kedi Maması 85 Gr,37.95
+2026-03-15 20:34:36,39,Whiskas Kuzulu Yaş Kedi Maması 85 Gr,37.95
+2026-03-15 20:34:36,39,"Whiskas Tasty Mix Kuzulu, Havuçlu ve Tavuklu Yaş Kedi Maması 85 Gr",37.95
+2026-03-15 20:34:36,39,Pedigree Tavuklu Konserve Yaş Mama 400 Gr,164.95
+2026-03-15 20:34:36,39,Pedigree Biftekli Poşet Yaş Mama 100 Gr,49.95
+2026-03-15 20:34:36,39,Dreamies Mix Peynirli ve Somonlu Kedi Ödül Maması 60 Gr,79.95
+2026-03-15 20:34:36,39,Dreamies Mix Peynirli Sığır Etli Kedi Ödül Maması 60 Gr,79.95
+2026-03-15 20:34:36,39,Pedigree Jumbone Mini Köpek Ödül Maması 160 Gr,119.95
+2026-03-15 20:34:36,39,Pedigree Rodeo Biftek Köpek Ödül Maması 70 Gr,99.95
+2026-03-15 20:34:36,39,Pedigree Konserve Sığır Etli Köpek Maması 400 Gr,164.95
+2026-03-15 20:34:36,39,Pedigree Konserve Tavuklu Yavru Köpek Maması 400 Gr,164.95
+2026-03-15 20:34:36,39,Dreamies Somonlu Kedi Ödül Maması 60 Gr,79.95
+2026-03-15 20:34:36,39,Dreamies Tavuklu Kedi Ödül Maması 60 Gr,79.95
+2026-03-15 20:34:36,39,Pedigree Biscrock Multi Mix Ödül Maması 200 Gr,124.95
+2026-03-15 20:34:36,39,Pedigree Dentastix Medium Ödül Maması 180 Gr,184.95
+2026-03-15 20:34:36,43,Portakal Sıkmalık Kg,39.9
+2026-03-15 20:34:36,44,Nestle Kitkat Chunky Hazelnut 38 G,32.0
+2026-03-15 20:34:36,44,Nestle Kitkat Chunky Bitter 38 G,32.0
+2026-03-15 20:34:36,44,Cedid Hurma Yumuşak 500 Gr,99.95
+2026-03-15 20:34:36,44,Ülker Pötibör Çokokrem Kremalı Sandviç 229 G,60.0
+2026-03-15 20:34:36,44,"Fanta Mandalina 2,5 L",79.95
+2026-03-15 20:34:36,44,Sofia Pamuk Katkılı Kağıt Havlu 8'li,129.95
+2026-03-15 20:34:36,44,Rebbi İran Hurma 300 Gr,39.95
+2026-03-15 20:34:36,44,Nestle Nesquik Kakaolu Buğday ve Mısır Gevreği 450 G,149.95
+2026-03-15 20:34:36,44,Leva Çok Amaçlı Saklama Seti 6+1,99.95
+2026-03-15 20:34:36,44,Cem Gemlik Yağlı Sele Zeytin 351-380 Kalibre Kg,159.95
+2026-03-15 20:34:36,44,NIVEA Express Hydration Nemlendirici El ve Vücut Bakım Kremi 400 Ml,139.95
+2026-03-15 20:34:36,44,Nivea Smooth Sensation El & Vücut Bakım Kremi 400 Ml,139.95
+2026-03-15 20:34:36,44,Bioblas Çinko+Kafein Kepeğe Karşı Şampuan 500 Ml,139.95
+2026-03-15 20:34:36,44,Bioblas Keratin+Biotin Saç Dökülmesine Karşı Şampuan 500 Ml,139.95
+2026-03-15 20:34:36,44,Bioblas Argan+Badem Yağı Saç Dökülmesine Karşı Şampuan 500 ml,139.95
+2026-03-15 20:34:36,44,Nestle Kitkat Chunky Cookie Crumble Gofret 38 Gr,32.0
+2026-03-15 20:34:36,44,Viking Soft Gül & Zambak Çamaşır Yumuşatıcı 1400 ml,69.95
+2026-03-15 20:34:36,44,Perwoll Renkliler İçin Sıvı Çamaşır Deterjanı 2.97 Lt,299.95
+2026-03-15 20:34:36,44,Hasata Basmati Pirinç 1 Kg,144.95
+2026-03-15 20:34:36,44,Colgate 360 Fresh Yumuşak 1+1 Diş Fırçası,129.95
+2026-03-15 20:34:36,44,Colgate Üçlü Etki Ağız Bakım Suyu 500 Ml,129.95
+2026-03-15 20:34:36,44,Hobby Glow&Shine Çiçek Bahçesi Duş Jeli 750 Ml,79.95
+2026-03-15 20:34:36,44,Hobby Glow&Shine Meyve Şöleni Duş Jeli 750 Ml,79.95
+2026-03-15 20:34:36,44,Hobby Glow&Shine Okyanus Duş Jeli 750 Ml,79.95
+2026-03-15 20:34:36,44,İnişdibi Sade Doğal Maden Suyu 200 Ml x 6 lı,54.95
+2026-03-15 20:34:36,44,Dimes Elma - Orman Meyveli Meyve Suyu 1 Lt,69.95
+2026-03-15 20:34:36,44,Dimes Elma - Tropik Meyveli Meyve Suyu 1 Lt,69.95
+2026-03-15 20:34:36,44,Arbella Mantı Makarna 500 Gr,24.95
+2026-03-15 20:34:36,44,Dalan Family Natural Sıvı Sabun 3 Lt,119.95
+2026-03-15 20:34:36,48,Solo Bambu Katkılı Havlu Kağıt 16'lı,239.95
+2026-03-15 20:34:36,48,Türk Şeker Toz Şeker 3 Kg,129.95
+2026-03-15 20:34:36,48,Yonca Ayçiçek Yağı Pet 4 Lt,369.95
+2026-03-15 20:34:36,48,Çilek Kg,189.9
+2026-03-15 20:34:36,48,Çaykur Tiryaki 500 Gr,149.95
+2026-03-15 20:34:36,49,Cire Aseptine Soft Avokado Özlü Yoğun Nemlendirici Prebiyotikli Krem 300 Ml,79.99
+2026-03-15 20:34:36,49,Cire Aseptine Soft Aloe Vera Özlü Rahatlatıcı Besleyici Prebiyotikli Krem 300 Ml,79.99
+2026-03-15 20:34:36,49,Clear Men Erkek Şampuan Kepeğe Karşı Etkili 600 Ml,229.95
+2026-03-15 20:34:36,49,Düşler Bahçesi Anti Sigara Oda ve Araç Kokusu 400 Ml,149.95
+2026-03-15 20:34:36,49,Düşler Bahçesi Anti Sigara - Kötü Kokulara Karşı Oda ve Araç Kokusu 400 Ml,149.95
+2026-03-15 20:34:36,49,Finish Bulaşık Makinesi Tuzu 1300 Gr,99.95
+2026-03-15 20:34:36,49,Doğuş Toz Şeker 5 Kg,239.95
+2026-03-15 20:34:36,49,Cif Krem Mucizesi Sakura Parfümlü Yüzey Temizleyici 750 ml,104.95
+2026-03-15 20:34:36,49,Asperox Okyanus Maviliği Yüzey Temizleyici 2.5 Lt,129.95
+2026-03-15 20:34:36,49,Asperox Doğaya Kaçış Yüzey Temizleyici 2.5 Lt,129.95
+2026-03-15 20:34:36,49,Cif Sprey Ultra Anında Etki Sakura Kir ve Yağ Çözücü 750 Ml,99.95
+2026-03-15 20:34:36,49,Yayla Esmerim Baldo Pirinç 1 Kg,149.95
+2026-03-15 20:34:36,49,Dardanel Füme Ton Balığı 6 x 75 G,349.95
+2026-03-15 20:34:36,49,Sleepy Sensitive Islak Havlu 3x50 Li,79.95
+2026-03-15 20:34:36,49,Vanish Kosla Multipower Renkliler İçin Sıvı Leke Çıkarıcı ve Deterjan Güçlendirici 1400 Ml,249.95
+2026-03-15 20:34:36,49,Vanish Kosla Multipower Beyazlar İçin Sıvı Leke Çıkarıcı ve Deterjan Güçlendirici 1400 Ml,249.95
+2026-03-15 20:34:36,49,Elidor Anında Onarıcı Bakım Şampuanı 650 Ml,199.95
+2026-03-15 20:34:36,49,Omo Express Fresh Beyazlar Sıvı Çamaşır Deterjanı 1.48 Lt,249.95
+2026-03-15 20:34:36,49,Elidor Güçlü ve Parlak Şampuan 650 Ml,199.95
+2026-03-15 20:34:36,49,Fairy Platinum Plus Bulaşık Makinesi Kapsülü 36'lı,399.95
+2026-03-15 20:34:36,49,NIVEA MEN Erkek Deep Dimension Amazonia Roll-on 50 Ml ve Black&White Invisible Original Mini Roll-on 25 Ml,214.95
+2026-03-15 20:34:36,49,Parex Çilek Kokulu Büzgülü Büyük Boy Çöp Poşeti Torbası 10 Lu,139.95
+2026-03-15 20:34:36,49,Parex Mega Comfort Oluklu Bulaşık Sünger 2'li,99.95
+2026-03-15 20:34:36,49,Sugar House Mix Mikrofiber Temizlik Bezi 4 lü,137.99
+2026-03-15 20:34:36,49,Cif Ultra Anında Etki Kir ve Yağ Çözücü Sprey 750 Ml,99.95
+2026-03-15 20:34:36,49,Dalan Family Natural Sıvı Sabun 3 Lt,119.95
+2026-03-15 20:34:36,50,Karnabahar Kg,37.9
+2026-03-15 20:34:36,50,Lahana Kırmızı Kg,24.9
+2026-03-15 20:34:36,52,Perfect Fit Sığır Etli Kısır Kedi Maması 750 Gr,399.95
+2026-03-15 20:34:36,52,Perfect Fit Tavuk Etli Yetişkin Kedi Maması 750 Gr,399.95
+2026-03-15 20:34:36,52,Perfect Fit Biftekli Yetişkin Kedi Maması 750 Gr,399.95
+2026-03-15 20:34:36,52,Whiskas Tavuklu Kısır Kedi Maması 1.4 Kg,549.95
+2026-03-15 20:34:36,52,Sheba Delikatesse Jöleli Ton Balıklı Kedi Yaş Mama 85 Gr,58.95
+2026-03-15 20:34:36,52,Whiskas Biftekli Kuru Kedi Maması 1.4 Kg,549.95
+2026-03-15 20:34:36,52,Whiskas Kümes Hayvanlı Yavru Kedi Yaş Mama 85 Gr,37.95
+2026-03-15 20:34:36,52,Whiskas Ton Balıklı Kuru Kedi Maması 1.4 Kg,549.95
+2026-03-15 20:34:36,52,Whiskas Ton Balıklı Yaş Kedi Maması 85 Gr,37.95
+2026-03-15 20:34:36,52,Whiskas Tavuklu Yaş Kedi Maması 85 Gr,37.95
+2026-03-15 20:34:36,52,Whiskas Somonlu Yaş Kedi Maması 85 Gr,37.95
+2026-03-15 20:34:36,52,Whiskas Sığırlı Yaş Kedi Maması 85 Gr,37.95
+2026-03-15 20:34:36,52,Whiskas Klasik Öğünler Etli Seçim Yavru Kedi Yaş Maması 4x85 Gr,124.95
+2026-03-15 20:34:36,52,Whiskas Klasik Öğünler Etli Seçim Yaş Kedi Maması 4x85 Gr,124.95
+2026-03-15 20:34:36,52,Whiskas Yavru Tavuklu Kuru Mama 300 Gr,129.95
+2026-03-15 20:34:36,52,Whiskas Tavuklu Kuru Mama 300 Gr,129.95
+2026-03-15 20:34:36,52,Whiskas Tavuklu Kuru Kedi Maması 1.4 Kg,549.95
+2026-03-15 20:34:36,52,Whiskas Biftekli Kuru Kedi Maması 300 Gr,129.95
+2026-03-15 20:34:36,52,Whiskas Ton Balıklı Kuru Kedi Maması 300 Gr,129.95
+2026-03-15 20:34:36,52,Whiskas Tavuklu ve Gravy Soslu Konserve Kedi Maması 400 Gr,164.95
+2026-03-15 20:34:36,52,Whiskas Sığır Etli ve Gravy Soslu Konserve Kedi Maması 400 Gr,164.95
+2026-03-15 20:34:36,52,Whiskas Ton Balıklı Konserve Yaş Kedi Maması 400 Gr,164.95
+2026-03-15 20:34:36,52,Whiskas Tasty Mix Somonlu ve Havuçlu Yaş Kedi Maması 85 Gr,37.95
+2026-03-15 20:34:36,52,Whiskas Tasty Mix Kuzulu ve Hindili Yaş Kedi Maması 85 Gr,37.95
+2026-03-15 20:34:36,52,Whiskas Kuzulu Yaş Kedi Maması 85 Gr,37.95
+2026-03-15 20:34:36,52,"Whiskas Tasty Mix Kuzulu, Havuçlu ve Tavuklu Yaş Kedi Maması 85 Gr",37.95
+2026-03-15 20:34:36,52,Pedigree Tavuklu Konserve Yaş Mama 400 Gr,164.95
+2026-03-15 20:34:36,52,Pedigree Biftekli Poşet Yaş Mama 100 Gr,49.95
+2026-03-15 20:34:36,52,Dreamies Mix Peynirli ve Somonlu Kedi Ödül Maması 60 Gr,79.95
+2026-03-15 20:34:36,52,Dreamies Mix Peynirli Sığır Etli Kedi Ödül Maması 60 Gr,79.95
+2026-03-15 20:34:36,52,Pedigree Jumbone Mini Köpek Ödül Maması 160 Gr,119.95
+2026-03-15 20:34:36,52,Pedigree Rodeo Biftek Köpek Ödül Maması 70 Gr,99.95
+2026-03-15 20:34:36,52,Pedigree Konserve Sığır Etli Köpek Maması 400 Gr,164.95
+2026-03-15 20:34:36,52,Pedigree Konserve Tavuklu Yavru Köpek Maması 400 Gr,164.95
+2026-03-15 20:34:36,52,Dreamies Somonlu Kedi Ödül Maması 60 Gr,79.95
+2026-03-15 20:34:36,52,Dreamies Tavuklu Kedi Ödül Maması 60 Gr,79.95
+2026-03-15 20:34:36,54,Varta Pil Long Life Power Alkalin Kalem 4'lü Aa,179.95
+2026-03-15 20:34:36,54,Varta Long Life Power Alkalin İnce Pil 4'lü,179.95
+2026-03-15 20:34:36,54,Varta Alkalin Kalem Pil Max Power 4 Lü,259.95
+2026-03-15 20:34:36,54,Varta Alkalin İnce Pil Max Power 4 Lü,259.95
+2026-03-15 20:34:36,54,Varta Longlife Power Alkalin İnce Pil 2 Li,109.95
+2026-03-15 20:34:36,54,Varta Longlife Power Alkalin Kalem Pil 2 Li,109.95
+2026-03-15 20:34:36,54,Varta Longlife Alkalin İnce Pil AAA 4 Lü,155.95
+2026-03-15 20:34:36,54,Varta Pil Longlife Alkalin Kalem Pil AA 4 Lü,155.95
+2026-03-15 20:34:36,55,Blade Al Dedodorant 2 150 Ml,149.95
+2026-03-15 20:34:36,55,Blade AL Deodorant 150 Ml,149.95
+2026-03-15 20:34:36,55,Axe Leather & Cookies Erkek Deodorant Sprey 150 Ml,179.95
+2026-03-15 20:34:36,55,Axe Epic Fresh Erkek Deodorant ve Vücut Spreyi 150 Ml,179.95
+2026-03-15 20:34:36,55,Rexona Invisible Black White Erkek Deodorant Roll On 50 Ml,199.95
+2026-03-15 20:34:36,55,Palette Deluxe Saç Boyası 10-1 Küllü Açık Sarı,359.95
+2026-03-15 20:34:36,55,Emotion Natural Breeze Deodorant Roll On 50 Ml,99.99
+2026-03-15 20:34:36,55,Rexona Invisible Black White Kadın Deodorant Roll On 50 Ml,199.95
+2026-03-15 20:34:36,55,Axe Dark Temptation Erkek Sprey Deodorant 150 Ml,179.95
+2026-03-15 20:34:36,55,Rexona Cotton Dry Deodorant Roll-On 50 Ml,199.95
+2026-03-15 20:34:36,55,Eyüp Sabri Tuncer Okyanus Ferahlığı Oda Spreyi 500 Ml,199.95
+2026-03-15 20:34:36,55,Eyüp Sabri Tuncer Japon Kiraz Çiçeği Oda Spreyi 500 Ml,199.95
+2026-03-15 20:34:36,55,Eyüp Sabri Tuncer Gül Suyu 350 Ml,99.95
+2026-03-15 20:34:36,55,Elseve Renk Koruyucu Bakım Şampuanı 300 Ml,149.95
+2026-03-15 20:34:36,55,Blade Green Dream Erkek Deodorant Roll On 50 Ml,149.95
+2026-03-15 20:34:36,55,Eyüp Sabri Tuncer Japon Kiraz Çiçeği Doğal Zeytinyağlı Sıvı Sabun 1.5 Lt,299.95
+2026-03-15 20:34:36,55,Rexona Mystic Love %0 Alüminyum Kadın Sprey Deodorant 150 Ml,199.95
+2026-03-15 20:34:36,55,Rexona Passion %0 Alüminyum 48 Saat Koruma Kadın Sprey Deodorant 150 Ml,199.95
+2026-03-15 20:34:36,55,Palette Göz Alıcı Renkler Saç Boyası 7-1 Küllü Kumral,169.95
+2026-03-15 20:34:36,55,Eyüp Sabri Tuncer Doğal Nane Özlü Diş Macunu 90 Ml,189.95
+2026-03-15 20:34:36,55,Eyüp Sabri Tuncer Doğal Misvak Özlü Diş Macunu 90 Ml,189.95
+2026-03-15 20:34:36,55,Eyüp Sabri Tuncer Doğal Karanfil Özlü Diş Macunu 90 Ml,189.95
+2026-03-15 20:34:36,55,Eyüp Sabri Tuncer Doğal Karadut Özlü 2-6 Yaş Çocuk Diş Macunu 60 Ml,149.95
+2026-03-15 20:34:36,55,Eyüp Sabri Tuncer Doğal Kakao ve Kahve Özlü Diş Macunu 90 ml,189.95
+2026-03-15 20:34:36,55,Eyüp Sabri Tuncer Doğal Bambu Karbonlu Diş Macunu 90 Ml,189.95
+2026-03-15 20:34:36,55,Palette Göz Alıcı Renkler Saç Boyası 7-77 Yoğun Bakır,169.95
+2026-03-15 20:34:36,55,Palette Göz Alıcı Renkler Saç Boyası 3-65 Çikolata Kahve,169.95
+2026-03-15 20:34:36,55,Blade Mountaın Fresh Roll On 50 Ml,149.95
+2026-03-15 20:34:36,55,Blade Cool Fresh Roll On 50 Ml,149.95
+2026-03-15 20:34:36,55,Palette Kalıcı Doğal Renkler Saç Boyası 3-68 Kızıl Çikolata,169.95
+2026-03-15 20:34:36,55,Palette Kalıcı Doğal Renkler Saç Boyası 7-0 Kumral,169.95
+2026-03-15 20:34:36,58,Flormar Glitter Yarı Transparan & Parlak Bitişli Simli Oje No:42 Copper,159.99
+2026-03-15 20:34:36,58,Flormar Nail Enamel Yüksek Pigmentli & Parlak Bitişli Oje No:89,84.99
+2026-03-15 20:34:36,58,Flormar Glitter Yarı Transparan & Parlak Bitişli Simli Oje No:02,159.99
+2026-03-15 20:34:36,58,Flormar Nail Enamel Yüksek Pigmentli & Parlak Bitişli Oje No:468,84.99
+2026-03-15 20:34:36,58,Flormar Calcium Gel Besleyici & Güçlendirici Kalsiyumlu Oje Bazı/Tırnak Cilası,149.99
+2026-03-15 20:34:36,58,Flormar Nail Enamel Yüksek Pigmentli & Parlak Bitişli Oje No:472,84.99
+2026-03-15 20:34:36,58,Flormar Nail Enamel Yüksek Pigmentli & Parlak Bitişli Oje No:385,84.99
+2026-03-15 20:34:36,58,Flormar Nail Enamel Yüksek Pigmentli & Parlak Bitişli Oje No:319,84.99
+2026-03-15 20:34:36,58,Flormar Nail Enamel Yüksek Pigmentli & Parlak Bitişli Oje No:310,84.99
+2026-03-15 20:34:36,58,Flormar Pearly Yarı Transparan & Parlak Bitişli Sedefli Oje No:PL451,129.99
+2026-03-15 20:34:36,58,Flormar Nail Enamel Yüksek Pigmentli & Parlak Bitişli Oje No:077,84.99
+2026-03-15 20:34:36,58,Flormar Let's Stop Tırnak Bakım Cilası,149.99
+2026-03-15 20:34:36,58,Flormar Moisture Boost Nemlendirici & Besleyici Oje Bazı/Tırnak Cilası,149.99
+2026-03-15 20:34:36,58,Flormar No More Breaks Besleyici & Kırılma Karşıtı Oje Bazı/Tırnak Cilası,149.99
+2026-03-15 20:34:36,58,Flormar Nail Enamel Yüksek Pigmentli & Parlak Bitişli Oje No:0508,84.99
+2026-03-15 20:34:36,58,Flormar Nail Enamel Yüksek Pigmentli & Parlak Bitişli Oje No:502,84.99
+2026-03-15 20:34:36,58,Flormar Nail Enamel Yüksek Pigmentli & Parlak Bitişli Oje No:501,84.99
+2026-03-15 20:34:36,58,Flormar Nail Enamel Yüksek Pigmentli & Parlak Bitişli Oje No:423,84.99
+2026-03-15 20:34:36,58,Flormar Nail Enamel Yüksek Pigmentli & Parlak Bitişli Oje No:410,84.99
+2026-03-15 20:34:36,58,Flormar Nail Enamel Yüksek Pigmentli & Parlak Bitişli Oje No:405,84.99
+2026-03-15 20:34:36,58,Flormar Nail Enamel Yüksek Pigmentli & Parlak Bitişli Oje No:323,84.99
+2026-03-15 20:34:36,58,Flormar Nail Enamel Yüksek Pigmentli & Parlak Bitişli Oje No:079,84.99
+2026-03-15 20:34:36,58,Flormar Nail Enamel Yüksek Pigmentli & Parlak Bitişli Oje No:058,84.99
+2026-03-15 20:34:36,58,Flormar Nail Enamel Yüksek Pigmentli & Parlak Bitişli Oje No:380,84.99
+2026-03-15 20:34:36,58,Flormar Pearly Yarı Transparan & Parlak Bitişli Sedefli Oje No:PL390,129.99
+2026-03-15 20:34:36,58,Flormar Nail Enamel Yüksek Pigmentli & Parlak Bitişli Oje No:465,84.99
+2026-03-15 20:34:36,58,Flormar Nail Enamel Yüksek Pigmentli & Parlak Bitişli Oje No:464,84.99
+2026-03-15 20:34:36,58,Flormar Nail Enamel Yüksek Pigmentli & Parlak Bitişli Oje No:456,84.99
+2026-03-15 20:34:36,58,Flormar Nail Enamel Yüksek Pigmentli & Parlak Bitişli Oje No:352,84.99
+2026-03-15 20:34:36,58,Flormar Nail Enamel Yüksek Pigmentli & Parlak Bitişli Oje No:313,84.99
+2026-03-15 20:34:36,58,Flormar Nail Enamel Yüksek Pigmentli & Parlak Bitişli Oje No:301,84.99
+2026-03-15 20:34:36,58,Flormar Nail Enamel Yüksek Pigmentli & Parlak Bitişli Oje No:127,84.99
+2026-03-15 20:34:36,59,Lpd Oscar Mangal Kömürü 1.5 Kg,89.95
+2026-03-15 20:34:36,59,PİKNİK KULLAN-AT PLASTİK BARDAK OTOMAT 50'Lİ BEYAZ,34.95
+2026-03-15 20:34:36,59,Piknik Tabak Orta 10 Lu,29.95
+2026-03-15 20:34:36,60,Sera Şeffaf Eldiven L Beden 50'li,59.95
+2026-03-15 20:34:36,60,Sera Şeffaf Eldiven M Beden 50'li,59.95
+2026-03-15 20:34:36,60,Sera Şeffaf Eldiven S Beden 50'li,59.95
+2026-03-15 20:34:36,60,Sera Doğal Hazır Kesilmiş Pişirme Kağıdı 10 Adet,69.95
+2026-03-15 20:34:36,60,Sera Airfryer Pişirme Kağıdı 25 Adet,59.95
+2026-03-15 20:34:36,60,Sera Orta Boy Çöp Poşeti Torbası 15 li,32.95
+2026-03-15 20:34:36,60,Sera Tüy Toplayıcı 30'lu,39.95
+2026-03-15 20:34:36,60,Sera Küçük Boy Çöp Poşeti Torbası 30 Lu,32.95
+2026-03-15 20:34:36,60,Sera Nergis Kokulu Büzgülü Orta Boy Çöp Poşeti Torbası 15 Li,49.95
+2026-03-15 20:34:36,60,Sera Nergis Kokulu Büzgülü Büyük Boy Çöp Poşeti Torbası 10 Lu,49.95
+2026-03-15 20:34:36,60,Sera Vanilya Kokulu Büzgülü Büyük Boy Çöp Poşeti Torbası 10 Lu,54.95
+2026-03-15 20:34:36,60,Sera Limon Kokulu Büzgülü Büyük Boy Çöp Poşeti Torbası 10 Lu,64.95
+2026-03-15 20:34:36,60,Sera Yeni Nesil Pişirme Kağıdı 10'lu,89.95
+2026-03-15 20:34:36,60,Sera Fırın Torbası 8 Adet,49.95
+2026-03-15 20:34:36,60,Sera Jumbo Boy Çöp Poşeti Torbası 10 Lu,99.95
+2026-03-15 20:34:36,60,Sera Battal Boy Çöp Poşeti Torbası 10 Lu,89.95
+2026-03-15 20:34:36,60,Sera Büyük Boy Çöp Poşeti Torbası 10 Lu,32.95
+2026-03-15 20:34:36,60,Sera Banyo Boy Çöp Poşeti Torbası 30 Lu,29.95
+2026-03-15 20:34:36,60,Sera Vanilya Kokulu Orta Boy Büzgülü Çöp Poşeti Torbası 15 Li,54.95
+2026-03-15 20:34:36,60,Sera Limon Kokulu Büzgülü Orta Boy Çöp Poşeti Torbası 15 li,64.95
+2026-03-15 20:34:36,60,Sera 196 Lı Buz Küpü Buz Torbası 7 Adet,24.95
+2026-03-15 20:34:36,60,Sera Kilitli Poşet 12 Li,44.95
+2026-03-15 20:34:36,60,Sera Büyük Boy 20 Li Buzdolabı Poşeti,24.95
+2026-03-15 20:34:36,60,Sera Orta Boy 20 Li Buzdolabı Poşeti,24.95
+2026-03-15 20:34:36,60,Sera Küçük Boy Buzdolabı Poşeti 40 lı,24.95
+2026-03-15 20:34:36,60,Sera Orta Boy 20 Li Buzdolabı Poşeti 4 Al 3 Öde,64.95
+2026-03-15 20:34:36,60,Sera Streç Film 33 Mt,79.95
+2026-03-15 20:34:36,60,Sera Yağlı Pişirme Kağıdı 8 Mt,59.95
+2026-03-15 20:34:36,60,Sera Hazır Kesilmiş Yağlı Pişirme Kağıdı 16'lı,59.95
+2026-03-15 20:34:36,60,Sera Alüminyum Folyo 8 Mt,69.95
+2026-03-15 20:34:36,61,Macromax Focus Otomatik Temizlik Seti,399.95
+2026-03-15 20:34:36,61,Macromax Focus Black Otomatik Temizlik Seti,199.99
+2026-03-15 20:34:36,61,Macromax Klasik Tırnak Koruyucu Oluklu Bulaşık Süngeri 5'li,79.95
+2026-03-15 20:34:36,61,Macromax Mikrofiber Cam Bezi 2'li,119.95
+2026-03-15 20:34:36,61,Macromax Airfryer Pişirme Kağıdı 20 Adet,129.95
+2026-03-15 20:34:36,61,Macromax Mikrofiber Havlu Paspas,199.95
+2026-03-15 20:34:36,61,Macromax Orta Boy Buzdolabı Poşeti 75 li,99.95
+2026-03-15 20:34:36,61,Macromax Buzdolabı Poşeti Küçük Boy 100 li,99.95
+2026-03-15 20:34:36,61,Macromax Profesyonel Çöp Poşeti Torbası Battal Boy 10 lu,99.95
+2026-03-15 20:34:36,61,Macromax Streç Film 100 Mt Kesme Bıçağı Hediyeli,199.95
+2026-03-15 20:34:36,61,Macromax Buzdolabı Poşeti Büyük Boy 50 li,99.95
+2026-03-15 20:34:36,61,Macromax Profesyonel Çöp Poşeti Torbası Jumbo Boy 10 lu,129.95
+2026-03-15 20:34:36,61,Macromax Çift Kilitli Poşet 12'li,89.95
+2026-03-15 20:34:36,61,Macromax Klasik Yeşil Düz Sünger 5'li,79.95
+2026-03-15 20:34:36,64,Pınar Sucuk Şölen 180 Gr,219.95
+2026-03-15 20:34:36,64,Torku Yarım Yağlı Yoğurt 2 Kg,129.95
+2026-03-15 20:34:36,64,Binnur Klasik Beyaz Peynir Kg,399.95
+2026-03-15 20:34:36,64,Solo Peçete Süper 200 Lü,99.95
+2026-03-15 20:34:36,64,Süperfresh Milföy 1 Kg,189.9
+2026-03-15 20:34:36,65,Semiz Otu Demet,64.99
+2026-03-15 20:34:36,65,Portakal Sıkmalık Kg,39.9
+2026-03-15 20:34:36,65,Kavun Kg,179.9
+2026-03-15 20:34:36,65,Sarımsak Yerli Demet 250 Gr,114.9
+2026-03-15 20:34:36,65,Taze Zencefil Adet 250 Gr,99.95
+2026-03-15 20:34:36,65,Turp Fındık Demet,34.9
+2026-03-15 20:34:36,65,Deniz Börülcesi Adet,24.95
+2026-03-15 20:34:36,65,Elma Fuji Kg,149.9
+2026-03-15 20:34:36,65,Patlıcan Topan Kg,199.9
+2026-03-15 20:34:36,65,Soğan Taze Kg,99.9
+2026-03-15 20:34:36,65,Mantar İstiridye Paket 350 Gr,129.95
+2026-03-15 20:34:36,65,Domates Pembe Kg,89.99
+2026-03-15 20:34:36,65,Reyhan Adet,39.9
+2026-03-15 20:34:36,65,Biber Köy Kg,219.9
+2026-03-15 20:34:36,65,Hindistan Cevizi Adet,122.9
+2026-03-15 20:34:36,65,Ananas Adet,149.9
+2026-03-15 20:34:36,65,Patlıcan Kg,199.9
+2026-03-15 20:34:36,65,Marul Aysberk Adet,89.95
+2026-03-15 20:34:36,65,Fasulye Çalı Taze Kg,199.99
+2026-03-15 20:34:36,65,Armut Santamaria Kg,159.9
+2026-03-15 20:34:36,65,Patates Taze Küçük Kg,34.99
+2026-03-15 20:34:36,65,Domates Sırık Kg,89.99
+2026-03-15 20:34:36,65,Çilek Kg,189.9
+2026-03-15 20:34:36,65,Soğan Yahnilik Adet,64.95
+2026-03-15 20:34:36,65,Elma Granny Smith Kg,149.9
+2026-03-15 20:34:36,66,Kivi Kg,189.9
+2026-03-15 20:34:36,66,Armut Deveci Kg,124.9
+2026-03-15 20:34:36,66,Cennet Elması Kg,49.99
+2026-03-15 20:34:36,66,Portakal Sıkmalık Kg,39.9
+2026-03-15 20:34:36,66,Kavun Kg,179.9
+2026-03-15 20:34:36,66,Ayva Kg,199.99
+2026-03-15 20:34:36,66,Yaban Mersini Paket-Blueberry 125Gr,254.9
+2026-03-15 20:34:36,66,Kumkuat Tropik Meyve Adet 300 Gr,49.95
+2026-03-15 20:34:36,66,Pomelo Tropik Meyve Adet,189.9
+2026-03-15 20:34:36,66,Elma Fuji Kg,149.9
+2026-03-15 20:34:36,66,Greyfurt Kg,57.9
+2026-03-15 20:34:36,66,Mango Adet,99.9
+2026-03-15 20:34:36,66,Mayhoş Nar Kg,179.9
+2026-03-15 20:34:36,66,Hindistan Cevizi Adet,122.9
+2026-03-15 20:34:36,66,Ananas Adet,149.9
+2026-03-15 20:34:36,66,Armut Santamaria Kg,159.9
+2026-03-15 20:34:36,66,Elma Granny Smith Kg,149.9
+2026-03-15 20:34:36,66,Muz İthal Kg,149.9
+2026-03-15 20:34:36,67,Pazı Adet,24.9
+2026-03-15 20:34:36,67,Balkabağı Kg,39.9
+2026-03-15 20:34:36,67,Pancar Kg,42.9
+2026-03-15 20:34:36,67,Kırmızı Turp Kg,29.99
+2026-03-15 20:34:36,67,Sarımsak Yerli Demet 250 Gr,114.9
+2026-03-15 20:34:36,67,Beyaz Turp Kg,29.99
+2026-03-15 20:34:36,67,Patates Tatlı Tropik Sebze Kg,129.95
+2026-03-15 20:34:36,67,Biber Şili Acı Kg,174.9
+2026-03-15 20:34:36,67,Taze Zencefil Adet 250 Gr,99.95
+2026-03-15 20:34:36,67,Turp Fındık Demet,34.9
+2026-03-15 20:34:36,67,Deniz Börülcesi Adet,24.95
+2026-03-15 20:34:36,67,Brüksel Lahana Paket,99.99
+2026-03-15 20:34:36,67,Marul Lolorosso,99.9
+2026-03-15 20:34:36,67,Patlıcan Topan Kg,199.9
+2026-03-15 20:34:36,67,Lime Tropik 3'lü Paket,99.9
+2026-03-15 20:34:36,67,Soğan Taze Kg,99.9
+2026-03-15 20:34:36,67,Mantar İstiridye Paket 350 Gr,129.95
+2026-03-15 20:34:36,67,Soğan Beyaz Kg,64.95
+2026-03-15 20:34:36,67,Domates Pembe Kg,89.99
+2026-03-15 20:34:36,67,Reyhan Adet,39.9
+2026-03-15 20:34:36,67,Biber Köy Kg,219.9
+2026-03-15 20:34:36,67,Patlıcan Kg,199.9
+2026-03-15 20:34:36,67,Mantar Kültür Paket 350 Gr,79.9
+2026-03-15 20:34:36,67,Marul Aysberk Adet,89.95
+2026-03-15 20:34:36,69,"Çamlıca Gazoz 2,5 Lt",69.95
+2026-03-15 20:34:36,69,Çamlıca Portakallı Gazoz 2.5 Lt,69.95
+2026-03-15 20:34:36,69,Çamlıca Gazoz 1.5 Lt,54.95
+2026-03-15 20:34:36,69,Çamlıca Portakallı Gazoz 1.5 Lt,54.95
+2026-03-15 20:34:36,69,Ülker Antep Fıstıklı Milfoy 28 Gr,20.0
+2026-03-15 20:34:36,69,Cola Turka 1 Lt,49.95
+2026-03-15 20:34:36,69,Cola Turka 2.5 Lt,69.95
+2026-03-15 20:34:36,69,Cornflakes Mısır Gevreği 400 Gr,144.95
+2026-03-15 20:34:36,69,Cola Turka 330 Ml,34.95
+2026-03-15 20:34:36,69,Ülker Kremini Vişneli Şeker 44 Gr,25.0
+2026-03-15 20:34:36,69,Hero Baby Armut Ananas Şeftali Kavanoz Mama 120 Ge,42.5
+2026-03-15 20:34:36,69,Ülker Bitter Kare Çikolata %60 Kakaolu 60 Gr,69.95
+2026-03-15 20:34:36,69,Ülker Kremalı Sandviç Bisküvi 8'li 488 Gr,94.5
+2026-03-15 20:34:36,69,Ülker Bitter Damla Çikolata 120 Gr,139.95
+2026-03-15 20:34:36,69,Caramio Bitter Baton Çikolata 35 Gr,14.95
+2026-03-15 20:34:36,69,Ülker Çizi Peynirli Kraker 4'lü 280 Gr,56.0
+2026-03-15 20:34:36,69,Ülker Bütün Antep Fıstıklı Sütlü Baton Çikolata 30 Gr,52.5
+2026-03-15 20:34:36,69,Ülker Albeni Tane Tane 29 Gr,28.0
+2026-03-15 20:34:36,69,Ülker Bütün Antep Fıstıklı %60 Bitter Çikolata 65 Gr,104.95
+2026-03-15 20:34:36,69,Alpella 3Gen Beyaz Gofret 28 Gr,16.0
+2026-03-15 20:34:36,69,Ülker Çokokrem 400 Gr,112.5
+2026-03-15 20:34:36,69,Hero Baby Şeftali Muz Püreli Kavanoz Mama 125 Gr,42.5
+2026-03-15 20:34:36,69,Ülker Kremalı Rondo Çilekli Bisküvi 61 Gr,13.0
+2026-03-15 20:34:36,69,Ülker Metro Sütlü Çikolatalı Kaplı Karamel & Nugalı Bar 36 Gr,17.0
+2026-03-15 20:34:36,69,Biskrem Kakaolu 100 Gr,25.0
+2026-03-15 20:34:36,69,Dankek Pöti Muffin Kek Meyveli 35 Gr,10.0
+2026-03-15 20:34:36,69,Cafe Crown 2'si 1 Arada Şekersiz Kahve 11 Gr,9.5
+2026-03-15 20:34:36,69,Bizim Mutfak Kremalı Tavuk Çorbası 65 Gr,37.5
+2026-03-15 20:34:36,69,Cafe Crown Gold Ekonomik Paket 100 Gr,198.95
+2026-03-15 20:34:36,69,Hero Baby Yulaflı Karışık Meyve Püreli Kavanoz Mama 125 Gr,42.5
+2026-03-15 20:34:36,69,Ülker Yupo Jelly Kolalı Jelibon 80 Gr,38.5
+2026-03-15 20:34:36,69,Ülker Pembo Tutti Frutti Aromalı Sakız 22.5 Gr,16.5
+2026-03-15 20:34:36,69,Ülker Yupo Metre Kola Aromalı 50 Gr,20.0
+2026-03-15 20:34:36,69,Ülker Yupo Metre Çilek Aromalı 50 Gr,20.0
+2026-03-15 20:34:36,69,"Ülker Çilekli Kanky Bulut Kornet Gofret 26,5 Gr",19.0
+2026-03-15 20:34:36,69,Ülker 8 Kek Mini Muzlu 162 Gr,44.95
+2026-03-15 20:34:36,70,Şölen Biscolata Stix Karamel Parçacıklı 36 Gr,30.0
+2026-03-15 20:34:36,70,Lay's Yoğurt Mevsim Yeşillikleri Patates Cipsi Süper Boy 125 Gr,59.95
+2026-03-15 20:34:36,70,Big Babol Fruit Mix Poşet 80 Gr,74.95
+2026-03-15 20:34:36,71,Şölen Karamelli Luppo 7 li 182Gr,78.95
+2026-03-15 20:34:36,71,Eti Hoşbeş Hindistan Cevizli 142 Gr,54.95
+2026-03-15 20:34:36,71,Şölen Kakaolu Luppo 8 Li 184 Gr,78.95
+2026-03-15 20:34:36,71,Şölen Şütlü Luppo 8 Li 184 Gr,78.95
+2026-03-15 20:34:36,71,Eti Çilekli Hoşbeş 142 Gr,54.95
+2026-03-15 20:34:36,71,Eti Fındıklı Hoşbeş 142 Gr,54.95
+2026-03-15 20:34:36,71,Eti Kakaolu Hoşbeş 142 Gr,54.95
+2026-03-15 20:34:36,72,"Perwoll Siyah Sıvı Çamaşır Deterjan 2,97 Lt",299.95
+2026-03-15 20:34:36,72,Perwoll Geliştirmiş Renkli Sıvı Çamaşır Deterjan 1.5 Lt,139.95
+2026-03-15 20:34:36,72,"Perwoll Geliştirilmiş Renkli Sıvı Çamaşır Deterjan 2,97 Lt",299.95
+2026-03-15 20:34:36,72,Bref Power Aktif Çam Tuvalet Bloğu 2'li Paket,139.95
+2026-03-15 20:34:36,72,Bref Power Aktiv Çam Tuvalet Bloğu 50 Gr,59.95
+2026-03-15 20:34:36,72,Palette Deluxe Saç Boyası 10-1 Küllü Açık Sarı,359.95
+2026-03-15 20:34:36,72,Blendax Yasemin Özlü Şampuan 500 Ml,99.95
+2026-03-15 20:34:36,72,Fa Sport Erkek Deodorant Roll On 50 Ml,127.95
+2026-03-15 20:34:36,72,Fa Aqua Kadın Deodorant Roll On 50 Ml,127.95
+2026-03-15 20:34:36,72,Fa Pink Passion Kadın Roll-on 50 Ml,127.95
+2026-03-15 20:34:36,72,Pril Amasya Elması Elde Yıkama Sıvı Bulaşık Deterjanı 1350 Gr,129.95
+2026-03-15 20:34:36,72,Persil Power Jel Color Sıvı Çamaşır Deterjanı 1.69 Lt,279.95
+2026-03-15 20:34:36,72,Persil Power Jel Gül Sıvı Çamaşır Deterjanı 1.69 Lt,279.95
+2026-03-15 20:34:36,72,"Persil Color Toz Çamaşır Deterjanı 1,5 Kg",137.95
+2026-03-15 20:34:36,72,"Persil Gülün Büyüsü Toz Çamaşır Deterjanı 1,5 Kg",137.95
+2026-03-15 20:34:36,72,Pril Excellence Bulaşık Kapsülü 40'lı,344.95
+2026-03-15 20:34:36,72,Persil Gülün Büyüsü Toz Çamaşır Deterjanı 7 Kg,359.95
+2026-03-15 20:34:36,72,Persil Color Toz Çamaşır Deterjanı 7 Kg,359.95
+2026-03-15 20:34:36,72,Palette Göz Alıcı Renkler Saç Boyası 7-1 Küllü Kumral,169.95
+2026-03-15 20:34:36,72,Dixi Bref Gül Yüzey Temizleyici 2.5 Lt,139.95
+2026-03-15 20:34:36,72,Dixi Bref Çam Yüzey Temizleyici 2.5 Lt,139.95
+2026-03-15 20:34:36,72,Pril Excellence Bulaşık Kapsülü 22'li,209.95
+2026-03-15 20:34:36,72,Palette Göz Alıcı Renkler Saç Boyası 7-77 Yoğun Bakır,169.95
+2026-03-15 20:34:36,72,Palette Göz Alıcı Renkler Saç Boyası 3-65 Çikolata Kahve,169.95
+2026-03-15 20:34:36,72,Blendax Kepeğe Karşı Etkili Şampuan 500 Ml,99.95
+2026-03-15 20:34:36,72,Palette Kalıcı Doğal Renkler Saç Boyası 3-68 Kızıl Çikolata,169.95
+2026-03-15 20:34:36,72,Palette Kalıcı Doğal Renkler Saç Boyası 7-0 Kumral,169.95
+2026-03-15 20:34:36,72,Palette Kalıcı Doğal Renkler Saç Boyası 8-0 Bal Köpüğü,169.95
+2026-03-15 20:34:36,72,Palette Kalıcı Doğal Renkler Saç Boyası 6-0 Koyu Kumral,169.95
+2026-03-15 20:34:36,72,Palette Kalıcı Doğal Renkler Saç Boyası 5-0 Açık Kahve,169.95
+2026-03-15 20:34:36,72,Palette Kalıcı Doğal Renkler 1-1 Gece Mavisi,169.95
+2026-03-15 20:34:36,72,Palette Kalıcı Doğal Renkler Saç Boyası 3-0 Koyu Kahve,169.95
+2026-03-15 20:34:36,72,Palette Kalıcı Doğal Renkler Saç Boyası 1-0 Siyah,169.95
+2026-03-15 20:34:36,72,Palette Kalıcı Doğal Renkler Saç Boyası 8-77 Tarçın Bakır,169.95
+2026-03-15 20:34:36,72,Palette Kalıcı Doğal Renkler Saç Boyası 7-5 Açık Karamel,169.95
+2026-03-15 20:34:36,72,Palette Kalıcı Doğal Renkler Saç Boyası 10-0 Açık Sarı,169.95
+2026-03-15 20:34:36,73,Algida Kaymaklı Dondurma 1000 Ml,130.0
+2026-03-15 20:34:36,73,Algida Maraş Kesme Dilim Dondurma 492 Ml,164.9
+2026-03-15 20:34:36,73,Algida Frigola Fındık Çikolata Dondurma 65 Ml,40.0
+2026-03-15 20:34:36,73,Algida Nogger Sandwich Çikolata Kaymak Dondurma 145 Ml,65.0
+2026-03-15 20:34:36,73,Algida Max Twister Cool 65 Ml,15.0
+2026-03-15 20:34:36,73,Algida Viennetta Stick Dondurma 90 Ml,25.0
+2026-03-15 20:34:36,73,Algida Maraş Kadayıf Dondurma 500 Ml,224.95
+2026-03-15 20:34:36,73,Magnum Euphoria Limon Ahududu Dondurma 85 Ml,85.0
+2026-03-15 20:34:36,73,Algida Milka Stick Dondurma 82 Ml,50.0
+2026-03-15 20:34:36,73,Cornetto Classico Çilek Dondurma 120 Ml,50.0
+2026-03-15 20:34:36,73,Algida 4Köşe Vanilya Dondurma 48 Ml,10.0
+2026-03-15 20:34:36,73,Carte Dor Selection Aşkın Büyüsü Dondurma 800 Ml,289.95
+2026-03-15 20:34:36,73,Cornetto Disc Choco Coffee Dondurma 130 Ml,70.0
+2026-03-15 20:34:36,73,Algida Frigola Bar 60 Ml,50.0
+2026-03-15 20:34:36,73,Carte Dor Selection Patisserie Dondurma 800 Ml,289.95
+2026-03-15 20:34:36,73,Magnum Double Chill Yaban Mersini Cookie Dondurma 85 Ml,85.0
+2026-03-15 20:34:36,73,Algida Boom Boom Kat Kat 570 Ml,124.9
+2026-03-15 20:34:36,73,Algida Carte d'Or Selection Meyve Şöleni 800 Ml,289.95
+2026-03-15 20:34:36,73,Algida Max Twister Island 65 Ml,15.0
+2026-03-15 20:34:36,74,"Purina One Steril Sığır Etli Yetişkin Kedi Maması 1,5 Kg",695.0
+2026-03-15 20:34:36,74,"Purina One Tavuklu Yetişkin Kuru Kedi Maması 1,5 kg",695.0
+2026-03-15 20:34:36,74,Felix Sensations Sığır Etli ve Domatesli Yaş Kedi Maması 85 Gr,32.95
+2026-03-15 20:34:36,74,"Purina One Steril Sığır Etli Kısırlaştırılmış Kedi Maması 1,5 Kg",695.0
+2026-03-15 20:34:36,74,"Purina One Steril Somonlu Kedi Maması 1,5 Kg",695.0
+2026-03-15 20:34:36,74,Friskies Junior Tavuklu Yavru Yaş Kedi Maması 100 Gr,30.9
+2026-03-15 20:34:36,74,Friskies Somonlu Yaş Kedi Maması 85 Gr,30.9
+2026-03-15 20:34:36,74,Friskies Tavuklu Yaş Kedi Maması 85 Gr,30.9
+2026-03-15 20:34:36,74,Friskies Sığır Etli Yaş Kedi Maması 85 Gr,30.9
+2026-03-15 20:34:36,74,Friskies Yetişkin Kümes Hayvanlı Kuru Kedi Maması 300 Gr,95.9
+2026-03-15 20:34:36,74,Purina One Streril Kediler Sığır Etli Kısırlaştırılmış Kuru Kedi Maması 800 Gr,429.9
+2026-03-15 20:34:36,74,Purina One Steril Kediler Somonlu Kuru Kedi Maması 800 Gr,429.9
+2026-03-15 20:34:36,74,Purina One 1- 12 Ay Yavru Kedi Maması 800 Gr,429.9
+2026-03-15 20:34:36,74,Gourmet Gold Kıyılmış Hindili Konserve Yaş Kedi Maması 85 Gr,59.9
+2026-03-15 20:34:36,74,Gourmet Gold Kıyılmış Sığır Etli Konserve Yaş Kedi Maması 85 Gr,59.9
+2026-03-15 20:34:36,74,Gourmet Gold Kıyılmış Ton Balıklı Konserve Yaş Kedi Maması 85 Gr,59.9
+2026-03-15 20:34:36,74,Gourmet Gold Kıyılmış Tavuklu Konserve Yaş Kedi Maması 85 Gr,59.9
+2026-03-15 20:34:36,74,Felix Pouch Tasty Shreds Somonlu Yaş Kedi Maması 80 Gr,33.95
+2026-03-15 20:34:36,74,Felix Pouch Tasty Shreds Tavuklu Yaş Kedi Maması 80 Gr,33.95
+2026-03-15 20:34:36,74,Felix Pouch Tasty Shreds Ton Balıklı Yaş Kedi Maması 80 Gr,33.95
+2026-03-15 20:34:36,74,Felix Somon ve Sardalyalı Yaş Kedi Maması 85 Gr,32.95
+2026-03-15 20:34:36,74,Felix Junior Sığır Etli ve Tavuklu Yaş Yavru Kedi Maması 4x85 Gr,123.45
+2026-03-15 20:34:36,74,Felix Sensation Tavuklu ve Havuçlu Yaş Kedi Maması 85 Gr,32.95
+2026-03-15 20:34:36,74,Felix Sensations Somon ve Karidesli Yaş Kedi Maması 85 Gr,32.95
+2026-03-15 20:34:36,74,Felix Sığır Etli ve Tavuklu Yaş Kedi Maması 85 Gr,32.95
+2026-03-15 20:34:36,74,Felix Junior Tavuklu Yaş Yavru Kedi Maması 85 Gr,32.95
+2026-03-15 20:34:36,74,Felix Junior Sığır Etli Yaş Yavru Kedi Maması 85 Gr,32.95
+2026-03-15 20:34:36,74,Felix Sığır Etli Yaş Kedi Maması 85 Gr,32.95
+2026-03-15 20:34:36,74,Felix Ton Balıklı Yaş Kedi Maması 85 Gr,32.95
+2026-03-15 20:34:36,74,Felix Avantajlı Somonlu Ton Balıklı Yaş Kedi Maması 4x85 Gr,123.45
+2026-03-15 20:34:36,74,Felix Tavuklu Yaş Kedi Maması 85 Gr,32.95
+2026-03-15 20:34:36,74,Felix Somonlu Yaş Kedi Maması 85 Gr,32.95
+2026-03-15 20:34:36,74,Felix Sığır Etli ve Tavuklu Yaş Kedi Maması 4x85 Gr,123.45
+2026-03-15 20:34:36,74,Felix Kuzulu Yaş Kedi Maması 85 Gr,32.95
+2026-03-15 20:34:36,74,Friskies Junior Tavuklu Ve Havuçlu Yavru Yaş Köpek Maması 100 Gr,43.5
+2026-03-15 20:34:36,74,Friskies Sığır Etli ve Patatesli Yetişkin Yaş Köpek Maması 100 Gr,43.5
+2026-03-15 20:34:36,75,Milupa Aptamil 2 Devam Sütü 800 Gr,1109.95
+2026-03-15 20:34:36,75,Bebelac Bebek Devam Sütü 4 Numara 400 Gr,379.95
+2026-03-15 20:34:36,75,Bebelac Bebek Devam Sütü 3 Numara 400 Gr,379.95
+2026-03-15 20:34:36,75,Bebelac Bebek Devam Sütü 2 Numara 400 Gr,379.95
+2026-03-15 20:34:36,75,Bebelac Bebek Devam Sütü 1 Numara 400 Gr,379.95
+2026-03-15 20:34:36,75,Milupa Aptamil 5 Devam Sütü 800 Gr,1109.95
+2026-03-15 20:34:36,75,Milupa Aptamil 4 800 Gr,1109.95
+2026-03-15 20:34:36,75,Milupa Aptamil 1 800 Gr,1109.95
+2026-03-15 20:34:36,75,Milupa Aptamil 3 800 Gr,1109.95
+2026-03-15 20:34:36,76,Algida Nogger Sandwich Çikolata Kaymak Dondurma 145 Ml,65.0
+2026-03-15 20:34:36,76,Algida Milka Stick Dondurma 82 Ml,50.0
+2026-03-15 20:34:36,76,Algida Frigola Bar 60 Ml,50.0
+2026-03-15 20:34:36,77,Sütaş Çilekli Puding 200 Gr,21.95
+2026-03-15 20:34:36,77,Sütaş Yağlı Süt 200 Ml,19.5
+2026-03-15 20:34:36,77,Sütaş Şişe Ayran 2 Lt,89.5
+2026-03-15 20:34:36,77,Sütaş Çilekli Büyümix 6x40 Gr,46.95
+2026-03-15 20:34:36,77,Sütaş Yayık Tereyağ 225 Gr,194.95
+2026-03-15 20:34:36,77,Sütaş Kaymaksız Yoğurt 500 Gr,45.0
+2026-03-15 20:34:36,77,Sütaş Kaymaklım Yoğurt 500 Gr,65.5
+2026-03-15 20:34:36,77,Sütaş Dilimli Burger Peyniri 225 Gr,154.95
+2026-03-15 20:34:36,77,Sütaş Kakaolu Puding 200 Gr,21.95
+2026-03-15 20:34:36,77,Sütaş Muzlu Puding 200 Gr,21.95
+2026-03-15 20:34:36,77,Sütaş Çikolatalı Süt 1 Lt,99.95
+2026-03-15 20:34:36,77,Sütaş Tereyağ 750 Gr,599.95
+2026-03-15 20:34:36,77,Sütaş Süzme Yoğurt 375 Gr,77.95
+2026-03-15 20:34:36,77,Sütaş Orman Meyveli Kaf Kefir 1 Lt,97.95
+2026-03-15 20:34:36,77,Sütaş Örgü Peyniri 200 Gr,159.95
+2026-03-15 20:34:36,77,Sütaş Çeçil Peyniri 200 Gr,159.95
+2026-03-15 20:34:36,77,Sütaş Çilekli Süt 6x180 Ml,99.95
+2026-03-15 20:34:36,77,Sütaş Muzlu Süt 6x180 ml,99.95
+2026-03-15 20:34:36,77,Sütaş Çikolatalı Süt 6x180 ml,99.95
+2026-03-15 20:34:36,77,Sütaş Tam Yağlı Beyaz Peynir 900 Gr,299.95
+2026-03-15 20:34:36,77,Sütaş Orman Meyveli Kaf Kefir 250 Ml,36.95
+2026-03-15 20:34:36,77,Sütaş Kaf Kefir Sade 1 Lt,86.95
+2026-03-15 20:34:36,77,Sütaş Yağlı Süt 6x180 Ml,99.95
+2026-03-15 20:34:36,77,Sütaş Orman Meyveli Yoğurt 4x115 Gr,92.95
+2026-03-15 20:34:36,77,Sütaş Orman Meyveli Yoğurt 500 Gr,82.95
+2026-03-15 20:34:36,77,Sütaş Tatlımmm Çikolatalı Puding 4X65 G,41.95
+2026-03-15 20:34:36,77,Sütaş Salep 1 Lt,104.95
+2026-03-15 20:34:36,77,Sütaş Kaf Kefir Çilek 1 Lt,97.95
+2026-03-15 20:34:36,77,Sütaş Labne Avantaj Paketi 3 lü,199.95
+2026-03-15 20:34:36,78,Rexona Men Xtra Cool Roll-On 50 M,199.95
+2026-03-15 20:34:36,78,Omo Active Beyazlar& Renkliler Toz Çamaşır Deterjanı 9 Kg,449.95
+2026-03-15 20:34:36,78,Knorr Çabuk Ezogelin Çorba,16.95
+2026-03-15 20:34:36,78,Knorr Çabuk Acılı Domates Çorbası,16.95
+2026-03-15 20:34:36,78,Clear Men Saç Dökülmesine Karşı Kahve Çekirdeği Özü Şampuan 350 Ml,194.95
+2026-03-15 20:34:36,78,Domestos Bıo Actıve Mutfak Çamaşır Suyu 1850 Ml,149.95
+2026-03-15 20:34:36,78,Knorr Çabuk Çorba Kremalı Mantar 19 Gr,16.95
+2026-03-15 20:34:36,78,Cif Krem Gold 750 Ml,104.95
+2026-03-15 20:34:36,78,Knorr Çabuk Mac Cheese Peynirli Makarna 212 Gr,84.95
+2026-03-15 20:34:36,78,Domestos Kötü Koku Avcısı Çamaşır Suyu 750 Ml,74.95
+2026-03-15 20:34:36,78,Clear Men Legend By CR7 Cristiano Ronaldo Şampuan 350 Ml,194.95
+2026-03-15 20:34:36,78,Clear Men Hızlı Stil 2'si 1 Arada Şampuan 350 Ml,194.95
+2026-03-15 20:34:36,78,Rinso Argan Özü Renkliler Sıvı Çamaşır Deterjan 3 Lt,179.99
+2026-03-15 20:34:36,78,Clear Men Ferahlatıcı Mentol ile 3 ü 1 Arada Şampuan & Duş Jeli 350 Ml,199.95
+2026-03-15 20:34:36,78,Clear Men Arındırıcı Kömür 3'ü 1 Arada Şampuan ve Duş Jeli 350 ML,199.95
+2026-03-15 20:34:36,78,Clear Men Cool Sport Menthol Ferahlatıcı Mentol Etkisi Kepeğe Karşı Etkili Şampuan 350 Ml,194.95
+2026-03-15 20:34:36,78,Lipton Yellow Label Demlik Çay 150 Adet,249.95
+2026-03-15 20:34:36,78,Lipton Limonlu Bardak Poşet Yeşil Çay 20'li,89.95
+2026-03-15 20:34:36,78,Lipton Rezene Bardak Poşet Bitki Çayı 20'li,89.95
+2026-03-15 20:34:36,78,Rexona Musk %0 Alüminyum 48 Saat Koruma Kadın Sprey Deodorant 150 Ml,199.95
+2026-03-15 20:34:36,78,Lipton Doğu Karadeniz Demlik Poşet Çay 100'Lü,199.95
+2026-03-15 20:34:36,78,Rexona Shower Fresh 72 Saat Kesintisiz Koruma Kadın Sprey Deodorant 150 Ml,199.95
+2026-03-15 20:34:36,78,Yumoş Sakura Ev ve Tekstil Spreyi 450 Ml,144.95
+2026-03-15 20:34:36,78,Signal White Now Diş Macunu 75 Ml + Performans Diş Fırçası,149.95
+2026-03-15 20:34:36,78,Yumoş Extra Sakura Konsantre Çamaşır Yumuşatıcı 1440 Ml,199.95
+2026-03-15 20:34:36,78,Rexona MotionSense Invisible On Black + White Clothes Erkek Stick Deodorant 40 Ml,269.95
+2026-03-15 20:34:36,78,Knorr Kıtırlı Kremalı Tavuk Çabuk Çorba,16.95
+2026-03-15 20:34:36,78,Rexona MotionSense Invisible On Black + White Clothes Kadın Stick Deodorant 40 Ml,269.95
+2026-03-15 20:34:36,78,Rexona MotionSense Cotton Dry Algodon Kadın Stick Deodorant 40 Ml,269.95
+2026-03-15 20:34:36,78,Lipton Yellow Label Demlik Poşet Çay 100'Lü,239.95
+2026-03-15 20:34:36,78,Lipton Yellow Label Dökme Çay 500 Gr,214.95
+2026-03-15 20:34:36,78,Dove Beauty Cream Bar Fresh Touch Nemlendirici Etkili Sabun 90 Gr,49.95
+2026-03-15 20:34:36,78,Lipton Doğu Karadeniz Dökme Çay 500 Gr,179.95
+2026-03-15 20:34:36,78,Knorr Beşamel Sos 70 Gr,58.95
+2026-03-15 20:34:36,78,Lipton Form Plus Kayısılı Çay 20'li,89.95
+2026-03-15 20:34:36,79,Fersan Ferfresh Beyaz Sirke 2 Lt,99.95
+2026-03-15 20:34:36,79,Konserve Kapak Adet,2.5
+2026-03-15 20:34:36,79,Cevher Tuz İri Salamura 3Kg,49.95
+2026-03-15 20:34:36,79,Fersan Turşuluk Sirkeli Salamura Pet Kavanoz 3 Lt,149.95
+2026-03-15 20:34:36,79,Konserve Kavanozu 1 Lt,14.95
+2026-03-15 20:34:36,81,Superfresh Tavuk Dönerli Dürüm Tost 180 Gr,109.95
+2026-03-15 20:34:36,81,Superfresh Çıtır Soğan Halka Kroket 450 Gr,139.95
+2026-03-15 20:34:36,81,Superfresh Hamburger Köfte 500 Gr,649.95
+2026-03-15 20:34:36,81,Süperfresh Milföy 1 Kg,189.9
+2026-03-15 20:34:36,82,Sleepy Yüzey Temizlik Havlusu 100 lü,99.95
+2026-03-15 20:34:36,83,Ülker Ballı Bademli Krokanlı Sütlü Çikolata 60 Gr,56.95
+2026-03-15 20:34:36,83,Ülker Antep Fıstıklı Milfoy 28 Gr,20.0
+2026-03-15 20:34:36,83,Ülker Bitter Kare Çikolata %60 Kakaolu 60 Gr,69.95
+2026-03-15 20:34:36,83,Ülker Kremalı Sandviç Bisküvi 8'li 488 Gr,94.5
+2026-03-15 20:34:36,83,Caramio Bitter Baton Çikolata 35 Gr,14.95
+2026-03-15 20:34:36,83,Ülker Çizi Peynirli Kraker 4'lü 280 Gr,56.0
+2026-03-15 20:34:36,83,Ülker Bütün Antep Fıstıklı Sütlü Baton Çikolata 30 Gr,52.5
+2026-03-15 20:34:36,83,Ülker Albeni Tane Tane 29 Gr,28.0
+2026-03-15 20:34:36,83,Ülker Bütün Antep Fıstıklı %60 Bitter Çikolata 65 Gr,104.95
+2026-03-15 20:34:36,83,Alpella 3Gen Beyaz Gofret 28 Gr,16.0
+2026-03-15 20:34:36,83,Ülker Kremalı Rondo Çilekli Bisküvi 61 Gr,13.0
+2026-03-15 20:34:36,83,Ülker Metro Sütlü Çikolatalı Kaplı Karamel & Nugalı Bar 36 Gr,17.0
+2026-03-15 20:34:36,83,Biskrem Kakaolu 100 Gr,25.0
+2026-03-15 20:34:36,83,Dankek Pöti Muffin Kek Meyveli 35 Gr,10.0
+2026-03-15 20:34:36,83,"Ülker Çilekli Kanky Bulut Kornet Gofret 26,5 Gr",19.0
+2026-03-15 20:34:36,83,Ülker 8 Kek Mini Muzlu 162 Gr,44.95
+2026-03-15 20:34:36,83,Ülker Çilekli Mini Dankek Tart 150 Gr,54.95
+2026-03-15 20:34:36,83,Ülker Çilekli Mini Kekstra 150 Gr,54.95
+2026-03-15 20:34:36,83,Ülker Olala Tiramisu Dolgulu Kek 45 Gr,25.0
+2026-03-15 20:34:36,83,Ülker Dankek Mousse Kek 45 Gr,25.0
+2026-03-15 20:34:36,83,Ülker Çokonat Baklava 30 Gr,25.0
+2026-03-15 20:34:36,83,Ülker Dido Trio Colors Çilekli 36.5 Gr,22.0
+2026-03-15 20:34:36,83,Ülker Muzlu Mini Halley 66 Gr,22.0
+2026-03-15 20:34:36,83,Ülker Kakao Kremalı Bisküvi 61 Gr,13.0
+2026-03-15 20:34:36,83,Hanımeller Zeytinli Biberiyeli Tuzlu Kurabiye 81 Gr,20.0
+2026-03-15 20:34:36,83,Ülker Çizi Çıtır Atıştırmalık Tulum Peynir & Köz Biber 80 Gr,30.0
+2026-03-15 20:34:36,83,Ülker Altınbaşak Tahıl Cipsi 50 Gr,22.0
+2026-03-15 20:34:36,83,Ülker Çizi Çıtır Atıştırmalık Peynir & Soğan 80 Gr,30.0
+2026-03-15 20:34:36,83,Ülker Hanımeller Frambuaz Soslu Kurabiye 150 Gr,43.0
+2026-03-15 20:34:36,83,Ülker Biskrem Cookie 80 Gr,25.0
+2026-03-15 20:34:36,83,Ülker Çikolata Fındık Rüyası 75 Gr,69.95
+2026-03-15 20:34:36,83,Ülker Badem Kraker Sade 38 Gr,9.0
+2026-03-15 20:34:36,83,Ülker Halley Muzlu Pasta Tadında Sandviç Bisküvi 210 Gr,94.95
+2026-03-15 20:34:36,83,Ülker Kanky Mini Yumurta 70 Gr,79.95
+2026-03-15 20:34:36,83,Ülker Çizi Çıtır Tulum Peynir & Köz Biber Aromalı Kraker 40 Gr,16.0
+2026-03-15 20:34:36,83,Ülker Çizi Çıtır Peynir&Soğan Aromalı Kraker 40 Gr,16.0
+2026-03-15 20:34:36,85,Oyun Hamuru 4 Lü,52.5
+2026-03-15 20:34:36,85,Mikro Glue Stick Katı Yapıştırıcı 9 Gr,11.5
+2026-03-15 20:34:36,85,Mikro Uç 0.7,4.5
+2026-03-15 20:34:36,85,Spiralli Resim Defteri 35x50,32.5
+2026-03-15 20:34:36,85,Spiralli Resim Defteri 25x35,17.5
+2026-03-15 20:34:36,85,Umut Metod A4 Çizgili Defter 100 Yaprak,44.95
+2026-03-15 20:34:36,85,Umut Metod A4 Kareli Defter 100 Yaprak,44.95
+2026-03-15 20:34:36,85,Umut Metod A4 Çizgili Defter 80 Yaprak,37.95
+2026-03-15 20:34:36,85,Umut Metod A4 Çizgili Defter 60 Yaprak,29.95
+2026-03-15 20:34:36,85,Umut Metod A4 Kareli Defter 60 Yaprak,29.95
+2026-03-15 20:34:36,85,Umut Metod A4 Çizgili Defter 40 Yaprak,21.95
+2026-03-15 20:34:36,85,Umut Metod A4 Kareli Defter 40 Yaprak,21.95
+2026-03-15 20:34:36,85,Umut A5 Kareli Defter 100 Yaprak,23.95
+2026-03-15 20:34:36,85,Umut A5 Çizgili Defter 80 Yaprak,22.5
+2026-03-15 20:34:36,85,Umut A5 Çizgili Defter 60 Yaprak,14.95
+2026-03-15 20:34:36,85,Umut A5 Kareli Defter 60 Yaprak,14.95
+2026-03-15 20:34:36,85,Umut A5 Çizgili Defter 40 Yaprak,11.95
+2026-03-15 20:34:36,85,Umut A5 Kareli Defter 40 Yaprak,11.95
+2026-03-15 20:34:36,85,Umut A5 Çizgili Defter 100 Yaprak,23.95
+2026-03-15 20:34:36,85,Mimaks Keçeli Kalem 12 Li,44.95
+2026-03-15 20:34:36,85,Fatih Pastel Boya 12 Li,59.95
+2026-03-15 20:34:36,85,Fatih Sulu Boya 12 Li,74.95
+2026-03-15 20:34:36,85,Fatih Kuru Boya 12 Li,74.95
+2026-03-15 20:34:36,85,Fatih Kırmızı Kalem,8.5
+2026-03-15 20:34:36,85,Umut Plastik Kapak A4 Çizgili Defter 100 Yaprak,52.5
+2026-03-15 20:34:36,85,Umut Plastik Kapak A4 Kareli Defter 80 Yaprak,41.5
+2026-03-15 20:34:36,85,Umut Plastik Kapak A4 Çizgili Defter 80 Yaprak,41.5
+2026-03-15 20:34:36,85,Umut Plastik Kapak A4 Kareli Defter 60 Yaprak,33.95
+2026-03-15 20:34:36,85,Umut Plastik Kapak A4 Çizgili Defter 60 Yaprak,33.95
+2026-03-15 20:34:36,85,Umut Plastik Kapak A4 Kareli Defter 40 Yaprak,26.5
+2026-03-15 20:34:36,85,Umut Plastik Kapak A4 Çizgili Defter 40 Yaprak,26.5
+2026-03-15 20:34:36,85,Matara Çeşitleri,108.0
+2026-03-15 20:34:36,85,Beslenme Kabı,59.95
+2026-03-15 20:34:36,85,Mikro Beyaz Silgi,5.95
+2026-03-15 20:34:36,85,Hazneli Kalem Traş,11.5
+2026-03-15 20:34:36,86,LAV Dias 18 Parça Meşrubat Bardağı Seti 18'li,299.99
+2026-03-15 20:34:36,87,Ülker Meşhur Dubai Lezzeti Kadayıflı Çikolata 93 Gr,124.95
+2026-03-15 20:34:36,87,Ülker Biskrem Extra Bisküvi 184 Gr,51.95
+2026-03-15 20:34:36,87,Ülker Hanımeller Frambuaz Soslu Kurabiye 94.5 Gr,25.0
+2026-03-15 20:34:36,87,Ülker Çizi Haşhaşlı - Baharatlı Kraker 70 Gr,12.5
+2026-03-15 20:34:36,87,Ülker Laviva Selection Sütlü Gofret 45 Gr,30.0
+2026-03-15 20:34:36,87,Ülker Çizi Haşhaşlı - Peynirli Kraker 82 Gr,16.5
+2026-03-15 20:34:36,87,Ülker Krispi Pops Süt Mısır Çerezi 40 Gr,15.0
+2026-03-15 20:34:36,87,Ülker Krispi Pops Peynirli Mısır Çerezi 40 Gr,15.0
+2026-03-15 20:34:36,87,Ülker Ballı Bademli Krokanlı Sütlü Çikolata 60 Gr,56.95
+2026-03-15 20:34:36,87,Ülker Antep Fıstıklı Milfoy 28 Gr,20.0
+2026-03-15 20:34:36,87,Ülker Bitter Kare Çikolata %60 Kakaolu 60 Gr,69.95
+2026-03-15 20:34:36,87,Ülker Kremalı Sandviç Bisküvi 8'li 488 Gr,94.5
+2026-03-15 20:34:36,87,Caramio Bitter Baton Çikolata 35 Gr,14.95
+2026-03-15 20:34:36,87,Ülker Çizi Peynirli Kraker 4'lü 280 Gr,56.0
+2026-03-15 20:34:36,87,Ülker Bütün Antep Fıstıklı Sütlü Baton Çikolata 30 Gr,52.5
+2026-03-15 20:34:36,87,Ülker Albeni Tane Tane 29 Gr,28.0
+2026-03-15 20:34:36,87,Ülker Bütün Antep Fıstıklı %60 Bitter Çikolata 65 Gr,104.95
+2026-03-15 20:34:36,87,Alpella 3Gen Beyaz Gofret 28 Gr,16.0
+2026-03-15 20:34:36,87,Ülker Kremalı Rondo Çilekli Bisküvi 61 Gr,13.0
+2026-03-15 20:34:36,87,Ülker Metro Sütlü Çikolatalı Kaplı Karamel & Nugalı Bar 36 Gr,17.0
+2026-03-15 20:34:36,87,Biskrem Kakaolu 100 Gr,25.0
+2026-03-15 20:34:36,87,Dankek Pöti Muffin Kek Meyveli 35 Gr,10.0
+2026-03-15 20:34:36,87,"Ülker Çilekli Kanky Bulut Kornet Gofret 26,5 Gr",19.0
+2026-03-15 20:34:36,87,Ülker 8 Kek Mini Muzlu 162 Gr,44.95
+2026-03-15 20:34:36,87,Ülker Çilekli Mini Dankek Tart 150 Gr,54.95
+2026-03-15 20:34:36,87,Ülker Çilekli Mini Kekstra 150 Gr,54.95
+2026-03-15 20:34:36,87,Ülker Olala Tiramisu Dolgulu Kek 45 Gr,25.0
+2026-03-15 20:34:36,87,Ülker Dankek Mousse Kek 45 Gr,25.0
+2026-03-15 20:34:36,87,Ülker Çokonat Baklava 30 Gr,25.0
+2026-03-15 20:34:36,87,Ülker Dido Trio Colors Çilekli 36.5 Gr,22.0
+2026-03-15 20:34:36,87,Ülker Muzlu Mini Halley 66 Gr,22.0
+2026-03-15 20:34:36,87,Ülker Kakao Kremalı Bisküvi 61 Gr,13.0
+2026-03-15 20:34:36,87,Hanımeller Zeytinli Biberiyeli Tuzlu Kurabiye 81 Gr,20.0
+2026-03-15 20:34:36,87,Ülker Çizi Çıtır Atıştırmalık Tulum Peynir & Köz Biber 80 Gr,30.0
+2026-03-15 20:34:36,87,Ülker Altınbaşak Tahıl Cipsi 50 Gr,22.0
+2026-03-15 20:34:36,87,Ülker Çizi Çıtır Atıştırmalık Peynir & Soğan 80 Gr,30.0
+2026-03-15 20:34:36,88,Proline Sabun Kokulu Topaklanan Bentonit Kedi Kumu 5 Lt,99.99
+2026-03-15 20:34:36,88,Proline Pudra Kokulu Topaklanan Bentonit Kedi Kumu 5 Lt,99.99
+2026-03-15 20:34:36,88,Enjoy Kuzu Etli ve Pirinçli Yetişkin Kuru Köpek Maması 10 Kg,699.99
+2026-03-15 20:34:36,88,Jungle Bentonit İnce Natural Kedi Kumu 5 Lt,99.99
+2026-03-15 20:34:36,90,Tukaş Çilek Reçeli 380 Gr,109.95
+2026-03-15 20:34:36,90,Torku Macar Salam Dilim 50 Gr,49.95
+2026-03-15 20:34:36,90,Torku Dana Sucuk 180 Gr,199.95
+2026-03-15 20:34:36,90,Tukaş Reçel Ahududu 380 Gr,89.95
+2026-03-15 20:34:36,90,Binnur Klasik Beyaz Peynir Kg,399.95
+2026-03-15 20:34:36,90,Tukaş Vişne Reçeli 380 Gr,129.95
+2026-03-15 20:34:36,90,Tukaş Kayısı Reçeli 380 Gr,89.95
+2026-03-15 20:34:36,90,Tukaş Böğürtlen Reçeli 380 Gr,89.95
+2026-03-15 20:34:36,90,Biber Kıl Acı Kg,329.9
+2026-03-15 20:34:36,90,Biber Kıl Tatlı Kg,329.9
+2026-03-15 20:34:36,91,Sütaş Dil Peyniri 200 Gr,159.95
+2026-03-15 20:34:36,91,Sütaş Örgü Peyniri 200 Gr,159.95
+2026-03-15 20:34:36,91,Sütaş Çeçil Peyniri 200 Gr,159.95
+2026-03-15 20:34:36,92,Milka Oreolu Çikolata 100 Gr,129.95
+2026-03-15 20:34:36,92,Milka Çilekli Yoğurtlu Çikolata 100 Gr,129.95
+2026-03-15 20:34:36,92,Milka Çikolata Rüyası 100 Gr,129.95
+2026-03-15 20:34:36,92,"Milka Çikolata Milkinis 87,5 Gr",129.95
+2026-03-15 20:34:36,92,Milka Fındıklı Çikolatalı Tablet 80 Gr,129.95
+2026-03-15 20:34:36,92,Milka Sütlü Tablet Çikolata 80 Gr,129.95
+2026-03-15 20:34:36,92,Milka Beyaz Çikolata 80 Gr,129.95
+2026-03-15 20:34:36,94,Torku Mini Kokteyl Dana Sosis 100 Gr,114.95
+2026-03-15 20:34:36,94,Torku Yarım Yağlı Yoğurt 750 Ml,69.95
+2026-03-15 20:34:36,94,Torku Tam Yağlı Tost Peyniri 600 Gr,289.95
+2026-03-15 20:34:36,94,Torku Labne 400 Gr,129.95
+2026-03-15 20:34:36,94,Torku Kavurma Dilimli 100 Gr,239.95
+2026-03-15 20:34:36,94,Torku Macar Salam Dilim 50 Gr,49.95
+2026-03-15 20:34:36,94,Torku Dana Sucuk 180 Gr,199.95
+2026-03-15 20:34:36,95,Pınar Cheddarlı Krem Peynir 270 Gr,119.95
+2026-03-15 20:34:36,95,Pınar Sucuk Şölen 180 Gr,219.95
+2026-03-15 20:34:36,95,Pınar Süzme Az Yağlı Az Tuzlu Peynir 500 Gr,129.95
+2026-03-15 20:34:36,95,Pınar Salam Hindi Büyük Dilim Aç Bitir 60 Gr,35.95
+2026-03-15 20:34:36,95,Pınar Denge Laktozsuz Süt 1 Lt,69.95
+2026-03-15 20:34:36,95,Pınar Sosis Aç Bitir 180 Gr,74.95
+2026-03-15 20:34:36,97,Klorak Ultra Yoğun Çamaşır Suyu 1850 Ml,89.95
+2026-03-15 20:34:36,97,Rinso Argan Özü Renkliler Sıvı Çamaşır Deterjan 3 Lt,179.99
+2026-03-15 20:34:36,97,Maylo 3 Katlı Tuvalet Kağıdı 32'li,299.95
+2026-03-15 20:34:36,97,Nutella 750 Gr,272.5
+2026-03-15 20:34:36,97,Rinso Komple Bakım Serisi Renkliler İçin Sıvı Çamaşır Deterjanı 3 Lt,179.99
+2026-03-15 20:34:36,97,Çaykur Tiryaki Çayı 1 Kg,295.95
+2026-03-15 20:34:36,97,Fairy Losyon Sıvı Bulaşık Deterjanı 1500 Ml,184.95
+2026-03-15 20:34:36,97,Olin Ayçiçek Yağı Pet 4 Lt,399.95
+2026-03-15 20:34:36,97,Rinso Siyahlar Sıvı Çamaşır Deterjanı 3 Lt,179.99
+2026-03-15 20:34:36,97,Dana Kıymalık Kg,795.0
+2026-03-15 20:34:36,97,İçim Süzme Peynir 900 Gr,269.95
+2026-03-15 20:34:36,97,Sütaş Kaymaksız Yoğurt 1 Kg,77.5
+2026-03-15 20:34:36,97,Şenpiliç Kalçalı But Kg,105.0
+2026-03-15 20:34:36,97,Dana Az Yağlı Kuşbaşı Kg,890.0
+2026-03-15 20:34:36,97,Şenpiliç Piliç Bütün Poşet Kg,99.99
+2026-03-15 20:34:36,98,Sütaş Şişe Ayran 2 Lt,89.5
+2026-03-15 20:34:36,99,Eker Dip Cips Domates Soslu Yoğurt Sos 125 Gr,39.95
+2026-03-15 20:34:36,99,Eker Dip Cips Acı Soslu Yoğurt 125 Gr,39.95
+2026-03-15 20:34:36,99,Eker Dip Cips Barbekü Soslu Yoğurt Sos 125 Gr,39.95
+2026-03-15 20:34:36,99,Eker Dip Cips Cheddar Soslu Yoğurt 125 Gr,39.95
+2026-03-15 20:34:36,99,Eker Kaşar Peyniri 600 Gr,299.95
+2026-03-15 20:34:36,100,Proline Sabun Kokulu Topaklanan Bentonit Kedi Kumu 5 Lt,99.99
+2026-03-15 20:34:36,100,Proline Pudra Kokulu Topaklanan Bentonit Kedi Kumu 5 Lt,99.99
+2026-03-15 20:34:36,100,Enjoy Kuzu Etli ve Pirinçli Yetişkin Kuru Köpek Maması 10 Kg,699.99
