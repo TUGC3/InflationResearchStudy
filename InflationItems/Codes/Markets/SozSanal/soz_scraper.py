@@ -1,5 +1,6 @@
 import csv
 import os
+import random
 import re
 import time
 from collections import deque
@@ -15,8 +16,12 @@ HEADERS = {
     "User-Agent": (
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
         "AppleWebKit/537.36 (KHTML, like Gecko) "
-        "Chrome/120.0.0.0 Safari/537.36"
-    )
+        "Chrome/124.0.0.0 Safari/537.36"
+    ),
+    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+    "Accept-Language": "tr-TR,tr;q=0.9,en;q=0.8",
+    "Accept-Encoding": "gzip, deflate, br",
+    "Connection": "keep-alive",
 }
 
 PATH_RE = re.compile(r"/hesabim\?path=(\d+)")
@@ -27,15 +32,23 @@ NON_PRODUCT_TITLES = {"alt kategoriler", "kategoriler"}
 
 
 def repo_root() -> str:
-    # Codes/Markets/SozSanal/soz_scraper.py -> repo root
     return os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
 
+def jitter(base: float, spread: float = 0.5) -> float:
+    """Return base ± random spread seconds."""
+    return base + random.uniform(-spread, spread)
+
+
+SESSION = requests.Session()
+SESSION.headers.update(HEADERS)
+
+
 def fetch_soup(url: str) -> BeautifulSoup:
-    r = requests.get(url, headers=HEADERS, timeout=30)
+    time.sleep(jitter(2.0, 1.0))  # 1–3s before every request
+    r = SESSION.get(url, timeout=90)
     r.raise_for_status()
     return BeautifulSoup(r.text, "html.parser")
-
 
 
 def category_url(path_id: int, page: int = 1) -> str:
@@ -73,7 +86,7 @@ def discover_seed_paths_from_home() -> Set[int]:
 
 
 def normalize_price(price_str: str) -> str:
-    return price_str.replace(".", "").strip()  # keep comma decimal
+    return price_str.replace(".", "").strip()
 
 
 def parse_products_from_page(soup: BeautifulSoup) -> List[Tuple[str, str]]:
@@ -112,7 +125,7 @@ def parse_products_from_page(soup: BeautifulSoup) -> List[Tuple[str, str]]:
     return results
 
 
-def scrape_path(path_id: int, polite_delay_sec: float = 0.25) -> Tuple[List[Tuple[str, str]], Set[int]]:
+def scrape_path(path_id: int) -> Tuple[List[Tuple[str, str]], Set[int]]:
     first = fetch_soup(category_url(path_id, 1))
     pages = extract_total_pages(first)
 
@@ -124,9 +137,22 @@ def scrape_path(path_id: int, polite_delay_sec: float = 0.25) -> Tuple[List[Tupl
         soup = fetch_soup(category_url(path_id, page))
         discovered_paths |= discover_paths_from_soup(soup)
         products.extend(parse_products_from_page(soup))
-        time.sleep(polite_delay_sec)
 
     return products, discovered_paths
+
+
+def try_scrape(path_id: int, max_attempts: int = 5) -> Tuple[List, Set]:
+    for attempt in range(1, max_attempts + 1):
+        try:
+            return scrape_path(path_id)
+        except Exception as e:
+            if attempt < max_attempts:
+                wait = (2 ** attempt) * 10 + random.uniform(0, 5)  # 20s, 40s, 80s, 160s
+                print(f"  !! Attempt {attempt} failed path={path_id}: {e} — retrying in {wait:.0f}s")
+                time.sleep(wait)
+            else:
+                print(f"  !! Failed path={path_id} after {max_attempts} attempts: {e}")
+    return None, None
 
 
 def count_zero_prices(csv_path: str) -> Tuple[int, int, float]:
@@ -146,6 +172,37 @@ def count_zero_prices(csv_path: str) -> Tuple[int, int, float]:
     return total, zero, ratio
 
 
+def collect_products(
+    path_id: int,
+    visited: Set[int],
+    q: deque,
+    global_seen: Set[Tuple[str, str]],
+    final_rows: List[Tuple[int, str, str]],
+    next_id: int,
+    failed_paths: Set[int],
+) -> int:
+    products, discovered = try_scrape(path_id)
+
+    if products is None:
+        failed_paths.add(path_id)
+        return next_id
+
+    print(f"  -> {len(products)} items found on this path")
+
+    for p in discovered:
+        if p not in visited:
+            q.append(p)
+
+    for name, price in products:
+        key = (name, price)
+        if key not in global_seen:
+            global_seen.add(key)
+            final_rows.append((next_id, name, price))
+            next_id += 1
+
+    return next_id
+
+
 def main() -> None:
     seed_paths = discover_seed_paths_from_home()
     print(f"Seed paths from homepage: {len(seed_paths)}")
@@ -153,9 +210,10 @@ def main() -> None:
     q = deque(sorted(seed_paths))
     visited: Set[int] = set()
 
-    global_seen: Set[Tuple[str, str]] = set()  # dedupe by (name, price)
+    global_seen: Set[Tuple[str, str]] = set()
     final_rows: List[Tuple[int, str, str]] = []
     next_id = 1
+    failed_paths: Set[int] = set()
 
     while q:
         path_id = q.popleft()
@@ -164,36 +222,25 @@ def main() -> None:
         visited.add(path_id)
 
         print(f"Scraping path={path_id} ...")
-        products, discovered = None, None
-        for attempt in range(1, 4):  # up to 3 attempts
-            try:
-                products, discovered = scrape_path(path_id)
-                break
-            except Exception as e:
-                if attempt < 3:
-                    wait = attempt * 10
-                    print(f"  !! Attempt {attempt} failed path={path_id}: {e} — retrying in {wait}s")
-                    time.sleep(wait)
-                else:
-                    print(f"  !! Failed path={path_id} after 3 attempts: {e}")
+        next_id = collect_products(path_id, visited, q, global_seen, final_rows, next_id, failed_paths)
 
-        if products is None:
-            continue
+    # Retry failed paths after a long rest
+    if failed_paths:
+        print(f"\nRetrying {len(failed_paths)} failed paths after 60s rest...")
+        time.sleep(60)
+        for path_id in sorted(failed_paths):
+            print(f"Retrying path={path_id} ...")
+            visited.add(path_id)
+            next_id = collect_products(path_id, visited, q, global_seen, final_rows, next_id, set())
 
-        print(f"  -> {len(products)} items found on this path")
-
-        for p in discovered:
-            if p not in visited:
-                q.append(p)
-
-        for name, price in products:
-            key = (name, price)
-            if key in global_seen:
+        # Handle any paths discovered during retries
+        while q:
+            path_id = q.popleft()
+            if path_id in visited:
                 continue
-            global_seen.add(key)
-
-            final_rows.append((next_id, name, price))
-            next_id += 1
+            visited.add(path_id)
+            print(f"Scraping newly discovered path={path_id} ...")
+            next_id = collect_products(path_id, visited, q, global_seen, final_rows, next_id, set())
 
     out_dir = os.path.join(repo_root(), "Datas", "Markets", "SozSanal")
     os.makedirs(out_dir, exist_ok=True)
