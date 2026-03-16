@@ -98,7 +98,8 @@ def run(args: argparse.Namespace) -> None:
     )
 
     # -- SeleniumBase context manager handles driver lifecycle --------------
-    with SB(uc=True, headed=True, page_load_strategy="eager", user_data_dir=config.SELENIUM_PROFILE_DIR) as sb:
+    with SB(uc=True, headed=True, page_load_strategy="eager", user_data_dir=config.SELENIUM_PROFILE_DIR,
+            chromium_arg="--no-focus-on-navigate") as sb:
         grand_total = 0
 
         for city_cfg in cities_to_scrape:
