@@ -170,7 +170,8 @@ def scrape_range(
         f"?pagingSize={config.PAGE_SIZE}"
         f"&price_min={min_price}&price_max={max_price}"
     )
-    sb.uc_open_with_reconnect(url, reconnect_time=config.PAGE_LOAD_DELAY)
+    sb.execute_script(f"window.location.href = '{url}';")
+    time.sleep(config.PAGE_LOAD_DELAY)
 
     soup = _wait_for_listings(sb.driver)
     total_listings = _extract_total_listings(soup)
@@ -235,7 +236,8 @@ def scrape_range(
         if has_next:
             next_btn = soup.find("a", title="Sonraki")
             next_url = "https://www.sahibinden.com" + next_btn["href"]
-            sb.uc_open_with_reconnect(next_url, reconnect_time=config.PAGE_LOAD_DELAY)
+            sb.execute_script(f"window.location.href = '{next_url}';")
+            time.sleep(config.PAGE_LOAD_DELAY)
             page_num += 1
             time.sleep(random.uniform(config.PAGE_TURN_DELAY_MIN, config.PAGE_TURN_DELAY_MAX))
             soup = _wait_for_listings(sb.driver)
