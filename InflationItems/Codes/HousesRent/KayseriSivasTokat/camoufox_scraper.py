@@ -46,6 +46,31 @@ DATA_BASE_DIR = os.path.abspath(os.path.join(SCRIPT_DIR, "../../../Datas/HousesR
 
 
 # ============================================================
+# BROWSER LIFECYCLE HELPER
+# ============================================================
+
+class BrowserBlockedError(Exception):
+    """safe_goto tüm denemelerde başarısız olunca fırlatılır.
+    scrape_city bu exception'ı yakalayarak tarayıcıyı kapatır
+    ve close_and_wait() ile 15-20s bekler."""
+    pass
+
+
+def close_and_wait(label, reason="normal"):
+    """Tarayıcı kapatıldıktan sonra her zaman çağrılır.
+    Şehirler arası geçişte veya CAPTCHA/engel sonrası yeniden
+    başlatmada — nedeni ne olursa olsun aynı bekleme uygulanır.
+    """
+    if reason == "engel":
+        print(f"🚫 {label} tarayıcısı engel nedeniyle kapatıldı — çerezler ve oturum temizlendi.")
+    else:
+        print(f"🧹 {label} tarayıcısı kapatıldı — çerezler ve oturum temizlendi.")
+    wait = random.uniform(15.0, 20.0)
+    print(f"⏳ Sonraki açılış için {wait:.1f} saniye bekleniyor...")
+    time.sleep(wait)
+
+
+# ============================================================
 # PROTECTION HANDLERS
 # ============================================================
 
@@ -84,7 +109,7 @@ def is_login_page(html):
 def wait_for_challenge(page, max_wait=20):
     print(f"⏳ Challenge sayfasının kendi kendine çözülmesi bekleniyor (max {max_wait}s)...")
     for i in range(max_wait // 2):
-        time.sleep(random.uniform(4.0, 6.0))
+        time.sleep(random.uniform(6.0, 9.0))
         if not is_waiting_page(page.content()):
             print(f"✅ Challenge ~{(i + 1) * 2}s sonra çözüldü.")
             return True
@@ -106,7 +131,7 @@ def wait_for_listings(page, timeout=15_000):
 def safe_goto(page, url):
     """Sahibinden'in tüm koruma katmanlarını yöneterek URL'ye gider."""
     page.goto(url, wait_until="domcontentloaded", timeout=30_000)
-    time.sleep(random.uniform(3.0, 5.0))
+    time.sleep(random.uniform(6.0, 9.0))
 
     handle_browser_check(page)
     html = page.content()
@@ -115,7 +140,7 @@ def safe_goto(page, url):
         print("🔄 Login sayfasına yönlendirildi, tekrar deneniyor...")
         time.sleep(random.uniform(8, 12))
         page.goto(url, wait_until="domcontentloaded", timeout=30_000)
-        time.sleep(random.uniform(4, 7))
+        time.sleep(random.uniform(6, 9))
         handle_browser_check(page)
         html = page.content()
 
@@ -127,7 +152,7 @@ def safe_goto(page, url):
         else:
             print("🔄 Challenge takılı kaldı, tekrar yükleniyor...")
             page.goto(url, wait_until="domcontentloaded", timeout=30_000)
-            time.sleep(random.uniform(4, 7))
+            time.sleep(random.uniform(6, 9))
             handle_browser_check(page)
             html = page.content()
             if is_waiting_page(html):
@@ -137,9 +162,9 @@ def safe_goto(page, url):
 
     if is_login_page(html):
         print("🔄 Login/CAPTCHA sayfası, tekrar deneniyor...")
-        time.sleep(random.uniform(5, 10))
+        time.sleep(random.uniform(6, 10))
         page.goto(url, wait_until="domcontentloaded", timeout=30_000)
-        time.sleep(random.uniform(4, 7))
+        time.sleep(random.uniform(6, 9))
         handle_browser_check(page)
         html = page.content()
 
@@ -149,8 +174,9 @@ def safe_goto(page, url):
             html = page.content()
 
         if is_login_page(html):
-            print("❌ Yeniden denemeden sonra hâlâ engellendi.")
-            return False
+            print("❌ Yeniden denemeden sonra hâlâ engellendi — tarayıcı yeniden başlatılacak.")
+            raise BrowserBlockedError(f"Kalıcı engel: {url}")
+
 
     wait_for_listings(page)
     return True
@@ -201,10 +227,7 @@ def discover_pages(page, city_url_name, brackets):
         )
 
         while True:
-            success = safe_goto(page, current_url)
-            if not success:
-                print(f"   ⚠️ Sayfa {page_num} erişilemedi, bu bracket atlanıyor.")
-                break
+            safe_goto(page, current_url)
 
             html  = page.content()
             soup  = BeautifulSoup(html, "html.parser")
@@ -225,7 +248,7 @@ def discover_pages(page, city_url_name, brackets):
             if next_button and "href" in next_button.attrs:
                 current_url = "https://www.sahibinden.com" + next_button["href"]
                 page_num   += 1
-                time.sleep(random.uniform(4.0, 6.0))
+                time.sleep(random.uniform(6.0, 9.0))
             else:
                 print(f"   Son sayfa — bracket {min_price}-{max_price} TL tamamlandı.")
                 break
@@ -302,6 +325,8 @@ def save_to_csv_incremental(folder_name, data_batch):
 
 
 # ============================================================
+
+# ============================================================
 # PER-CITY SCRAPE — her şehir için sıfırdan tarayıcı
 # ============================================================
 
@@ -313,28 +338,50 @@ def scrape_city(city_url_name, city_data):
     tamamen temiz başlar: çerez, önbellek, localStorage, oturum —
     hiçbir şey bir önceki şehirden taşınmaz.
 
-    Tarayıcı `with` bloğunun sonunda otomatik kapatılır ve
-    geçici profil dizini silinir (camoufox varsayılan davranışı).
+    BrowserBlockedError fırlatılırsa (CAPTCHA / kalıcı engel):
+      1. `with` bloğu otomatik kapanır → tarayıcı + profil silinir
+      2. close_and_wait() ile 15-20s beklenir
+      3. Yeni clean-slate tarayıcıyla yeniden denenir (max 3 kez)
+
+    Tarayıcı her kapandığında — ister normal, ister engel nedeniyle —
+    close_and_wait() çağrılır, bekleme süresi her zaman aynıdır.
     """
-    folder_name = city_data["folder"]
-    brackets    = city_data["brackets"]
+    folder_name  = city_data["folder"]
+    brackets     = city_data["brackets"]
+    max_restarts = 3
 
-    print(f"\n{'=' * 50}")
-    print(f"ŞEHİR: {folder_name.upper()} — clean slate tarayıcı başlatılıyor 🧹")
-    print(f"{'=' * 50}")
+    for attempt in range(1, max_restarts + 1):
+        print(f"\n{'=' * 50}")
+        print(f"ŞEHİR: {folder_name.upper()} — clean slate tarayıcı başlatılıyor 🧹"
+              + (f" (deneme {attempt}/{max_restarts})" if attempt > 1 else ""))
+        print(f"{'=' * 50}")
 
-    with Camoufox(headless=False) as browser:
-        page = browser.new_page()
+        try:
+            with Camoufox(headless=False) as browser:
+                page = browser.new_page()
 
-        # COMPONENT 1: Tüm sayfa URL + HTML keşfi
-        discovered_pages = discover_pages(page, city_url_name, brackets)
+                # COMPONENT 1: Tüm sayfa URL + HTML keşfi
+                # BrowserBlockedError burada fırlatılabilir →
+                # with bloğu kapanır, aşağıdaki except yakalanır
+                discovered_pages = discover_pages(page, city_url_name, brackets)
 
-        # COMPONENT 2: Önbellekteki HTML'den veri çekimi (sıfır ek istek)
-        extract_all_pages(discovered_pages, folder_name)
+                # COMPONENT 2: Önbellekteki HTML'den veri çekimi (sıfır ek istek)
+                extract_all_pages(discovered_pages, folder_name)
 
-    # with bloğu kapanınca: tarayıcı kapanır, geçici profil silinir
-    print(f"🧹 {folder_name} tarayıcısı kapatıldı — çerezler ve oturum temizlendi.")
-    time.sleep(random.uniform(3.0, 5.0))
+            # ── Normal kapanış ──────────────────────────────
+            close_and_wait(folder_name, reason="normal")
+            break  # Başarılı, döngüden çık
+
+        except BrowserBlockedError as e:
+            # ── Engel nedeniyle kapanış ─────────────────────
+            # `with` bloğu zaten kapandı (exception tarafından)
+            print(f"   Engel detayı: {e}")
+            if attempt < max_restarts:
+                print(f"🔄 Yeniden başlatılıyor (deneme {attempt + 1}/{max_restarts})...")
+                close_and_wait(folder_name, reason="engel")
+            else:
+                print(f"❌ {max_restarts} denemeden sonra {folder_name} atlandı.")
+                close_and_wait(folder_name, reason="engel")
 
 
 # ============================================================
