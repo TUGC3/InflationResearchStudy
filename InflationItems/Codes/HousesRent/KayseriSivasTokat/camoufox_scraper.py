@@ -3,15 +3,12 @@ import csv
 import re
 import time
 import random
-import shutil
 from datetime import datetime
 from bs4 import BeautifulSoup
 from camoufox.sync_api import Camoufox
 
 # ============================================================
 # Per-city price brackets, calibrated from real data (2026-02-27)
-# Each bracket targets ~200-250 listings to stay well under
-# Sahibinden's 1,000 listing cap per search page.
 # ============================================================
 
 KAYSERI_BRACKETS = [
@@ -19,7 +16,7 @@ KAYSERI_BRACKETS = [
     (20_000, 39_999),
     (40_000, 59_999),
     (60_000, 99_999),
-    (100_000, 9_999_999)
+    (100_000, 9_999_999),
 ]
 
 SIVAS_BRACKETS = [
@@ -27,7 +24,7 @@ SIVAS_BRACKETS = [
     (20_000, 39_999),
     (40_000, 59_999),
     (60_000, 99_999),
-    (100_000, 9_999_999)
+    (100_000, 9_999_999),
 ]
 
 TOKAT_BRACKETS = [
@@ -35,13 +32,13 @@ TOKAT_BRACKETS = [
     (20_000, 39_999),
     (40_000, 59_999),
     (60_000, 99_999),
-    (100_000, 9_999_999)
+    (100_000, 9_999_999),
 ]
 
 CITIES = {
-    'kayseri': {'folder': 'Kayseri', 'brackets': KAYSERI_BRACKETS},
-    'sivas':   {'folder': 'Sivas',   'brackets': SIVAS_BRACKETS},
-    'tokat':   {'folder': 'Tokat',   'brackets': TOKAT_BRACKETS}
+    "kayseri": {"folder": "Kayseri", "brackets": KAYSERI_BRACKETS},
+    "sivas":   {"folder": "Sivas",   "brackets": SIVAS_BRACKETS},
+    "tokat":   {"folder": "Tokat",   "brackets": TOKAT_BRACKETS},
 }
 
 SCRIPT_DIR    = os.path.dirname(os.path.abspath(__file__))
@@ -53,33 +50,21 @@ DATA_BASE_DIR = os.path.abspath(os.path.join(SCRIPT_DIR, "../../../Datas/HousesR
 # ============================================================
 
 def handle_browser_check(page):
-    """Clicks through Sahibinden's Cloudflare Turnstile browser check page.
-
-    Waits for the Turnstile widget to appear, sleeps for token population
-    (shadow DOM prevents direct inspection), clicks 'Devam Et', then waits
-    until the check page is fully gone before returning.
-    """
+    """Sahibinden'in Cloudflare Turnstile sayfasını geçer."""
     if "tarayıcınızı kontrol ediyoruz" not in page.content().lower():
         return
 
     print("🤖 Browser check sayfası tespit edildi, Turnstile bekleniyor...")
     try:
-        # Wait for Turnstile widget container
         page.wait_for_selector("#turnStileWidget", timeout=25_000)
-
-        # Fixed wait — token lives inside Shadow DOM, cannot be read directly
         print("   ⏳ Turnstile token bekleniyor (shadow DOM)...")
         time.sleep(random.uniform(10.0, 13.0))
-
-        # Click the continue button
         page.wait_for_selector("#btn-continue", timeout=15_000)
         page.click("#btn-continue")
         print("✅ 'Devam Et' butonuna tıklandı, sayfa geçişi bekleniyor...")
-
-        # Wait until the browser check page is gone
         page.wait_for_function(
             "() => !document.body.innerText.toLowerCase().includes('tarayıcınızı kontrol ediyoruz')",
-            timeout=20_000
+            timeout=20_000,
         )
     except Exception as e:
         print(f"⚠️ Browser check geçilemedi: {e}")
@@ -92,36 +77,26 @@ def is_waiting_page(html):
 
 def is_login_page(html):
     lower = html.lower()
-    login_signals = ["giriş yap", "üye girişi", "captcha", "güvenlik doğrulama", "robot olmadığınızı"]
-    strong_hits = sum(1 for s in login_signals if s in lower)
-    return strong_hits >= 1 and "searchresultstable" not in lower
+    signals = ["giriş yap", "üye girişi", "captcha", "güvenlik doğrulama", "robot olmadığınızı"]
+    return sum(1 for s in signals if s in lower) >= 1 and "searchresultstable" not in lower
 
 
 def wait_for_challenge(page, max_wait=20):
-    """Waits for a self-resolving Cloudflare challenge to clear."""
-    print(f"⏳ Waiting for challenge page to resolve (up to {max_wait}s)...")
+    print(f"⏳ Challenge sayfasının kendi kendine çözülmesi bekleniyor (max {max_wait}s)...")
     for i in range(max_wait // 2):
         time.sleep(random.uniform(4.0, 6.0))
         if not is_waiting_page(page.content()):
-            print(f"✅ Challenge resolved after ~{(i + 1) * 2}s")
+            print(f"✅ Challenge ~{(i + 1) * 2}s sonra çözüldü.")
             return True
-    print("⏰ Challenge did not resolve in time.")
+    print("⏰ Challenge zamanında çözülmedi.")
     return False
 
 
 def wait_for_listings(page, timeout=15_000):
-    """Waits until the search results table is present in the DOM.
-
-    Called after every navigation to ensure listing rows are fully
-    rendered before BeautifulSoup parses the HTML. Prevents empty
-    extractions caused by parsing too early after a Turnstile redirect.
-
-    Returns True if listings appeared, False if timeout was reached.
-    """
     try:
         page.wait_for_selector(
             "#searchResultsTable tbody tr.searchResultsItem",
-            timeout=timeout
+            timeout=timeout,
         )
         return True
     except Exception:
@@ -129,38 +104,28 @@ def wait_for_listings(page, timeout=15_000):
 
 
 def safe_goto(page, url):
-    """Navigates to a URL and handles all Sahibinden protection layers.
-
-    Returns True on success. On success, the listing table is guaranteed
-    to be present in the DOM. Unlike the Selenium version, we do not need
-    to restart the browser — camoufox handles fingerprint rotation
-    automatically, so a simple re-navigation is sufficient on blocks.
-    """
+    """Sahibinden'in tüm koruma katmanlarını yöneterek URL'ye gider."""
     page.goto(url, wait_until="domcontentloaded", timeout=30_000)
     time.sleep(random.uniform(3.0, 5.0))
 
-    # Layer 0: Browser check (Turnstile)
     handle_browser_check(page)
-
     html = page.content()
 
-    # After Turnstile, sahibinden may redirect to login if it suspects a bot
     if is_login_page(html):
-        print("🔄 Browser check sonrası login sayfasına yönlendirildi! Tekrar deneniyor...")
+        print("🔄 Login sayfasına yönlendirildi, tekrar deneniyor...")
         time.sleep(random.uniform(8, 12))
         page.goto(url, wait_until="domcontentloaded", timeout=30_000)
         time.sleep(random.uniform(4, 7))
         handle_browser_check(page)
         html = page.content()
 
-    # Layer 1: Cloudflare waiting page (self-resolving)
     if is_waiting_page(html):
         resolved = wait_for_challenge(page)
         if resolved:
             handle_browser_check(page)
             html = page.content()
         else:
-            print("🔄 Challenge stuck. Re-navigating...")
+            print("🔄 Challenge takılı kaldı, tekrar yükleniyor...")
             page.goto(url, wait_until="domcontentloaded", timeout=30_000)
             time.sleep(random.uniform(4, 7))
             handle_browser_check(page)
@@ -170,9 +135,8 @@ def safe_goto(page, url):
                 handle_browser_check(page)
                 html = page.content()
 
-    # Layer 2: Login / CAPTCHA wall
     if is_login_page(html):
-        print("🔄 Login/CAPTCHA page detected! Re-navigating...")
+        print("🔄 Login/CAPTCHA sayfası, tekrar deneniyor...")
         time.sleep(random.uniform(5, 10))
         page.goto(url, wait_until="domcontentloaded", timeout=30_000)
         time.sleep(random.uniform(4, 7))
@@ -185,29 +149,21 @@ def safe_goto(page, url):
             html = page.content()
 
         if is_login_page(html):
-            print("❌ Still blocked after re-navigation.")
+            print("❌ Yeniden denemeden sonra hâlâ engellendi.")
             return False
 
-    # Wait for the listings table to be fully rendered in the DOM
     wait_for_listings(page)
     return True
 
 
 # ============================================================
 # PRICE NORMALIZATION
-# Converts raw price strings like "15.000 TL" → 15000.0
 # ============================================================
 
 def normalize_price(price_text):
-    """Cleans raw price strings from sahibinden into a plain float.
-
-    Handles formats: "15.000 TL", "15,000", "1.500.000 TL", etc.
-    Returns None for unparseable values so they can be filtered out.
-    """
     if not price_text or price_text == "N/A":
         return None
-    cleaned = price_text.lower()
-    cleaned = cleaned.replace("tl", "").replace("₺", "").strip()
+    cleaned = price_text.lower().replace("tl", "").replace("₺", "").strip()
     cleaned = re.sub(r"[^\d,\.]", "", cleaned)
     if not cleaned:
         return None
@@ -229,93 +185,69 @@ def normalize_price(price_text):
 
 
 # ============================================================
-# COMPONENT 1: LINK DISCOVERY
-# Scans all bracket + pagination combinations and returns a
-# flat list of (url, page_html, min_price, max_price).
-# HTML is cached here so Component 2 needs zero extra requests.
+# DISCOVERY
 # ============================================================
 
 def discover_pages(page, city_url_name, brackets):
-    """Collects all search result page URLs + their HTML for a city.
-
-    Iterates over price brackets and follows pagination. The page HTML
-    is saved alongside each URL so the extraction component can reuse
-    it directly — eliminating the double-request problem that previously
-    caused Sahibinden to block the scraper.
-
-    Returns:
-        discovered: list of (url, page_html, min_price, max_price)
-    """
+    """Tüm bracket + sayfalama kombinasyonlarını tarar, HTML'i önbelleğe alır."""
     discovered = []
 
     for min_price, max_price in brackets:
-        print(f"\n🔍 Discovering pages for bracket {min_price}-{max_price} TL...")
-        page_num = 1
-
-        base_url = (
+        print(f"\n🔍 Bracket {min_price}-{max_price} TL taranıyor...")
+        page_num    = 1
+        current_url = (
             f"https://www.sahibinden.com/kiralik/{city_url_name}"
             f"?pagingSize=50&price_min={min_price}&price_max={max_price}"
         )
-        current_url = base_url
 
         while True:
             success = safe_goto(page, current_url)
             if not success:
-                print(f"   ⚠️ Could not access page {page_num}, stopping discovery for this bracket.")
+                print(f"   ⚠️ Sayfa {page_num} erişilemedi, bu bracket atlanıyor.")
                 break
 
-            # Cache HTML — extraction will reuse this, no second request needed
-            html = page.content()
-            soup = BeautifulSoup(html, 'html.parser')
+            html  = page.content()
+            soup  = BeautifulSoup(html, "html.parser")
             listings = soup.select("#searchResultsTable tbody tr.searchResultsItem")
 
             if not listings:
                 html_lower = html.lower()
                 if "ilan bulunamadı" in html_lower or "bulunamamıştır" in html_lower:
-                    print(f"   No listings exist in {min_price}-{max_price} TL range.")
+                    print(f"   {min_price}-{max_price} TL aralığında ilan yok.")
                 else:
-                    print(f"   No listings on page {page_num}, stopping.")
+                    print(f"   Sayfa {page_num}'de ilan bulunamadı, durduruluyor.")
                 break
 
             discovered.append((current_url, html, min_price, max_price))
-            print(f"   ✔ Page {page_num} queued ({len(listings)} listings found)")
+            print(f"   ✔ Sayfa {page_num} kuyruğa alındı ({len(listings)} ilan)")
 
-            next_button = soup.find('a', title='Sonraki')
-            if next_button and 'href' in next_button.attrs:
-                current_url = "https://www.sahibinden.com" + next_button['href']
-                page_num += 1
+            next_button = soup.find("a", title="Sonraki")
+            if next_button and "href" in next_button.attrs:
+                current_url = "https://www.sahibinden.com" + next_button["href"]
+                page_num   += 1
                 time.sleep(random.uniform(4.0, 6.0))
             else:
-                print(f"   Last page reached for bracket {min_price}-{max_price} TL.")
+                print(f"   Son sayfa — bracket {min_price}-{max_price} TL tamamlandı.")
                 break
 
-    print(f"\n📋 Discovery complete. {len(discovered)} pages queued in total.")
+    print(f"\n📋 Discovery tamamlandı. Toplam {len(discovered)} sayfa kuyruğa alındı.")
     return discovered
 
 
 # ============================================================
-# COMPONENT 2: DATA EXTRACTION
-# Parses listing data from the HTML collected during discovery.
-# Makes zero additional network requests.
+# EXTRACTION
 # ============================================================
 
 def extract_page(html):
-    """Parses a single search results page and returns listing records.
-
-    Uses the HTML snapshot saved during discovery — no network request.
-    Price values are normalized to plain floats via normalize_price().
-
-    Returns a list of {"District", "Rooms", "Price"} dicts.
-    """
-    soup = BeautifulSoup(html, 'html.parser')
+    """Önbellekteki HTML'den ilan verilerini çeker. Ek istek gönderilmez."""
+    soup     = BeautifulSoup(html, "html.parser")
     listings = soup.select("#searchResultsTable tbody tr.searchResultsItem")
-    results = []
+    results  = []
 
     for row in listings:
         try:
             price_elem = row.select_one(".searchResultsPriceValue")
-            raw_price  = price_elem.text.strip() if price_elem else None
-            price      = normalize_price(raw_price)
+            price      = normalize_price(price_elem.text.strip() if price_elem else None)
 
             location_elem = row.select_one(".searchResultsLocationValue")
             district = " / ".join(location_elem.stripped_strings) if location_elem else "N/A"
@@ -326,31 +258,27 @@ def extract_page(html):
             if price is not None and district != "N/A":
                 results.append({"District": district, "Rooms": rooms, "Price": price})
         except Exception as e:
-            print(f"   ⚠️ Error parsing row: {e}")
+            print(f"   ⚠️ Satır parse hatası: {e}")
             continue
 
     return results
 
 
 def extract_all_pages(discovered_pages, folder_name):
-    """Extracts listing data from all pages discovered in Component 1.
-
-    Parses from cached HTML — zero additional network requests made.
-    """
+    """Önbellekteki tüm sayfalardan veri çeker — sıfır ek istek."""
     print(f"\n{'=' * 50}")
-    print(f"EXTRACTING DATA FOR: {folder_name.upper()}")
+    print(f"VERİ ÇEKME: {folder_name.upper()}")
     print(f"{'=' * 50}")
 
     for i, (url, html, min_price, max_price) in enumerate(discovered_pages, 1):
-        print(f"\n[{i}/{len(discovered_pages)}] Extracting: bracket {min_price}-{max_price} TL")
-
+        print(f"\n[{i}/{len(discovered_pages)}] Bracket {min_price}-{max_price} TL çekiliyor")
         records = extract_page(html)
 
         if records:
             save_to_csv_incremental(folder_name, records)
-            print(f"   ✅ Saved {len(records)} records.")
+            print(f"   ✅ {len(records)} kayıt kaydedildi.")
         else:
-            print(f"   ⚠️ No records extracted from this page.")
+            print(f"   ⚠️ Bu sayfadan kayıt çıkmadı.")
 
 
 # ============================================================
@@ -364,13 +292,49 @@ def save_to_csv_incremental(folder_name, data_batch):
     file_path  = os.path.join(target_dir, f"{today_str}.csv")
 
     file_exists = os.path.isfile(file_path)
-    with open(file_path, mode='a', newline='', encoding='utf-8') as file:
-        writer = csv.DictWriter(file, fieldnames=["District", "Rooms", "Price"])
+    with open(file_path, mode="a", newline="", encoding="utf-8") as f:
+        writer = csv.DictWriter(f, fieldnames=["District", "Rooms", "Price"])
         if not file_exists:
             writer.writeheader()
         writer.writerows(data_batch)
 
-    print(f"   💾 Appended {len(data_batch)} records to {file_path}")
+    print(f"   💾 {len(data_batch)} kayıt eklendi → {file_path}")
+
+
+# ============================================================
+# PER-CITY SCRAPE — her şehir için sıfırdan tarayıcı
+# ============================================================
+
+def scrape_city(city_url_name, city_data):
+    """
+    Her şehir için bağımsız bir Camoufox örneği başlatır.
+
+    Kalıcı profil yolu verilmediği için tarayıcı her açılışta
+    tamamen temiz başlar: çerez, önbellek, localStorage, oturum —
+    hiçbir şey bir önceki şehirden taşınmaz.
+
+    Tarayıcı `with` bloğunun sonunda otomatik kapatılır ve
+    geçici profil dizini silinir (camoufox varsayılan davranışı).
+    """
+    folder_name = city_data["folder"]
+    brackets    = city_data["brackets"]
+
+    print(f"\n{'=' * 50}")
+    print(f"ŞEHİR: {folder_name.upper()} — clean slate tarayıcı başlatılıyor 🧹")
+    print(f"{'=' * 50}")
+
+    with Camoufox(headless=False) as browser:
+        page = browser.new_page()
+
+        # COMPONENT 1: Tüm sayfa URL + HTML keşfi
+        discovered_pages = discover_pages(page, city_url_name, brackets)
+
+        # COMPONENT 2: Önbellekteki HTML'den veri çekimi (sıfır ek istek)
+        extract_all_pages(discovered_pages, folder_name)
+
+    # with bloğu kapanınca: tarayıcı kapanır, geçici profil silinir
+    print(f"🧹 {folder_name} tarayıcısı kapatıldı — çerezler ve oturum temizlendi.")
+    time.sleep(random.uniform(3.0, 5.0))
 
 
 # ============================================================
@@ -378,25 +342,10 @@ def save_to_csv_incremental(folder_name, data_batch):
 # ============================================================
 
 def main():
-    with Camoufox(headless=False) as browser:
-        page = browser.new_page()
+    for city_url_name, city_data in CITIES.items():
+        scrape_city(city_url_name, city_data)
 
-        for city_url_name, city_data in CITIES.items():
-            print(f"\n{'=' * 50}")
-            print(f"CITY: {city_data['folder'].upper()}")
-            print(f"{'=' * 50}")
-
-            # COMPONENT 1: Discover all pages + cache their HTML
-            discovered_pages = discover_pages(
-                page,
-                city_url_name,
-                city_data['brackets']
-            )
-
-            # COMPONENT 2: Extract from cached HTML — zero extra requests
-            extract_all_pages(discovered_pages, city_data['folder'])
-
-            time.sleep(random.uniform(4.0, 6.0))
+    print("\n✅ Tüm şehirler tamamlandı.")
 
 
 if __name__ == "__main__":
