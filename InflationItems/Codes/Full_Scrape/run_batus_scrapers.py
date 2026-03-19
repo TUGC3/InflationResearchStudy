@@ -8,7 +8,7 @@ def main():
     codes_dir = os.path.dirname(script_dir)
     
     # Create a logs directory inside Full_Scrape to avoid messy console output
-    logs_dir = os.path.join(script_dir, "logs")
+    logs_dir = os.path.join(script_dir, "batus_logs")
     os.makedirs(logs_dir, exist_ok=True)
     
     # List of your 4 specific scrapers
