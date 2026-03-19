@@ -19,7 +19,6 @@ Pipeline
 4. **Incremental saving** — product data is written to disk immediately
    after each category completes.
 5. **Final deduplication** — a safety-net pass removes any remaining dupes.
-6. **Inflation** — calculates price changes vs historical data.
 
 Usage examples
 --------------
@@ -45,7 +44,6 @@ from curl_cffi import requests
 from tqdm import tqdm
 
 import config
-import inflation
 from category_fetcher import fetch_categories
 from product_fetcher import fetch_products_for_category
 
@@ -265,9 +263,6 @@ def run_scraper(args: argparse.Namespace) -> None:
     logger.info("Done! ✓  Total unique products: %d", final_count)
     logger.info("Output → %s", config.CSV_OUTPUT_FILE)
 
-    # 6. Calculate Inflation
-    logger.info("Calculating inflation metrics...")
-    inflation.calculate_inflation()
 
 
 # ── CLI ──────────────────────────────────────────────────────────────────────
