@@ -16,17 +16,6 @@ import config
 import category_fetcher
 import product_fetcher
 
-_inflation_dir = os.path.join(
-    os.path.dirname(os.path.abspath(__file__)), 
-    "..", "..", "..", "..", "..", "Inflations", "Codes", "ConstructionSuppliesMarkets", "Nalburadam"
-)
-sys.path.append(os.path.abspath(_inflation_dir))
-try:
-    import inflation
-except ImportError as e:
-    inflation = None
-    print(f"Warning: Could not import inflation module: {e}")
-
 logger = logging.getLogger(__name__)
 
 def parse_args():
@@ -145,15 +134,6 @@ def main():
     csv_path = os.path.join(config.OUTPUT_DIR, f"{base_name}.csv")
 
     save_csv(unique_products, csv_path)
-
-    if inflation:
-        logger.info("Calculating inflation metrics...")
-        try:
-            inflation.calculate_inflation()
-        except Exception as e:
-            logger.error(f"Failed to calculate inflation: {e}")
-    else:
-        logger.warning("Skipping inflation calculation because the module could not be imported.")
 
 if __name__ == "__main__":
     main()
