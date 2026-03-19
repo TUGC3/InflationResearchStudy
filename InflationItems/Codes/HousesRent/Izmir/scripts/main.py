@@ -108,7 +108,7 @@ def run(args: argparse.Namespace) -> None:
                 checkpoint["completed_brackets"] = [list(b) for b in completed_brackets]
                 _save_checkpoint(checkpoint)
 
-                bracket_sleep = random.randint(15, 45)
+                bracket_sleep = random.randint(10, 15)
                 logger.info(f"☕ Bracket complete! Taking a {bracket_sleep}-second break...")
                 time.sleep(bracket_sleep)
 
