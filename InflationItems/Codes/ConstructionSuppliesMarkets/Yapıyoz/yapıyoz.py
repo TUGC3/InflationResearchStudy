@@ -112,7 +112,7 @@ def get_product_links_from_category(driver, category_url: str):
             print(f"  [ERR] Kategori açılamadı: {e}")
             continue
 
-        # Ürün linklerini topla
+        
         for a in soup.select('a[href*="/urun/"]'):
             href = a.get("href")
             if not href:
@@ -121,7 +121,7 @@ def get_product_links_from_category(driver, category_url: str):
             if full.startswith(BASE_URL.rstrip("/")):
                 product_links.add(full)
 
-        # Olası pagination linklerini de takip et
+       
         for a in soup.select("a[href]"):
             href = a.get("href")
             if not href:
@@ -135,7 +135,7 @@ def get_product_links_from_category(driver, category_url: str):
             if full == url:
                 continue
 
-            # Aynı kategorinin sayfalama varyasyonlarını yakala
+            
             if (
                 "/kategori/" in full
                 and full.startswith(category_url.rstrip("/"))
@@ -143,7 +143,7 @@ def get_product_links_from_category(driver, category_url: str):
             ):
                 queue.append(full)
 
-            # page, sayfa gibi query parametrelerini de yakala
+          
             if (
                 "/kategori/" in full
                 and ("page=" in full or "sayfa=" in full or "/page/" in full)
@@ -193,7 +193,7 @@ def extract_product_price(soup: BeautifulSoup):
             if price is not None:
                 return price
 
-    # fallback: tüm sayfa metninden ilk TL fiyatını çek
+ 
     full_text = clean_text(soup.get_text(" ", strip=True))
     return parse_price(full_text)
 
