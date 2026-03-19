@@ -128,9 +128,34 @@ def wait_for_listings(page, timeout=15_000):
         return False
 
 
+def goto_with_retry(page, url, retries=3, timeout=60_000):
+    """page.goto() çağrısını timeout hatalarına karşı retry ile sarar.
+
+    Timeout 30s → 60s'ye yükseltildi. Her timeout'ta 10-15s bekleyip
+    tekrar dener. Tüm denemeler tükenirse BrowserBlockedError fırlatır.
+    """
+    for attempt in range(1, retries + 1):
+        try:
+            page.goto(url, wait_until="domcontentloaded", timeout=timeout)
+            return  # Başarılı
+        except Exception as e:
+            err_str = str(e).lower()
+            if "timeout" in err_str:
+                print(f"   ⏱️ page.goto timeout (deneme {attempt}/{retries}): {url}")
+                if attempt < retries:
+                    wait = random.uniform(10.0, 15.0)
+                    print(f"   {wait:.1f}s bekleniyor...")
+                    time.sleep(wait)
+                else:
+                    print("   ❌ Tüm goto denemeleri tükendi — tarayıcı yeniden başlatılacak.")
+                    raise BrowserBlockedError(f"Kalıcı goto timeout: {url}") from e
+            else:
+                raise BrowserBlockedError(f"goto hatası: {e}") from e
+
+
 def safe_goto(page, url):
     """Sahibinden'in tüm koruma katmanlarını yöneterek URL'ye gider."""
-    page.goto(url, wait_until="domcontentloaded", timeout=30_000)
+    goto_with_retry(page, url)
     time.sleep(random.uniform(6.0, 9.0))
 
     handle_browser_check(page)
@@ -139,7 +164,7 @@ def safe_goto(page, url):
     if is_login_page(html):
         print("🔄 Login sayfasına yönlendirildi, tekrar deneniyor...")
         time.sleep(random.uniform(8, 12))
-        page.goto(url, wait_until="domcontentloaded", timeout=30_000)
+        goto_with_retry(page, url)
         time.sleep(random.uniform(6, 9))
         handle_browser_check(page)
         html = page.content()
@@ -151,7 +176,7 @@ def safe_goto(page, url):
             html = page.content()
         else:
             print("🔄 Challenge takılı kaldı, tekrar yükleniyor...")
-            page.goto(url, wait_until="domcontentloaded", timeout=30_000)
+            goto_with_retry(page, url)
             time.sleep(random.uniform(6, 9))
             handle_browser_check(page)
             html = page.content()
@@ -163,7 +188,7 @@ def safe_goto(page, url):
     if is_login_page(html):
         print("🔄 Login/CAPTCHA sayfası, tekrar deneniyor...")
         time.sleep(random.uniform(6, 10))
-        page.goto(url, wait_until="domcontentloaded", timeout=30_000)
+        goto_with_retry(page, url)
         time.sleep(random.uniform(6, 9))
         handle_browser_check(page)
         html = page.content()
@@ -176,7 +201,6 @@ def safe_goto(page, url):
         if is_login_page(html):
             print("❌ Yeniden denemeden sonra hâlâ engellendi — tarayıcı yeniden başlatılacak.")
             raise BrowserBlockedError(f"Kalıcı engel: {url}")
-
 
     wait_for_listings(page)
     return True
