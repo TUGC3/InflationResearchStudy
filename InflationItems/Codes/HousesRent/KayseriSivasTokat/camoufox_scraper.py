@@ -65,7 +65,7 @@ def close_and_wait(label, reason="normal"):
         print(f"🚫 {label} tarayıcısı engel nedeniyle kapatıldı — çerezler ve oturum temizlendi.")
     else:
         print(f"🧹 {label} tarayıcısı kapatıldı — çerezler ve oturum temizlendi.")
-    wait = random.uniform(15.0, 20.0)
+    wait = random.uniform(16.0, 21.0)
     print(f"⏳ Sonraki açılış için {wait:.1f} saniye bekleniyor...")
     time.sleep(wait)
 
@@ -74,16 +74,47 @@ def close_and_wait(label, reason="normal"):
 # PROTECTION HANDLERS
 # ============================================================
 
+def get_page_content(page, timeout=10_000):
+    """Sayfa navigasyonu bitene kadar bekleyip HTML içeriğini döner.
+
+    Turnstile / redirect sonrası page.content() 'page is navigating'
+    hatası verebilir. Bu helper her çağrıda önce load state bekler.
+    """
+    try:
+        page.wait_for_load_state("domcontentloaded", timeout=timeout)
+    except Exception:
+        pass  # Zaten yüklenmiş olabilir, devam et
+    try:
+        return page.content()
+    except Exception:
+        # Hâlâ navigasyon varsa kısa bekleyip bir kez daha dene
+        time.sleep(2)
+        return page.content()
+
+
+def beep_alert(times=3):
+    """Windows'ta kısa bip sesi çıkarır — Cloudflare sayfası gelince çağrılır."""
+    try:
+        import winsound
+        for _ in range(times):
+            winsound.Beep(1000, 400)   # 1000 Hz, 400ms
+            time.sleep(0.15)
+    except Exception:
+        # Windows değilse (veya winsound yoksa) terminale görsel uyarı bas
+        print("\a\a\a")  # terminal bell
+
+
 def handle_browser_check(page):
     """Sahibinden'in Cloudflare Turnstile sayfasını geçer."""
-    if "tarayıcınızı kontrol ediyoruz" not in page.content().lower():
+    if "tarayıcınızı kontrol ediyoruz" not in get_page_content(page).lower():
         return
 
     print("🤖 Browser check sayfası tespit edildi, Turnstile bekleniyor...")
+    beep_alert(times=3)   # 🔔 sesli uyarı
     try:
         page.wait_for_selector("#turnStileWidget", timeout=25_000)
         print("   ⏳ Turnstile token bekleniyor (shadow DOM)...")
-        time.sleep(random.uniform(10.0, 13.0))
+        time.sleep(random.uniform(11.0, 14.0))
         page.wait_for_selector("#btn-continue", timeout=15_000)
         page.click("#btn-continue")
         print("✅ 'Devam Et' butonuna tıklandı, sayfa geçişi bekleniyor...")
@@ -109,8 +140,8 @@ def is_login_page(html):
 def wait_for_challenge(page, max_wait=20):
     print(f"⏳ Challenge sayfasının kendi kendine çözülmesi bekleniyor (max {max_wait}s)...")
     for i in range(max_wait // 2):
-        time.sleep(random.uniform(6.0, 9.0))
-        if not is_waiting_page(page.content()):
+        time.sleep(random.uniform(7.0, 10.0))
+        if not is_waiting_page(get_page_content(page)):
             print(f"✅ Challenge ~{(i + 1) * 2}s sonra çözüldü.")
             return True
     print("⏰ Challenge zamanında çözülmedi.")
@@ -143,7 +174,7 @@ def goto_with_retry(page, url, retries=3, timeout=60_000):
             if "timeout" in err_str:
                 print(f"   ⏱️ page.goto timeout (deneme {attempt}/{retries}): {url}")
                 if attempt < retries:
-                    wait = random.uniform(10.0, 15.0)
+                    wait = random.uniform(11.0, 16.0)
                     print(f"   {wait:.1f}s bekleniyor...")
                     time.sleep(wait)
                 else:
@@ -156,47 +187,47 @@ def goto_with_retry(page, url, retries=3, timeout=60_000):
 def safe_goto(page, url):
     """Sahibinden'in tüm koruma katmanlarını yöneterek URL'ye gider."""
     goto_with_retry(page, url)
-    time.sleep(random.uniform(6.0, 9.0))
+    time.sleep(random.uniform(7.0, 10.0))
 
     handle_browser_check(page)
-    html = page.content()
+    html = get_page_content(page)
 
     if is_login_page(html):
         print("🔄 Login sayfasına yönlendirildi, tekrar deneniyor...")
-        time.sleep(random.uniform(8, 12))
+        time.sleep(random.uniform(9, 13))
         goto_with_retry(page, url)
-        time.sleep(random.uniform(6, 9))
+        time.sleep(random.uniform(7, 10))
         handle_browser_check(page)
-        html = page.content()
+        html = get_page_content(page)
 
     if is_waiting_page(html):
         resolved = wait_for_challenge(page)
         if resolved:
             handle_browser_check(page)
-            html = page.content()
+            html = get_page_content(page)
         else:
             print("🔄 Challenge takılı kaldı, tekrar yükleniyor...")
             goto_with_retry(page, url)
-            time.sleep(random.uniform(6, 9))
+            time.sleep(random.uniform(7, 10))
             handle_browser_check(page)
-            html = page.content()
+            html = get_page_content(page)
             if is_waiting_page(html):
                 wait_for_challenge(page)
                 handle_browser_check(page)
-                html = page.content()
+                html = get_page_content(page)
 
     if is_login_page(html):
         print("🔄 Login/CAPTCHA sayfası, tekrar deneniyor...")
-        time.sleep(random.uniform(6, 10))
+        time.sleep(random.uniform(7, 11))
         goto_with_retry(page, url)
-        time.sleep(random.uniform(6, 9))
+        time.sleep(random.uniform(7, 10))
         handle_browser_check(page)
-        html = page.content()
+        html = get_page_content(page)
 
         if is_waiting_page(html):
             wait_for_challenge(page)
             handle_browser_check(page)
-            html = page.content()
+            html = get_page_content(page)
 
         if is_login_page(html):
             print("❌ Yeniden denemeden sonra hâlâ engellendi — tarayıcı yeniden başlatılacak.")
@@ -253,7 +284,7 @@ def discover_pages(page, city_url_name, brackets):
         while True:
             safe_goto(page, current_url)
 
-            html  = page.content()
+            html  = get_page_content(page)
             soup  = BeautifulSoup(html, "html.parser")
             listings = soup.select("#searchResultsTable tbody tr.searchResultsItem")
 
@@ -272,7 +303,7 @@ def discover_pages(page, city_url_name, brackets):
             if next_button and "href" in next_button.attrs:
                 current_url = "https://www.sahibinden.com" + next_button["href"]
                 page_num   += 1
-                time.sleep(random.uniform(6.0, 9.0))
+                time.sleep(random.uniform(7.0, 10.0))
             else:
                 print(f"   Son sayfa — bracket {min_price}-{max_price} TL tamamlandı.")
                 break
