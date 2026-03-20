@@ -7,10 +7,26 @@ Computes three inflation metrics for IstanbulAvrupa rental listings:
   3. TUIK Weighted Avg – weighted average using TUIK 2026 CPI basket weights
                          (all segments map to group 04 – Konut)
 
-Since rental listings have no stable product IDs, segments are formed by
-grouping on (District, Rooms) and comparing median prices.
+Features:
+- Calculates inflation for 1d, 7d, 15d, 30d intervals
+- Supports comparison between any two arbitrary dates
+- Uses District × Rooms segments (no stable product IDs)
+- Maps all segments to TUIK group 04 (Konut/housing)
+- Outputs segment-level data and store-level summaries
+- Handles missing historical data gracefully
 
-Supports both preset intervals (1d, 7d, 15d, 30d) and arbitrary date comparison.
+Methodology:
+Since rental listings have no stable product IDs, segments are formed by
+grouping on (District, Rooms) and comparing median prices between dates.
+
+Output Files:
+- IstanbulAvrupa_inflation_YYYY-MM-DD.csv – Segment-level data with all metrics
+- inflation_summary.csv – Store-level summary with one row per date
+
+Usage:
+    python inflation.py                    # Uses today's date
+    python inflation.py --date 2026-03-20  # Specific target date
+    python inflation.py --date 2026-03-20 --compare 2026-03-10  # Arbitrary comparison
 """
 
 import logging
@@ -118,6 +134,30 @@ def calculate_inflation(target_date=None, compare_date=None):
                    *compare_date* (past) and *target_date* (current).
                    If omitted, compute for the four standard intervals
                    (1d, 7d, 15d, 30d back from target_date).
+
+    Returns
+    -------
+    None
+        Results are saved to CSV files in the inflation output directory.
+
+    Notes
+    -----
+    - Uses District × Rooms segments for matching across dates
+    - Price column: 'Price' (rental price strings, parsed to numeric)
+    - All segments map to TUIK group 04 (Konut/housing)
+    - Missing historical data results in NaN values for affected intervals
+    - Median prices are used to reduce outlier impact
+
+    Examples
+    --------
+    >>> # Calculate today's inflation with standard intervals
+    >>> calculate_inflation()
+
+    >>> # Calculate inflation for a specific date
+    >>> calculate_inflation('2026-03-20')
+
+    >>> # Compare two arbitrary dates
+    >>> calculate_inflation('2026-03-20', '2026-03-10')
     """
     if target_date:
         base_date = datetime.strptime(target_date, "%Y-%m-%d")

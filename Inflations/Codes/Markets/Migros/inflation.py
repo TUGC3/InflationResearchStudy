@@ -7,8 +7,21 @@ Computes three inflation metrics for Migros products:
   3. TUIK Weighted Avg – weighted average using TUIK 2026 CPI basket weights,
                          with weights normalised to the product categories present
 
-Supports both preset intervals (1d, 7d, 15d, 30d back from a target date)
-and comparison between two arbitrary dates.
+Features:
+- Calculates inflation for 1d, 7d, 15d, 30d intervals
+- Supports comparison between any two arbitrary dates
+- Maps ~700 Migros categories to 9 TUIK groups (01,02,03,05,06,07,08,09,12)
+- Outputs detailed per-product data and store-level summaries
+- Handles missing historical data gracefully
+
+Output Files:
+- migros_inflation_YYYY-MM-DD.csv – Detailed per-product data with all metrics
+- inflation_summary.csv – Store-level summary with one row per date
+
+Usage:
+    python inflation.py                    # Uses today's date
+    python inflation.py --date 2026-03-20  # Specific target date
+    python inflation.py --date 2026-03-20 --compare 2026-03-10  # Arbitrary comparison
 """
 
 import logging
@@ -108,6 +121,29 @@ def calculate_inflation(target_date=None, compare_date=None):
                    *compare_date* (past) and *target_date* (current).
                    If omitted, compute for the four standard intervals
                    (1d, 7d, 15d, 30d back from target_date).
+
+    Returns
+    -------
+    None
+        Results are saved to CSV files in the inflation output directory.
+
+    Notes
+    -----
+    - Uses Migros product IDs ('id') for matching across dates
+    - Price column: 'shown_price' (displayed price after discounts)
+    - Category column: 'category' (mapped to TUIK groups via tuik_config.py)
+    - Missing historical data results in NaN values for affected intervals
+
+    Examples
+    --------
+    >>> # Calculate today's inflation with standard intervals
+    >>> calculate_inflation()
+
+    >>> # Calculate inflation for a specific date
+    >>> calculate_inflation('2026-03-20')
+
+    >>> # Compare two arbitrary dates
+    >>> calculate_inflation('2026-03-20', '2026-03-10')
     """
     if target_date:
         base_date = datetime.strptime(target_date, "%Y-%m-%d")
