@@ -1,146 +1,209 @@
+"""
+inflation.py — IstanbulAvrupa (Rent) Daily Inflation Calculator
+
+Computes three inflation metrics for IstanbulAvrupa rental listings:
+  1. Basic Inflation   – per-segment (District × Rooms) median-price change (%)
+  2. Average Inflation – arithmetic mean of all per-segment basic inflation rates
+  3. TUIK Weighted Avg – weighted average using TUIK 2026 CPI basket weights
+                         (all segments map to group 04 – Konut)
+
+Since rental listings have no stable product IDs, segments are formed by
+grouping on (District, Rooms) and comparing median prices.
+
+Supports both preset intervals (1d, 7d, 15d, 30d) and arbitrary date comparison.
+"""
+
 import logging
-from datetime import datetime, timedelta
-import pandas as pd
 import sys
+from datetime import datetime, timedelta
 from pathlib import Path
 
-# Add the scraper's scripts directory to sys.path so we can import config
-# This file is in: .../Inflations/Codes/HousesRent/IstanbulAvrupa/inflation.py
-# Config is in: .../InflationItems/Codes/HousesRent/IstanbulAvrupa/scripts
-scraper_dir = Path(__file__).resolve().parent.parent.parent.parent.parent / "InflationItems" / "Codes" / "HousesRent" / "IstanbulAvrupa" / "scripts"
-sys.path.append(str(scraper_dir))
+import pandas as pd
 
+# ── Path setup ────────────────────────────────────────────────────────────────
+_THIS_DIR = Path(__file__).resolve().parent
+_CODES_DIR = _THIS_DIR.parent.parent               # .../Inflations/Codes
+_PROJECT_ROOT = _CODES_DIR.parent.parent            # .../InflationResearchStudy
+
+sys.path.insert(0, str(_THIS_DIR))
+from tuik_config import istanbul_avrupa_category_to_tuik, normalised_weights, TUIK_WEIGHTS
+
+# Scraper config for data paths
+_scraper_dir = _PROJECT_ROOT / "InflationItems" / "Codes" / "HousesRent" / "IstanbulAvrupa" / "scripts"
+sys.path.insert(0, str(_scraper_dir))
 import config
 
 logger = logging.getLogger(__name__)
 
-def parse_price(price_str):
+# ── Directories ───────────────────────────────────────────────────────────────
+DATA_DIR = Path(config.BASE_OUTPUT_DIR)
+FOLDER_NAME = config.FOLDER_NAME                    # "IstanbulAvrupa"
+INFLATION_OUT_DIR = _CODES_DIR.parent / "Datas" / "HousesRent" / "IstanbulAvrupa"
+
+
+def _parse_price(price_str):
     """Convert a price string like '8.000 TL' to a float 8000.0."""
     try:
         if pd.isna(price_str):
             return None
-        # Remove " TL", dots used as thousands separators, and any commas if they exist
         clean_str = str(price_str).replace(' TL', '').replace('.', '').strip()
         return float(clean_str)
     except Exception:
         return None
 
-def calculate_inflation(target_date=None):
-    """Calculates inflation for the IstanbulAvrupa data based on 1-day, 7-day, 15-day, and 30-day intervals.
-    
-    Reads today's scraped CSV file, finds historical CSVs, and calculates median prices 
-    grouped by 'District' and 'Rooms'. Then calculates the percentage price change 
-    for each group and outputs a new summarized CSV file containing the inflation data.
+
+def _load_and_group(date_str):
+    """Load a daily CSV, parse prices, and return median-grouped DataFrame or None."""
+    fpath = DATA_DIR / f"{FOLDER_NAME}_{date_str}.csv"
+    if not fpath.exists():
+        logger.info(f"Data file not found: {fpath}")
+        return None
+    try:
+        df = pd.read_csv(fpath)
+        df['Price_Num'] = df['Price'].apply(_parse_price)
+        grouped = df.groupby(['District', 'Rooms'])['Price_Num'].median().reset_index()
+        grouped.rename(columns={'Price_Num': 'median_price'}, inplace=True)
+        return grouped
+    except Exception as e:
+        logger.error(f"Failed to read {fpath}: {e}")
+        return None
+
+
+def _compute_metrics(df_current, df_past):
+    """Compute the three inflation metrics between two grouped DataFrames.
+
+    Returns
+    -------
+    df_detail : DataFrame  – per-segment rows with basic_inflation and tuik_category
+    basic_inflation_index : float – basket-level price index change (%)
+    avg_inflation         : float – arithmetic mean of per-segment inflation rates
+    tuik_weighted         : float – TUIK-weighted average inflation
     """
-    # Use BASE_OUTPUT_DIR because raw CSVs are directly there
-    output_dir = Path(config.BASE_OUTPUT_DIR)
-    folder_name = config.FOLDER_NAME # IstanbulAvrupa
-    
+    df_current = df_current.copy()
+    df_current['tuik_category'] = df_current.apply(lambda _: istanbul_avrupa_category_to_tuik(), axis=1)
+
+    past_subset = df_past[['District', 'Rooms', 'median_price']].rename(columns={'median_price': 'past_price'})
+    merged = df_current.merge(past_subset, on=['District', 'Rooms'], how='left')
+
+    # 1) Basic inflation per segment
+    merged['basic_inflation'] = ((merged['median_price'] - merged['past_price']) / merged['past_price']) * 100
+    merged['basic_inflation'] = merged['basic_inflation'].replace([float('inf'), float('-inf')], pd.NA)
+
+    # 2) Average inflation
+    avg_inflation = merged['basic_inflation'].mean()
+
+    # 3) Basic inflation at basket level
+    valid = merged.dropna(subset=['median_price', 'past_price'])
+    sum_current = valid['median_price'].sum()
+    sum_past = valid['past_price'].sum()
+    basic_inflation_index = ((sum_current - sum_past) / sum_past) * 100 if sum_past else None
+
+    # 4) TUIK weighted average (all segments → 04, so this equals avg_inflation)
+    cat_avg = merged.groupby('tuik_category')['basic_inflation'].mean()
+    present_codes = list(cat_avg.dropna().index)
+    norm_w = normalised_weights(present_codes)
+    tuik_weighted = sum(cat_avg[c] * norm_w[c] / 100.0 for c in norm_w if c in cat_avg.index and pd.notna(cat_avg[c]))
+
+    merged = merged.drop(columns=['past_price'], errors='ignore')
+    return merged, basic_inflation_index, avg_inflation, tuik_weighted
+
+
+def calculate_inflation(target_date=None, compare_date=None):
+    """Calculate inflation metrics for IstanbulAvrupa rental listings.
+
+    Parameters
+    ----------
+    target_date  : str (YYYY-MM-DD) – the "current" date.  Defaults to today.
+    compare_date : str (YYYY-MM-DD) – if given, compute metrics only between
+                   *compare_date* (past) and *target_date* (current).
+                   If omitted, compute for the four standard intervals
+                   (1d, 7d, 15d, 30d back from target_date).
+    """
     if target_date:
-        today_str = target_date
-        # Ensure we compute past dates relative to the target date
         base_date = datetime.strptime(target_date, "%Y-%m-%d")
     else:
         base_date = datetime.today()
-        today_str = base_date.strftime("%Y-%m-%d")
-        
-    today_file = output_dir / f"{folder_name}_{today_str}.csv"
-    
-    if not today_file.exists():
-        logger.warning(f"Today's data file not found: {today_file}. Cannot calculate inflation.")
+    today_str = base_date.strftime("%Y-%m-%d")
+
+    df_today = _load_and_group(today_str)
+    if df_today is None:
+        logger.warning(f"Cannot calculate inflation – no data for {today_str}.")
         return
 
-    logger.info(f"Loading today's CSV for inflation calculation: {today_file}")
-    
-    try:
-        df_today = pd.read_csv(today_file)
-    except Exception as e:
-        logger.error(f"Failed to read today's CSV: {e}")
-        return
+    INFLATION_OUT_DIR.mkdir(parents=True, exist_ok=True)
 
-    # Parse prices and calculate median per segment
-    df_today['Price_Num'] = df_today['Price'].apply(parse_price)
-    df_today_grouped = df_today.groupby(['District', 'Rooms'])['Price_Num'].median().reset_index()
-    df_today_grouped.rename(columns={'Price_Num': 'Median_Price_Today'}, inplace=True)
-    
-    intervals = [1, 7, 15, 30]
-    summary_data = {'date': [today_str]}
-    
-    for days in intervals:
-        past_date = (base_date - timedelta(days=days)).strftime("%Y-%m-%d")
-        past_file = output_dir / f"{folder_name}_{past_date}.csv"
-        
-        col_name = f"inflation_{days}d_pct"
-        
-        if not past_file.exists():
-            logger.info(f"No historical data found for {days} days ago ({past_file}). Skipping interval.")
-            df_today_grouped[col_name] = None
-            summary_data[f"avg_{col_name}"] = [None]
+    # ── Determine intervals ──────────────────────────────────────────────────
+    if compare_date:
+        intervals = {compare_date: compare_date}
+    else:
+        intervals = {}
+        for days in [1, 7, 15, 30]:
+            past_str = (base_date - timedelta(days=days)).strftime("%Y-%m-%d")
+            intervals[f"{days}d"] = past_str
+
+    # ── Per-interval computation ─────────────────────────────────────────────
+    summary_row = {'date': today_str}
+    detail_base = df_today.copy()
+    detail_base['tuik_category'] = detail_base.apply(lambda _: istanbul_avrupa_category_to_tuik(), axis=1)
+
+    for label, past_str in intervals.items():
+        df_past = _load_and_group(past_str)
+
+        if df_past is None:
+            logger.info(f"Skipping interval {label} – no data for {past_str}.")
+            detail_base[f'basic_inflation_{label}'] = None
+            summary_row[f'basic_inflation_{label}'] = None
+            summary_row[f'avg_inflation_{label}'] = None
+            summary_row[f'tuik_weighted_{label}'] = None
             continue
-            
-        logger.info(f"Loading historical data from {days} days ago: {past_file}")
-        try:
-            df_past = pd.read_csv(past_file)
-            df_past['Price_Num'] = df_past['Price'].apply(parse_price)
-            df_past_grouped = df_past.groupby(['District', 'Rooms'])['Price_Num'].median().reset_index()
-            df_past_grouped.rename(columns={'Price_Num': f'past_price_{days}d'}, inplace=True)
-            
-            # Merge on segment criteria
-            df_today_grouped = df_today_grouped.merge(df_past_grouped, on=['District', 'Rooms'], how='left')
-            
-            # Calculate percentage change
-            current_median = df_today_grouped['Median_Price_Today']
-            past_median = df_today_grouped[f'past_price_{days}d']
-            
-            df_today_grouped[col_name] = ((current_median - past_median) / past_median) * 100
-            
-            # Calculate average inflation for the day across all groups
-            avg_inflation = df_today_grouped[col_name].replace([float('inf'), float('-inf')], pd.NA).mean()
-            summary_data[f"avg_{col_name}"] = [avg_inflation]
-            
-            # Drop the intermediate historical price column (optional, but requested for cleanliness)
-            df_today_grouped = df_today_grouped.drop(columns=[f'past_price_{days}d'])
-            
-        except Exception as e:
-            logger.error(f"Error processing historical data {past_file}: {e}")
-            df_today_grouped[col_name] = None
-            summary_data[f"avg_{col_name}"] = [None]
 
-    # Output to the Inflations/Datas hierarchy
-    project_inflations_dir = Path(__file__).resolve().parent.parent.parent.parent
-    inflation_dir = project_inflations_dir / "Datas" / "HousesRent" / "IstanbulAvrupa"
-    inflation_dir.mkdir(parents=True, exist_ok=True)
+        merged, basic_idx, avg_inf, tuik_w = _compute_metrics(df_today, df_past)
 
-    # Save detailed data (it's essentially a grouped summary since listings don't have unique IDs)
-    output_inflation_file = inflation_dir / f"{folder_name}_inflation_{today_str}.csv"
-    df_today_grouped.to_csv(output_inflation_file, index=False, encoding='utf-8')
-    logger.info(f"Saved grouped inflation data to: {output_inflation_file}")
-    
-    # Save/Append summary data
-    summary_file = inflation_dir / "inflation_summary.csv"
-    df_summary = pd.DataFrame(summary_data)
-    
+        detail_base = detail_base.merge(
+            merged[['District', 'Rooms', 'basic_inflation']].rename(
+                columns={'basic_inflation': f'basic_inflation_{label}'}
+            ),
+            on=['District', 'Rooms'], how='left'
+        )
+
+        summary_row[f'basic_inflation_{label}'] = basic_idx
+        summary_row[f'avg_inflation_{label}'] = avg_inf
+        summary_row[f'tuik_weighted_{label}'] = tuik_w
+
+    # ── Add store-level aggregates as columns to detail file ─────────────────
+    for label in intervals:
+        detail_base[f'avg_inflation_{label}'] = summary_row.get(f'avg_inflation_{label}')
+        detail_base[f'tuik_weighted_{label}'] = summary_row.get(f'tuik_weighted_{label}')
+
+    # ── Save detailed data ───────────────────────────────────────────────────
+    detail_file = INFLATION_OUT_DIR / f"{FOLDER_NAME}_inflation_{today_str}.csv"
+    detail_base.to_csv(detail_file, index=False, encoding='utf-8')
+    logger.info(f"Saved grouped inflation data to: {detail_file}")
+
+    # ── Save / update summary ────────────────────────────────────────────────
+    summary_file = INFLATION_OUT_DIR / "inflation_summary.csv"
+    df_summary = pd.DataFrame([summary_row])
+
     try:
         if summary_file.exists():
             df_existing = pd.read_csv(summary_file)
-            # Remove any existing entry for today's date
             df_existing = df_existing[df_existing['date'] != today_str]
-            # Append new data
             df_final = pd.concat([df_existing, df_summary], ignore_index=True)
             df_final.to_csv(summary_file, index=False, encoding='utf-8')
-            logger.info(f"Updated daily inflation summary in: {summary_file}")
+            logger.info(f"Updated inflation summary in: {summary_file}")
         else:
             df_summary.to_csv(summary_file, index=False, encoding='utf-8')
-            logger.info(f"Created daily inflation summary in: {summary_file}")
+            logger.info(f"Created inflation summary in: {summary_file}")
     except Exception as e:
         logger.error(f"Failed to write summary file: {e}")
 
+
 if __name__ == "__main__":
     import argparse
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--date", help="Target date in YYYY-MM-DD format", default=None)
+    parser = argparse.ArgumentParser(description="IstanbulAvrupa rent inflation calculator")
+    parser.add_argument("--date", help="Target (current) date in YYYY-MM-DD format", default=None)
+    parser.add_argument("--compare", help="Comparison (past) date in YYYY-MM-DD format", default=None)
     args = parser.parse_args()
 
-    # Configure basic logging for standalone execution
     logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
-    calculate_inflation(args.date)
+    calculate_inflation(args.date, args.compare)
