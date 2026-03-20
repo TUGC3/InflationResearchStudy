@@ -342,8 +342,12 @@ def _parse_listings(tree: etree._Element, rooms_idx: int | None) -> list[dict]:
             # Extract location/district using XPath
             loc_elems = row.xpath(".//*[contains(@class, 'searchResultsLocationValue')]")
             if loc_elems:
-                # Get all text content and join with " / "
-                district = " / ".join(loc_elems[0].text_content().split())
+                parts = loc_elems[0].text_content().split()
+                district = " / ".join(parts)
+                # Normalise: if city and district were concatenated without whitespace
+                # (e.g. "İstanbulAvcılar" instead of "İstanbul Avcılar"), split at boundary.
+                if " / " not in district and district.startswith("İstanbul") and len(district) > 8:
+                    district = "İstanbul / " + district[8:]
             else:
                 district = "N/A"
 

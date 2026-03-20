@@ -122,7 +122,8 @@ def _compute_metrics(df_current, df_past):
     cat_avg = merged.groupby('tuik_category')['basic_inflation'].mean()
     present_codes = list(cat_avg.dropna().index)
     norm_w = normalised_weights(present_codes)
-    tuik_weighted = sum(cat_avg[c] * norm_w[c] / 100.0 for c in norm_w if c in cat_avg.index and pd.notna(cat_avg[c]))
+    valid_terms = [cat_avg[c] * norm_w[c] / 100.0 for c in norm_w if c in cat_avg.index and pd.notna(cat_avg[c])]
+    tuik_weighted = sum(valid_terms) if valid_terms else None
 
     merged = merged.drop(columns=['past_price'], errors='ignore')
     return merged, basic_inflation_index, avg_inflation, tuik_weighted
