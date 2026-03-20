@@ -2,26 +2,25 @@
 inflation.py — Bauhaus Daily Inflation Calculator
 
 Computes three inflation metrics for Bauhaus products:
-  1. Basic Inflation   – per-product percentage price change between two dates
-  2. Average Inflation – arithmetic mean of all per-product basic inflation rates
+  1. Basic Inflation   – basket-level price index change (%) calculated as sum of current prices vs sum of past prices
+  2. Average Inflation – arithmetic mean of all per-product percentage price changes
   3. TUIK Weighted Avg – weighted average using TUIK 2026 CPI basket weights,
                          with weights normalised to the product categories present
 
 Features:
 - Calculates inflation for 1d, 7d, 15d, 30d intervals
 - Supports comparison between any two arbitrary dates
-- Maps 12 Bauhaus categories to 3 TUIK groups (04, 05, 07)
+- Maps 12 Bauhaus categories to 2 TUIK groups (05, 07)
 - Outputs detailed per-product data and store-level summaries
 - Handles missing historical data gracefully
 
 Bauhaus TUIK mapping:
-  - Boya ve İnşaat, Parke ve Kapılar, Tüm Isıtma ve Soğutma → 04 (Konut)
+  - All categories except Tüm Oto Ürünleri → 05 (Mobilya, ev aletleri ve ev bakım hizmetleri)
   - Tüm Oto Ürünleri → 07 (Ulaştırma)
-  - Everything else   → 05 (Mobilya, ev aletleri ve ev bakım hizmetleri)
 
 Output Files:
-- bauhaus_inflation_YYYY-MM-DD.csv – Detailed per-product data with all metrics
-- inflation_summary.csv – Store-level summary with one row per date
+- bauhaus_inflation_YYYY-MM-DD.csv – Detailed per-product data with basic_inflation columns
+- inflation_summary.csv – Store-level summary with avg_inflation and tuik_weighted columns
 
 Usage:
     python inflation.py                    # Uses today's date
@@ -45,12 +44,14 @@ sys.path.insert(0, str(_THIS_DIR))
 from tuik_config import bauhaus_category_to_tuik, normalised_weights, TUIK_WEIGHTS
 
 # Scraper config for data paths
+# Note: Bauhaus uses config.OUTPUT_DIR while other calculators use config.BASE_OUTPUT_DIR
 try:
     _scraper_dir = _PROJECT_ROOT / "InflationItems" / "Codes" / "ConstructionSuppliesMarkets" / "Bauhaus" / "scripts"
     sys.path.insert(0, str(_scraper_dir))
     import config
     DATA_DIR = Path(config.OUTPUT_DIR)
 except Exception:
+    # Fallback to default path if config import fails
     DATA_DIR = _PROJECT_ROOT / "InflationItems" / "Datas" / "ConstructionSuppliesMarkets" / "Bauhaus"
 
 logger = logging.getLogger(__name__)

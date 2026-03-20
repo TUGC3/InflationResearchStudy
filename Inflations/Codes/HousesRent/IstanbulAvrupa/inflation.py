@@ -2,8 +2,8 @@
 inflation.py — IstanbulAvrupa (Rent) Daily Inflation Calculator
 
 Computes three inflation metrics for IstanbulAvrupa rental listings:
-  1. Basic Inflation   – per-segment (District × Rooms) median-price change (%)
-  2. Average Inflation – arithmetic mean of all per-segment basic inflation rates
+  1. Basic Inflation   – basket-level price index change (%) calculated as sum of current median prices vs sum of past median prices
+  2. Average Inflation – arithmetic mean of all per-segment median price percentage changes
   3. TUIK Weighted Avg – weighted average using TUIK 2026 CPI basket weights
                          (all segments map to group 04 – Konut)
 
@@ -20,8 +20,8 @@ Since rental listings have no stable product IDs, segments are formed by
 grouping on (District, Rooms) and comparing median prices between dates.
 
 Output Files:
-- IstanbulAvrupa_inflation_YYYY-MM-DD.csv – Segment-level data with all metrics
-- inflation_summary.csv – Store-level summary with one row per date
+- IstanbulAvrupa_inflation_YYYY-MM-DD.csv – Segment-level data with basic_inflation columns
+- inflation_summary.csv – Store-level summary with avg_inflation and tuik_weighted columns
 
 Usage:
     python inflation.py                    # Uses today's date
@@ -58,10 +58,14 @@ INFLATION_OUT_DIR = _CODES_DIR.parent / "Datas" / "HousesRent" / "IstanbulAvrupa
 
 
 def _parse_price(price_str):
-    """Convert a price string like '8.000 TL' to a float 8000.0."""
+    """Convert a Turkish price string like '8.000 TL' to a float 8000.0.
+    
+    Turkish format uses '.' as thousand separator, not decimal point.
+    """
     try:
         if pd.isna(price_str):
             return None
+        # Remove ' TL' suffix and thousand separators (.), then convert to float
         clean_str = str(price_str).replace(' TL', '').replace('.', '').strip()
         return float(clean_str)
     except Exception:

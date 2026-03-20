@@ -6,9 +6,9 @@ Calculates inflation metrics for IstanbulAvrupa rental listings using TUIK 2026 
 
 Computes three inflation metrics for rental listings:
 
-1. **Basic Inflation** - Per-segment (District × Rooms) median price change (%)
-2. **Average Inflation** - Arithmetic mean of all per-segment basic inflation rates
-3. **TUIK Weighted Average** - Weighted average using TUIK 2026 CPI basket weights
+1. **Basic Inflation** - Basket-level price index change (%) calculated as sum of current median prices vs sum of past median prices
+2. **Average Inflation** - Arithmetic mean of all per-segment median price percentage changes
+3. **TUIK Weighted Average** - Weighted average using TUIK 2026 CPI basket weights (all segments map to group 04)
 
 ## Special Methodology
 
@@ -66,8 +66,9 @@ python inflation.py --date 2026-03-20 --compare 2026-03-10
 
 `IstanbulAvrupa_inflation_YYYY-MM-DD.csv`
 
-- Per-segment inflation data
-- Columns: `District`, `Rooms`, `tuik_category`, `basic_inflation_{interval}` for each available interval
+- Per-segment inflation data with median price percentage changes
+- Columns: `District`, `Rooms`, `median_price`, `tuik_category`, `basic_inflation_{interval}` for each available interval
+- `basic_inflation_{interval}`: Per-segment median price percentage change for that interval
 - Location: `Inflations/Datas/HousesRent/IstanbulAvrupa/`
 
 ### Summary Data
@@ -93,6 +94,15 @@ date,avg_inflation_1d,tuik_weighted_1d,avg_inflation_7d,tuik_weighted_7d,avg_inf
 District,Rooms,median_price,tuik_category,basic_inflation_1d,basic_inflation_7d,basic_inflation_15d,basic_inflation_30d
 ```
 
+## Calculation Methodology
+
+1. **Segment Formation**: Listings grouped by `(District, Rooms)` combinations
+2. **Median Calculation**: Median price computed for each segment on each date
+3. **Per-segment Inflation**: `((current_median - past_median) / past_median) * 100`
+4. **Basic Inflation**: Sum-based basket index using all segment medians
+5. **Average Inflation**: Mean of all valid per-segment inflation rates
+6. **TUIK Weighted**: All segments map to group 04, so equals average inflation
+
 ## Configuration
 
 The `tuik_config.py` file contains:
@@ -112,8 +122,10 @@ Designed to run after daily IstanbulAvrupa scraping completes:
 ## Error Handling
 
 - Missing historical data → NaN values for affected intervals
-- Invalid price strings → Parsed as NaN and excluded
+- Invalid price strings → Parsed as NaN and excluded from calculations
 - Empty segments → Skipped in calculations
+- Price changes of 0/0 → Handled gracefully, excluded from basket calculations
+- Infinite inflation rates → Converted to NaN and excluded
 
 ## Dependencies
 

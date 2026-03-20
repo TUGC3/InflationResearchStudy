@@ -6,9 +6,9 @@ Calculates inflation metrics for Bauhaus home improvement and construction produ
 
 Computes three inflation metrics for Bauhaus products:
 
-1. **Basic Inflation** - Per-product percentage price change between two dates
-2. **Average Inflation** - Arithmetic mean of all per-product basic inflation rates
-3. **TUIK Weighted Average** - Weighted average using TUIK 2026 CPI basket weights
+1. **Basic Inflation** - Basket-level price index change (%) calculated as sum of current prices vs sum of past prices
+2. **Average Inflation** - Arithmetic mean of all per-product percentage price changes
+3. **TUIK Weighted Average** - Weighted average using TUIK 2026 CPI basket weights, normalised to present categories
 
 ## Data Requirements
 
@@ -61,8 +61,9 @@ python inflation.py --date 2026-03-20 --compare 2026-03-10
 
 `bauhaus_inflation_YYYY-MM-DD.csv`
 
-- Per-product inflation data
-- Columns: `id`, `name`, `category`, `tuik_category`, `basic_inflation_{interval}` for each available interval
+- Per-product inflation data with percentage price changes
+- Columns: All original columns + `tuik_category` + `basic_inflation_{interval}` for each available interval
+- `basic_inflation_{interval}`: Per-product percentage price change for that interval
 - Location: `Inflations/Datas/ConstructionSuppliesMarkets/Bauhaus/`
 
 ### Summary Data
@@ -88,6 +89,14 @@ date,avg_inflation_1d,tuik_weighted_1d,avg_inflation_7d,tuik_weighted_7d,avg_inf
 id,sku,name,brand,category,...,tuik_category,basic_inflation_1d,basic_inflation_7d,basic_inflation_15d,basic_inflation_30d
 ```
 
+## Calculation Methodology
+
+1. **Data Matching**: Products matched across dates using unique `id`
+2. **Per-product Inflation**: `((current_price - past_price) / past_price) * 100`
+3. **Basic Inflation**: Sum-based basket index using matched products only
+4. **Average Inflation**: Mean of all valid per-product inflation rates
+5. **TUIK Weighted**: Category-level averages weighted by normalised TUIK weights
+
 ## Configuration
 
 The `tuik_config.py` file contains:
@@ -107,8 +116,10 @@ Designed to run after daily Bauhaus scraping completes:
 ## Error Handling
 
 - Missing historical data → NaN values for affected intervals
-- Invalid price data → Coerced to NaN and excluded
+- Invalid price data → Coerced to NaN and excluded from calculations
 - Unknown categories → Default to TUIK group 05 (household goods)
+- Price changes of 0/0 → Handled gracefully, excluded from basket calculations
+- Infinite inflation rates → Converted to NaN and excluded
 
 ## Dependencies
 

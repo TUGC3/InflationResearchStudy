@@ -2,8 +2,8 @@
 inflation.py — Migros Daily Inflation Calculator
 
 Computes three inflation metrics for Migros products:
-  1. Basic Inflation   – per-product percentage price change between two dates
-  2. Average Inflation – arithmetic mean of all per-product basic inflation rates
+  1. Basic Inflation   – basket-level price index change (%) calculated as sum of current prices vs sum of past prices
+  2. Average Inflation – arithmetic mean of all per-product percentage price changes
   3. TUIK Weighted Avg – weighted average using TUIK 2026 CPI basket weights,
                          with weights normalised to the product categories present
 
@@ -15,8 +15,8 @@ Features:
 - Handles missing historical data gracefully
 
 Output Files:
-- migros_inflation_YYYY-MM-DD.csv – Detailed per-product data with all metrics
-- inflation_summary.csv – Store-level summary with one row per date
+- migros_inflation_YYYY-MM-DD.csv – Detailed per-product data with basic_inflation columns
+- inflation_summary.csv – Store-level summary with avg_inflation and tuik_weighted columns
 
 Usage:
     python inflation.py                    # Uses today's date
