@@ -5,17 +5,20 @@ Calculates inflation metrics for Koton fashion products using TUIK 2026 CPI bask
 ## Overview
 
 Computes three inflation metrics for Koton products:
+
 1. **Basic Inflation** - Per-product percentage price change between two dates
-2. **Average Inflation** - Arithmetic mean of all per-product basic inflation rates  
+2. **Average Inflation** - Arithmetic mean of all per-product basic inflation rates
 3. **TUIK Weighted Average** - Weighted average using TUIK 2026 CPI basket weights
 
 ## Data Requirements
 
 ### Input Files
+
 - **Location**: `InflationItems/Datas/ClothingStores/Koton/koton_YYYY-MM-DD.csv`
 - **Required columns**: `pk`, `sale_price`, `category`
 
 ### Key Columns
+
 - `pk`: Unique product identifier for matching across dates
 - `sale_price`: Current sale price (numeric)
 - `category`: Hierarchical product category (mapped to TUIK groups)
@@ -24,12 +27,13 @@ Computes three inflation metrics for Koton products:
 
 Maps Koton categories to 2 TUIK groups:
 
-| Category Pattern | TUIK Group | Description |
-|------------------|------------|-------------|
-| COSMETICS, PERFUME | 12 | Kişisel bakım, sosyal koruma ve çeşitli mal ve hizmetler |
-| All other products | 03 | Giyim ve ayakkabı |
+| Category Pattern   | TUIK Group | Description                                              |
+| ------------------ | ---------- | -------------------------------------------------------- |
+| COSMETICS, PERFUME | 12         | Kişisel bakım, sosyal koruma ve çeşitli mal ve hizmetler |
+| All other products | 03         | Giyim ve ayakkabı                                        |
 
 ### Example Categories
+
 - **TUIK 12 (Personal Care)**: `ACCESSORIES > COSMETICS > WOMEN > PERFUME > PERFUME W`
 - **TUIK 03 (Clothing)**: `MENSWEAR > MENSWEAR > MEN > JERSEY > SHIRTS SS`
 
@@ -49,28 +53,40 @@ python inflation.py --date 2026-03-20 --compare 2026-03-10
 ## Output Files
 
 ### Detailed Data
+
 `koton_inflation_YYYY-MM-DD.csv`
+
 - Per-product inflation data
-- Columns: `basic_inflation_{interval}`, `tuik_category`, plus store-level aggregates
+- Columns: `pk`, `name`, `category`, `tuik_category`, `basic_inflation_{interval}` for each available interval
 - Location: `Inflations/Datas/ClothingStores/Koton/`
 
-### Summary Data  
+### Summary Data
+
 `inflation_summary.csv`
+
 - Store-level metrics, one row per date
-- Columns: `basic_inflation_{interval}`, `avg_inflation_{interval}`, `tuik_weighted_{interval}`
+- Columns: `date`, `avg_inflation_{interval}`, `tuik_weighted_{interval}` for each interval
 - Appends new data, updates existing dates
 
 ## Example Output
 
 ### inflation_summary.csv
+
 ```csv
-date,basic_inflation_1d,avg_inflation_1d,tuik_weighted_1d,basic_inflation_7d,avg_inflation_7d,tuik_weighted_7d,basic_inflation_15d,avg_inflation_15d,tuik_weighted_15d,basic_inflation_30d,avg_inflation_30d,tuik_weighted_30d
-2026-03-19,0.0,0.0,0.0,0.1895,0.2214,0.1414,0.2384,0.3049,0.1947,,
+date,avg_inflation_1d,tuik_weighted_1d,avg_inflation_7d,tuik_weighted_7d,avg_inflation_15d,tuik_weighted_15d,avg_inflation_30d,tuik_weighted_30d
+2026-03-19,0.0,0.0,0.2214,0.1414,0.3049,0.1947,,
+```
+
+### koton_inflation_YYYY-MM-DD.csv (first columns)
+
+```csv
+pk,sku,name,brand,category,...,tuik_category,basic_inflation_1d,basic_inflation_7d,basic_inflation_15d,basic_inflation_30d
 ```
 
 ## Configuration
 
 The `tuik_config.py` file contains:
+
 - TUIK 2026 CPI basket weights
 - `koton_category_to_tuik()` mapping function
 - `normalised_weights()` helper function
@@ -78,6 +94,7 @@ The `tuik_config.py` file contains:
 ## Integration
 
 Designed to run after daily Koton scraping completes:
+
 1. Koton scraper saves data to `InflationItems/Datas/ClothingStores/Koton/`
 2. Run `python inflation.py` to calculate metrics
 3. Results saved to `Inflations/Datas/ClothingStores/Koton/`

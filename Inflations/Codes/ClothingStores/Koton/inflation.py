@@ -176,7 +176,6 @@ def calculate_inflation(target_date=None, compare_date=None):
         if df_past is None:
             logger.info(f"Skipping interval {label} – no data for {past_str}.")
             detail_base[f'basic_inflation_{label}'] = None
-            summary_row[f'basic_inflation_{label}'] = None
             summary_row[f'avg_inflation_{label}'] = None
             summary_row[f'tuik_weighted_{label}'] = None
             continue
@@ -188,14 +187,8 @@ def calculate_inflation(target_date=None, compare_date=None):
             on='pk', how='left'
         )
 
-        summary_row[f'basic_inflation_{label}'] = basic_idx
         summary_row[f'avg_inflation_{label}'] = avg_inf
         summary_row[f'tuik_weighted_{label}'] = tuik_w
-
-    # ── Add store-level aggregates as columns to detail file ─────────────────
-    for label in intervals:
-        detail_base[f'avg_inflation_{label}'] = summary_row.get(f'avg_inflation_{label}')
-        detail_base[f'tuik_weighted_{label}'] = summary_row.get(f'tuik_weighted_{label}')
 
     # ── Save detailed data ───────────────────────────────────────────────────
     detail_file = INFLATION_OUT_DIR / f"koton_inflation_{today_str}.csv"

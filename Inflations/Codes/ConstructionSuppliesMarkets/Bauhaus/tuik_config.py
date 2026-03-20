@@ -42,15 +42,15 @@ def normalised_weights(present_codes):
 _BAUHAUS_TUIK_MAP = {
     "Bahçe":                                "05",
     "Banyo":                                "05",
-    "Boya ve İnşaat":                       "04",
+    "Boya ve İnşaat":                       "05",
     "Dekorasyon ve Ev Gereçleri":           "05",
     "Hırdavat ve El Aletleri":             "05",
     "Makine":                               "05",
     "Mobilya":                              "05",
     "Mutfak":                               "05",
-    "Parke ve Kapılar":                     "04",
+    "Parke ve Kapılar":                     "05",
     "Tüm Aydınlatma ve Elektro Ürünleri":  "05",
-    "Tüm Isıtma ve Soğutma Ürünleri":      "04",
+    "Tüm Isıtma ve Soğutma Ürünleri":      "05",
     "Tüm Oto Ürünleri":                    "07",
 }
 
