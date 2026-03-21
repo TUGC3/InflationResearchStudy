@@ -1,130 +1,228 @@
+"""
+inflation.py — Migros Daily Inflation Calculator
+
+Computes three inflation metrics for Migros products:
+  1. Basic Inflation   – basket-level price index change (%) calculated as sum of current prices vs sum of past prices
+  2. Average Inflation – arithmetic mean of all per-product percentage price changes
+  3. TUIK Weighted Avg – weighted average using TUIK 2026 CPI basket weights,
+                         with weights normalised to the product categories present
+
+Features:
+- Calculates inflation for 1d, 7d, 15d, 30d intervals
+- Supports comparison between any two arbitrary dates
+- Maps ~700 Migros categories to 9 TUIK groups (01,02,03,05,06,07,08,09,12)
+- Outputs detailed per-product data and store-level summaries
+- Handles missing historical data gracefully
+
+Output Files:
+- migros_inflation_YYYY-MM-DD.csv – Detailed per-product data with basic_inflation columns
+- inflation_summary.csv – Store-level summary with avg_inflation and tuik_weighted columns
+
+Usage:
+    python inflation.py                    # Uses today's date
+    python inflation.py --date 2026-03-20  # Specific target date
+    python inflation.py --date 2026-03-20 --compare 2026-03-10  # Arbitrary comparison
+"""
+
 import logging
-from datetime import datetime, timedelta
-import pandas as pd
 import sys
+from datetime import datetime, timedelta
 from pathlib import Path
 
-# Add the scraper's scripts directory to sys.path so we can import config
-# This file is in: .../Inflations/Codes/Markets/Migros/inflation.py
-# Config is in: .../InflationItems/Codes/Markets/Migros/scripts
-scraper_dir = Path(__file__).resolve().parent.parent.parent.parent.parent / "InflationItems" / "Codes" / "Markets" / "Migros" / "scripts"
-sys.path.append(str(scraper_dir))
+import pandas as pd
 
+# ── Path setup ────────────────────────────────────────────────────────────────
+_THIS_DIR = Path(__file__).resolve().parent
+_CODES_DIR = _THIS_DIR.parent.parent               # .../Inflations/Codes
+_PROJECT_ROOT = _CODES_DIR.parent.parent            # .../InflationResearchStudy
+
+sys.path.insert(0, str(_THIS_DIR))
+from tuik_config import migros_category_to_tuik, normalised_weights, TUIK_WEIGHTS
+
+# Scraper config for data paths
+_scraper_dir = _PROJECT_ROOT / "InflationItems" / "Codes" / "Markets" / "Migros" / "scripts"
+sys.path.insert(0, str(_scraper_dir))
 import config
 
 logger = logging.getLogger(__name__)
 
-def calculate_inflation(target_date=None):
-    """Calculates inflation for the Migros data based on 1-day, 7-day, 15-day, and 30-day intervals.
-    
-    Reads today's scraped CSV file, finds historical CSVs, calculates the percentage price change
-    for each product based on its 'id', and outputs a new combined CSV file containing the inflation data
-    along with a summary CSV for the daily average inflation.
+# ── Directories ───────────────────────────────────────────────────────────────
+DATA_DIR = Path(config.BASE_OUTPUT_DIR)
+INFLATION_OUT_DIR = _CODES_DIR.parent / "Datas" / "Markets" / "Migros"
+
+
+def _load_csv(date_str):
+    """Load a Migros daily CSV by date string, return DataFrame or None."""
+    fpath = DATA_DIR / f"migros_{date_str}.csv"
+    if not fpath.exists():
+        logger.info(f"Data file not found: {fpath}")
+        return None
+    try:
+        df = pd.read_csv(fpath)
+        df['shown_price'] = pd.to_numeric(df['shown_price'], errors='coerce')
+        return df
+    except Exception as e:
+        logger.error(f"Failed to read {fpath}: {e}")
+        return None
+
+
+def _compute_metrics(df_current, df_past):
+    """Compute the three inflation metrics between two DataFrames.
+
+    Returns
+    -------
+    df_detail : DataFrame  – per-product rows with basic_inflation column and tuik_category
+    basic_inflation_index : float – basket-level price index change (%)
+    avg_inflation         : float – arithmetic mean of per-product inflation rates
+    tuik_weighted         : float – TUIK-weighted average inflation
     """
-    # Use BASE_OUTPUT_DIR because raw CSVs are directly there
-    output_dir = Path(config.BASE_OUTPUT_DIR)
-    
+    # Assign TUIK categories
+    df_current = df_current.copy()
+    df_current['tuik_category'] = df_current['category'].apply(migros_category_to_tuik)
+
+    # Merge past prices
+    past_subset = df_past[['id', 'shown_price']].rename(columns={'shown_price': 'past_price'})
+    merged = df_current.merge(past_subset, on='id', how='left')
+
+    # 1) Basic inflation per product
+    merged['basic_inflation'] = ((merged['shown_price'] - merged['past_price']) / merged['past_price']) * 100
+
+    # Clean inf values
+    merged['basic_inflation'] = merged['basic_inflation'].replace([float('inf'), float('-inf')], pd.NA)
+
+    # 2) Average inflation – arithmetic mean of per-product rates
+    avg_inflation = merged['basic_inflation'].mean()
+
+    # 3) Basic inflation at basket level (price-index style)
+    valid = merged.dropna(subset=['shown_price', 'past_price'])
+    sum_current = valid['shown_price'].sum()
+    sum_past = valid['past_price'].sum()
+    basic_inflation_index = ((sum_current - sum_past) / sum_past) * 100 if sum_past else None
+
+    # 4) TUIK weighted average
+    cat_avg = merged.groupby('tuik_category')['basic_inflation'].mean()
+    present_codes = list(cat_avg.dropna().index)
+    norm_w = normalised_weights(present_codes)
+    tuik_weighted = sum(cat_avg[c] * norm_w[c] / 100.0 for c in norm_w if c in cat_avg.index and pd.notna(cat_avg[c]))
+
+    # Drop intermediate column
+    merged = merged.drop(columns=['past_price'], errors='ignore')
+
+    return merged, basic_inflation_index, avg_inflation, tuik_weighted
+
+
+def calculate_inflation(target_date=None, compare_date=None):
+    """Calculate inflation metrics for Migros.
+
+    Parameters
+    ----------
+    target_date  : str (YYYY-MM-DD) – the "current" date.  Defaults to today.
+    compare_date : str (YYYY-MM-DD) – if given, compute metrics only between
+                   *compare_date* (past) and *target_date* (current).
+                   If omitted, compute for the four standard intervals
+                   (1d, 7d, 15d, 30d back from target_date).
+
+    Returns
+    -------
+    None
+        Results are saved to CSV files in the inflation output directory.
+
+    Notes
+    -----
+    - Uses Migros product IDs ('id') for matching across dates
+    - Price column: 'shown_price' (displayed price after discounts)
+    - Category column: 'category' (mapped to TUIK groups via tuik_config.py)
+    - Missing historical data results in NaN values for affected intervals
+
+    Examples
+    --------
+    >>> # Calculate today's inflation with standard intervals
+    >>> calculate_inflation()
+
+    >>> # Calculate inflation for a specific date
+    >>> calculate_inflation('2026-03-20')
+
+    >>> # Compare two arbitrary dates
+    >>> calculate_inflation('2026-03-20', '2026-03-10')
+    """
     if target_date:
-        today_str = target_date
-        # Ensure we compute past dates relative to the target date
         base_date = datetime.strptime(target_date, "%Y-%m-%d")
     else:
         base_date = datetime.today()
-        today_str = base_date.strftime("%Y-%m-%d")
-        
-    today_file = output_dir / f"migros_{today_str}.csv"
-    
-    if not today_file.exists():
-        logger.warning(f"Today's data file not found: {today_file}. Cannot calculate inflation.")
+    today_str = base_date.strftime("%Y-%m-%d")
+
+    df_today = _load_csv(today_str)
+    if df_today is None:
+        logger.warning(f"Cannot calculate inflation – no data for {today_str}.")
         return
 
-    logger.info(f"Loading today's CSV for inflation calculation: {today_file}")
-    
-    try:
-        df_today = pd.read_csv(today_file)
-    except Exception as e:
-        logger.error(f"Failed to read today's CSV: {e}")
-        return
+    INFLATION_OUT_DIR.mkdir(parents=True, exist_ok=True)
 
-    # Ensure 'shown_price' is numeric
-    df_today['shown_price'] = pd.to_numeric(df_today['shown_price'], errors='coerce')
-    
-    intervals = [1, 7, 15, 30]
-    summary_data = {'date': [today_str]}
-    
-    for days in intervals:
-        past_date = (base_date - timedelta(days=days)).strftime("%Y-%m-%d")
-        past_file = output_dir / f"migros_{past_date}.csv"
-        
-        col_name = f"inflation_{days}d_pct"
-        
-        if not past_file.exists():
-            logger.info(f"No historical data found for {days} days ago ({past_file}). Skipping interval.")
-            df_today[col_name] = None
-            summary_data[f"avg_{col_name}"] = [None]
+    # ── Determine intervals ──────────────────────────────────────────────────
+    if compare_date:
+        # Single arbitrary comparison
+        intervals = {compare_date: compare_date}
+    else:
+        intervals = {}
+        for days in [1, 7, 15, 30]:
+            past_str = (base_date - timedelta(days=days)).strftime("%Y-%m-%d")
+            intervals[f"{days}d"] = past_str
+
+    # ── Per-interval computation ─────────────────────────────────────────────
+    summary_row = {'date': today_str}
+    detail_base = df_today.copy()
+    detail_base['tuik_category'] = detail_base['category'].apply(migros_category_to_tuik)
+
+    for label, past_str in intervals.items():
+        df_past = _load_csv(past_str)
+
+        if df_past is None:
+            logger.info(f"Skipping interval {label} – no data for {past_str}.")
+            detail_base[f'basic_inflation_{label}'] = None
+            summary_row[f'avg_inflation_{label}'] = None
+            summary_row[f'tuik_weighted_{label}'] = None
             continue
-            
-        logger.info(f"Loading historical data from {days} days ago: {past_file}")
-        try:
-            df_past = pd.read_csv(past_file)
-            df_past['shown_price'] = pd.to_numeric(df_past['shown_price'], errors='coerce')
-            
-            # Keep only id and shown_price for merging
-            df_past_subset = df_past[['id', 'shown_price']].rename(columns={'shown_price': f'past_price_{days}d'})
-            
-            # Merge on product id
-            df_today = df_today.merge(df_past_subset, on='id', how='left')
-            
-            # Calculate percentage change: ((current - past) / past) * 100
-            df_today[col_name] = ((df_today['shown_price'] - df_today[f'past_price_{days}d']) / df_today[f'past_price_{days}d']) * 100
-            
-            # Calculate average inflation for the day (excluding NaNs and infinities)
-            avg_inflation = df_today[col_name].replace([float('inf'), float('-inf')], pd.NA).mean()
-            summary_data[f"avg_{col_name}"] = [avg_inflation]
-            
-            # Drop the intermediate historical price column
-            df_today = df_today.drop(columns=[f'past_price_{days}d'])
-            
-        except Exception as e:
-            logger.error(f"Error processing historical data {past_file}: {e}")
-            df_today[col_name] = None
-            summary_data[f"avg_{col_name}"] = [None]
 
-    # Output to the Inflations/Datas hierarchy
-    project_inflations_dir = Path(__file__).resolve().parent.parent.parent.parent
-    inflation_dir = project_inflations_dir / "Datas" / "Markets" / "Migros"
-    inflation_dir.mkdir(parents=True, exist_ok=True)
+        merged, basic_idx, avg_inf, tuik_w = _compute_metrics(df_today, df_past)
 
-    # Save detailed data
-    output_inflation_file = inflation_dir / f"migros_inflation_{today_str}.csv"
-    df_today.to_csv(output_inflation_file, index=False, encoding='utf-8')
-    logger.info(f"Saved detailed inflation data to: {output_inflation_file}")
-    
-    # Save/Append summary data
-    summary_file = inflation_dir / "inflation_summary.csv"
-    df_summary = pd.DataFrame(summary_data)
-    
+        # Attach per-product basic inflation to detail frame
+        detail_base = detail_base.merge(
+            merged[['id', 'basic_inflation']].rename(columns={'basic_inflation': f'basic_inflation_{label}'}),
+            on='id', how='left'
+        )
+
+        summary_row[f'avg_inflation_{label}'] = avg_inf
+        summary_row[f'tuik_weighted_{label}'] = tuik_w
+
+    # ── Save detailed data ───────────────────────────────────────────────────
+    detail_file = INFLATION_OUT_DIR / f"migros_inflation_{today_str}.csv"
+    detail_base.to_csv(detail_file, index=False, encoding='utf-8')
+    logger.info(f"Saved detailed inflation data to: {detail_file}")
+
+    # ── Save / update summary ────────────────────────────────────────────────
+    summary_file = INFLATION_OUT_DIR / "inflation_summary.csv"
+    df_summary = pd.DataFrame([summary_row])
+
     try:
         if summary_file.exists():
             df_existing = pd.read_csv(summary_file)
-            # Remove any existing entry for today's date
             df_existing = df_existing[df_existing['date'] != today_str]
-            # Append new data
             df_final = pd.concat([df_existing, df_summary], ignore_index=True)
             df_final.to_csv(summary_file, index=False, encoding='utf-8')
-            logger.info(f"Updated daily inflation summary in: {summary_file}")
+            logger.info(f"Updated inflation summary in: {summary_file}")
         else:
             df_summary.to_csv(summary_file, index=False, encoding='utf-8')
-            logger.info(f"Created daily inflation summary in: {summary_file}")
+            logger.info(f"Created inflation summary in: {summary_file}")
     except Exception as e:
         logger.error(f"Failed to write summary file: {e}")
 
+
 if __name__ == "__main__":
     import argparse
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--date", help="Target date in YYYY-MM-DD format", default=None)
+    parser = argparse.ArgumentParser(description="Migros inflation calculator")
+    parser.add_argument("--date", help="Target (current) date in YYYY-MM-DD format", default=None)
+    parser.add_argument("--compare", help="Comparison (past) date in YYYY-MM-DD format", default=None)
     args = parser.parse_args()
 
-    # Configure basic logging for standalone execution
     logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
-    calculate_inflation(args.date)
+    calculate_inflation(args.date, args.compare)
