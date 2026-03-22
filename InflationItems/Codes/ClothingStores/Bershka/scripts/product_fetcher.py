@@ -256,5 +256,8 @@ def fetch_products_for_category(
         seen_ids.add(pid)
         records.append(record)
 
-    time.sleep(delay * random.uniform(0.5, 1.5))
+    # Normal distribution sleep (mean = config.REQUEST_DELAY, stdev = 0.5)
+    # Ensure delay is at least 0.1s to avoid negative values
+    final_delay = max(0.1, random.normalvariate(config.REQUEST_DELAY, 0.5))
+    time.sleep(final_delay)
     return records

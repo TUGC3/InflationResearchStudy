@@ -288,9 +288,9 @@ def _build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--workers",
         type=int,
-        default=1,
+        default=5,
         metavar="N",
-        help="Number of parallel category workers (default: 1).",
+        help="Number of parallel category workers (default: 5).",
     )
     parser.add_argument(
         "--delay",
