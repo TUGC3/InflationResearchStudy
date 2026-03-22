@@ -100,7 +100,8 @@ def _wait_for_listings(driver: WebDriver) -> BeautifulSoup:
     Retries several times before assuming CAPTCHA/login wall.
     """
     # Initial wait for page to start rendering
-    time.sleep(config.PAGE_LOAD_DELAY)
+    load_delay = max(config.PAGE_LOAD_FLOOR, random.normalvariate(config.PAGE_LOAD_DELAY, config.PAGE_LOAD_STDEV))
+    time.sleep(load_delay)
 
     # Poll for listings up to max_retries times
     max_retries = 5
@@ -171,7 +172,8 @@ def scrape_range(
         f"&price_min={min_price}&price_max={max_price}"
     )
     sb.execute_script(f"window.location.href = '{url}';")
-    time.sleep(config.PAGE_LOAD_DELAY)
+    load_delay = max(config.PAGE_LOAD_FLOOR, random.normalvariate(config.PAGE_LOAD_DELAY, config.PAGE_LOAD_STDEV))
+    time.sleep(load_delay)
 
     soup = _wait_for_listings(sb.driver)
     total_listings = _extract_total_listings(soup)
@@ -237,9 +239,13 @@ def scrape_range(
             next_btn = soup.find("a", title="Sonraki")
             next_url = "https://www.sahibinden.com" + next_btn["href"]
             sb.execute_script(f"window.location.href = '{next_url}';")
-            time.sleep(config.PAGE_LOAD_DELAY)
+            # Page load delay
+            load_delay = max(config.PAGE_LOAD_FLOOR, random.normalvariate(config.PAGE_LOAD_DELAY, config.PAGE_LOAD_STDEV))
+            time.sleep(load_delay)
             page_num += 1
-            time.sleep(random.uniform(config.PAGE_TURN_DELAY_MIN, config.PAGE_TURN_DELAY_MAX))
+            # "Human" random wait
+            turn_delay = max(config.PAGE_TURN_DELAY_FLOOR, random.normalvariate(config.PAGE_TURN_DELAY_MEAN, config.PAGE_TURN_DELAY_STDEV))
+            time.sleep(turn_delay)
             soup = _wait_for_listings(sb.driver)
 
             if rooms_idx is None:

@@ -61,9 +61,12 @@ MIN_BRACKET_WIDTH = 50
 
 # -- Request / Timing Settings ---------------------------------------------
 PAGE_SIZE              = 50
-PAGE_LOAD_DELAY        = 2.5
-PAGE_TURN_DELAY_MIN    = 2.0
-PAGE_TURN_DELAY_MAX    = 4.0
+PAGE_LOAD_DELAY        = 1.5   # Mean page load wait
+PAGE_LOAD_STDEV        = 0.5
+PAGE_LOAD_FLOOR        = 0.8
+PAGE_TURN_DELAY_MEAN   = 2.2
+PAGE_TURN_DELAY_STDEV  = 0.8
+PAGE_TURN_DELAY_FLOOR  = 1.4
 BETWEEN_BRACKET_DELAY_MIN = 1.0
 BETWEEN_BRACKET_DELAY_MAX = 2.0
 BETWEEN_CITY_DELAY_MIN    = 3.0

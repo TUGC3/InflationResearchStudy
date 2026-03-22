@@ -154,8 +154,10 @@ def fetch_products_for_category(category_dict, session=None, limit_pages=0):
         last_page_skus = current_page_skus
         page += 1
         
-        delay = adaptive_delay * random.uniform(config.JITTER_MIN, config.JITTER_MAX)
-        time.sleep(delay)
+        # Normal distribution sleep (mean = config.REQUEST_DELAY, stdev = 0.4)
+        # Ensure delay is at least 0.5s to avoid negative values or too fast scraping
+        final_delay = max(0.5, random.normalvariate(config.REQUEST_DELAY, 0.4))
+        time.sleep(final_delay)
         
     logger.info(f"[{name}] Completed. Found {len(products)} products across {page-1} pages.")
     return products

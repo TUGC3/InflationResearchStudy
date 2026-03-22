@@ -6,7 +6,10 @@ import os
 
 BASE_URL = "https://www.hapeloglu.com"
 PRODUCTS_PER_PAGE = 80
-REQUEST_DELAY = 1.5       # seconds between requests
+REQUEST_DELAY = 1.5       # seconds between requests (mean)
+REQUEST_STDEV = 0.4
+REQUEST_FLOOR = 0.9
+DEFAULT_WORKERS = 3
 MAX_RETRIES = 3
 
 # Resolve path relative to this file's location:

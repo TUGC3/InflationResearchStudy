@@ -112,11 +112,25 @@ def scrape_category(category_name: str, category_slug: str, session) -> list[dic
 
 def scrape_all() -> pd.DataFrame:
     """Scrape every category, deduplicate, return DataFrame."""
+    from concurrent.futures import ThreadPoolExecutor, as_completed
+    from src.config import DEFAULT_WORKERS
+    
     session = create_session()
     all_products = []
 
-    for name, slug in CATEGORIES.items():
-        all_products.extend(scrape_category(name, slug, session))
+    # Use ThreadPoolExecutor for parallel category scraping
+    with ThreadPoolExecutor(max_workers=DEFAULT_WORKERS) as executor:
+        future_to_cat = {
+            executor.submit(scrape_category, name, slug, session): name 
+            for name, slug in CATEGORIES.items()
+        }
+        
+        for future in as_completed(future_to_cat):
+            cat_name = future_to_cat[future]
+            try:
+                all_products.extend(future.result())
+            except Exception as exc:
+                logger.error(f"Category {cat_name} generated an exception: {exc}")
 
     session.close()
 

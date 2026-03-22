@@ -16,13 +16,13 @@ DEFAULT_HEADERS = {
 
 BASE_URL = "https://www.nalburadam.com"
 
-REQUEST_DELAY = 1.5  # Base delay between requests
+REQUEST_DELAY = 1.2  # Base delay between requests (mean)
 JITTER_MIN = 1.0     # Jitter multiplier min
 JITTER_MAX = 2.0     # Jitter multiplier max
 MAX_RETRIES = 5      # Retry attempts for failed requests
 RETRY_BACKOFF = 3    # Exponential backoff seed
 
-DEFAULT_WORKERS = 2  # Number of parallel workers
+DEFAULT_WORKERS = 4  # Number of parallel workers
 
 # --- Paths ---
 SCRIPTS_DIR = os.path.dirname(os.path.abspath(__file__))
