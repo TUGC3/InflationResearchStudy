@@ -101,7 +101,7 @@ def run(args: argparse.Namespace) -> None:
                         checkpoint["scraped_urls"] = list(scraped_urls)
                         _save_checkpoint(checkpoint)
 
-                        time.sleep(random.uniform(1, 3))
+                        #time.sleep(random.uniform(1, 3))
 
                 bracket_complete = True
                 completed_brackets.add((seed_min, seed_max))
