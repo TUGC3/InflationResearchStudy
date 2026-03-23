@@ -19,7 +19,9 @@ import os
 import sys
 import time
 import random
+import threading
 from functools import partial
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
 from seleniumbase import SB
 
@@ -34,7 +36,8 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
-# -- Checkpoint helpers ----------------------------------------------------
+_checkpoint_lock = threading.Lock()
+_total_lock      = threading.Lock()
 
 def _load_checkpoint() -> dict:
     cp_file = config.get_checkpoint_file()
@@ -45,9 +48,10 @@ def _load_checkpoint() -> dict:
 
 
 def _save_checkpoint(data: dict) -> None:
-    os.makedirs(config.CHECKPOINT_DIR, exist_ok=True)
-    with open(config.get_checkpoint_file(), "w", encoding="utf-8") as f:
-        json.dump(data, f, ensure_ascii=False, indent=2)
+    with _checkpoint_lock:
+        os.makedirs(config.CHECKPOINT_DIR, exist_ok=True)
+        with open(config.get_checkpoint_file(), "w", encoding="utf-8") as f:
+            json.dump(data, f, ensure_ascii=False, indent=2)
 
 
 # -- Main run --------------------------------------------------------------
@@ -97,11 +101,17 @@ def run(args: argparse.Namespace) -> None:
         len(cities_to_scrape), len(done_ranges),
     )
 
-    # -- SeleniumBase context manager handles driver lifecycle --------------
-    with SB(uc=True, headed=True, page_load_strategy="eager", user_data_dir=config.SELENIUM_PROFILE_DIR) as sb:
-        grand_total = 0
+    logger.info(
+        "Starting stable serial scrape for %d city/cities (%d ranges already completed)...",
+        len(cities_to_scrape), len(done_ranges),
+    )
 
-        for city_cfg in cities_to_scrape:
+    grand_total = 0
+    # Single SB instance for all cities - use base profile for stability
+    # Extra optimization flags: disable-gpu, disable-dev-shm-usage, ad_block_on=True, headless=True
+    with SB(uc=True, headless=True, page_load_strategy="eager", user_data_dir=config.SELENIUM_PROFILE_DIR, 
+            block_images=True, ad_block_on=True) as sb:
+        for city_idx, city_cfg in enumerate(cities_to_scrape, 1):
             city_name = city_cfg["name"]
             city_slug = city_cfg["url_slug"]
             seed_ranges = city_cfg["seed_ranges"]
@@ -110,48 +120,45 @@ def run(args: argparse.Namespace) -> None:
                 logger.info("\u21a9  City '%s' already completed. Skipping.", city_name)
                 continue
 
-            logger.info(
-                "\n" + "=" * 60 +
-                "\n   \U0001f3d8\ufe0f  Scraping %s (%d seed ranges)" +
-                "\n" + "=" * 60,
-                city_name, len(seed_ranges),
-            )
+            logger.info(f"[PROGRESS] [{city_idx}/{len(cities_to_scrape)}] {city_name} | starting...")
 
             city_total = 0
             city_save_fn = partial(save_incremental, city_name)
+            
+            try:
+                for seed_min, seed_max in seed_ranges:
+                    saved = scrape_range(
+                        sb=sb,
+                        city_url_slug=city_slug,
+                        min_price=seed_min,
+                        max_price=seed_max,
+                        done_ranges=done_ranges,
+                        save_fn=city_save_fn,
+                        save_checkpoint_fn=mark_range_done,
+                        indent=0,
+                    )
+                    city_total += saved
 
-            for seed_min, seed_max in seed_ranges:
-                saved = scrape_range(
-                    sb=sb,
-                    city_url_slug=city_slug,
-                    min_price=seed_min,
-                    max_price=seed_max,
-                    done_ranges=done_ranges,
-                    save_fn=city_save_fn,
-                    save_checkpoint_fn=mark_range_done,
-                    indent=0,
-                )
-                city_total += saved
+                    delay = max(config.BETWEEN_BRACKET_DELAY_FLOOR, random.normalvariate(config.BETWEEN_BRACKET_DELAY_MEAN, config.BETWEEN_BRACKET_DELAY_STDEV))
+                    time.sleep(delay)
 
-                time.sleep(random.uniform(
-                    config.BETWEEN_BRACKET_DELAY_MIN,
-                    config.BETWEEN_BRACKET_DELAY_MAX,
-                ))
+                mark_city_done(city_slug)
+                grand_total += city_total
+                logger.info(f"Finished {city_name}: {city_total} items.")
+                logger.info(f"[ITEMS] {grand_total} items collected so far")
 
-            mark_city_done(city_slug)
-            grand_total += city_total
+                # Delay between cities
+                if city_cfg != cities_to_scrape[-1]:
+                    delay = max(config.BETWEEN_CITY_DELAY_FLOOR, random.normalvariate(config.BETWEEN_CITY_DELAY_MEAN, config.BETWEEN_CITY_DELAY_STDEV))
+                    logger.info("   Waiting %.1fs before next city...", delay)
+                    time.sleep(delay)
 
-            logger.info(
-                "\u2705 %s complete! %d records saved to: %s",
-                city_name, city_total, config.get_city_csv_path(city_name),
-            )
+            except Exception as exc:
+                logger.error(f"City {city_name} failed with error: {exc}")
 
-            if city_cfg != cities_to_scrape[-1]:
-                delay = random.uniform(config.BETWEEN_CITY_DELAY_MIN, config.BETWEEN_CITY_DELAY_MAX)
-                logger.info("   Waiting %.1fs before next city...", delay)
-                time.sleep(delay)
+    logger.info("\n[DONE] %d items saved across all cities", grand_total)
 
-        logger.info("\n\u2728 Done! Total new records saved across all cities: %d", grand_total)
+    logger.info("\n[DONE] %d items saved across all cities", grand_total)
 
 
 # -- CLI -------------------------------------------------------------------

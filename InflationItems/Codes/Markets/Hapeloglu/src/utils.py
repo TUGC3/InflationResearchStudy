@@ -31,7 +31,7 @@ def setup_logger():
     logging.basicConfig(
         level=logging.INFO,
         format="%(asctime)s [%(levelname)s] %(message)s",
-        datefmt="%Y-%m-%d %H:%M:%S",
+        datefmt="%H:%M:%S",
     )
 
 
@@ -64,7 +64,13 @@ def fetch_page(url: str, session: curl_requests.Session) -> Optional[BeautifulSo
     """GET a page with retries and polite delay."""
     for attempt in range(1, MAX_RETRIES + 1):
         try:
-            time.sleep(REQUEST_DELAY)
+            # Normal distribution sleep (mean = config.REQUEST_DELAY, stdev = config.REQUEST_STDEV)
+            # Ensure delay is at least config.REQUEST_FLOOR
+            import random
+            from src import config as cfg
+            delay = max(cfg.REQUEST_FLOOR, random.normalvariate(cfg.REQUEST_DELAY, cfg.REQUEST_STDEV))
+            time.sleep(delay)
+            
             response = session.get(url, headers=HEADERS, timeout=15)
             response.raise_for_status()
             soup = BeautifulSoup(response.text, "html.parser")
@@ -81,7 +87,7 @@ def fetch_page(url: str, session: curl_requests.Session) -> Optional[BeautifulSo
         except Exception as e:
             logger.warning(f"  Attempt {attempt}/{MAX_RETRIES} failed for {url}: {e}")
             if attempt < MAX_RETRIES:
-                time.sleep(REQUEST_DELAY * attempt)
+                time.sleep(cfg.RETRY_BACKOFF * attempt)
 
     logger.error(f"  FAILED after {MAX_RETRIES} attempts: {url}")
     return None

@@ -134,8 +134,14 @@ def get_products_detail(
         )
         data = _request_with_retry(session, url)
         if data is not None:
-            all_products.extend(data.get("products", []))
-        time.sleep(0.3)
+            batch_prods = data.get("products", [])
+            all_products.extend(batch_prods)
+            logger.info(f"  Page {i//config.BATCH_SIZE + 1}: {len(batch_prods)} items")
+        
+        # Jittered delay with floor
+        import random
+        sleep_time = max(config.DELAY_FLOOR, random.normalvariate(config.REQUEST_DELAY, config.REQUEST_STDEV))
+        time.sleep(sleep_time)
     return all_products
 
 
@@ -256,5 +262,8 @@ def fetch_products_for_category(
         seen_ids.add(pid)
         records.append(record)
 
-    time.sleep(delay * random.uniform(0.5, 1.5))
+    # Normal distribution sleep (mean = config.REQUEST_DELAY, stdev = 0.5)
+    # Ensure delay is at least 0.1s to avoid negative values
+    final_delay = max(0.3, random.normalvariate(config.REQUEST_DELAY, 0.5))
+    time.sleep(final_delay)
     return records

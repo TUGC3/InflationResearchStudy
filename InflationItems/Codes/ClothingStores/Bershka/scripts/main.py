@@ -41,7 +41,6 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 
 import pandas as pd
 from curl_cffi import requests
-from tqdm import tqdm
 
 import config
 from category_fetcher import fetch_categories
@@ -58,6 +57,7 @@ logger = logging.getLogger(__name__)
 _csv_lock     = threading.Lock()
 _counter_lock = threading.Lock()
 _seen_lock    = threading.Lock()
+_progress_lock = threading.Lock()
 
 # Global set of product_ids already collected — used for live deduplication
 # across categories processed by different workers.
@@ -137,8 +137,9 @@ def _make_session() -> requests.Session:
 def _worker_scrape_chunk(
     chunk: list[dict],
     delay: float,
-    pbar: tqdm,
-    counter: list,  # mutable list holding [total_products]
+    counter: list,  # mutable list holding [total_items]
+    prog_counter: list, # mutable list holding [completed_categories]
+    total_cats: int,
 ) -> None:
     """
     Scrape a chunk of categories on a single thread with one reusable session.
@@ -150,6 +151,7 @@ def _worker_scrape_chunk(
     session = _make_session()
 
     for cat in chunk:
+        logger.info(f"Starting {cat['name']}...")
         try:
             cat_products = fetch_products_for_category(
                 category=cat,
@@ -170,13 +172,14 @@ def _worker_scrape_chunk(
             with _counter_lock:
                 counter[0] += len(unique_products)
 
-        pbar.set_postfix_str(cat["name"])
-        pbar.update(1)
+            prog_counter[0] += 1
+            logger.info(f"[PROGRESS] [{prog_counter[0]}/{total_cats}] {cat['name']} | +{len(unique_products)} items")
+            logger.info(f"[ITEMS] {counter[0]} items collected so far")
 
         if unique_products:
             skip_msg = f" ({skipped} dupes skipped)" if skipped else ""
             logger.info(
-                "Category '%s': +%d new products%s (total unique so far: %d)",
+                "Category '%s' | +%d items%s (total: %d)",
                 cat["name"], len(unique_products), skip_msg, counter[0],
             )
         elif cat_products:
@@ -236,32 +239,34 @@ def run_scraper(args: argparse.Namespace) -> None:
     )
 
 
-    # 5. Partition categories into chunks (one per worker) for session reuse
+    # Partition categories into chunks (one per worker) for session reuse
     chunks = [[] for _ in range(n_workers)]
     for i, cat in enumerate(categories_to_scrape):
         chunks[i % n_workers].append(cat)
 
-    with tqdm(total=len(categories_to_scrape), unit="category", desc="Categories") as pbar:
-        with ThreadPoolExecutor(max_workers=n_workers) as executor:
-            futures = []
-            for chunk in chunks:
-                future = executor.submit(
-                    _worker_scrape_chunk, chunk, args.delay, pbar, counter
-                )
-                futures.append(future)
+    total_cats = len(categories_to_scrape)
+    prog_counter = [0]
 
-            # Wait for all workers and propagate exceptions
-            for future in as_completed(futures):
-                try:
-                    future.result()
-                except Exception as exc:
-                    logger.error("Worker failed: %s", exc)
+    with ThreadPoolExecutor(max_workers=n_workers) as executor:
+        futures = []
+        for chunk in chunks:
+            future = executor.submit(
+                _worker_scrape_chunk, chunk, args.delay, counter, prog_counter, total_cats
+            )
+            futures.append(future)
+
+        # Wait for all workers and propagate exceptions
+        for future in as_completed(futures):
+            try:
+                future.result()
+            except Exception as exc:
+                logger.error("Worker failed: %s", exc)
 
     # 5. Final deduplication pass (safety net — live dedup should catch most)
     logger.info("Running final deduplication…")
     final_count = _dedup_csv()
-    logger.info("Done! ✓  Total unique products: %d", final_count)
-    logger.info("Output → %s", config.CSV_OUTPUT_FILE)
+    logger.info("[DONE] %d items saved to %s", final_count, config.CSV_OUTPUT_FILE)
+    logger.info("All done!")
 
 
 
@@ -288,9 +293,9 @@ def _build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--workers",
         type=int,
-        default=1,
+        default=12,
         metavar="N",
-        help="Number of parallel category workers (default: 1).",
+        help="Number of parallel category workers (default: 12).",
     )
     parser.add_argument(
         "--delay",

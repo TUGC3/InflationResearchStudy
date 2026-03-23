@@ -61,13 +61,18 @@ MIN_BRACKET_WIDTH = 50
 
 # -- Request / Timing Settings ---------------------------------------------
 PAGE_SIZE              = 50
-PAGE_LOAD_DELAY        = 2.5
-PAGE_TURN_DELAY_MIN    = 2.0
-PAGE_TURN_DELAY_MAX    = 4.0
-BETWEEN_BRACKET_DELAY_MIN = 1.0
-BETWEEN_BRACKET_DELAY_MAX = 2.0
-BETWEEN_CITY_DELAY_MIN    = 3.0
-BETWEEN_CITY_DELAY_MAX    = 6.0
+PAGE_LOAD_DELAY        = 0.2   # Mean page load wait
+PAGE_LOAD_STDEV        = 0.4
+PAGE_LOAD_FLOOR        = 0.05
+PAGE_TURN_DELAY_MEAN   = 0.2
+PAGE_TURN_DELAY_STDEV  = 0.4
+PAGE_TURN_DELAY_FLOOR  = 0.05
+BETWEEN_BRACKET_DELAY_MEAN = 0.6
+BETWEEN_BRACKET_DELAY_STDEV = 0.4
+BETWEEN_BRACKET_DELAY_FLOOR = 0.05
+BETWEEN_CITY_DELAY_MEAN    = 0.9
+BETWEEN_CITY_DELAY_STDEV   = 1.0
+BETWEEN_CITY_DELAY_FLOOR   = 0.05
 
 # -- Output Settings -------------------------------------------------------
 TODAY = _dt.date.today().strftime("%Y-%m-%d")
@@ -84,6 +89,11 @@ def get_city_csv_path(city_name: str) -> str:
 
 def get_checkpoint_file() -> str:
     return str(_Path(CHECKPOINT_DIR) / f"checkpoint_{TODAY}.json")
+
+
+def get_city_profile_dir(city_name: str) -> str:
+    return str(_Path(SELENIUM_PROFILE_DIR) / city_name.lower())
+
 
 # -- Browser Settings ------------------------------------------------------
 SELENIUM_PROFILE_DIR = str(_SCRAPER_DIR / "SeleniumProfile")

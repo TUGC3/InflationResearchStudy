@@ -4,6 +4,7 @@ Loops categories, handles pagination, extracts product data.
 """
 
 import logging
+import threading
 
 import pandas as pd
 
@@ -84,7 +85,7 @@ def scrape_category(category_name: str, category_slug: str, session) -> list[dic
             break
 
         page_products = extract_products_from_page(soup, category_name)
-        logger.info(f"  Page {page}: {len(page_products)} products")
+        logger.info(f"  Page {page}: {len(page_products)} items")
 
         if not page_products:
             break
@@ -106,17 +107,39 @@ def scrape_category(category_name: str, category_slug: str, session) -> list[dic
 
         page += 1
 
-    logger.info(f"  Total: {len(all_products)} from {category_name} ({page} pages)\n")
+    logger.info(f"  Total: {len(all_products)} items from {category_name} ({page} pages)")
     return all_products
 
 
 def scrape_all() -> pd.DataFrame:
     """Scrape every category, deduplicate, return DataFrame."""
+    from concurrent.futures import ThreadPoolExecutor, as_completed
+    from src.config import DEFAULT_WORKERS
+    
     session = create_session()
     all_products = []
+    total_cats = len(CATEGORIES)
+    completed_count = [0]
+    count_lock = threading.Lock()
 
-    for name, slug in CATEGORIES.items():
-        all_products.extend(scrape_category(name, slug, session))
+    # Use ThreadPoolExecutor for parallel category scraping
+    with ThreadPoolExecutor(max_workers=DEFAULT_WORKERS) as executor:
+        future_to_cat = {
+            executor.submit(scrape_category, name, slug, session): name 
+            for name, slug in CATEGORIES.items()
+        }
+        
+        for future in as_completed(future_to_cat):
+            cat_name = future_to_cat[future]
+            try:
+                results = future.result()
+                all_products.extend(results)
+                with count_lock:
+                    completed_count[0] += 1
+                    logger.info(f"[PROGRESS] [{completed_count[0]}/{total_cats}] {cat_name} | +{len(results)} items")
+                    logger.info(f"[ITEMS] {len(all_products)} items collected so far")
+            except Exception as exc:
+                logger.error(f"Category {cat_name} generated an exception: {exc}")
 
     session.close()
 
@@ -129,8 +152,8 @@ def scrape_all() -> pd.DataFrame:
     df = df.drop_duplicates(subset="product_id", keep="first")
     dupes = before - len(df)
     if dupes:
-        logger.info(f"Removed {dupes} duplicates ({before} -> {len(df)})")
+        logger.info(f"Removed {dupes} duplicate items ({before} -> {len(df)})")
 
     df = df.sort_values(["category", "name"]).reset_index(drop=True)
-    logger.info(f"DONE - {len(df)} unique products across {df['category'].nunique()} categories")
+    logger.info(f"[DONE] {len(df)} items across {df['category'].nunique()} categories")
     return df
