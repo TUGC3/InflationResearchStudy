@@ -47,11 +47,13 @@ DEFAULT_HEADERS = {
 }
 
 # ── Scraping Parameters ──────────────────────────────────────────────────────
-REQUEST_DELAY = 1.3        # Seconds between paginated requests (mean)
-MAX_RETRIES = 5            # Max retries on a failed request before skipping
-RETRY_BACKOFF = 3          # Retry backoff seed (actual wait = RETRY_BACKOFF × attempt)
+REQUEST_DELAY = 0.4        # Seconds between paginated requests (mean)
+REQUEST_STDEV = 0.4        # Standard deviation for jitter
+DELAY_FLOOR = 0.3          # Minimum delay
+MAX_RETRIES = 20           # Max retries on a failed request before skipping
+RETRY_BACKOFF = 4          # Retry backoff seed (actual wait = RETRY_BACKOFF × attempt)
 RATE_LIMIT_BACKOFF = 60    # Extra sleep when 429 / 403 is received
-BATCH_SIZE = 30            # Product IDs per batch request
+BATCH_SIZE = 100           # Product IDs per batch request
 
 # ── Output Settings ──────────────────────────────────────────────────────────
 import datetime as _dt

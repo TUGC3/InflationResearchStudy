@@ -31,7 +31,7 @@ def setup_logger():
     logging.basicConfig(
         level=logging.INFO,
         format="%(asctime)s [%(levelname)s] %(message)s",
-        datefmt="%Y-%m-%d %H:%M:%S",
+        datefmt="%H:%M:%S",
     )
 
 
@@ -87,7 +87,7 @@ def fetch_page(url: str, session: curl_requests.Session) -> Optional[BeautifulSo
         except Exception as e:
             logger.warning(f"  Attempt {attempt}/{MAX_RETRIES} failed for {url}: {e}")
             if attempt < MAX_RETRIES:
-                time.sleep(REQUEST_DELAY * attempt)
+                time.sleep(cfg.RETRY_BACKOFF * attempt)
 
     logger.error(f"  FAILED after {MAX_RETRIES} attempts: {url}")
     return None

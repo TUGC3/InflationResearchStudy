@@ -162,8 +162,8 @@ def scrape_range(
 
     width = max_price - min_price
     logger.info(
-        "%s\u25b6  Checking range %d-%d TL [%s]...",
-        pad, min_price, max_price, city_url_slug,
+        "  Checking range %d-%d TL [%s]...",
+        min_price, max_price, city_url_slug,
     )
 
     url = (
@@ -185,8 +185,8 @@ def scrape_range(
         and width > config.MIN_BRACKET_WIDTH
     ):
         logger.info(
-            "%s   \u2702\ufe0f Range too dense (%d listings). Splitting...",
-            pad, total_listings,
+            "  Range too dense (%d items). Splitting...",
+            total_listings,
         )
         mid = (min_price + max_price) // 2
         total_saved = 0
@@ -195,9 +195,8 @@ def scrape_range(
             sb, city_url_slug, min_price, mid,
             done_ranges, save_fn, save_checkpoint_fn, indent + 1,
         )
-        time.sleep(random.uniform(
-            config.BETWEEN_BRACKET_DELAY_MIN, config.BETWEEN_BRACKET_DELAY_MAX,
-        ))
+        delay = max(config.BETWEEN_BRACKET_DELAY_FLOOR, random.normalvariate(config.BETWEEN_BRACKET_DELAY_MEAN, config.BETWEEN_BRACKET_DELAY_STDEV))
+        time.sleep(delay)
         total_saved += scrape_range(
             sb, city_url_slug, mid + 1, max_price,
             done_ranges, save_fn, save_checkpoint_fn, indent + 1,
@@ -206,13 +205,13 @@ def scrape_range(
 
     elif total_listings is not None and total_listings > config.MAX_LISTINGS_PER_QUERY:
         logger.warning(
-            "%s   \u26a0 Min width reached (%d TL) but count (%d) over cap. Scraping capped.",
-            pad, width, total_listings,
+            "  Min width reached (%d TL) but count (%d) over cap. Scraping capped.",
+            width, total_listings,
         )
     elif total_listings is not None:
-        logger.info("%s   \u2713 Safe range (%d listings). Scraping all pages.", pad, total_listings)
+        logger.info("  Safe range (%d items). Scraping all pages.", total_listings)
     else:
-        logger.info("%s   ? Could not parse total count. Scraping anyway.", pad)
+        logger.info("  ? Could not parse total count. Scraping anyway.")
 
     # -- PERFORM ACTUAL SCRAPE --
     records: list[dict] = []
@@ -225,8 +224,8 @@ def scrape_range(
 
         if page_records:
             logger.info(
-                "%s     Page %2d: %2d listings (total so far: %d) | %d-%d TL [%s]",
-                pad, page_num, len(page_records), len(records),
+                "  Page %d: %d items (total so far: %d) | %d-%d TL [%s]",
+                page_num, len(page_records), len(records),
                 min_price, max_price, city_url_slug,
             )
 
@@ -256,8 +255,8 @@ def scrape_range(
     if records:
         save_fn(records)
         logger.info(
-            "%s\u2705 Saved %d records for %d-%d TL [%s].",
-            pad, len(records), min_price, max_price, city_url_slug,
+            "  Saved %d items for %d-%d TL [%s]",
+            len(records), min_price, max_price, city_url_slug,
         )
 
     save_checkpoint_fn(city_url_slug, min_price, max_price)

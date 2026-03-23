@@ -59,7 +59,7 @@ def main():
     logging.basicConfig(
         level=logging.DEBUG if args.verbose else logging.INFO,
         format='%(asctime)s [%(levelname)s] %(message)s',
-        datefmt='%Y-%m-%d %H:%M:%S'
+        datefmt='%H:%M:%S'
     )
     
     config.REQUEST_DELAY = args.delay
@@ -90,8 +90,8 @@ def main():
 
     all_products = []
     cats_to_scrape = [c for c in cats if c["id"] not in completed_ids]
-    cat_count = len(cats_to_scrape)
-    logger.info(f"Beginning scrape for {cat_count} categories using {args.workers} workers...")
+    total_cats = len(cats)
+    logger.info(f"Beginning scrape for {total_cats} categories using {args.workers} workers...")
 
     completed_count = 0
     count_lock = threading.Lock()
@@ -114,11 +114,12 @@ def main():
                 
                 with count_lock:
                     completed_count += 1
-                    logger.info(f"[{completed_count}/{cat_count}] Merged {len(cat_prods)} products from {cat['name']}")
+                    logger.info(f"[PROGRESS] [{completed_count}/{total_cats}] {cat['name']} | +{len(cat_prods)} items")
+                    logger.info(f"[ITEMS] {len(all_products)} items collected so far")
                     
-                    if completed_count % checkpoint_interval == 0 or completed_count == cat_count:
+                    if completed_count % checkpoint_interval == 0 or completed_count == total_cats:
                         save_checkpoint(checkpoint_file, completed_ids)
-                        logger.info(f"Checkpoint saved: {completed_count}/{cat_count} categories completed")
+                        logger.info(f"Checkpoint saved: {completed_count}/{total_cats} categories completed")
                     
             except Exception as exc:
                 logger.error(f"Category {cat['id']} generated an exception: {exc}")
@@ -134,6 +135,7 @@ def main():
     csv_path = os.path.join(config.OUTPUT_DIR, f"{base_name}.csv")
 
     save_csv(unique_products, csv_path)
+    logger.info(f"[DONE] {len(list(unique_products))} items saved to {csv_path}")
 
 if __name__ == "__main__":
     main()

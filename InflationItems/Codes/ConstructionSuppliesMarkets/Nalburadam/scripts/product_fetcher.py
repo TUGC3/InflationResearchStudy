@@ -50,11 +50,11 @@ def fetch_products_for_category(category_dict, session=None, limit_pages=0):
     consecutive_successes = 0
     consecutive_429s = 0
     
-    logger.info(f"[{name}] Starting scrape from {cat_url}")
+    logger.info(f"Starting {name}...")
     
     while True:
         if limit_pages > 0 and page > limit_pages:
-            logger.info(f"[{name}] Reached limit of {limit_pages} pages.")
+            logger.info(f"Reached limit of {limit_pages} pages for {name}.")
             break
             
         url = f"{cat_url}?sayfa={page}" if page > 1 else cat_url
@@ -86,7 +86,7 @@ def fetch_products_for_category(category_dict, session=None, limit_pages=0):
         
         items = soup.select('.showcase')
         if not items:
-            logger.info(f"[{name}] No items found on page {page}. Ending pagination.")
+            logger.info(f"Page {page}: 0 items from {name}. Ending.")
             break
             
         current_page_skus = set()
@@ -140,11 +140,14 @@ def fetch_products_for_category(category_dict, session=None, limit_pages=0):
             })
             new_products_found = True
             
+        if items:
+            logger.info(f"  Page {page}: {len(items)} items")
+            
         # Stop condition
         # If the page contents exactly match the previous page, we've likely hit the end 
         # (some sites return last page repeatedly)
         if current_page_skus == last_page_skus or not new_products_found:
-            logger.info(f"[{name}] Page {page} has same items as previous or empty. Ending.")
+            logger.info(f"Page {page}: same items as previous for {name}. Ending.")
             break
             
         # Nalburadam custom validation: verify if sayfa parameter effectively worked
@@ -155,9 +158,9 @@ def fetch_products_for_category(category_dict, session=None, limit_pages=0):
         page += 1
         
         # Normal distribution sleep (mean = config.REQUEST_DELAY, stdev = 0.4)
-        # Ensure delay is at least 0.5s to avoid negative values or too fast scraping
-        final_delay = max(0.5, random.normalvariate(config.REQUEST_DELAY, 0.4))
+        # Ensure delay is at least config.REQUEST_FLOOR to avoid negative values or too fast scraping
+        final_delay = max(config.REQUEST_FLOOR, random.normalvariate(config.REQUEST_DELAY, 0.4))
         time.sleep(final_delay)
         
-    logger.info(f"[{name}] Completed. Found {len(products)} products across {page-1} pages.")
+    logger.info(f"{name} | {len(products)} items across {page-1} pages")
     return products

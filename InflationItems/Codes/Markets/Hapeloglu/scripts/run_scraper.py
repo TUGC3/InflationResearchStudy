@@ -35,7 +35,7 @@ def main():
     # Save CSV
     df.to_csv(filepath, index=False, encoding="utf-8-sig")
 
-    print(f"\nDone! {len(df)} products -> {filepath}")
+    print(f"\n[DONE] {len(df)} items saved to {filepath}")
 
 
 if __name__ == "__main__":
