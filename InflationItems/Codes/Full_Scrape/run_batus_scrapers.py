@@ -100,17 +100,44 @@ def count_items_from_log(lines):
         if m: return int(m.group(1))
     return 0
 
-def find_output_file(lines):
-    """Extract the output file path from log lines."""
-    for line in reversed(lines):
-        clean = strip_ansi(line)
-        # Universal: "[DONE] X items saved to /path/to/file.csv"
-        m = re.search(r"\[DONE\].*?(/[^\s]+\.csv)", clean)
-        if m: return m.group(1)
-        # Fallback
-        m = re.search(r"(?:Output|Saved|->|→).*?(/Users/[^\s]+\.csv)", clean)
-        if m: return m.group(1)
-    return None
+def get_historical_stats(name, codes_dir):
+    """Scan the last 7 days of CSVs to calculate the average item count baseline."""
+    project_root = os.path.dirname(codes_dir)
+    datas_root = os.path.join(project_root, "Datas")
+    
+    patterns = {
+        "Nalburadam": os.path.join(datas_root, "ConstructionSuppliesMarkets", "Nalburadam", "nalburadam_*.csv"),
+        "Bershka":    os.path.join(datas_root, "ClothingStores", "Bershka", "ProductData", "bershka_*.csv"),
+        "Hapeloglu":  os.path.join(datas_root, "Markets", "Hapeloglu", "hapeloglu_*.csv"),
+        "EEB":        os.path.join(datas_root, "HousesRent", "ErzurumErzincanBayburt", "*", "*_*.csv")
+    }
+    
+    if name not in patterns: return 0
+    files = glob.glob(patterns[name])
+    today_str = datetime.now().strftime("%Y-%m-%d")
+    
+    # date_str -> total_items
+    daily_totals = {}
+    for f in files:
+        match = re.search(r"(\d{4}-\d{2}-\d{2})", os.path.basename(f))
+        if not match: continue
+        f_date = match.group(1)
+        if f_date == today_str: continue 
+        
+        try:
+            dt = datetime.strptime(f_date, "%Y-%m-%d")
+            if (datetime.now() - dt).days > 7: continue
+        except: continue
+        
+        # Count lines minus header
+        try:
+            with open(f, 'r', encoding='utf-8', errors='ignore') as fh:
+                count = sum(1 for _ in fh) - 1
+                daily_totals[f_date] = daily_totals.get(f_date, 0) + max(0, count)
+        except: continue
+        
+    if not daily_totals: return 0
+    return sum(daily_totals.values()) / len(daily_totals)
 
 def strip_ansi(text):
     return re.sub(r'\033\[[0-9;]*m', '', text)
@@ -280,22 +307,26 @@ def main():
     print(f"{WHITE}╠{'═' * (CARD_WIDTH - 2)}╣{RESET}")
     print(format_row(f"Total Duration: {YELLOW}{str(final_time).split('.')[0]}{RESET}", "", width=CARD_WIDTH))
     print(f"{WHITE}╠{'═' * (CARD_WIDTH - 2)}╣{RESET}")
-    print(format_row(f"{'Scraper':15} {'Status':10} {'Items':>8}   {'Duration':>10}   {'Output'}", "", width=CARD_WIDTH))
+    print(format_row(f"{'Scraper':12} {'Status':8} {'Items':>8}  {'7d Avg':>8}  {'Var':>5}  {'Dur'}", "", width=CARD_WIDTH))
     print(f"{WHITE}╠{'═' * (CARD_WIDTH - 2)}╣{RESET}")
     total_items = 0
     for d in processes:
         all_lines = get_last_lines_fast(d["log"], num_bytes=16384)
         items = count_items_from_log(all_lines)
         total_items += items
-        out_file = find_output_file(all_lines)
-        out_base = os.path.basename(out_file) if out_file else "-"
-        out_size = ""
-        if out_file and os.path.exists(out_file):
-            sz = os.path.getsize(out_file)
-            out_size = f" ({sz/1024:.0f} KB)" if sz < 1048576 else f" ({sz/1048576:.1f} MB)"
+        
+        # Historical Comparison
+        hist_avg = get_historical_stats(d["name"], codes_dir)
+        var_str = "-"
+        if hist_avg > 0:
+            var = (items / hist_avg - 1) * 100
+            var_color = GREEN if var > -5 else (YELLOW if var > -15 else RED)
+            var_str = f"{var_color}{var:+4.1f}%{RESET}"
+        
+        hist_str = f"{int(hist_avg):,}" if hist_avg > 0 else "-"
         dur = str((d['finish_time'] - start_time) if d.get('finish_time') else final_time).split('.')[0]
         res_str = f"{GREEN}OK{RESET}" if d["status"] == "COMPLETE" else f"{RED}FAIL{RESET}"
-        print(format_row(f"{d['name']:15} {res_str:>19} {CYAN}{items:>8,}{RESET}   {YELLOW}{dur:>10}{RESET}   {out_base}{out_size}", "", width=CARD_WIDTH))
+        print(format_row(f"{d['name']:12} {res_str:>17} {CYAN}{items:>8,}{RESET}  {WHITE}{hist_str:>8}{RESET}  {var_str:>14}  {YELLOW}{dur:>5}{RESET}", "", width=CARD_WIDTH))
     print(f"{WHITE}╠{'═' * (CARD_WIDTH - 2)}╣{RESET}")
     print(format_row(f"{BOLD}TOTAL ITEMS COLLECTED: {CYAN}{total_items:,}{RESET}", "", width=CARD_WIDTH))
     print(f"{WHITE}╚{'═' * (CARD_WIDTH - 2)}╝{RESET}\n")

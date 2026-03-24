@@ -109,7 +109,7 @@ def run(args: argparse.Namespace) -> None:
     grand_total = 0
     # Single SB instance for all cities - use base profile for stability
     # Extra optimization flags: disable-gpu, disable-dev-shm-usage, ad_block_on=True, headless=True
-    with SB(uc=True, headless=True, page_load_strategy="eager", user_data_dir=config.SELENIUM_PROFILE_DIR, 
+    with SB(uc=True, page_load_strategy="eager", user_data_dir=config.SELENIUM_PROFILE_DIR,
             block_images=True, ad_block_on=True) as sb:
         for city_idx, city_cfg in enumerate(cities_to_scrape, 1):
             city_name = city_cfg["name"]
