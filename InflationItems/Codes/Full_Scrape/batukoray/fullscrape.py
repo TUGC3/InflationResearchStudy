@@ -161,8 +161,9 @@ def format_row(content_left, content_right="", width=TABLE_WIDTH):
     return f"{WHITE}║ {RESET}{content_left}{padding}{content_right}{WHITE} ║{RESET}"
 
 def main():
+    # Pathing: script_dir is batukoraymasak, so we go up two levels to reach Codes/
     script_dir = os.path.dirname(os.path.abspath(__file__))
-    codes_dir = os.path.dirname(script_dir)
+    codes_dir = os.path.dirname(os.path.dirname(script_dir))
     logs_dir = os.path.join(script_dir, "batus_logs")
     os.makedirs(logs_dir, exist_ok=True)
     
