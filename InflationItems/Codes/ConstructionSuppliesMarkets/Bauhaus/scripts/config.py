@@ -118,6 +118,9 @@ RETRY_BACKOFF = 3    # Exponential backoff seed
 
 DEFAULT_WORKERS = 2  # Number of parallel workers
 
+MAX_403_RETRIES = 3    # Max retry rounds for 403-blocked categories
+COOLDOWN_BASE = 60     # Base cooldown in seconds (multiplied by retry round)
+
 # --- Paths ---
 # By default, save to InflationItems/Datas/ConstructionSuppliesMarkets/Datas/
 # Compute absolute paths relative to this config file's location to be robust

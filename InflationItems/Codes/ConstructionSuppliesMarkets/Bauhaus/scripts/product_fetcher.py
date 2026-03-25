@@ -110,6 +110,12 @@ import config
 
 logger = logging.getLogger(__name__)
 
+class BauhausBlockedException(Exception):
+    """Raised when the server returns 403 Forbidden, carrying any partial products."""
+    def __init__(self, message, products=None):
+        super().__init__(message)
+        self.products = products or []
+
 def create_session():
     """
     Creates a requests session configured with retry adapters and headers.
@@ -221,6 +227,9 @@ def fetch_products_for_category(category_dict, session=None, limit_pages=0):
                 page += 1
                 time.sleep(adaptive_delay)
                 continue
+            elif "403" in str(e):
+                logger.warning(f"⚠  [{name}] Blocked (403) on page {page}. Collected {len(products)} products before block.")
+                raise BauhausBlockedException(str(e), products=products)
             else:
                 break
             

@@ -275,37 +275,63 @@ def main():
     import time
     start_time = time.time()
 
-    # Create sessions for each worker
-    worker_sessions = [product_fetcher.create_session() for _ in range(args.workers)]
+    # Retry loop: when 403 blocks occur, save partial products, cooldown, and retry
+    retry_round = 0
+    pending_cats = list(cats_to_scrape)
 
-    with ThreadPoolExecutor(max_workers=args.workers) as executor:
-        # Assign each category a session based on worker index
-        future_to_cat = {}
-        for i, cat in enumerate(cats_to_scrape):
-            worker_session = worker_sessions[i % args.workers]
-            future = executor.submit(scrape_category_worker, cat, args.limit, worker_session, checkpoint_file, completed_ids)
-            future_to_cat[future] = cat
-            
-        for future in as_completed(future_to_cat):
-            cat = future_to_cat[future]
-            try:
-                cat_prods = future.result()
-                all_products.extend(cat_prods)
-                
-                with count_lock:
-                    completed_count += 1
-                    logger.info(f"✓  Category '{cat['name']}': +{len(cat_prods)} products (total: {len(all_products)})")
-                    
-                    # Batch checkpoint updates
-                    if completed_count % checkpoint_interval == 0 or completed_count == cat_count:
-                        save_checkpoint(checkpoint_file, completed_ids)
-                        logger.info(f"💾 Checkpoint saved: {completed_count}/{cat_count} categories completed")
-                    
-            except Exception as exc:
-                logger.error(f"✗  Category '{cat['id']}' failed: {exc}")
-        
-        # Final checkpoint save
+    while pending_cats and retry_round <= config.MAX_403_RETRIES:
+        # Create fresh sessions each round (important after a 403 block)
+        worker_sessions = [product_fetcher.create_session() for _ in range(args.workers)]
+
+        if retry_round > 0:
+            cooldown = config.COOLDOWN_BASE * retry_round
+            logger.info(f"⏳ 403 cooldown: waiting {cooldown}s before retry round {retry_round}/{config.MAX_403_RETRIES}…")
+            time.sleep(cooldown)
+            logger.info(f"🔄 Retrying {len(pending_cats)} blocked categories with fresh sessions…")
+
+        blocked_cats = []
+
+        with ThreadPoolExecutor(max_workers=args.workers) as executor:
+            future_to_cat = {}
+            for i, cat in enumerate(pending_cats):
+                worker_session = worker_sessions[i % args.workers]
+                future = executor.submit(scrape_category_worker, cat, args.limit, worker_session, checkpoint_file, completed_ids)
+                future_to_cat[future] = cat
+
+            for future in as_completed(future_to_cat):
+                cat = future_to_cat[future]
+                try:
+                    cat_prods = future.result()
+                    all_products.extend(cat_prods)
+
+                    with count_lock:
+                        completed_count += 1
+                        logger.info(f"✓  Category '{cat['name']}': +{len(cat_prods)} products (total: {len(all_products)})")
+
+                        if completed_count % checkpoint_interval == 0 or completed_count == cat_count:
+                            save_checkpoint(checkpoint_file, completed_ids)
+                            logger.info(f"💾 Checkpoint saved: {completed_count}/{cat_count} categories completed")
+
+                except product_fetcher.BauhausBlockedException as blocked:
+                    partial = blocked.products
+                    all_products.extend(partial)
+                    blocked_cats.append(cat)
+                    logger.warning(f"⚠  Category '{cat['name']}' blocked (403). Saved {len(partial)} partial products. Will retry.")
+
+                except Exception as exc:
+                    logger.error(f"✗  Category '{cat['id']}' failed: {exc}")
+
         save_checkpoint(checkpoint_file, completed_ids)
+
+        if not blocked_cats:
+            break
+
+        retry_round += 1
+        pending_cats = blocked_cats
+
+    if pending_cats and retry_round > config.MAX_403_RETRIES:
+        logger.warning(f"⚠  {len(pending_cats)} categories still blocked after {config.MAX_403_RETRIES} retries: "
+                       f"{[c['name'] for c in pending_cats]}")
 
     # Calculate elapsed time
     elapsed_time = time.time() - start_time
