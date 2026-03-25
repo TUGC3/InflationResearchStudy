@@ -1,280 +1,243 @@
+
 """
-A101.com.tr Ürün Scraper - Playwright Versiyonu
-JavaScript ile yüklenen sayfaları destekler.
+A101.com.tr - Kapida Odeme API Scraper
+Rio API ile dogrudan urun verisi ceker — tarayici gerekmez.
 
 Kurulum:
-    pip install playwright
-    playwright install chromium
+    pip install requests beautifulsoup4 pandas
+
+Kullanim:
+    python a101_scraper.py
 """
 
-import asyncio
-import csv
-import json
-import logging
-import re
-from playwright.async_api import async_playwright, TimeoutError as PWTimeout
+import time
+import datetime
+import requests
+import pandas as pd
 
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s - %(levelname)s - %(message)s"
-)
-logger = logging.getLogger(__name__)
+# ─────────────────────────────────────────────────────────
+BASE_URL   = "https://www.a101.com.tr"
+RIO_BASE   = "https://rio.a101.com.tr/dbmk89vnr/CALL"
+STORE_ID   = "VS032"          # Varsayilan magaza (Istanbul)
+OUTPUT_CSV = f"a101_kapida_{datetime.date.today()}.csv"
 
-BASE_URL = "https://www.a101.com.tr"
+# Scrape edilecek ana kategoriler — bos birakirsan HEPSINI ceker
+# Ornek: ["C05", "C01"]  veya  []  (tum kategoriler)
+ONLY_CATEGORY_IDS: list[str] = []   # bos = hepsi
+# ─────────────────────────────────────────────────────────
 
-# Bilinen A101 kategorileri
-KNOWN_CATEGORIES = [
-    {"name": "Market",         "url": f"{BASE_URL}/market"},
-    {"name": "Elektronik",     "url": f"{BASE_URL}/elektronik"},
-    {"name": "Ev & Yasam",     "url": f"{BASE_URL}/ev-ve-yasam"},
-    {"name": "Tekstil",        "url": f"{BASE_URL}/tekstil"},
-    {"name": "Oyuncak",        "url": f"{BASE_URL}/oyuncak"},
-    {"name": "Spor",           "url": f"{BASE_URL}/spor"},
-    {"name": "Kozmetik",       "url": f"{BASE_URL}/kozmetik"},
-    {"name": "Kirtasiye",      "url": f"{BASE_URL}/kirtasiye"},
-    {"name": "Anne & Bebek",   "url": f"{BASE_URL}/anne-bebek"},
-    {"name": "Pet Shop",       "url": f"{BASE_URL}/pet-shop"},
-    {"name": "Oto & Bahce",    "url": f"{BASE_URL}/oto-bahce"},
-    {"name": "Aktuel Urunler", "url": f"{BASE_URL}/aldin-aldin"},
-]
+HEADERS = {
+    "User-Agent": (
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+        "AppleWebKit/537.36 (KHTML, like Gecko) "
+        "Chrome/124.0.0.0 Safari/537.36"
+    ),
+    "Accept": "application/json",
+    "Accept-Language": "tr-TR,tr;q=0.9",
+    "Referer": "https://www.a101.com.tr/",
+    "Origin": "https://www.a101.com.tr",
+}
+
+session = requests.Session()
+session.headers.update(HEADERS)
 
 
-async def scrape_category(page, category: dict, max_pages: int = 30) -> list[dict]:
-    """Bir kategorinin tum urunlerini ceker."""
-    products = []
-    url = category["url"]
-    cat_name = category["name"]
+def rio_get(path: str, extra_params: str = "") -> dict:
+    """
+    Rio API'ye GET ister, JSON doner.
+    extra_params: '&id=C05' gibi ek parametre string'i
+    """
+    base = "channel=SLOT&__culture=tr-TR&__platform=web&data=e30%3D&__isbase64=true"
+    url = f"{RIO_BASE}/{path}?{base}{extra_params}"
+    r = session.get(url, timeout=20)
+    r.raise_for_status()
+    return r.json()
 
-    logger.info(f"Kategori: {cat_name} -> {url}")
 
-    try:
-        await page.goto(url, wait_until="networkidle", timeout=30000)
-    except PWTimeout:
-        logger.warning(f"Timeout: {url}")
-        return products
+def get_main_categories() -> list[dict]:
+    """Kök sayfadaki tüm ana kategorileri döndürür."""
+    url = (
+        f"https://rio.a101.com.tr/dbmk89vnr/CALL/Homepage/getHome/Homepage"
+        f"?platform=WEB&storeId={STORE_ID}&type=SLOT"
+        f"&__culture=tr-TR&__platform=web&data=e30%3D&__isbase64=true"
+    )
+    r = session.get(url, timeout=20)
+    r.raise_for_status()
+    return r.json().get("categories", [])
 
-    page_num = 1
-    while page_num <= max_pages:
-        await page.wait_for_timeout(2000)
 
-        # Urun kartlarini bul
-        items = await page.query_selector_all(
-            ".product-item, .product-card, [class*='ProductCard'], "
-            "[class*='product-card'], .prd-item, "
-            "[data-testid*='product'], [class*='ProductItem']"
-        )
+def get_category_with_products(category_id: str) -> dict:
+    """
+    Bir ana/alt kategori için hem alt kategori listesini
+    hem de ürünleri döndüren endpoint.
+    Yanıt: { id, name, children: [ { id, name, products: [...] } ] }
+    """
+    return rio_get(
+        f"Store/getProductsByCategory/{STORE_ID}",
+        extra_params=f"&id={category_id}",
+    )
 
-        # Fallback: urun linkleri
-        if not items:
-            items = await page.query_selector_all("a[href*='/p/'], a[href*='/urun/']")
 
-        logger.info(f"  Sayfa {page_num}: {len(items)} urun ogesi")
+def parse_product(raw: dict, ana_kategori: str, alt_kategori: str) -> dict | None:
+    """
+    Ham ürün dict'ini temizlenmiş satıra dönüştürür.
+    API yapısı:
+      raw.id               -> ürün ID
+      raw.attributes.name  -> ürün adı
+      raw.attributes.seoUrl-> ürün URL
+      raw.attributes.brand -> marka
+      raw.images[]         -> resimler (imageType=product olanı al)
+      raw.price.normalStr  -> normal fiyat
+      raw.price.discountedStr -> indirimli fiyat
+      raw.stock            -> stok
+    """
+    attrs = raw.get("attributes", {})
+    name  = attrs.get("name", "").strip()
+    if not name:
+        return None
 
-        if not items:
+    price_block    = raw.get("price", {})
+    normal_str     = price_block.get("normalStr", "")
+    discounted_str = price_block.get("discountedStr", "")
+    is_discounted  = price_block.get("normal", 0) != price_block.get("discounted", 0)
+
+    # Resim: imageType=product olanı tercih et
+    image_url = ""
+    for img in raw.get("images", []):
+        if img.get("imageType") == "product":
+            image_url = img.get("url", "")
             break
+    if not image_url and raw.get("images"):
+        image_url = raw["images"][0].get("url", "")
 
-        for item in items:
-            product = {"category": cat_name}
+    seo_url    = attrs.get("seoUrl", "")
+    if seo_url and not seo_url.startswith("http"):
+        seo_url = f"{BASE_URL}{seo_url}"
 
-            # Isim
-            for sel in [".product-name", ".p-name", "h2", "h3",
-                        "[class*='name']", "[class*='Name']", "[class*='title']"]:
-                el = await item.query_selector(sel)
-                if el:
-                    product["name"] = (await el.inner_text()).strip()
-                    break
+    product_id = str(raw.get("id", ""))
+    brand      = attrs.get("brand", "")
+    stock      = raw.get("stock", 0)
+    barcodes   = attrs.get("barcodes", [])
+    barcode    = barcodes[0] if barcodes else ""
 
-            # Fiyat
-            for sel in [".product-price", ".price", ".p-price",
-                        "[class*='price']", "[class*='Price']"]:
-                el = await item.query_selector(sel)
-                if el:
-                    product["price"] = (await el.inner_text()).strip()
-                    break
-
-            # Link
-            href = await item.get_attribute("href")
-            if not href:
-                a = await item.query_selector("a[href]")
-                if a:
-                    href = await a.get_attribute("href")
-            if href:
-                product["url"] = href if href.startswith("http") else BASE_URL + href
-
-            # Resim
-            img = await item.query_selector("img")
-            if img:
-                src = (await img.get_attribute("src") or
-                       await img.get_attribute("data-src") or "")
-                product["image"] = src
-
-            if product.get("name") or product.get("url"):
-                products.append(product)
-
-        # Sonraki sayfaya gec
-        next_btn = await page.query_selector(
-            "a[rel='next'], .pagination .next, [aria-label='Sonraki'], "
-            "button.next-page, [class*='next']:not([disabled])"
-        )
-
-        if next_btn:
-            try:
-                await next_btn.click()
-                await page.wait_for_load_state("networkidle", timeout=15000)
-                page_num += 1
-            except Exception as e:
-                logger.warning(f"Sonraki sayfa gecisi basarisiz: {e}")
-                break
-        else:
-            # URL tabanli sayfalama dene
-            next_url = f"{url}?page={page_num + 1}"
-            current_url = page.url
-            try:
-                await page.goto(next_url, wait_until="networkidle", timeout=20000)
-                page_title = await page.title()
-                if page.url == current_url or "404" in page_title:
-                    break
-                page_num += 1
-            except PWTimeout:
-                break
-
-    logger.info(f"  -> Toplam {len(products)} urun bulundu ({cat_name})")
-    return products
+    return {
+        "ana_kategori": ana_kategori,
+        "alt_kategori": alt_kategori,
+        "marka":        brand,
+        "ad":           name,
+        "fiyat":        discounted_str or normal_str,
+        "normal_fiyat": normal_str,
+        "indirimli":    "Evet" if is_discounted else "Hayir",
+        "stok":         stock,
+        "urun_id":      product_id,
+        "barkod":       barcode,
+        "resim_url":    image_url,
+        "url":          seo_url,
+    }
 
 
-async def get_dynamic_categories(page) -> list[dict]:
-    """Anasayfadan dinamik kategorileri ceker."""
+def scrape_main_category(cat: dict) -> list[dict]:
+    """
+    Ana kategori -> getProductsByCategory çağır.
+    Dönen children (alt kategoriler) üzerinden ürünleri topla.
+    """
+    ana_id   = cat["id"]
+    ana_name = cat["name"]
+    print(f"\n[{ana_id}] {ana_name}")
+
     try:
-        await page.goto(BASE_URL, wait_until="networkidle", timeout=30000)
-        await page.wait_for_timeout(3000)
-
-        links = await page.query_selector_all("nav a[href], header a[href], .menu a[href]")
-        categories = []
-        seen = set()
-
-        for link in links:
-            href = await link.get_attribute("href") or ""
-            text = (await link.inner_text()).strip()
-
-            if not href or href in ("#", "/") or not text:
-                continue
-
-            full_url = href if href.startswith("http") else BASE_URL + href
-
-            skip_keywords = ["sitemap", ".xml", "login", "giris", "hesap",
-                             "sepet", "odeme", "blog", "yardim", "iletisim"]
-
-            if (full_url not in seen
-                    and BASE_URL in full_url
-                    and not any(kw in full_url for kw in skip_keywords)):
-                seen.add(full_url)
-                categories.append({"name": text, "url": full_url})
-
-        if categories:
-            logger.info(f"Anasayfadan {len(categories)} kategori alindi.")
-            return categories
-
+        data = get_category_with_products(ana_id)
     except Exception as e:
-        logger.warning(f"Dinamik kategori alimi basarisiz: {e}")
+        print(f"  ! Hata: {e}")
+        return []
 
-    logger.info("Bilinen sabit kategoriler kullaniliyor.")
-    return KNOWN_CATEGORIES
+    children = data.get("children", [])
+    all_products: list[dict] = []
+    seen_ids: set = set()
 
+    if not children:
+        # Alt kategori yok, ürünler doğrudan üst seviyede
+        products_raw = data.get("products", [])
+        print(f"  (alt kategori yok) {len(products_raw)} urun")
+        for raw in products_raw:
+            pid = raw.get("id", raw.get("barcode", ""))
+            if pid and pid in seen_ids:
+                continue
+            seen_ids.add(pid)
+            parsed = parse_product(raw, ana_name, ana_name)
+            if parsed:
+                all_products.append(parsed)
+    else:
+        print(f"  {len(children)} alt kategori bulundu")
+        for ch in children:
+            alt_id   = ch["id"]
+            alt_name = ch["name"]
+            products_raw = ch.get("products", [])
 
-async def scrape_all(
-    max_categories: int = None,
-    max_pages: int = 30,
-    output_csv: str = "a101_urunler.csv",
-    output_json: str = "a101_urunler.json",
-    headless: bool = True,
-):
-    async with async_playwright() as pw:
-        browser = await pw.chromium.launch(headless=headless)
-        context = await browser.new_context(
-            user_agent=(
-                "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
-                "AppleWebKit/537.36 (KHTML, like Gecko) "
-                "Chrome/120.0.0.0 Safari/537.36"
-            ),
-            viewport={"width": 1280, "height": 800},
-            locale="tr-TR",
-        )
-        page = await context.new_page()
+            new_count = 0
+            for raw in products_raw:
+                pid = raw.get("id", raw.get("barcode", ""))
+                if pid and pid in seen_ids:
+                    continue
+                seen_ids.add(pid)
+                parsed = parse_product(raw, ana_name, alt_name)
+                if parsed:
+                    all_products.append(parsed)
+                    new_count += 1
 
-        # Gorsel/analytics isteklerini engelle (hizlanma)
-        await page.route(
-            re.compile(r"\.(gif|png|jpg|jpeg|svg|woff2?)(\?.*)?$"
-                       r"|google-analytics|doubleclick|facebook\.net"),
-            lambda route: route.abort()
-        )
+            print(f"    [{alt_id}] {alt_name}: {len(products_raw)} urun ({new_count} yeni)")
+            time.sleep(0.3)
 
-        logger.info("Kategoriler aliniyor...")
-        categories = await get_dynamic_categories(page)
-        logger.info(f"{len(categories)} kategori bulundu.")
-
-        if max_categories:
-            categories = categories[:max_categories]
-
-        all_products = []
-        for i, cat in enumerate(categories, 1):
-            logger.info(f"\n[{i}/{len(categories)}]")
-            products = await scrape_category(page, cat, max_pages=max_pages)
-            all_products.extend(products)
-
-        await browser.close()
-
-    # Tekrarlari temizle
-    seen_urls: set = set()
-    unique = []
-    for p in all_products:
-        key = p.get("url") or p.get("name", "")
-        if key and key not in seen_urls:
-            seen_urls.add(key)
-            unique.append(p)
-
-    logger.info(f"\nToplam benzersiz urun: {len(unique)}")
-
-    # CSV kaydet
-    if unique:
-        fieldnames = ["category", "name", "price", "url", "image"]
-        with open(output_csv, "w", newline="", encoding="utf-8-sig") as f:
-            writer = csv.DictWriter(f, fieldnames=fieldnames, extrasaction="ignore")
-            writer.writeheader()
-            writer.writerows(unique)
-        logger.info(f"CSV kaydedildi: {output_csv}")
-
-    # JSON kaydet
-    with open(output_json, "w", encoding="utf-8") as f:
-        json.dump(unique, f, ensure_ascii=False, indent=2)
-    logger.info(f"JSON kaydedildi: {output_json}")
-
-    # Onizleme
-    print("\n--- Ilk 3 Urun ---")
-    for p in unique[:3]:
-        print(json.dumps(p, ensure_ascii=False, indent=2))
-
-    return unique
+    print(f"  Toplam: {len(all_products)} urun")
+    return all_products
 
 
-# ─────────────────────────────────────────────
+def main():
+    print("=" * 65)
+    print("  A101 Kapida Scraper — Rio API Modu")
+    print(f"  Magaza: {STORE_ID}")
+    print("=" * 65)
+
+    # 1) Ana kategorileri cek
+    print("\n[1] Ana kategoriler aliniyor...")
+    main_cats = get_main_categories()
+    print(f"  Toplam {len(main_cats)} ana kategori")
+
+    # Filtrele (bos = hepsi)
+    if ONLY_CATEGORY_IDS:
+        main_cats = [c for c in main_cats if c["id"] in ONLY_CATEGORY_IDS]
+        print(f"  Filtre sonrasi: {len(main_cats)} kategori")
+
+    # 2) Her ana kategoriyi tara
+    print("\n[2] Urunler cekiliyor...")
+    all_products: list[dict] = []
+
+    for i, cat in enumerate(main_cats, 1):
+        print(f"\n  [{i}/{len(main_cats)}]", end="")
+        items = scrape_main_category(cat)
+        all_products.extend(items)
+        time.sleep(0.5)
+
+    # 3) CSV
+    print(f"\n{'=' * 65}")
+    if not all_products:
+        print("  Hic urun bulunamadi!")
+        return
+
+    df = pd.DataFrame(all_products)
+    cols = ["ana_kategori", "alt_kategori", "marka", "ad", "fiyat", "normal_fiyat",
+            "indirimli", "stok", "urun_id", "barkod", "resim_url", "url"]
+    df = df.reindex(columns=[c for c in cols if c in df.columns])
+    df.drop_duplicates(subset=["urun_id"], inplace=True)
+    df.to_csv(OUTPUT_CSV, index=False, encoding="utf-8-sig")
+
+    print(f"  Tamamlandi!")
+    print(f"  Toplam urun          : {len(df)}")
+    print(f"  Ana kategori sayisi  : {df['ana_kategori'].nunique()}")
+    print(f"  Alt kategori sayisi  : {df['alt_kategori'].nunique()}")
+    print(f"  Dosya                : {OUTPUT_CSV}")
+    print("=" * 65)
+
+
 if __name__ == "__main__":
-    import argparse
-
-    parser = argparse.ArgumentParser(description="A101.com.tr Playwright Scraper")
-    parser.add_argument("--max-categories", type=int, default=None,
-                        help="Test icin kategori sayisi siniri (varsayilan: hepsi)")
-    parser.add_argument("--max-pages", type=int, default=30,
-                        help="Kategori basina max sayfa (varsayilan: 30)")
-    parser.add_argument("--output-csv", default="a101_urunler.csv")
-    parser.add_argument("--output-json", default="a101_urunler.json")
-    parser.add_argument("--show-browser", action="store_true",
-                        help="Tarayiciyi gorunur sec (debug icin)")
-    args = parser.parse_args()
-
-    asyncio.run(scrape_all(
-        max_categories=args.max_categories,
-        max_pages=args.max_pages,
-        output_csv=args.output_csv,
-        output_json=args.output_json,
-        headless=not args.show_browser,
-    ))
+    main()
