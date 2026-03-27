@@ -27,22 +27,25 @@ Terminali açıp aşağıdaki komutları kullanabilirsiniz.
 Verilen tarihteki dosyayı alır ve otomatik olarak 1, 7, 15 ve 30 gün öncesinin dosyalarını aynı klasörde arayıp hesaplama yapar:
 
 ```bash
-python gurmar_inflation.py -i gurmar_2026-02-24.csv
+python gurmar_inflation.py -i gurmar_2026-02-24.cs
+```
+
 ### 2. Çıktıları Farklı Klasöre Kaydetme (-o)
 
 Oluşan enflasyon dosyalarını bulunduğunuz dizine değil, belirttiğiniz bir klasöre kaydetmek için:
 
 ```bash
 python gurmar_inflation.py -i data/gurmar_2026-02-24.csv -o sonuclar/
-
+```
 ### 3. Özel Tarih Karşılaştırması (-c)
 
 Sadece belirlediğiniz iki dosya (bugün ve geçmiş bir tarih) arasında enflasyon hesaplamak için:
 ```bash
 python gurmar_inflation.py -i gurmar_2026-02-24.csv -c gurmar_2026-02-10.csv
-
+```
 ### 4. Yardım Menüsü
 
 Komutların listesini ve kullanım detaylarını görmek için:
 ```bash
 python gurmar_inflation.py -h
+```
