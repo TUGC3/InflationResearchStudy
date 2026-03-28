@@ -20,10 +20,14 @@ from bs4 import BeautifulSoup
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.action_chains import ActionChains
 
 import config
 
 logger = logging.getLogger(__name__)
+
+# Dictionary needed for main.py to remember where it left off
+progress_tracker = {}
 
 class CaptchaDetectedException(Exception):
     pass
@@ -57,49 +61,82 @@ def setup_driver() -> uc.Chrome:
 
     return uc.Chrome(options=options, version_main=145)
 
+
 def handle_browser_check(driver: uc.Chrome):
-    if "tarayıcınızı" not in driver.page_source.lower():
+    page_source = driver.page_source.lower()
+
+    if "tarayıcınızı" not in page_source and "kontrol ediliyor" not in page_source:
         return
 
     logger.info("🤖 Browser check page detected. Waiting for it to resolve...")
     start_time = time.time()
 
-    while time.time() - start_time < 30:
+    while time.time() - start_time < 90:
         page_source = driver.page_source.lower()
 
-        if "tarayıcınızı" not in page_source and "bekleyiniz" not in page_source:
+        if "tarayıcınızı" not in page_source and "bekleyiniz" not in page_source and "kontrol ediliyor" not in page_source:
             logger.info("✅ Browser check resolved automatically!")
-            time.sleep(3)
+            time.sleep(1.5)
             return
 
-        try:
-            btn = WebDriverWait(driver, 1).until(
-                EC.element_to_be_clickable((By.ID, "btn-continue"))
-            )
-            reaction_time = random.uniform(7.0, 11.5)
-            logger.info(f"🛑 Button found! Staring at it for {reaction_time:.2f} seconds to let background JS finish...")
-            time.sleep(reaction_time)
+        # --- NEW MANUAL "Click and Hold" Screen ---
+        if "basılı tutun" in page_source or "bağlantınız kontrol ediliyor" in page_source:
+            logger.warning("🚨 USER ACTION REQUIRED: 'Basılı Tutun' screen detected!")
+            logger.warning("👉 Please go to the Chrome window and MANUALLY CLICK AND HOLD the button. The bot is waiting for you to pass...")
 
-            logger.info("🖱️ Clicking 'Devam Et' button...")
-            btn.click()
-            time.sleep(8)
+            manual_wait_start = time.time()
+            # Waits here for 5 minutes (300 seconds) until you pass
+            while time.time() - manual_wait_start < 300:
+                current_source = driver.page_source.lower()
+                # If the "click and hold" text on the screen disappears, it means you bypassed the block
+                if "basılı tutun" not in current_source and "bağlantınız kontrol ediliyor" not in current_source:
+                    logger.info("✅ Great! You manually bypassed the block. Automation is continuing...")
+                    time.sleep(3) # Short head start to allow the site to load the new page
+                    return
+                time.sleep(2) # Check the page every 2 seconds
+
+            logger.error("❌ No action taken for 5 minutes. Timeout!")
             return
-        except Exception:
-            pass
+
+        # --- Standard Automatic "Continue" Screen ---
+        if "tarayıcınızı kontrol ediyoruz" in page_source and "devam et" in page_source:
+            try:
+                # Reduced wait time on the standard button to 15-20 seconds range (A bit faster)
+                wait_time = random.uniform(15.0, 20.0)
+                logger.info(f"⚠️ Standard 'Devam Et' screen detected. Waiting {wait_time:.2f}s before interaction...")
+                time.sleep(wait_time)
+
+                logger.info("✅ Wait complete. Locating 'Devam Et' button...")
+                btn = WebDriverWait(driver, 10).until(
+                    EC.element_to_be_clickable((By.ID, "btn-continue"))
+                )
+
+                actions = ActionChains(driver)
+                actions.move_to_element(btn).pause(0.5).click().perform()
+                logger.info("🎯 Clicked 'Devam Et' button.")
+
+                time.sleep(5)
+                return
+            except Exception as e:
+                logger.error(f"❌ Standard bypass error: {e}")
+                time.sleep(2)
+                continue
 
         time.sleep(1)
 
-    logger.warning("⚠️ Browser check timed out after 30 seconds.")
+    logger.warning("⚠️ Browser check timed out after 90 seconds.")
 
 def load_and_bypass(driver: uc.Chrome, url: str) -> BeautifulSoup:
     if driver.current_url in ["data:,", "about:blank"]:
         logger.info("🔥 Warming up fresh browser on homepage...")
         driver.get("https://www.sahibinden.com/")
-        time.sleep(random.uniform(4.0, 7.0))
+        time.sleep(random.uniform(2.0, 4.0))
         handle_browser_check(driver)
 
     driver.get(url)
-    time.sleep(random.uniform(4.0, 6.0))
+
+    # SPEEDUP 1: Fixed wait time reduced to 1-2 seconds
+    time.sleep(random.uniform(1.0, 2.0))
 
     handle_browser_check(driver)
     page_source = driver.page_source.lower()
@@ -110,11 +147,21 @@ def load_and_bypass(driver: uc.Chrome, url: str) -> BeautifulSoup:
         handle_browser_check(driver)
 
     start_time = time.time()
+    # SPEEDUP 2: Reduced timeout limit from 30 to 20
     while time.time() - start_time < 20:
         soup = BeautifulSoup(driver.page_source, "html.parser")
+
+        # If there are listings in the table, return the data INSTANTLY, don't waste time
         if soup.select("#searchResultsTable tbody tr.searchResultsItem") or "ilan bulunamadı" in driver.page_source.lower():
             return soup
-        time.sleep(1.5)
+
+        current_source = driver.page_source.lower()
+        if "tarayıcınızı" in current_source or "kontrol ediliyor" in current_source:
+            handle_browser_check(driver)
+            start_time = time.time()
+
+        # SPEEDUP 3: Frequency of checking listings reduced from 1.5s to 0.5s
+        time.sleep(0.5)
 
     driver.save_screenshot("debug_silent_block.png")
     final_source = driver.page_source.lower()
@@ -150,7 +197,10 @@ class CategoryScanner:
             logger.info(f"{pad}  ✂️ Range too dense ({total_listings} listings). Splitting...")
             mid = (min_price + max_price) // 2
             left_urls = self.discover_bracket(min_price, mid, indent + 1)
-            time.sleep(random.uniform(config.BETWEEN_BRACKET_DELAY_MIN, config.BETWEEN_BRACKET_DELAY_MAX))
+
+            # SPEEDUP 4: Wait time during search split is greatly shortened
+            time.sleep(random.uniform(0.5, 1.0))
+
             right_urls = self.discover_bracket(mid + 1, max_price, indent + 1)
             return left_urls + right_urls
 
@@ -222,3 +272,62 @@ class DataExtractor:
             if not file_exists:
                 writer.writeheader()
             writer.writerows(data_batch)
+
+
+# ── ADAPTER: Bridge for main.py ───────────────────────────────────────────────
+def scrape_range(driver: uc.Chrome, min_price: int, max_price: int, done_ranges: set, save_fn, save_checkpoint_fn, indent: int = 0) -> int:
+    """Connects the Scanner and Extractor to the main execution loop."""
+    bracket_key = (min_price, max_price)
+
+    if bracket_key in done_ranges:
+        logger.info(f"↩  Skipping already-completed range {min_price}–{max_price} TL")
+        return 0
+
+    scanner = CategoryScanner(driver)
+    extractor = DataExtractor(driver)
+
+    # 1. Discover all URLs for this bracket
+    urls_to_scrape = scanner.discover_bracket(min_price, max_price)
+
+    total_saved_this_run = 0
+    start_index = progress_tracker.get(bracket_key, 0)
+
+    # 2. Extract data from each URL sequentially
+    for i in range(start_index, len(urls_to_scrape)):
+        url = urls_to_scrape[i]
+        logger.info(f"  📄 Scraping page {i + 1}/{len(urls_to_scrape)} for {min_price}-{max_price} TL...")
+
+        page_records = extractor.extract_from_url(url)
+
+        if page_records:
+            save_fn(page_records)
+            total_saved_this_run += len(page_records)
+
+        progress_tracker[bracket_key] = i + 1
+
+        # SPEEDUP 5: Human-like wait reduced to once every 5 pages, duration set to 2-4 seconds
+        if i > 0 and i % 5 == 0:
+            pause_time = random.uniform(2, 4)
+            logger.info(f"  ⏳ Taking a brief human-like pause of {pause_time:.2f} seconds...")
+            time.sleep(pause_time)
+
+    save_checkpoint_fn(min_price, max_price)
+    done_ranges.add(bracket_key)
+
+    if bracket_key in progress_tracker:
+        del progress_tracker[bracket_key]
+
+    return total_saved_this_run
+
+
+def save_incremental(data_batch: list[dict]) -> None:
+    """Appends data to the CSV file. Required by main.py."""
+    if not data_batch: return
+    os.makedirs(config.OUTPUT_DIR, exist_ok=True)
+    file_exists = os.path.isfile(config.CSV_OUTPUT_FILE)
+
+    with open(config.CSV_OUTPUT_FILE, mode="a", newline="", encoding="utf-8-sig") as f:
+        writer = csv.DictWriter(f, fieldnames=["District", "Rooms", "Price"])
+        if not file_exists:
+            writer.writeheader()
+        writer.writerows(data_batch)

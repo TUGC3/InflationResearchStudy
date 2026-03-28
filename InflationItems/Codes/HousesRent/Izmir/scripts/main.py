@@ -108,7 +108,7 @@ def run(args: argparse.Namespace) -> None:
                 checkpoint["completed_brackets"] = [list(b) for b in completed_brackets]
                 _save_checkpoint(checkpoint)
 
-                bracket_sleep = random.randint(10, 15)
+                bracket_sleep = random.randint(1, 5)
                 logger.info(f"☕ Bracket complete! Taking a {bracket_sleep}-second break...")
                 time.sleep(bracket_sleep)
 
@@ -121,7 +121,7 @@ def run(args: argparse.Namespace) -> None:
                 driver = None
 
                 delete_selenium_profile()
-                time.sleep(random.randint(60, 120))
+                time.sleep(random.randint(30, 60))
 
             except Exception as e:
                 logger.error(f"Critical Error: {e}")
