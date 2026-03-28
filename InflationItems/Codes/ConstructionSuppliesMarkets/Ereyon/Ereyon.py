@@ -16,24 +16,22 @@ except ImportError:
     print("pip install undetected-chromedriver beautifulsoup4 setuptools")
     sys.exit(1)
 
-
-
-CHROME_VERSION = 145  
+CHROME_VERSION = 145
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_BASE_DIR = os.path.join(SCRIPT_DIR, "Datas", "Ereyon")
 
 ANA_KATEGORILER = [
-    ("Kucuk Ev Aletleri", "https://www.ereyon.com.tr/kucuk-ev-aletleri-8"),
-    ("Petshop", "https://www.ereyon.com.tr/petshop-151"),
-    ("Bahce Yapi Market", "https://www.ereyon.com.tr/yapi-market-bahce"),
-    ("Kisisel Bakim", "https://www.ereyon.com.tr/kisisel-bakim-kozmetik"),
-    ("Isitma Barbeku", "https://www.ereyon.com.tr/isitma-ve-barbekuler"),
-    ("Ev Yasam Mobilya", "https://www.ereyon.com.tr/ev-yasam-mobilya"),
+    ("Kucuk Ev Aletleri",  "https://www.ereyon.com.tr/kucuk-ev-aletleri-8"),
+    ("Petshop",            "https://www.ereyon.com.tr/petshop-151"),
+    ("Bahce Yapi Market",  "https://www.ereyon.com.tr/yapi-market-bahce"),
+    ("Kisisel Bakim",      "https://www.ereyon.com.tr/kisisel-bakim-kozmetik"),
+    ("Isitma Barbeku",     "https://www.ereyon.com.tr/isitma-ve-barbekuler"),
+    ("Ev Yasam Mobilya",   "https://www.ereyon.com.tr/ev-yasam-mobilya"),
     ("Anne Bebek Oyuncak", "https://www.ereyon.com.tr/anne-bebek-oyuncak-73"),
-    ("Diger Kategoriler", "https://www.ereyon.com.tr/diger-kategoriler-"),
-    ("Oto Aksesuar", "https://www.ereyon.com.tr/oto-aksesuar-206"),
-    ("Kampanyalar", "https://www.ereyon.com.tr/kampanyalar"),
+    ("Diger Kategoriler",  "https://www.ereyon.com.tr/diger-kategoriler-"),
+    ("Oto Aksesuar",       "https://www.ereyon.com.tr/oto-aksesuar-206"),
+    ("Kampanyalar",        "https://www.ereyon.com.tr/kampanyalar"),
 ]
 
 seen_products = set()
@@ -65,6 +63,23 @@ def save_batch(batch, file_path):
         if not file_exists:
             writer.writeheader()
         writer.writerows(batch)
+
+
+def scroll_until_stable(driver):
+    """Urun sayisi 3 tur ust uste degismeyene kadar scroll et."""
+    last_count = 0
+    stable_rounds = 0
+    while stable_rounds < 3:
+        driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+        time.sleep(2)
+        soup = BeautifulSoup(driver.page_source, 'html.parser')
+        count = len(soup.select("div.productDetail"))
+        print("    Yuklenen urun: " + str(count))
+        if count == last_count:
+            stable_rounds += 1
+        else:
+            stable_rounds = 0
+            last_count = count
 
 
 def parse_products(driver, kategori):
@@ -131,12 +146,7 @@ def scrape_category(driver, kategori, base_url, file_path):
         driver.get(url)
         time.sleep(random.uniform(3, 5))
 
-        # Scroll - lazy load icin
-        for _ in range(3):
-            driver.execute_script("window.scrollBy(0, 1000);")
-            time.sleep(0.8)
-        driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-        time.sleep(random.uniform(2, 3))
+        scroll_until_stable(driver)
 
         batch, soup = parse_products(driver, kategori)
 
