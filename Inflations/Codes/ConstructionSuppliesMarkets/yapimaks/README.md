@@ -1,37 +1,57 @@
-Yapımaks Enflasyon Hesaplayıcı Rehberi
+Bu araç, Yapımaks mağazasından çekilen günlük fiyat verilerini kullanarak, ürünleri TÜİK (Türkiye İstatistik Kurumu) harcam gruplarına göre sınıflandırır ve enflasyon oranlarını hesaplar.
+## 1. Sistemin Çalışma Mantığı
 
-Bu araç, Yapımaks mağazasından çekilen günlük fiyat verilerini (CSV dosyalarını) birbiriyle kıyaslar. Sonuç olarak sana mağazadaki ürünlerin 1, 7, 15 ve 30 günlük süreler içinde ne kadar zamlandığını söyler.
-# 1. Bu Kod Ne Yapar?
+Kod, kategori_haritasi.json dosyasındaki eşleştirmeleri kullanarak her ürünü üç ana TÜİK grubundan birine atar:
 
-  Sepet Enflasyonu: Mağazadaki tüm ürünleri bir sepete koyduğumuzu hayal et. Bu sepetin toplam fiyatı geçen haftaya göre yüzde kaç arttı?
+  Grup 05 (Ev Bakım ve Hırdavat): Vidalar, borular, el aletleri, boyalar, banyo ve mutfak malzemeleri. (Mağazanın %90'ı)
 
-  Ortalama Enflasyon: Ürünlerin tek tek değişim oranlarını bulur ve bunların ortalamasını alır.
+  Grup 07 (Ulaştırma): Oto bakım ürünleri (Autokit), krikolar, antifriz, akü ve lastik ekipmanları.
 
-  Ürün Bazlı Takip: Hangi ürünün fiyatı sabit kalmış, hangisi uçmuş? Bunları tek tek listeler.
+  Grup 09 (Eğlence ve Kültür): Yapay ağaçlar, çiçekler, kamp malzemeleri, spor aletleri ve evcil hayvan ürünleri.
 
-# 2. Çalışması İçin Ne Lazım?
+# 2. Gereksinimler
 
-Bilgisayarındaki şu klasör yolunda günlük verilerinin olması gerekir:
-InflationItems/Datas/ConstructionSuppliesMarkets/Yapimaks/
+Hesaplama yapabilmek için şu dosyaların yerinde olması gerekir:
 
-Dosya isimleri şu formatta olmalı: yapimaks_YYYY-MM-DD.csv (Örnek: yapimaks_2026-03-24.csv)
-# 3. Nasıl Kullanılır?
+   Günlük CSV Verileri: InflationItems/Datas/ConstructionSuppliesMarkets/Yapimaks/ içinde yapimaks_YYYY-MM-DD.csv formatında.
 
-Terminali (veya PyCharm terminalini) aç ve şu komutu yaz:
-```
-    python inflation.py --date 2026-03-24
-```
-(Eğer --date yazmazsan, kod otomatik olarak bugünün tarihini arar.)
-# 4. Sonuçlar Nerede?
+   Kategori Haritası: kategori_haritasi.json (Scraper tarafından oluşturulan dosya).
 
-Hesaplama bittiğinde Inflations/Datas/ConstructionSuppliesMarkets/Yapimaks/ klasörüne şu iki dosya gelir:
+## 3. Kullanım
 
-  yapimaks_inflation_Tarih.csv: Bu dosyada her ürünün satırında 1, 7, 15 ve 30 günlük enflasyon oranlarını görürsün.
+Terminalden hedef tarihi belirterek çalıştırabilirsin:
+Bash
 
-  inflation_summary.csv: Bu dosya genel özet tablosudur. Her gün çalıştırdığında altına yeni bir satır ekler; böylece mağazanın genel gidişatını tek bir yerden takip edebilirsin.
+python inflation.py
 
-# 5. Önemli Notlar
+Not: Kodun içindeki run_inflation_report("2026-03-24") kısmını istediğin tarihe göre güncelleyebilirsin.
+## 4. Çıktılar (Output)
 
-  Fiyatlar: Verilerindeki virgüllü fiyatlar (276,00) kod tarafından otomatik olarak matematiksel işleme uygun hale getirilir.
+Inflations/Datas/ConstructionSuppliesMarkets/Yapimaks/ klasöründe iki ana rapor oluşur:
+# A. Detaylı Ürün Raporu (yapimaks_detailed_inf_TARİH.csv)
 
-  Eşleştirme: Kod, ürünleri product_id numaralarına bakarak tanır. Eğer bir ürün eski dosyada yoksa, onun için enflasyon hesaplanamaz.
+Her bir ürün için şu bilgileri içerir:
+
+  Ürün ID, Fiyat ve Kategori bilgisi.
+
+  tuik_code: Ürünün hangi TÜİK grubuna dahil olduğu.
+
+  change_1d/7d/15d/30d: Ürünün ilgili gün sayısındaki yüzde değişim oranı.
+
+# B. Özet Rapor (inflation_summary.csv)
+
+Bu dosya projenin "Dashboard" kısmıdır. Şunları içerir:
+
+  genel_30d: Mağaza genelindeki 30 günlük toplam enflasyon.
+
+  grup_05_30d: Sadece hırdavat/ev bakım grubundaki aylık artış.
+
+  grup_07_30d: Sadece ulaştırma/oto grubundaki aylık artış.
+
+## 5. Teknik Detaylar
+
+  Encoding: Dosyalar utf-8-sig formatında kaydedilir, böylece Türkçe karakterler Excel'de bozulmadan görünür.
+
+  Fiyat Dönüştürme: CSV'deki virgüllü fiyatlar (150,50) otomatik olarak sayısal formata (150.50) çekilir.
+
+  Mapping: Yeni bir kategori eklendiğinde kod bunu otomatik olarak "05" grubuna atar (Default).
