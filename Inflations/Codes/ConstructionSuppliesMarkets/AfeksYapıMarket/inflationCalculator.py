@@ -64,7 +64,7 @@ def fileInput(fileNew, fileOld):
     test_1 = dataCompiler(df)
     test_2 = dataCompiler(df1)
     test_3 = compareData(test_1, test_2)
-    test_3["Inflation(%)"] = ((test_3["Price(TL)_y"] - test_3["Price(TL)_x"]) / test_3["Price(TL)_x"]) * 100
+    test_3["Inflation(%)"] = ((test_3["Price(TL)_x"] - test_3["Price(TL)_y"]) / test_3["Price(TL)_y"]) * 100
     test_3["Inflation(%)"] = test_3["Inflation(%)"].fillna(0)
     test_3 = test_3.drop(columns=["Price(TL)_y", "Price(TL)_x"])
 
