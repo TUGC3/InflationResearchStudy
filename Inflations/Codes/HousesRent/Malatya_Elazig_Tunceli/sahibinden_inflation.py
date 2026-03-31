@@ -77,6 +77,17 @@ def _load_csv(city: str, date_str: str) -> pd.DataFrame | None:
     try:
         df = pd.read_csv(fpath, encoding="utf-8-sig")
         df["price_numeric"] = df["Price"].apply(_parse_price)
+        df = df[df["price_numeric"].notna()]
+
+        # IQR outlier filtresi — şehir genelinde aşırı uç fiyatları at
+        q1 = df["price_numeric"].quantile(0.25)
+        q3 = df["price_numeric"].quantile(0.75)
+        iqr = q3 - q1
+        df = df[
+            (df["price_numeric"] >= q1 - 3.0 * iqr) &
+            (df["price_numeric"] <= q3 + 3.0 * iqr)
+        ]
+
         # Dedup: aynı District+Rooms kombinasyonu → medyan fiyatı tut
         df = (
             df.groupby(["District", "Rooms"], as_index=False)["price_numeric"]
