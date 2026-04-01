@@ -32,7 +32,7 @@ def parse_args():
 def save_csv(products, out_path):
     if not products:
         return
-    fieldnames = ["id", "sku", "name", "brand", "category", "regular_price", "shown_price", "discount_rate", "unit", "status"]
+    fieldnames = ["Product Name", "Product Cost", "id", "sku", "brand", "category", "regular_price", "discount_rate", "unit", "status"]
     with open(out_path, 'w', encoding='utf-8-sig', newline='') as f:
         writer = csv.DictWriter(f, fieldnames=fieldnames)
         writer.writeheader()

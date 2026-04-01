@@ -127,13 +127,13 @@ def fetch_products_for_category(category_dict, session=None, limit_pages=0):
                 discount_rate = round(((old_price_val - price_val) / old_price_val) * 100, 2)
 
             products.append({
+                "Product Name": title,
+                "Product Cost": price_val,
                 "id": sku,
                 "sku": sku,
-                "name": title,
                 "brand": brand,
                 "category": name,
                 "regular_price": old_price_val,
-                "shown_price": price_val,
                 "discount_rate": discount_rate,
                 "unit": "PIECE",
                 "status": "IN_SALE"
