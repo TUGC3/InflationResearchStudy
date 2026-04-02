@@ -29,6 +29,11 @@ def main():
     df["scrape_date"] = timestamp.strftime("%Y-%m-%d")
     df["scrape_timestamp"] = timestamp.isoformat()
 
+    # Standardize columns: Product Name first, Product Cost second
+    df = df.rename(columns={"name": "Product Name", "current_price": "Product Cost"})
+    cols = ["Product Name", "Product Cost"] + [c for c in df.columns if c not in ("Product Name", "Product Cost")]
+    df = df[cols]
+
     os.makedirs(OUTPUT_DIR, exist_ok=True)
     filename = f"hapeloglu_{timestamp.strftime('%Y-%m-%d')}.csv"
     filepath = os.path.join(OUTPUT_DIR, filename)

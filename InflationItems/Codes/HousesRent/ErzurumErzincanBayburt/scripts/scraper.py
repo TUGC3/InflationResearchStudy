@@ -30,6 +30,18 @@ logger = logging.getLogger(__name__)
 
 # -- HTML helpers ----------------------------------------------------------
 
+def _clean_price(price_str: str) -> float:
+    """Convert sahibinden price string like '5.000 TL' to float 5000.0"""
+    if not price_str:
+        return 0.0
+    cleaned = price_str.upper().replace("TL", "").strip()
+    cleaned = cleaned.replace(".", "")
+    try:
+        return float(cleaned)
+    except ValueError:
+        return 0.0
+
+
 def _get_soup(driver: WebDriver) -> BeautifulSoup:
     return BeautifulSoup(driver.page_source, "html.parser")
 
@@ -87,7 +99,7 @@ def _parse_listings(soup: BeautifulSoup, rooms_idx: int | None) -> list[dict]:
                 rooms = "N/A"
 
             if price:
-                records.append({"District": district, "Rooms": rooms, "Price": price})
+                records.append({"Product Name": district, "Product Cost": _clean_price(price), "Rooms": rooms})
         except Exception as exc:
             logger.debug("Row parse error: %s", exc)
 
@@ -277,7 +289,7 @@ def save_incremental(city_name: str, data_batch: list[dict]) -> None:
     file_exists = os.path.isfile(csv_path)
 
     with open(csv_path, mode="a", newline="", encoding="utf-8") as f:
-        writer = csv.DictWriter(f, fieldnames=["District", "Rooms", "Price"])
+        writer = csv.DictWriter(f, fieldnames=["Product Name", "Product Cost", "Rooms"])
         if not file_exists:
             writer.writeheader()
         writer.writerows(data_batch)

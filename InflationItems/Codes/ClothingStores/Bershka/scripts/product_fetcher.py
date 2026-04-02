@@ -197,13 +197,13 @@ def extract_product_record(product: dict, category_name: str) -> Optional[dict]:
         discount_pct = round((1 - sale_price / regular_price) * 100, 2)
 
     return {
+        "Product Name":  name,
+        "Product Cost":  round(sale_price, 2),
         "product_id":    product_id,
-        "name":          name,
         "brand":         "Bershka",
         "category":      category_name,
         "color":         color_name,
         "regular_price": round(regular_price, 2),
-        "sale_price":    round(sale_price, 2),
         "discount_pct":  discount_pct,
         "currency":      "TRY",
     }
