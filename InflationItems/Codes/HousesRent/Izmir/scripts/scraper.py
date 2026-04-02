@@ -26,7 +26,7 @@ import config
 
 logger = logging.getLogger(__name__)
 
-# Dictionary needed for main.py to remember where it left off
+# Dictionary required for main.py to remember where it left off
 progress_tracker = {}
 
 class CaptchaDetectedException(Exception):
@@ -79,21 +79,19 @@ def handle_browser_check(driver: uc.Chrome):
             time.sleep(1.5)
             return
 
-        # --- NEW MANUAL "Click and Hold" Screen ---
+        # --- NEW MANUAL "Press and Hold" Screen ---
         if "basılı tutun" in page_source or "bağlantınız kontrol ediliyor" in page_source:
             logger.warning("🚨 USER ACTION REQUIRED: 'Basılı Tutun' screen detected!")
-            logger.warning("👉 Please go to the Chrome window and MANUALLY CLICK AND HOLD the button. The bot is waiting for you to pass...")
+            logger.warning("👉 Please go to the Chrome window and manually PRESS AND HOLD the button. The bot is waiting for you to pass...")
 
             manual_wait_start = time.time()
-            # Waits here for 5 minutes (300 seconds) until you pass
             while time.time() - manual_wait_start < 300:
                 current_source = driver.page_source.lower()
-                # If the "click and hold" text on the screen disappears, it means you bypassed the block
                 if "basılı tutun" not in current_source and "bağlantınız kontrol ediliyor" not in current_source:
                     logger.info("✅ Great! You manually bypassed the block. Automation is continuing...")
-                    time.sleep(3) # Short head start to allow the site to load the new page
+                    time.sleep(3)
                     return
-                time.sleep(2) # Check the page every 2 seconds
+                time.sleep(2)
 
             logger.error("❌ No action taken for 5 minutes. Timeout!")
             return
@@ -101,19 +99,18 @@ def handle_browser_check(driver: uc.Chrome):
         # --- Standard Automatic "Continue" Screen ---
         if "tarayıcınızı kontrol ediyoruz" in page_source and "devam et" in page_source:
             try:
-                # Reduced wait time on the standard button to 15-20 seconds range (A bit faster)
                 wait_time = random.uniform(15.0, 20.0)
-                logger.info(f"⚠️ Standard 'Devam Et' screen detected. Waiting {wait_time:.2f}s before interaction...")
+                logger.info(f"⚠️ Standard 'Continue' screen detected. Waiting {wait_time:.2f}s before interaction...")
                 time.sleep(wait_time)
 
-                logger.info("✅ Wait complete. Locating 'Devam Et' button...")
+                logger.info("✅ Wait complete. Locating 'Continue' button...")
                 btn = WebDriverWait(driver, 10).until(
                     EC.element_to_be_clickable((By.ID, "btn-continue"))
                 )
 
                 actions = ActionChains(driver)
                 actions.move_to_element(btn).pause(0.5).click().perform()
-                logger.info("🎯 Clicked 'Devam Et' button.")
+                logger.info("🎯 Clicked 'Continue' button.")
 
                 time.sleep(5)
                 return
@@ -126,16 +123,35 @@ def handle_browser_check(driver: uc.Chrome):
 
     logger.warning("⚠️ Browser check timed out after 90 seconds.")
 
+
+def accept_cookies(driver: uc.Chrome):
+    """Clicks the cookie consent (Accept All) button if found."""
+    logger.info("🍪 Checking for cookie consent banner...")
+    try:
+        cookie_btn = WebDriverWait(driver, 5).until(
+            EC.element_to_be_clickable((By.ID, "onetrust-accept-btn-handler"))
+        )
+        actions = ActionChains(driver)
+        actions.move_to_element(cookie_btn).pause(random.uniform(0.5, 1.0)).click().perform()
+        logger.info("✅ Cookies accepted! Trust score increased.")
+        time.sleep(random.uniform(1.0, 2.0))
+    except Exception:
+        logger.debug("Cookie banner not found or already accepted.")
+
+
 def load_and_bypass(driver: uc.Chrome, url: str) -> BeautifulSoup:
-    if driver.current_url in ["data:,", "about:blank"]:
-        logger.info("🔥 Warming up fresh browser on homepage...")
+    # --- FIX: If the browser is on Wikipedia/Google (not Sahibinden), go to the homepage first to establish session ---
+    if "sahibinden.com" not in driver.current_url:
+        logger.info("🔥 Navigating to Sahibinden homepage first to establish session...")
         driver.get("https://www.sahibinden.com/")
         time.sleep(random.uniform(2.0, 4.0))
-        handle_browser_check(driver)
 
+        handle_browser_check(driver)
+        accept_cookies(driver)
+
+    logger.info(f"🚀 Navigating to target URL...")
     driver.get(url)
 
-    # SPEEDUP 1: Fixed wait time reduced to 1-2 seconds
     time.sleep(random.uniform(1.0, 2.0))
 
     handle_browser_check(driver)
@@ -147,11 +163,9 @@ def load_and_bypass(driver: uc.Chrome, url: str) -> BeautifulSoup:
         handle_browser_check(driver)
 
     start_time = time.time()
-    # SPEEDUP 2: Reduced timeout limit from 30 to 20
     while time.time() - start_time < 20:
         soup = BeautifulSoup(driver.page_source, "html.parser")
 
-        # If there are listings in the table, return the data INSTANTLY, don't waste time
         if soup.select("#searchResultsTable tbody tr.searchResultsItem") or "ilan bulunamadı" in driver.page_source.lower():
             return soup
 
@@ -160,7 +174,6 @@ def load_and_bypass(driver: uc.Chrome, url: str) -> BeautifulSoup:
             handle_browser_check(driver)
             start_time = time.time()
 
-        # SPEEDUP 3: Frequency of checking listings reduced from 1.5s to 0.5s
         time.sleep(0.5)
 
     driver.save_screenshot("debug_silent_block.png")
@@ -169,6 +182,7 @@ def load_and_bypass(driver: uc.Chrome, url: str) -> BeautifulSoup:
         raise CaptchaDetectedException("Login/CAPTCHA wall detected! Saved 'debug_silent_block.png'.")
 
     raise CaptchaDetectedException("Page loaded but listings never appeared. Saved 'debug_silent_block.png'.")
+
 
 # ── COMPONENT 1: Scanner ──────────────────────────────────────────────────────
 class CategoryScanner:
@@ -197,10 +211,7 @@ class CategoryScanner:
             logger.info(f"{pad}  ✂️ Range too dense ({total_listings} listings). Splitting...")
             mid = (min_price + max_price) // 2
             left_urls = self.discover_bracket(min_price, mid, indent + 1)
-
-            # SPEEDUP 4: Wait time during search split is greatly shortened
             time.sleep(random.uniform(0.5, 1.0))
-
             right_urls = self.discover_bracket(mid + 1, max_price, indent + 1)
             return left_urls + right_urls
 
@@ -286,13 +297,11 @@ def scrape_range(driver: uc.Chrome, min_price: int, max_price: int, done_ranges:
     scanner = CategoryScanner(driver)
     extractor = DataExtractor(driver)
 
-    # 1. Discover all URLs for this bracket
     urls_to_scrape = scanner.discover_bracket(min_price, max_price)
 
     total_saved_this_run = 0
     start_index = progress_tracker.get(bracket_key, 0)
 
-    # 2. Extract data from each URL sequentially
     for i in range(start_index, len(urls_to_scrape)):
         url = urls_to_scrape[i]
         logger.info(f"  📄 Scraping page {i + 1}/{len(urls_to_scrape)} for {min_price}-{max_price} TL...")
@@ -305,7 +314,6 @@ def scrape_range(driver: uc.Chrome, min_price: int, max_price: int, done_ranges:
 
         progress_tracker[bracket_key] = i + 1
 
-        # SPEEDUP 5: Human-like wait reduced to once every 5 pages, duration set to 2-4 seconds
         if i > 0 and i % 5 == 0:
             pause_time = random.uniform(2, 4)
             logger.info(f"  ⏳ Taking a brief human-like pause of {pause_time:.2f} seconds...")

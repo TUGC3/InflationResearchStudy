@@ -36,6 +36,23 @@ def _save_checkpoint(data: dict) -> None:
     with open(config.CHECKPOINT_FILE, "w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, indent=2)
 
+def warm_up_browser(driver) -> None:
+    """
+    Increases the browser's Trust Score (Güvenlik Skoru) by building a realistic
+    initial history and cookie profile before hitting the heavily guarded target.
+    """
+    warmup_sites = [
+        "https://www.google.com.tr",
+        "https://tr.wikipedia.org/wiki/Ana_Sayfa",
+        "https://www.youtube.com"
+    ]
+    site = random.choice(warmup_sites)
+    logger.info(f"🔥 Warming up browser trust score by visiting: {site}")
+    try:
+        driver.get(site)
+        time.sleep(random.uniform(3.0, 6.0))
+    except Exception as e:
+        logger.debug(f"Warm-up skipped due to error: {e}")
 
 def run(args: argparse.Namespace) -> None:
     checkpoint = _load_checkpoint() if not args.restart else {"scraped_urls": [], "completed_brackets": []}
@@ -66,6 +83,8 @@ def run(args: argparse.Namespace) -> None:
             # 2. Only spin up a new browser if we don't currently have one
             if driver is None:
                 driver = setup_driver()
+                # Tarayıcı sıfırdan açıldığı an çerezleri ve geçmişi ısıt
+                warm_up_browser(driver)
 
             scanner = CategoryScanner(driver)
             extractor = DataExtractor(driver)
@@ -101,8 +120,6 @@ def run(args: argparse.Namespace) -> None:
                         checkpoint["scraped_urls"] = list(scraped_urls)
                         _save_checkpoint(checkpoint)
 
-                        #time.sleep(random.uniform(1, 3))
-
                 bracket_complete = True
                 completed_brackets.add((seed_min, seed_max))
                 checkpoint["completed_brackets"] = [list(b) for b in completed_brackets]
@@ -126,8 +143,6 @@ def run(args: argparse.Namespace) -> None:
             except Exception as e:
                 logger.error(f"Critical Error: {e}")
                 break
-
-            # 4. REMOVED the `finally` block from here so the browser doesn't quit on success!
 
     # 5. Quit the driver safely when all brackets are completely done
     if driver:
