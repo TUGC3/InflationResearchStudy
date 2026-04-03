@@ -1,37 +1,13 @@
-"""
-main.py — Kayseri / Sivas / Tokat Kiralık Konut Scraper
-CLI giriş noktası ve orkestratör.
-
-Kullanım:
-  python main.py                   # Tüm şehirleri sıfırdan çek
-  python main.py --resume          # Checkpoint'ten devam et
-  python main.py --city kayseri    # Sadece bir şehri çek
-  python main.py -v                # Verbose (debug) log
-
-Çalışırken konsol komutları:
-  skip    → Mevcut şehri atla, sonrakine geç
-  next    → Mevcut bracket'ı atla, sonrakine geç
-  stop    → Scraper'ı düzgünce durdur
-  status  → Mevcut durumu yazdır
-  help    → Komut listesini göster
-"""
-
 import argparse
 import asyncio
 import logging
+import os
 import queue
 import sys
 import threading
 
 import config
-from scraper import (
-    SkipCitySignal,
-    StopSignal,
-    clear_checkpoint,
-    load_checkpoint,
-    save_checkpoint,
-    scrape_city,
-)
+from scraper import SkipCitySignal, StopSignal, clear_checkpoint, load_checkpoint, scrape_city
 
 logging.basicConfig(
     level=logging.INFO,
@@ -44,6 +20,7 @@ HELP_TEXT = """
 ╔══════════════════════════════════════════╗
 ║         Konsol Komutları                 ║
 ╠══════════════════════════════════════════╣
+║  ok     → Manuel doğrulamayı onayla     ║
 ║  skip   → Mevcut şehri atla             ║
 ║  next   → Mevcut bracket'ı atla         ║
 ║  stop   → Scraper'ı durdur              ║
@@ -52,178 +29,115 @@ HELP_TEXT = """
 ╚══════════════════════════════════════════╝
 """
 
-
-# ============================================================
-# KONSOL MÜDAHALE SİSTEMİ
-# ============================================================
-
-# Mevcut durumu paylaşmak için thread-safe yapı
 _current_status: dict = {"city": "-", "bracket": "-", "page": "-"}
 _status_lock = threading.Lock()
 
 
-def update_status(city: str = None, bracket: str = None, page: str = None) -> None:
+def update_status(city=None, bracket=None, page=None):
     with _status_lock:
-        if city    is not None: _current_status["city"]    = city
-        if bracket is not None: _current_status["bracket"] = bracket
-        if page    is not None: _current_status["page"]    = page
+        if city:    _current_status["city"]    = city
+        if bracket: _current_status["bracket"] = bracket
+        if page:    _current_status["page"]    = page
 
 
-def print_status() -> None:
+def print_status():
     with _status_lock:
-        s = _current_status
+        s = dict(_current_status)
     print(f"\n📊 Durum: Şehir={s['city']} | Bracket={s['bracket']} | Sayfa={s['page']}\n")
 
 
-def console_listener(cmd_queue: queue.Queue, stop_event: threading.Event) -> None:
+def console_listener(cmd_queue, stop_event):
     """
-    Arka planda stdin'i dinler, komutları kuyruğa ekler.
-
-    Scraper sona erince stop_event set edilir ve thread durur.
+    Single owner of stdin. wait_for_manual_solve() must NEVER call input() —
+    it reads from cmd_queue instead, avoiding the stdin deadlock that caused
+    CLI commands to stop working and human-click steps to hang indefinitely.
     """
     while not stop_event.is_set():
         try:
             line = input()
         except (EOFError, KeyboardInterrupt):
             break
-
         cmd = line.strip().lower()
         if not cmd:
             continue
-
         if cmd == "help":
             print(HELP_TEXT)
         elif cmd == "status":
             print_status()
-        elif cmd in ("skip", "next", "stop"):
+        elif cmd in ("skip", "next", "stop", "ok", "devam"):
             cmd_queue.put(cmd)
-            logger.info("⚡ Komut kuyruğa eklendi: '%s'", cmd)
+            logger.info("⚡ Komut alındı: '%s'", cmd)
         else:
-            logger.warning("❓ Bilinmeyen komut: '%s' — 'help' yazın.", cmd)
+            print(f"Bilinmeyen komut: '{cmd}'. Yardım için 'help' yazın.")
 
 
-# ============================================================
-# ANA ÇALIŞTIRICI
-# ============================================================
-
-async def run(args: argparse.Namespace) -> None:
+async def run(args):
     checkpoint = load_checkpoint() if args.resume else {}
+    cities = config.CITIES
 
-    # --city filtresi
-    cities_to_scrape = config.CITIES
     if args.city:
-        target = args.city.lower()
-        cities_to_scrape = [c for c in config.CITIES if c["url_slug"] == target]
-        if not cities_to_scrape:
-            valid = ", ".join(c["url_slug"] for c in config.CITIES)
-            logger.error("Şehir '%s' bulunamadı. Geçerli: %s", args.city, valid)
+        cities = [c for c in config.CITIES if c["url_slug"] == args.city.lower()]
+        if not cities:
+            logger.error("Geçersiz şehir slug'ı: %s", args.city)
             sys.exit(1)
 
-    # Taze çalışmada bugünkü CSV'leri temizle
     if not args.resume:
-        for city_cfg in cities_to_scrape:
-            csv_path = config.get_city_csv_path(city_cfg["name"])
-            import os
-            if os.path.exists(csv_path):
-                os.remove(csv_path)
-                logger.info("Eski CSV temizlendi: %s", csv_path)
+        for c in cities:
+            p = config.get_city_csv_path(c["name"])
+            if os.path.exists(p):
+                os.remove(p)
 
-    # Checkpoint'teki şehirden başla
-    start_city = checkpoint.get("city")
-    start_idx  = 0
-    if start_city and args.resume:
-        for i, c in enumerate(cities_to_scrape):
-            if c["url_slug"] == start_city:
+    start_idx = 0
+    if args.resume and checkpoint.get("city"):
+        for i, c in enumerate(cities):
+            if c["url_slug"] == checkpoint["city"]:
                 start_idx = i
                 break
 
-    # Konsol müdahale sistemi
-    cmd_queue   = queue.Queue()
-    stop_event  = threading.Event()
-    console_thread = threading.Thread(
+    cmd_q    = queue.Queue()
+    stop_ev  = threading.Event()
+    threading.Thread(
         target=console_listener,
-        args=(cmd_queue, stop_event),
-        daemon=True,    # Ana thread bitince otomatik ölür
-        name="ConsoleListener",
-    )
-    console_thread.start()
+        args=(cmd_q, stop_ev),
+        daemon=True,
+    ).start()
 
     print(HELP_TEXT)
-    logger.info(
-        "🚀 %d şehir için scrape başlıyor (%d checkpoint tamamlandı)...",
-        len(cities_to_scrape) - start_idx,
-        len(checkpoint.get("done_cities", [])),
-    )
-
-    grand_total = 0
+    logger.info("🚀 Scrape başlıyor...")
 
     try:
-        for city_cfg in cities_to_scrape[start_idx:]:
-            update_status(city=city_cfg["name"], bracket="-", page="-")
+        for city in cities[start_idx:]:
             try:
-                await scrape_city(
-                    city=city_cfg,
-                    checkpoint=checkpoint,
-                    cmd_queue=cmd_queue,
-                )
-                grand_total += 0   # scrape_city kendi logluyor
-                checkpoint = {}    # Sonraki şehir checkpoint sıfırla
-
+                await scrape_city(city=city, checkpoint=checkpoint, cmd_queue=cmd_q)
+                checkpoint = {}
             except SkipCitySignal:
-                logger.warning("⏭️ %s atlandı.", city_cfg["name"])
+                logger.warning("⏭️  %s atlandı.", city["name"])
                 checkpoint = {}
                 continue
-
             except StopSignal:
-                logger.warning("🛑 Stop komutu alındı — scraper durduruluyor.")
+                logger.warning("🛑 Kullanıcı durdurdu.")
                 break
-
     except KeyboardInterrupt:
-        logger.warning("⛔ Ctrl+C algılandı — scraper durduruluyor.")
-
+        pass
     finally:
-        stop_event.set()    # Konsol thread'ini durdur
+        stop_ev.set()
 
     clear_checkpoint()
-    logger.info("\n✅ Tüm şehirler tamamlandı.")
+    logger.info("\n✅ Tamamlandı.")
 
 
-# ============================================================
-# CLI
-# ============================================================
-
-def _build_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(
-        prog="kayseri-sivas-tokat-scraper",
-        description="Kayseri, Sivas, Tokat kiralık konut ilanlarını çeker.",
-    )
-    parser.add_argument(
-        "--resume",
-        action="store_true",
-        help="Checkpoint'ten devam et.",
-    )
-    parser.add_argument(
-        "--city",
-        type=str,
-        default=None,
-        metavar="ŞEHİR",
-        help="Sadece bir şehri çek (kayseri / sivas / tokat).",
-    )
-    parser.add_argument(
-        "-v", "--verbose",
-        action="store_true",
-        help="Debug log.",
-    )
-    return parser
+def _build_parser():
+    p = argparse.ArgumentParser(description="Sahibinden kira scraper")
+    p.add_argument("--resume",  action="store_true", help="Checkpoint'ten devam et")
+    p.add_argument("--city",    type=str, default=None, help="Tek şehir (url slug)")
+    p.add_argument("-v", "--verbose", action="store_true", help="Debug loglama")
+    return p
 
 
-def main() -> None:
-    parser = _build_parser()
-    args   = parser.parse_args()
-
+def main():
+    args = _build_parser().parse_args()
     if args.verbose:
         logging.getLogger().setLevel(logging.DEBUG)
-
     asyncio.run(run(args))
 
 
