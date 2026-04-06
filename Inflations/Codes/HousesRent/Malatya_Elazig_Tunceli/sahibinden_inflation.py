@@ -129,6 +129,31 @@ def _compute_metrics(df_current: pd.DataFrame, df_past: pd.DataFrame, city: str)
         [float("inf"), float("-inf")], pd.NA
     )
 
+    # ── Inflation-level IQR outlier filter ──────────────────────────────────
+    # Fiyat-bazlı IQR (_load_csv) tek günün uç fiyatlarını atar ama
+    # iki gün arasındaki absürt yüzde değişimleri yakalayamaz
+    # (örn. 1.400→30.000 TL = %2042). Bu filtre per-item inflation
+    # değerlerinin kendisine IQR×3.0 uygulayarak ortalamayı koruyor.
+    #
+    # Edge case: 1d gibi kısa intervallerde çoğu grup %0 değişim gösterir,
+    # IQR=0 olur ve filtre sınırları [0,0]'a çöker → her non-zero değer
+    # atılır. Minimum IQR tabanı (10 yüzde puan) bu durumu önler:
+    # taban ile sınırlar en az ±30pp olur, gerçek outlier'lar hâlâ yakalanır.
+    _inf_vals = merged["per_item_inflation"].dropna()
+    if len(_inf_vals) >= 4:
+        _q1 = _inf_vals.quantile(0.25)
+        _q3 = _inf_vals.quantile(0.75)
+        _iqr = max(_q3 - _q1, 10.0)
+        _inf_lower = _q1 - 3.0 * _iqr
+        _inf_upper = _q3 + 3.0 * _iqr
+        merged.loc[
+            merged["per_item_inflation"].notna() & (
+                (merged["per_item_inflation"] < _inf_lower) |
+                (merged["per_item_inflation"] > _inf_upper)
+            ),
+            "per_item_inflation",
+        ] = pd.NA
+
     # 2) Average inflation
     avg_inflation = merged["per_item_inflation"].mean()
 
