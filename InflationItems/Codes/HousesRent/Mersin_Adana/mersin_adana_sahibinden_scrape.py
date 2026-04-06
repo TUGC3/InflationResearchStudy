@@ -16,8 +16,8 @@ CITIES: Dict[str, str] = {
 
 HEADLESS = os.environ.get("HEADLESS", "").strip().lower() in {"1", "true", "yes"}
 
-SLEEP_MIN = 3.5
-SLEEP_MAX = 5.5
+SLEEP_MIN = 2.5
+SLEEP_MAX = 4
 
 BROWSER_MAJOR_VERSION = 145
 
