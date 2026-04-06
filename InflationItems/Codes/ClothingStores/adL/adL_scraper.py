@@ -50,15 +50,11 @@ def scrape_adl_api(category_slug):
                 price_dict = product.get("price", {})
                 current_price = price_dict.get("value", 0.0)
 
-                # 2. Get the original price (Fallback to current_price if it's not on sale)
-                original_price_dict = product.get("originalPrice", {})
-                original_price = original_price_dict.get("value", current_price)
 
                 category_data.append({
-                    'Category': category_name,
                     'Product Name': name,
-                    'Original Price (TRY)': original_price,
-                    'Current Price (TRY)': current_price
+                    'Price': current_price,
+                    'Category': category_name
                 })
             except Exception as e:
                 print(f"Error parsing product JSON: {e}")

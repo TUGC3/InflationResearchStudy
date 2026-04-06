@@ -10,7 +10,7 @@ import time
 import random
 
 import config
-from scraper import setup_driver, CategoryScanner, DataExtractor, CaptchaDetectedException, delete_selenium_profile
+from scraper import setup_driver, CategoryScanner, DataExtractor, CaptchaDetectedException, delete_selenium_profile, save_incremental
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s", datefmt="%H:%M:%S")
 logger = logging.getLogger(__name__)
@@ -113,7 +113,7 @@ def run(args: argparse.Namespace) -> None:
                             _save_checkpoint(checkpoint)
                             break
 
-                        extractor.save_to_csv(records)
+                        save_incremental(records)
                         total_saved += len(records)
                         scraped_urls.add(url)
 

@@ -37,8 +37,7 @@ def scrape():
             if name_tag and price_tag:
                 clean_name = name_tag.text.strip()
                 clean_price = " ".join(price_tag.text.split())
-                product_count += 1
-                all_data.append([product_count, clean_name, clean_price])
+                all_data.append([ clean_name, clean_price])
 
         url = f"https://www.baskentmarket.com.tr/kategori/tum-urunler?tp={index}"
         answer = requests.get(url, headers=headers)
@@ -58,7 +57,7 @@ def scrape():
 
     with open(file_path, mode='w', newline='', encoding='utf-8-sig') as file:
         writer = csv.writer(file)
-        writer.writerow(['ID', 'Product Name', 'Price'])
+        writer.writerow([ 'Product Name', 'Price'])
         writer.writerows(all_data)
 
     print(f"Success: {product_count} items saved to: {file_path}")

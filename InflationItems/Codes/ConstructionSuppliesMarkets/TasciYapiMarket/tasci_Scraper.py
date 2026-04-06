@@ -53,7 +53,7 @@ print(f"Data will be saved to: {csv_file_path}")
 
 with open(csv_file_path, 'w', newline='', encoding='utf-8') as file:
     writer = csv.writer(file)
-    writer.writerow(['Category', 'Product Name', 'Price (TL)'])
+    writer.writerow(['Product Name', 'Price ', 'Category'])
 
     for category in categories:
         offset = 0
