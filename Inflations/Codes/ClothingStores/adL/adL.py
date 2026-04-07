@@ -34,10 +34,8 @@ else:
             df['Date'] = pd.to_datetime(date_str)
 
             # Standardize Price
-            if 'Current Price (TRY)' in df.columns:
-                df['Active_Price'] = df['Current Price (TRY)']
-            elif 'Price (TRY)' in df.columns:
-                df['Active_Price'] = df['Price (TRY)']
+            if 'Price' in df.columns:
+                df['Active_Price'] = df['Price']
             else:
                 continue
 

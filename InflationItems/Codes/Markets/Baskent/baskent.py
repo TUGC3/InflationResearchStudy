@@ -38,6 +38,7 @@ def scrape():
                 clean_name = name_tag.text.strip()
                 clean_price = " ".join(price_tag.text.split())
                 all_data.append([ clean_name, clean_price])
+                product_count+=1
 
         url = f"https://www.baskentmarket.com.tr/kategori/tum-urunler?tp={index}"
         answer = requests.get(url, headers=headers)
