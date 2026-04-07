@@ -332,5 +332,14 @@ def main():
     print(format_row(f"{BOLD}TOTAL ITEMS COLLECTED: {CYAN}{total_items:,}{RESET}", "", width=CARD_WIDTH))
     print(f"{WHITE}╚{'═' * (CARD_WIDTH - 2)}╝{RESET}\n")
 
+    # Run inflation calculations automatically after scraping
+    print(f"{YELLOW}{BOLD}Running inflation calculations...{RESET}\n")
+    calc_script = os.path.join(
+        os.path.dirname(codes_dir),  # InflationItems/
+        os.pardir, "Inflations", "Codes", "Full_Calculate", "batukoray", "calc_inflation.py"
+    )
+    calc_script = os.path.normpath(calc_script)
+    subprocess.run([sys.executable, calc_script])
+
 if __name__ == "__main__":
     main()
