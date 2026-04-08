@@ -44,7 +44,7 @@ def scroll_to_bottom(driver):
         last_height = new_height
 
 options = uc.ChromeOptions()
-driver = uc.Chrome(version_main=145, options=options)
+driver = uc.Chrome(options=options)
 
 data_dir = "InflationItems/Datas/Markets/CarrefourSA"
 os.makedirs(data_dir, exist_ok=True)

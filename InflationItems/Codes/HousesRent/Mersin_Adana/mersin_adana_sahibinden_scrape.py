@@ -65,7 +65,7 @@ def setup_driver() -> uc.Chrome:
 
     return uc.Chrome(
         options=options,
-        version_main=145
+        # version_main=145
     )
 
 def close_driver(driver: Optional[uc.Chrome]) -> None:
