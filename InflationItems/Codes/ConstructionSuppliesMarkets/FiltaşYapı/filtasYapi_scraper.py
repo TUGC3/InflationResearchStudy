@@ -109,7 +109,7 @@ class DataExtractor:
             numeric_price = self.clean_price(raw_price)
             
             extracted_items.append({
-                "category": page_data["category"],
+                # "category": page_data["category"],
                 "title": title_el.get_text(strip=True) if title_el else "N/A",
                 "price": numeric_price  
             })
@@ -130,7 +130,7 @@ class Storage:
         out_path = os.path.join(path, filename)
 
         with open(out_path, "w", newline="", encoding="utf-8-sig") as f:
-            fieldnames = ["category", "title", "price"]
+            fieldnames = ["title", "price"]
             w = csv.DictWriter(f, fieldnames=fieldnames)
             
             w.writeheader()

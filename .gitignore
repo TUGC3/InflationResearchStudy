@@ -37,6 +37,8 @@ venv/
 .ai/
 SeleniumProfile/
 .claude/
+CLAUDE.md
+AGENTS.md
 scrape_progress.json/
 
 # --- Python bytecode (extra) ---

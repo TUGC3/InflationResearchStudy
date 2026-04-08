@@ -83,7 +83,6 @@ def run(args: argparse.Namespace) -> None:
             # 2. Only spin up a new browser if we don't currently have one
             if driver is None:
                 driver = setup_driver()
-                # Tarayıcı sıfırdan açıldığı an çerezleri ve geçmişi ısıt
                 warm_up_browser(driver)
 
             scanner = CategoryScanner(driver)
@@ -119,7 +118,7 @@ def run(args: argparse.Namespace) -> None:
 
                         checkpoint["scraped_urls"] = list(scraped_urls)
                         _save_checkpoint(checkpoint)
-                        time.sleep(random.randint(0,2))
+                        #time.sleep(random.randint(0,2))
 
                 bracket_complete = True
                 completed_brackets.add((seed_min, seed_max))
