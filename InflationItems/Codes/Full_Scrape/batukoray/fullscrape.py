@@ -1,3 +1,4 @@
+import argparse
 import subprocess
 import os
 import sys
@@ -160,7 +161,42 @@ def format_row(content_left, content_right="", width=TABLE_WIDTH):
     padding = " " * max(0, space_needed)
     return f"{WHITE}║ {RESET}{content_left}{padding}{content_right}{WHITE} ║{RESET}"
 
+
+def _build_parser():
+    parser = argparse.ArgumentParser(
+        description="Run Batu Koray Masak's full scrape orchestration."
+    )
+    parser.add_argument(
+        "--only",
+        type=str,
+        default="",
+        help="Comma-separated scraper names to run: Nalburadam,Bershka,Hapeloglu,EEB",
+    )
+    parser.add_argument(
+        "--skip",
+        type=str,
+        default="",
+        help="Comma-separated scraper names to skip: Nalburadam,Bershka,Hapeloglu,EEB",
+    )
+    parser.add_argument(
+        "--skip-inflation",
+        action="store_true",
+        help="Skip the automatic inflation calculation after scraping.",
+    )
+    return parser
+
+
+def _parse_name_list(raw_value):
+    return {
+        part.strip().lower()
+        for part in raw_value.split(",")
+        if part.strip()
+    }
+
+
 def main():
+    args = _build_parser().parse_args()
+
     # Pathing: script_dir is batukoraymasak, so we go up two levels to reach Codes/
     script_dir = os.path.dirname(os.path.abspath(__file__))
     codes_dir = os.path.dirname(os.path.dirname(script_dir))
@@ -173,6 +209,25 @@ def main():
         ("Hapeloglu",  os.path.join(codes_dir, "Markets", "Hapeloglu")),
         ("EEB",    os.path.join(codes_dir, "HousesRent", "ErzurumErzincanBayburt"))
     ]
+
+    allowed_names = {name.lower() for name, _ in my_scrapers}
+    only_names = _parse_name_list(args.only)
+    skip_names = _parse_name_list(args.skip)
+
+    unknown_names = sorted((only_names | skip_names) - allowed_names)
+    if unknown_names:
+        print(f"{RED}Unknown scraper name(s): {', '.join(unknown_names)}{RESET}")
+        sys.exit(1)
+
+    if only_names:
+        my_scrapers = [item for item in my_scrapers if item[0].lower() in only_names]
+
+    if skip_names:
+        my_scrapers = [item for item in my_scrapers if item[0].lower() not in skip_names]
+
+    if not my_scrapers:
+        print(f"{RED}No scrapers selected after applying --only/--skip.{RESET}")
+        sys.exit(1)
     
     processes = []
     log_file_objects = []
@@ -333,13 +388,16 @@ def main():
     print(f"{WHITE}╚{'═' * (CARD_WIDTH - 2)}╝{RESET}\n")
 
     # Run inflation calculations automatically after scraping
-    print(f"{YELLOW}{BOLD}Running inflation calculations...{RESET}\n")
-    calc_script = os.path.join(
-        os.path.dirname(codes_dir),  # InflationItems/
-        os.pardir, "Inflations", "Codes", "Full_Calculate", "batukoray", "calc_inflation.py"
-    )
-    calc_script = os.path.normpath(calc_script)
-    subprocess.run([sys.executable, calc_script])
+    if args.skip_inflation:
+        print(f"{YELLOW}{BOLD}Skipping inflation calculations (--skip-inflation).{RESET}\n")
+    else:
+        print(f"{YELLOW}{BOLD}Running inflation calculations...{RESET}\n")
+        calc_script = os.path.join(
+            os.path.dirname(codes_dir),  # InflationItems/
+            os.pardir, "Inflations", "Codes", "Full_Calculate", "batukoray", "calc_inflation.py"
+        )
+        calc_script = os.path.normpath(calc_script)
+        subprocess.run([sys.executable, calc_script])
 
 if __name__ == "__main__":
     main()
