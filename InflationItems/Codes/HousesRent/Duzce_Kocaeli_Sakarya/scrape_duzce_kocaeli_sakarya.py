@@ -141,8 +141,8 @@ def setup_driver() -> uc.Chrome:
     if HEADLESS:
         options.add_argument("--headless=new")
 
-    # On Linux use Chromium with auto-detected version; on Windows use pinned Brave version.
-    version = None if platform.system() != "Windows" else BROWSER_MAJOR_VERSION
+    # On Linux use Chromium with pinned version (146); on Windows use pinned Brave version.
+    version = 146 if platform.system() != "Windows" else BROWSER_MAJOR_VERSION
 
     return uc.Chrome(
         options=options,
