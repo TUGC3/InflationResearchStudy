@@ -198,9 +198,8 @@ def ensure_access(driver: uc.Chrome, url: str) -> None:
     polite_sleep()
 
     if is_block_page(driver.page_source):
-        print("\n[BLOCK DETECTED]")
-        print("Solve the verification in the opened browser window.")
-        input("When the real listings page is visible, press ENTER here to continue...")
+        print("\n[BLOCK DETECTED] Waiting 30s and retrying automatically...")
+        time.sleep(30)
         driver.get(url)
         polite_sleep()
 
@@ -295,8 +294,8 @@ def scrape_city(driver: uc.Chrome, city: str, base_url: str) -> Tuple[uc.Chrome,
 
                 # If still blocked, pause/retry (no skipping!)
                 if is_block_page(html):
-                    print("Still blocked on this bracket page.")
-                    input("Solve it in browser, then press ENTER to retry this page...")
+                    print("Still blocked on this bracket page. Waiting 60s and retrying...")
+                    time.sleep(60)
                     continue
 
                 rows = extract_listings_from_html(html)
@@ -305,8 +304,8 @@ def scrape_city(driver: uc.Chrome, city: str, base_url: str) -> Tuple[uc.Chrome,
                 # Critical fix: do NOT skip zero-listing pages silently
                 if len(rows) == 0:
                     print("Zero listings on page (possible soft-block). URL:", driver.current_url)
-                    input("Check browser. If it's blocked/empty, fix it, then press ENTER to retry...")
-                    continue
+                    print("Skipping this bracket automatically...")
+                    break
 
                 last_out_path = append_to_daily_csv(city, rows)
                 print(f"Appended {len(rows)} rows -> {last_out_path}")
