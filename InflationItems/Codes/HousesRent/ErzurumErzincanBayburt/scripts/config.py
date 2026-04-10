@@ -61,18 +61,18 @@ MIN_BRACKET_WIDTH = 50
 
 # -- Request / Timing Settings ---------------------------------------------
 PAGE_SIZE              = 50
-PAGE_LOAD_DELAY        = 0.2   # Mean page load wait
-PAGE_LOAD_STDEV        = 0.4
-PAGE_LOAD_FLOOR        = 0.05
-PAGE_TURN_DELAY_MEAN   = 0.2
-PAGE_TURN_DELAY_STDEV  = 0.4
-PAGE_TURN_DELAY_FLOOR  = 0.05
-BETWEEN_BRACKET_DELAY_MEAN = 0.6
-BETWEEN_BRACKET_DELAY_STDEV = 0.4
-BETWEEN_BRACKET_DELAY_FLOOR = 0.05
-BETWEEN_CITY_DELAY_MEAN    = 0.9
-BETWEEN_CITY_DELAY_STDEV   = 1.0
-BETWEEN_CITY_DELAY_FLOOR   = 0.05
+PAGE_LOAD_DELAY        = 1.2   # Mean page load wait
+PAGE_LOAD_STDEV        = 0.6
+PAGE_LOAD_FLOOR        = 0.2
+PAGE_TURN_DELAY_MEAN   = 1.2
+PAGE_TURN_DELAY_STDEV  = 0.6
+PAGE_TURN_DELAY_FLOOR  = 0.2
+BETWEEN_BRACKET_DELAY_MEAN = 1.6
+BETWEEN_BRACKET_DELAY_STDEV = 0.6
+BETWEEN_BRACKET_DELAY_FLOOR = 0.2
+BETWEEN_CITY_DELAY_MEAN    = 1.9
+BETWEEN_CITY_DELAY_STDEV   = 1.2
+BETWEEN_CITY_DELAY_FLOOR   = 0.2
 
 # -- Output Settings -------------------------------------------------------
 TODAY = _dt.date.today().strftime("%Y-%m-%d")
