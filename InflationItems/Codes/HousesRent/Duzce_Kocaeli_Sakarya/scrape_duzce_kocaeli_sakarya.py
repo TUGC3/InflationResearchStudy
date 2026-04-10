@@ -1,5 +1,6 @@
 import csv
 import os
+import platform
 import random
 import shutil
 import time
@@ -26,7 +27,8 @@ HEADLESS = os.environ.get("HEADLESS", "").strip().lower() in {"1", "true", "yes"
 SLEEP_MIN = 2.5
 SLEEP_MAX = 4.5
 
-# Your Brave major version (from your earlier error message)
+# Brave major version on Windows (from your earlier error message).
+# On Linux, version is auto-detected from the installed Chromium.
 BROWSER_MAJOR_VERSION = 145
 
 # Persistent profile so manual verification/cookies stick
@@ -81,24 +83,39 @@ def data_dir_for_city(city: str) -> str:
 
 
 # =========================
-# Brave path
+# Browser path
 # =========================
 
-def find_brave_exe() -> str:
-    env_brave = os.environ.get("BRAVE_PATH", "").strip()
-    if env_brave and os.path.isfile(env_brave):
-        return env_brave
+def find_browser_exe() -> str:
+    # Explicit override via env var (works on any platform)
+    for env_var in ("BROWSER_PATH", "BRAVE_PATH"):
+        val = os.environ.get(env_var, "").strip()
+        if val and os.path.isfile(val):
+            return val
 
-    candidates = [
-        r"C:\Program Files\BraveSoftware\Brave-Browser\Application\brave.exe",
-        r"C:\Program Files (x86)\BraveSoftware\Brave-Browser\Application\brave.exe",
-        os.path.expandvars(r"%LOCALAPPDATA%\BraveSoftware\Brave-Browser\Application\brave.exe"),
-    ]
+    if platform.system() == "Windows":
+        candidates = [
+            r"C:\Program Files\BraveSoftware\Brave-Browser\Application\brave.exe",
+            r"C:\Program Files (x86)\BraveSoftware\Brave-Browser\Application\brave.exe",
+            os.path.expandvars(r"%LOCALAPPDATA%\BraveSoftware\Brave-Browser\Application\brave.exe"),
+        ]
+    else:  # Linux / macOS
+        candidates = [
+            "/usr/bin/chromium-browser",
+            "/usr/bin/chromium",
+            "/snap/bin/chromium",
+            "/usr/bin/google-chrome-stable",
+            "/usr/bin/google-chrome",
+        ]
+
     for p in candidates:
         if p and os.path.isfile(p):
             return p
 
-    raise FileNotFoundError("Brave executable not found. Set BRAVE_PATH to your brave.exe full path.")
+    raise FileNotFoundError(
+        "Browser executable not found. "
+        "Set BROWSER_PATH environment variable to the full path of your browser binary."
+    )
 
 
 # =========================
@@ -106,7 +123,7 @@ def find_brave_exe() -> str:
 # =========================
 
 def setup_driver() -> uc.Chrome:
-    brave_exe = find_brave_exe()
+    browser_exe = find_browser_exe()
 
     options = uc.ChromeOptions()
     profile_path = os.path.join(os.path.dirname(__file__), PROFILE_DIR_NAME)
@@ -124,10 +141,13 @@ def setup_driver() -> uc.Chrome:
     if HEADLESS:
         options.add_argument("--headless=new")
 
+    # On Linux use Chromium with auto-detected version; on Windows use pinned Brave version.
+    version = None if platform.system() != "Windows" else BROWSER_MAJOR_VERSION
+
     return uc.Chrome(
         options=options,
-        browser_executable_path=brave_exe,
-        version_main=BROWSER_MAJOR_VERSION,
+        browser_executable_path=browser_exe,
+        version_main=version,
     )
 
 
