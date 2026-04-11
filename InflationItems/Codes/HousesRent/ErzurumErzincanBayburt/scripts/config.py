@@ -14,6 +14,7 @@ range, the scraper peeks at the "Total Listings Found" text.
 """
 
 import datetime as _dt
+import os as _os
 from pathlib import Path as _Path
 
 # -- Paths -----------------------------------------------------------------
@@ -75,7 +76,11 @@ BETWEEN_CITY_DELAY_STDEV   = 1.2
 BETWEEN_CITY_DELAY_FLOOR   = 0.2
 
 # -- Output Settings -------------------------------------------------------
-TODAY = _dt.date.today().strftime("%Y-%m-%d")
+_DATE_OVERRIDE = _os.getenv("SCRAPE_DATE_OVERRIDE", "").strip()
+if _DATE_OVERRIDE:
+    TODAY = _dt.date.fromisoformat(_DATE_OVERRIDE).strftime("%Y-%m-%d")
+else:
+    TODAY = _dt.date.today().strftime("%Y-%m-%d")
 
 OUTPUT_BASE_DIR = str(_PROJECT_ROOT / "Datas" / "HousesRent" / FOLDER_NAME)
 CHECKPOINT_DIR  = str(_SCRAPER_DIR / "checkpoints")

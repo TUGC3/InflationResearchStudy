@@ -8,7 +8,7 @@ Usage:
 
 import os
 import sys
-from datetime import datetime
+from datetime import date, datetime
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
@@ -17,9 +17,19 @@ from src.utils import setup_logger
 from src.scraper import scrape_all
 
 
+def _resolve_scrape_timestamp() -> datetime:
+    override = os.getenv("SCRAPE_DATE_OVERRIDE", "").strip()
+    now = datetime.now().replace(microsecond=0)
+    if not override:
+        return now
+
+    target_date = date.fromisoformat(override)
+    return datetime.combine(target_date, now.time())
+
+
 def main():
     setup_logger()
-    timestamp = datetime.now()
+    timestamp = _resolve_scrape_timestamp()
 
     df = scrape_all()
     if df.empty:

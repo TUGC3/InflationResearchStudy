@@ -27,6 +27,49 @@ import config
 
 logger = logging.getLogger(__name__)
 
+_TURKISH_CHAR_MAP = str.maketrans(
+    {
+        "ı": "i",
+        "İ": "i",
+        "ş": "s",
+        "Ş": "s",
+        "ğ": "g",
+        "Ğ": "g",
+        "ü": "u",
+        "Ü": "u",
+        "ö": "o",
+        "Ö": "o",
+        "ç": "c",
+        "Ç": "c",
+    }
+)
+_VALID_LOCATION_PREFIXES = {
+    "erzincan": {
+        "cayirli",
+        "ilic",
+        "kemah",
+        "kemaliye",
+        "merkez",
+        "otlukbeli",
+        "refahiye",
+        "tercan",
+        "uzumlu",
+    }
+}
+
+
+def _normalise_location_token(value: str) -> str:
+    return value.strip().translate(_TURKISH_CHAR_MAP).casefold()
+
+
+def _is_valid_location(city_url_slug: str, district: str) -> bool:
+    allowed_prefixes = _VALID_LOCATION_PREFIXES.get(city_url_slug)
+    if not allowed_prefixes:
+        return True
+
+    top_level = district.split(" / ")[0].strip()
+    return _normalise_location_token(top_level) in allowed_prefixes
+
 
 # -- HTML helpers ----------------------------------------------------------
 
@@ -80,7 +123,9 @@ def _resolve_rooms_index(soup: BeautifulSoup) -> int | None:
     return None
 
 
-def _parse_listings(soup: BeautifulSoup, rooms_idx: int | None) -> list[dict]:
+def _parse_listings(
+    soup: BeautifulSoup, rooms_idx: int | None, city_url_slug: str
+) -> list[dict]:
     records = []
     for row in soup.select("#searchResultsTable tbody tr.searchResultsItem"):
         try:
@@ -98,7 +143,7 @@ def _parse_listings(soup: BeautifulSoup, rooms_idx: int | None) -> list[dict]:
             else:
                 rooms = "N/A"
 
-            if price:
+            if price and _is_valid_location(city_url_slug, district):
                 records.append({"Product Name": district, "Product Cost": _clean_price(price), "Rooms": rooms})
         except Exception as exc:
             logger.debug("Row parse error: %s", exc)
@@ -231,7 +276,7 @@ def scrape_range(
     page_num = 1
 
     while True:
-        page_records = _parse_listings(soup, rooms_idx)
+        page_records = _parse_listings(soup, rooms_idx, city_url_slug)
         records.extend(page_records)
 
         if page_records:

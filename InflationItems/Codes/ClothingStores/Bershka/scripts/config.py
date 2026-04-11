@@ -57,6 +57,7 @@ BATCH_SIZE = 100           # Product IDs per batch request
 
 # ── Output Settings ──────────────────────────────────────────────────────────
 import datetime as _dt
+import os as _os
 from pathlib import Path as _Path
 
 # Resolve paths relative to this config file so the scraper works regardless
@@ -72,7 +73,11 @@ BASE_OUTPUT_DIR = str(_PROJECT_ROOT / "Datas" / "ClothingStores" / "Bershka")
 OUTPUT_DIR      = str(_Path(BASE_OUTPUT_DIR) / "ProductData")
 INFLATION_DIR   = str(_Path(BASE_OUTPUT_DIR) / "InflationData")
 
-# Files are named with today's date so each daily run produces its own set.
-_TODAY = _dt.date.today().strftime("%Y-%m-%d")
+# Files are named with the scrape date so each daily run produces its own set.
+_DATE_OVERRIDE = _os.getenv("SCRAPE_DATE_OVERRIDE", "").strip()
+if _DATE_OVERRIDE:
+    _TODAY = _dt.date.fromisoformat(_DATE_OVERRIDE).strftime("%Y-%m-%d")
+else:
+    _TODAY = _dt.date.today().strftime("%Y-%m-%d")
 
 CSV_OUTPUT_FILE  = str(_Path(OUTPUT_DIR) / f"bershka_{_TODAY}.csv")

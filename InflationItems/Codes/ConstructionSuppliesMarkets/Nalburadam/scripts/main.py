@@ -80,7 +80,11 @@ def main():
             logger.error(f"Category {args.category} not found.")
             sys.exit(1)
 
-    date_str = datetime.now().strftime("%Y-%m-%d")
+    override_date = os.getenv("SCRAPE_DATE_OVERRIDE", "").strip()
+    if override_date:
+        date_str = datetime.fromisoformat(override_date).strftime("%Y-%m-%d")
+    else:
+        date_str = datetime.now().strftime("%Y-%m-%d")
     checkpoint_file = os.path.join(config.CHECKPOINT_DIR, f"nalburadam_checkpoint_{date_str}.json")
     
     completed_ids = set()
