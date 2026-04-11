@@ -3,7 +3,7 @@ stradivarius_tuik_config.py — TUIK CPI basket weights and Stradivarius categor
 
 Stradivarius kategorileri iki TUIK koduna map edilir:
   "03" — Giyim ve ayakkabı  (weight: 7.90)
-  "12" — Kişisel bakım, sosyal koruma ve çeşitli mal ve hizmetler  (weight: 4.49)
+  "13" — Kişisel bakım, sosyal koruma ve çeşitli mal ve hizmetler  (weight: 4.49)
         (Çanta, bijuteri, aksesuar bu koda girer)
 
 Bu ayrım olmadan tüm ürünler tek koda düşer ve
@@ -22,8 +22,8 @@ TUIK_WEIGHTS = {
     "09": {"name": "Eğlence, dinlence, spor ve kültür",                          "weight": 4.34},
     "10": {"name": "Eğitim",                                                     "weight": 2.02},
     "11": {"name": "Lokantalar ve konaklama hizmetleri",                         "weight": 11.13},
-    "12": {"name": "Kişisel bakım, sosyal koruma ve çeşitli mal ve hizmetler",   "weight": 4.49},
-    "13": {"name": "Sigorta ve finansal hizmetler",                              "weight": 1.07},
+    "12": {"name": "Sigorta ve finansal hizmetler",                              "weight": 1.07},
+    "13": {"name": "Kişisel bakım, sosyal koruma ve çeşitli mal ve hizmetler",   "weight": 4.49},
 }
 
 
@@ -46,8 +46,8 @@ _CAT_03 = {
     "Yeni koleksiyon", "Yeni", "Ürüne göre alışveriş", "Ürüne göre satın al",
 }
 
-# "12" — Çeşitli mal ve hizmetler (çanta, bijuteri, aksesuar)
-_CAT_12 = {
+# "13" — Çeşitli mal ve hizmetler (çanta, bijuteri, aksesuar)
+_CAT_13 = {
     "Çanta", "Bijuteri", "Aksesuar", "Cüzdan",
 }
 
@@ -67,15 +67,15 @@ def stradivarius_category_to_tuik(category_name: str) -> str:
     # Tam eşleşme
     if cat in _CAT_03:
         return "03"
-    if cat in _CAT_12:
-        return "12"
+    if cat in _CAT_13:
+        return "13"
 
     # Parent eşleşmesi: "Jean > D91 Düşük Bel" → "Jean" → "03"
     if " > " in cat:
         parent = cat.split(" > ")[0].strip()
         if parent in _CAT_03:
             return "03"
-        if parent in _CAT_12:
-            return "12"
+        if parent in _CAT_13:
+            return "13"
 
     return "03"

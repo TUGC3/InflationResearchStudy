@@ -6,7 +6,12 @@ Computes inflation metrics for Hapeloglu market products:
   2. Average inflation  — arithmetic mean of per-item rates
   3. TUIK weighted avg  — weighted average using TUIK 2026 CPI basket weights
 
-Products are matched across dates by product_id.
+Products are matched across dates without relying on product_id.
+Matching order is:
+  1. Unique image filename
+  2. Unique URL slug without trailing numeric ID
+  3. Unique normalised product name
+
 Baby products (Bebek category) are excluded from calculation.
 
 Intervals: 1d, 7d, 15d, 30d
@@ -17,9 +22,12 @@ Usage:
 """
 
 import logging
+import re
 import sys
+import unicodedata
 from datetime import datetime, timedelta
 from pathlib import Path
+from urllib.parse import urlparse
 
 import pandas as pd
 
@@ -68,6 +76,27 @@ _CATEGORY_NORMALIZE = {
 }
 
 EXCLUDED_CATEGORIES = {"Bebek"}
+MATCH_ORDER = (
+    ("image_key", "image"),
+    ("slug_key", "slug"),
+    ("name_key", "name"),
+)
+_TURKISH_TRANSLATION = str.maketrans(
+    {
+        "ı": "i",
+        "İ": "i",
+        "ş": "s",
+        "Ş": "s",
+        "ğ": "g",
+        "Ğ": "g",
+        "ü": "u",
+        "Ü": "u",
+        "ö": "o",
+        "Ö": "o",
+        "ç": "c",
+        "Ç": "c",
+    }
+)
 
 
 def _category_to_tuik(cat):
@@ -95,14 +124,128 @@ def _load_csv(date_str):
         return None
 
 
-def _compute_metrics(df_current, df_past):
-    df_current = df_current.copy()
-    df_current["tuik_category"] = df_current["category"].apply(_category_to_tuik)
+def _normalise_text(value):
+    if pd.isna(value):
+        return None
 
-    past_subset = df_past[["product_id", "Product Cost"]].rename(
-        columns={"Product Cost": "past_price"}
+    text = str(value).strip()
+    if not text:
+        return None
+
+    text = text.translate(_TURKISH_TRANSLATION).casefold()
+    text = unicodedata.normalize("NFKD", text)
+    text = "".join(ch for ch in text if not unicodedata.combining(ch))
+    text = re.sub(r"\s+", " ", text)
+    return text
+
+
+def _slug_without_numeric_id(url_value):
+    if pd.isna(url_value):
+        return None
+
+    slug = Path(urlparse(str(url_value).strip()).path).name
+    if not slug:
+        return None
+
+    slug = _normalise_text(slug)
+    if slug is None:
+        return None
+
+    return re.sub(r"-\d+$", "", slug)
+
+
+def _image_filename(url_value):
+    if pd.isna(url_value):
+        return None
+
+    filename = Path(urlparse(str(url_value).strip()).path).name
+    if not filename:
+        return None
+
+    return _normalise_text(filename)
+
+
+def _prepare_match_frame(df):
+    prepared = df.copy()
+    if "__row_id" not in prepared.columns:
+        prepared = prepared.reset_index(drop=True)
+        prepared["__row_id"] = prepared.index
+
+    prepared["tuik_category"] = prepared["category"].apply(_category_to_tuik)
+    prepared["image_key"] = prepared["image_url"].apply(_image_filename)
+    prepared["slug_key"] = prepared["product_url"].apply(_slug_without_numeric_id)
+    prepared["name_key"] = prepared["Product Name"].apply(_normalise_text)
+    return prepared
+
+
+def _match_unique_rows(df_current, df_past, key_name, source_name):
+    current_valid = df_current[df_current[key_name].notna() & (df_current[key_name] != "")]
+    past_valid = df_past[df_past[key_name].notna() & (df_past[key_name] != "")]
+
+    current_counts = current_valid[key_name].value_counts()
+    past_counts = past_valid[key_name].value_counts()
+    unique_keys = current_counts[current_counts == 1].index.intersection(
+        past_counts[past_counts == 1].index
     )
-    merged = df_current.merge(past_subset, on="product_id", how="inner")
+
+    if unique_keys.empty:
+        return pd.DataFrame()
+
+    current_unique = current_valid[current_valid[key_name].isin(unique_keys)]
+    past_unique = past_valid[past_valid[key_name].isin(unique_keys)]
+
+    matches = current_unique.merge(
+        past_unique[[key_name, "__row_id", "Product Cost"]].rename(
+            columns={"__row_id": "__past_row_id", "Product Cost": "past_price"}
+        ),
+        on=key_name,
+        how="inner",
+    )
+    matches["match_source"] = source_name
+    return matches
+
+
+def _match_products(df_current, df_past):
+    current_remaining = _prepare_match_frame(df_current)
+    past_remaining = _prepare_match_frame(df_past)
+    matched_frames = []
+
+    for key_name, source_name in MATCH_ORDER:
+        step_matches = _match_unique_rows(
+            current_remaining, past_remaining, key_name, source_name
+        )
+        if step_matches.empty:
+            continue
+
+        matched_frames.append(step_matches)
+        current_remaining = current_remaining[
+            ~current_remaining["__row_id"].isin(step_matches["__row_id"])
+        ].copy()
+        past_remaining = past_remaining[
+            ~past_remaining["__row_id"].isin(step_matches["__past_row_id"])
+        ].copy()
+
+    if matched_frames:
+        matched = pd.concat(matched_frames, ignore_index=True)
+    else:
+        matched = current_remaining.head(0).copy()
+        matched["__past_row_id"] = pd.Series(dtype="Int64")
+        matched["past_price"] = pd.Series(dtype="float64")
+        matched["match_source"] = pd.Series(dtype="object")
+
+    match_counts = matched["match_source"].value_counts().to_dict()
+    logger.debug(
+        "Matched Hapeloglu rows: total=%d image=%d slug=%d name=%d",
+        len(matched),
+        match_counts.get("image", 0),
+        match_counts.get("slug", 0),
+        match_counts.get("name", 0),
+    )
+    return matched
+
+
+def _compute_metrics(df_current, df_past):
+    merged = _match_products(df_current, df_past)
 
     merged["per_item_inflation"] = (
         (merged["Product Cost"] - merged["past_price"]) / merged["past_price"]
@@ -122,7 +265,7 @@ def _compute_metrics(df_current, df_past):
         if c in cat_avg.index and pd.notna(cat_avg[c])
     )
 
-    merged = merged.drop(columns=["past_price"], errors="ignore")
+    merged = merged[["__row_id", "tuik_category", "per_item_inflation"]].copy()
     return merged, avg_inflation, tuik_weighted
 
 
@@ -137,6 +280,8 @@ def calculate_inflation(target_date=None):
     if df_today is None:
         logger.warning(f"Cannot calculate inflation - no data for {today_str}.")
         return
+    df_today = df_today.reset_index(drop=True)
+    df_today["__row_id"] = df_today.index
 
     INFLATION_OUT_DIR.mkdir(parents=True, exist_ok=True)
 
@@ -161,10 +306,10 @@ def calculate_inflation(target_date=None):
         merged, avg_inf, tuik_w = _compute_metrics(df_today, df_past)
 
         detail_base = detail_base.merge(
-            merged[["product_id", "per_item_inflation"]].rename(
+            merged[["__row_id", "per_item_inflation"]].rename(
                 columns={"per_item_inflation": f"per_item_inflation_{label}"}
             ),
-            on="product_id",
+            on="__row_id",
             how="left",
         )
 
@@ -173,6 +318,7 @@ def calculate_inflation(target_date=None):
 
     # Save detailed data
     detail_file = INFLATION_OUT_DIR / f"hapeloglu_inflation_{today_str}.csv"
+    detail_base = detail_base.drop(columns=["__row_id"], errors="ignore")
     detail_base.to_csv(detail_file, index=False, encoding="utf-8")
     logger.info(f"Saved detailed inflation data to: {detail_file}")
 

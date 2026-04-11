@@ -21,8 +21,8 @@ TUIK_WEIGHTS = {
     "09": {"name": "Eğlence, dinlence, spor ve kültür",                          "weight": 4.34},
     "10": {"name": "Eğitim",                                                     "weight": 2.02},
     "11": {"name": "Lokantalar ve konaklama hizmetleri",                         "weight": 11.13},
-    "12": {"name": "Kişisel bakım, sosyal koruma ve çeşitli mal ve hizmetler",   "weight": 4.49},
-    "13": {"name": "Sigorta ve finansal hizmetler",                              "weight": 1.07},
+    "12": {"name": "Sigorta ve finansal hizmetler",                              "weight": 1.07},
+    "13": {"name": "Kişisel bakım, sosyal koruma ve çeşitli mal ve hizmetler",   "weight": 4.49},
 }
 
 
