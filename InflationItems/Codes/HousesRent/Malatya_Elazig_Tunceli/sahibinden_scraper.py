@@ -83,7 +83,7 @@ class SahibindenScraper:
     def _setup_driver(self) -> uc.Chrome:
         options = uc.ChromeOptions()
         options.add_argument(f"--user-data-dir={SELENIUM_PROFILE_DIR}")
-        return uc.Chrome(options=options, version_main=145)
+        return uc.Chrome(options=options, version_main=147)
 
     def quit(self):
         self.driver.quit()
