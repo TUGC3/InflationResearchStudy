@@ -73,6 +73,7 @@ BETWEEN_BRACKET_DELAY_MAX = 2.0
 
 # ── Browser Settings ──────────────────────────────────────────────────────────
 SELENIUM_PROFILE_DIR = str(_SCRAPER_DIR / "SeleniumProfile")
+CHROMEDRIVER_PATH = r"C:\chromedriver\chromedriver.exe"  # ← your actual path
 
 # ── Output Settings ───────────────────────────────────────────────────────────
 _TODAY = _dt.date.today().strftime("%Y-%m-%d")
