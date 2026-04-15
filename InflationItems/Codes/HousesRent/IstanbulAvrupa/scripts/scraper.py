@@ -120,6 +120,7 @@ import logging
 import os
 import random
 import re
+import subprocess
 import threading
 import time
 from typing import Optional
@@ -232,6 +233,34 @@ _delay_tracker = AdaptiveDelayTracker()
 
 # ── Driver factory ────────────────────────────────────────────────────────────
 
+def _ensure_patched_and_signed(executable_path: str) -> None:
+    """Patch chromedriver and re-sign it for macOS Apple Silicon.
+
+    On Apple Silicon, macOS kills any executable whose code signature is
+    invalid (SIGKILL / exit code -9). undetected_chromedriver patches the
+    binary in-place (replacing ``cdc_`` strings), which breaks the original
+    signature. This helper pre-patches the binary and immediately re-signs it
+    with an ad-hoc signature so that when ``uc.Chrome`` calls
+    ``patcher.auto()`` it detects the binary is already patched and skips the
+    re-patch, leaving the valid signature intact.
+    """
+    from undetected_chromedriver.patcher import Patcher
+    p = Patcher(executable_path=executable_path)
+    if not p.is_binary_patched():
+        logger.info("Pre-patching chromedriver binary…")
+        p.patch_exe()
+        result = subprocess.run(
+            ["codesign", "--force", "-s", "-", executable_path],
+            capture_output=True,
+        )
+        if result.returncode == 0:
+            logger.info("chromedriver re-signed successfully.")
+        else:
+            logger.warning("codesign failed: %s", result.stderr.decode())
+    else:
+        logger.debug("chromedriver already patched — skipping re-patch.")
+
+
 def setup_driver(profile_dir: str | None = None) -> uc.Chrome:
     """Create and return a uc.Chrome driver.
 
@@ -245,9 +274,10 @@ def setup_driver(profile_dir: str | None = None) -> uc.Chrome:
     uc.Chrome
         Chrome driver instance tailored to bypass basic Selenium detection.
     """
+    _ensure_patched_and_signed(config.CHROMEDRIVER_PATH)
     options = uc.ChromeOptions()
     options.add_argument(f"--user-data-dir={profile_dir or config.SELENIUM_PROFILE_DIR}")
-    driver = uc.Chrome(options=options, version_main=145)
+    driver = uc.Chrome(options=options, version_main=147, driver_executable_path=config.CHROMEDRIVER_PATH)
     return driver
 
 
