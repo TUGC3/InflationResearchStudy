@@ -158,7 +158,6 @@ MIN_BRACKET_WIDTH = 50
 
 # Density-aware splitting: split more aggressively in high-density ranges
 HIGH_DENSITY_THRESHOLD = 800            # Split earlier if count exceeds this
-OPTIMAL_BRACKET_SIZE   = 500            # Target listings per bracket for efficiency
 
 # ── Request / Timing Settings ─────────────────────────────────────────────────
 PAGE_SIZE              = 50             # Listings per page (sahibinden max)
@@ -183,6 +182,7 @@ RETRY_BACKOFF_MAX      = 30.0           # Maximum backoff delay (seconds)
 
 # ── Browser Settings ──────────────────────────────────────────────────────────
 SELENIUM_PROFILE_DIR = str(_SCRAPER_DIR / "SeleniumProfile")
+CHROMEDRIVER_PATH    = str(_SCRAPER_DIR / ".." / "chromedriver")
 
 # ── Output Settings ───────────────────────────────────────────────────────────
 _TODAY = _dt.date.today().strftime("%Y-%m-%d")
@@ -190,7 +190,7 @@ _TODAY = _dt.date.today().strftime("%Y-%m-%d")
 # Base output directory
 BASE_OUTPUT_DIR = str(_PROJECT_ROOT / "InflationItems" / "Datas" / "HousesRent" / FOLDER_NAME)
 
-OUTPUT_DIR      = str(_Path(BASE_OUTPUT_DIR))
+OUTPUT_DIR      = BASE_OUTPUT_DIR
 INFLATION_DIR   = str(_Path(BASE_OUTPUT_DIR) / "InflationData")
 
 CHECKPOINT_DIR  = str(_SCRAPER_DIR / "checkpoints")

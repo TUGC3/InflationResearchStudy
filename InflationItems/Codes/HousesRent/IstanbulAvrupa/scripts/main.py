@@ -94,7 +94,6 @@ import time
 
 import config
 import sys
-import os
 
 # Add the new location of inflation.py to sys.path
 _inflation_dir = os.path.join(
@@ -151,21 +150,6 @@ def _save_checkpoint(data: dict) -> None:
         json.dump(data, f, ensure_ascii=False, indent=2)
 
 
-# ── Output helpers ────────────────────────────────────────────────────────────
-
-def _append_records(new_records: list[dict]) -> None:
-    """Append a batch of records to the CSV incrementally.
-
-    Args
-    ----
-    new_records : list[dict]
-        Products scraped from a bracket.
-    """
-    if not new_records:
-        return
-    save_incremental(new_records)
-
-
 # ── Core run ──────────────────────────────────────────────────────────────────
 
 def run(args: argparse.Namespace) -> None:
@@ -208,7 +192,6 @@ def run(args: argparse.Namespace) -> None:
     cached_rooms_idx = None  # Cache room column index across seed ranges
 
     try:
-        brackets_scraped = 0
         start_time = time.time()
 
         for seed_min, seed_max in config.SEED_RANGES:
@@ -216,14 +199,13 @@ def run(args: argparse.Namespace) -> None:
             saved, cached_rooms_idx = scrape_and_resolve(
                 driver, seed_min, seed_max,
                 done_ranges=done_ranges,
-                save_fn=_append_records,
+                save_fn=save_incremental,
                 mark_done_fn=mark_done,
                 bracket_cache=None,
                 delay=args.delay,
                 cached_rooms_idx=cached_rooms_idx,
             )
             total_saved += saved
-            brackets_scraped += 1
 
             # --limit-brackets logic
             # Note: limit-brackets originally used len(bracket_cache), which counted leaf brackets.
