@@ -3,13 +3,6 @@ scraper.py — Core scraping logic for the Izmir rent scraper.
 Components:
   1. CategoryScanner  — discovers and generates target URLs
   2. DataExtractor    — visits URLs and extracts listing data
-
-District fallback:
-  When a price bracket can't be split further by price and still has
-  >MAX_LISTINGS_PER_QUERY listings, discover_bracket returns an empty
-  list AND sets self.needs_district_fallback = True so main.py can
-  handle the district-level discover+scrape loop directly (with full
-  access to the extractor, checkpoint, and scraped_urls).
 """
 
 import csv
@@ -45,6 +38,19 @@ IZMIR_DISTRICT_SLUGS = [
     "izmir-odemis", "izmir-seferihisar", "izmir-selcuk", "izmir-tire",
     "izmir-torbali", "izmir-urla",
 ]
+
+IZMIR_SLUG_TO_DISTRICT = {
+    "izmir-aliaga": "Aliağa", "izmir-balcova": "Balçova", "izmir-bayindir": "Bayındır",
+    "izmir-bayrakli": "Bayraklı", "izmir-bergama": "Bergama", "izmir-beydag": "Beydağ",
+    "izmir-bornova": "Bornova", "izmir-buca": "Buca", "izmir-cesme": "Çeşme",
+    "izmir-cigli": "Çiğli", "izmir-dikili": "Dikili", "izmir-foca": "Foça",
+    "izmir-gaziemir": "Gaziemir", "izmir-guzelbahce": "Güzelbahçe", "izmir-karabaglar": "Karabağlar",
+    "izmir-karaburun": "Karaburun", "izmir-karsiyaka": "Karşıyaka", "izmir-kemalpasa": "Kemalpaşa",
+    "izmir-kinik": "Kınık", "izmir-kiraz": "Kiraz", "izmir-konak": "Konak",
+    "izmir-menderes": "Menderes", "izmir-menemen": "Menemen", "izmir-narlidere": "Narlıdere",
+    "izmir-odemis": "Ödemiş", "izmir-seferihisar": "Seferihisar", "izmir-selcuk": "Selçuk",
+    "izmir-tire": "Tire", "izmir-torbali": "Torbalı", "izmir-urla": "Urla"
+}
 
 
 class CaptchaDetectedException(Exception):
@@ -111,7 +117,6 @@ def handle_browser_check(driver: uc.Chrome) -> None:
             time.sleep(1.5)
             return
 
-        # Manual "Press and Hold" screen
         if "basılı tutun" in page_source or "bağlantınız kontrol ediliyor" in page_source:
             logger.warning("🚨 USER ACTION REQUIRED: 'Press and Hold' screen detected!")
             logger.warning("👉 Go to Chrome and manually press & hold the button. Waiting up to 5 min...")
@@ -126,7 +131,6 @@ def handle_browser_check(driver: uc.Chrome) -> None:
             logger.error("❌ No action taken for 5 minutes. Timeout!")
             return
 
-        # Standard automatic "Devam Et" screen
         if "tarayıcınızı kontrol ediyoruz" in page_source and "devam et" in page_source:
             try:
                 wait_time = random.uniform(25.0, 30.0)
@@ -162,7 +166,6 @@ def accept_cookies(driver: uc.Chrome) -> None:
 
 
 def load_and_bypass(driver: uc.Chrome, url: str) -> BeautifulSoup:
-    """Navigate to `url`, handle any bot checks, and return parsed soup."""
     if "sahibinden.com" not in driver.current_url:
         logger.info("🔥 Establishing Sahibinden session via homepage first...")
         driver.get("https://www.sahibinden.com/")
@@ -223,44 +226,28 @@ class CategoryScanner:
                 return int(m.group(1))
         return None
 
-    def get_district_pages(self, slug: str, min_price: int, max_price: int) -> list[str]:
-        """
-        Returns the list of paginated URLs for a single district+price range.
-        Returns [] if the district has no listings.
-        Called by main.py one district at a time so it can scrape immediately.
-        """
-        district_url = (
-            f"https://www.sahibinden.com/kiralik/{slug}"
-            f"?pagingSize={config.PAGE_SIZE}&price_min={min_price}&price_max={max_price}"
-        )
-        soup  = load_and_bypass(self.driver, district_url)
-        total = self._extract_total_listings(soup)
+    def get_district_total(self, slug: str) -> int:
+        """Returns the total number of listings for a bare district."""
+        url = f"https://www.sahibinden.com/kiralik/{slug}?pagingSize={config.PAGE_SIZE}"
+        logger.info(f"Checking total listings for district: {slug}...")
+        soup = load_and_bypass(self.driver, url)
+        return self._extract_total_listings(soup) or 0
 
-        if not total:
-            return []
-
-        if total > config.MAX_LISTINGS_PER_QUERY:
-            logger.warning(
-                f"    ⚠️ {slug} has {total} listings — still over limit. Capping at 20 pages."
-            )
-
-        return _build_page_urls(district_url, total)
+    def get_district_pages_no_price(self, slug: str, total: int) -> list[str]:
+        """Returns paginated URLs for a district when it's under the 1000 limit."""
+        url = f"https://www.sahibinden.com/kiralik/{slug}?pagingSize={config.PAGE_SIZE}"
+        return _build_page_urls(url, total)
 
     def discover_bracket(
         self,
+        slug: str,
         min_price: int,
         max_price: int,
         indent: int = 0,
         results: list | None = None,
-    ) -> list[str] | None:
+    ) -> list[str]:
         """
-        Recursively discovers all page URLs for a price range.
-
-        Returns:
-          - list[str]  — page URLs to scrape (normal case)
-          - None       — signals that district-level fallback is needed;
-                         main.py should call get_district_pages() per district.
-
+        Recursively discovers all page URLs for a specific district and price range.
         `results` is mutated in-place so partial progress survives a CAPTCHA.
         """
         if results is None:
@@ -268,11 +255,11 @@ class CategoryScanner:
 
         pad = "  " * indent
         url = (
-            f"https://www.sahibinden.com/kiralik/{config.CITY_URL_NAME}"
+            f"https://www.sahibinden.com/kiralik/{slug}"
             f"?pagingSize={config.PAGE_SIZE}&price_min={min_price}&price_max={max_price}"
         )
 
-        logger.info(f"{pad}▶ Checking {min_price}–{max_price} TL…")
+        logger.info(f"{pad}▶ Checking {slug} | {min_price}–{max_price} TL…")
         soup  = load_and_bypass(self.driver, url)
         total = self._extract_total_listings(soup)
 
@@ -287,37 +274,31 @@ class CategoryScanner:
                 logger.info(f"{pad}  ✂️ Too dense ({total} listings). Splitting...")
                 mid = (min_price + max_price) // 2
 
-                # Check left and right sides, and capture their return values
                 if mid == min_price:
-                    res1 = self.discover_bracket(min_price, min_price, indent + 1, results)
-                    time.sleep(random.uniform(0.3, 0.6))
-                    res2 = self.discover_bracket(max_price, max_price, indent + 1, results)
+                    self.discover_bracket(slug, min_price, min_price, indent + 1, results)
+                    # SPEED UP: Slightly faster recursion delays
+                    time.sleep(random.uniform(0.2, 0.4))
+                    self.discover_bracket(slug, max_price, max_price, indent + 1, results)
                 else:
-                    res1 = self.discover_bracket(min_price, mid, indent + 1, results)
-                    time.sleep(random.uniform(0.3, 0.6))
-                    res2 = self.discover_bracket(mid + 1, max_price, indent + 1, results)
-
-                # CRITICAL FIX: If any sub-bracket hits a massive cluster (>1000)
-                # and returns None, bubble that signal all the way back up to main.py!
-                if res1 is None or res2 is None:
-                    return None
+                    self.discover_bracket(slug, min_price, mid, indent + 1, results)
+                    time.sleep(random.uniform(0.2, 0.4))
+                    self.discover_bracket(slug, mid + 1, max_price, indent + 1, results)
 
                 return results
             else:
-                # Width is 0 — single price point with >1000 listings.
-                # Signal main.py to handle district-level fallback.
                 logger.warning(
-                    f"{pad}  ⚠️ Massive cluster at exactly {min_price} TL! "
-                    f"Signalling district fallback to main.py."
+                    f"{pad}  ⚠️ Massive cluster at exactly {min_price} TL in {slug}! "
+                    f"Capping at 1000 listings to prevent infinite loops."
                 )
-                return None  # ← district fallback signal
+                page_urls = _build_page_urls(url, total)
+                results.extend(page_urls)
+                return results
 
-        # Safe range — generate paginated URLs
+        # Safe range
         page_urls = _build_page_urls(url, total)
         results.extend(page_urls)
         logger.info(f"{pad}  ✓ Safe ({total} listings) → {len(page_urls)} pages")
         return results
-
 
 # ── COMPONENT 2: Extractor ────────────────────────────────────────────────────
 
@@ -364,51 +345,49 @@ class DataExtractor:
         return records
 
 
+import re
+
+
 # ── Data cleaning & persistence ───────────────────────────────────────────────
 
 def clean_new_batch(data_batch: list[dict]) -> list[dict]:
-    izmir_districts = {
-        "Aliağa", "Balçova", "Bayındır", "Bayraklı", "Bergama", "Beydağ",
-        "Bornova", "Buca", "Çeşme", "Çiğli", "Dikili", "Foça", "Gaziemir",
-        "Güzelbahçe", "Karabağlar", "Karaburun", "Karşıyaka", "Kemalpaşa",
-        "Kınık", "Kiraz", "Konak", "Menderes", "Menemen", "Narlıdere",
-        "Ödemiş", "Seferihisar", "Selçuk", "Tire", "Torbalı", "Urla",
-    }
     cleaned = []
+
     for row in data_batch:
-        if not row.get("District") or not row.get("Price"):
-            continue
-        if row["District"] == "N/A" or row["Price"] == "N/A":
-            continue
+        price = row.get("Price", "N/A")
 
-        base = row["District"].split("/")[0].strip().title()
-        if base not in izmir_districts:
-            continue
+        # Strip everything EXCEPT numbers
+        digits_only = re.sub(r'\D', '', price)
+        price_int = int(digits_only) if digits_only else ""
 
-        try:
-            price_int = int(row["Price"].replace(".", "").replace(" TL", "").strip())
-        except ValueError:
-            continue
-
-        row["District"] = base
-        row["PriceInt"] = price_int
-        cleaned.append(row)
+        # Keep both District and Neighborhood
+        cleaned.append({
+            "District": row.get("District", "N/A"),
+            "Neighborhood": row.get("Neighborhood", "N/A"),
+            "Rooms": row.get("Rooms", "N/A"),
+            "Price": price,
+            "PriceInt": price_int
+        })
 
     return cleaned
 
 
-def save_incremental(data_batch: list[dict]) -> None:
+def save_incremental(data_batch: list[dict]) -> int:
     if not data_batch:
-        return
+        return 0
+
     cleaned = clean_new_batch(data_batch)
     if not cleaned:
-        return
+        return 0
 
     os.makedirs(config.OUTPUT_DIR, exist_ok=True)
     file_exists = os.path.isfile(config.CSV_OUTPUT_FILE)
 
     with open(config.CSV_OUTPUT_FILE, mode="a", newline="", encoding="utf-8-sig") as f:
-        writer = csv.DictWriter(f, fieldnames=["District", "Rooms", "Price", "PriceInt"])
+        # Added Neighborhood to the CSV columns!
+        writer = csv.DictWriter(f, fieldnames=["District", "Neighborhood", "Rooms", "Price", "PriceInt"])
         if not file_exists:
             writer.writeheader()
         writer.writerows(cleaned)
+
+    return len(cleaned)

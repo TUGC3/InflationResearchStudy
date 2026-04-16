@@ -1,23 +1,5 @@
 """
 main.py — Izmir Rent Scraper (Modular Architecture)
-
-Key behaviours
-──────────────
-• PHASE 1 (Discovery) is checkpointed URL-by-URL via the mutable `results`
-  list that scraper.py fills in-place. If a CAPTCHA hits mid-discovery the
-  partial URL list is saved immediately and never re-visited on the next run.
-
-• PHASE 2 (Extraction) skips any URL that already appears in `scraped_urls`,
-  so restarting after a crash never double-scrapes a page.
-
-• District fallback: when discover_bracket signals None (price bracket is a
-  single point with >1000 listings), main.py iterates districts one-by-one:
-  discover that district's pages → immediately scrape them → save → next
-  district. This way data is on disk after each district, not held in RAM
-  until all 30 districts are done.
-
-• Trust-score warm-up: on every new browser session the bot visits 2 real
-  Sahibinden category pages before touching the guarded search endpoints.
 """
 
 import argparse
@@ -31,7 +13,7 @@ import config
 from scraper import (
     setup_driver, CategoryScanner, DataExtractor,
     CaptchaDetectedException, delete_selenium_profile, save_incremental,
-    handle_browser_check, IZMIR_DISTRICT_SLUGS,
+    handle_browser_check, IZMIR_DISTRICT_SLUGS, IZMIR_SLUG_TO_DISTRICT
 )
 
 logging.basicConfig(
@@ -44,13 +26,10 @@ logger = logging.getLogger(__name__)
 # ── Checkpoint helpers ────────────────────────────────────────────────────────
 
 _CHECKPOINT_DEFAULTS: dict = {
-    "scraped_urls":               [],   # URLs whose data is already in the CSV
-    "completed_brackets":         [],   # (min, max) brackets fully done
-    "discovered_urls":            {},   # bracket_key → list[url]
-    "fully_discovered_brackets":  [],   # bracket_keys where Phase 1 is 100% done
-    # District fallback progress — persisted so a CAPTCHA mid-district-loop
-    # doesn't restart from the first district.
-    "district_fallback_done":     {},   # bracket_key → list[slug] already finished
+    "scraped_urls":         [],
+    "completed_districts":  [],
+    "district_ranges_done": {},
+    "discovered_urls":      {},
 }
 
 def _load_checkpoint() -> dict:
@@ -83,14 +62,7 @@ _TRUST_WARMUP_PAGES = [
 ]
 
 def warm_up_browser(driver) -> None:
-    """
-    Build trust on Sahibinden before hitting guarded search endpoints.
-    Visits the homepage first (establishes session + cookies), then 2 random
-    district listing pages with simulated scrolling.
-    """
     logger.info("🔥 Building trust score on Sahibinden...")
-
-    # Step 1: Homepage — establishes session cookies
     logger.info("    ↳ Visiting homepage to establish session...")
     try:
         driver.get("https://www.sahibinden.com/")
@@ -102,15 +74,12 @@ def warm_up_browser(driver) -> None:
     except Exception as e:
         logger.debug(f"Homepage warm-up issue: {e}")
 
-    # Step 2: Two random category subpages with scrolling
     for page_url in random.sample(_TRUST_WARMUP_PAGES, 2):
         logger.info(f"    ↳ Visiting: {page_url}")
         try:
             driver.get(page_url)
             time.sleep(random.uniform(2.0, 3.5))
             handle_browser_check(driver)
-
-            # Simulate human scrolling
             driver.execute_script("window.scrollTo(0, document.body.scrollHeight * 0.4);")
             time.sleep(random.uniform(0.7, 1.2))
             driver.execute_script("window.scrollTo(0, document.body.scrollHeight * 0.75);")
@@ -122,8 +91,7 @@ def warm_up_browser(driver) -> None:
         except Exception as e:
             logger.debug(f"Subpage warm-up skipped ({page_url}): {e}")
 
-    logger.info("✅ Warm-up complete. Proceeding to price-range discovery.")
-
+    logger.info("✅ Warm-up complete. Proceeding to discovery.")
 
 def quit_driver(driver) -> None:
     if driver:
@@ -135,118 +103,60 @@ def quit_driver(driver) -> None:
 # ── Helpers ───────────────────────────────────────────────────────────────────
 
 def _scrape_pages(
-    pages: list[str],
-    extractor: DataExtractor,
-    scraped_urls: set,
-    checkpoint: dict,
-    save_fn,
-    label: str = "",
+        pages: list[str],
+        extractor: DataExtractor,
+        scraped_urls: set,
+        checkpoint: dict,
+        save_fn,
+        district_slug: str,  # <-- Added parameter to know which district we are on
+        label: str = "",
 ) -> int:
-    """
-    Scrape a list of page URLs, skipping already-done ones.
-    Saves to CSV immediately after each page and checkpoints scraped_urls
-    every 10 pages. Returns the number of records saved.
-    """
     pending = [u for u in pages if u not in scraped_urls]
     already = len(pages) - len(pending)
     if already:
         logger.info(f"      ↳ {already} pages already scraped, skipping.")
 
-    saved = 0
+    accumulated_records = []
+    new_urls = set()
+    proper_district = IZMIR_SLUG_TO_DISTRICT.get(district_slug, "Unknown")
+
     for idx, url in enumerate(pending):
         logger.info(f"      📄 {label}Page {idx + 1}/{len(pending)} ...")
-        records = extractor.extract_from_url(url)
-        scraped_urls.add(url)
 
-        if records:
-            save_fn(records)
-            saved += len(records)
+        try:
+            records = extractor.extract_from_url(url)
+            new_urls.add(url)
 
-        if (idx + 1) % 10 == 0:
+            if records:
+                # Inject the clean district name, move Sahibinden's raw text to Neighborhood
+                for r in records:
+                    r["Neighborhood"] = r.get("District", "N/A")
+                    r["District"] = proper_district
+
+                accumulated_records.extend(records)
+
+            time.sleep(random.uniform(0.8, 1.8))
+
+        except Exception as e:
+            if accumulated_records:
+                actual_saved = save_fn(accumulated_records)
+                logger.info(f"      💾 HIT A WALL! Saved {actual_saved} valid records.")
+
+            scraped_urls.update(new_urls)
             checkpoint["scraped_urls"] = list(scraped_urls)
             _save_checkpoint(checkpoint)
+            raise e
 
-        time.sleep(random.uniform(2.0, 4.0))
+    if accumulated_records:
+        actual_saved = save_fn(accumulated_records)
+        logger.info(f"      ✅ BATCH COMPLETE! Saved {actual_saved} valid records.")
 
-    # Final checkpoint flush
+    scraped_urls.update(new_urls)
     checkpoint["scraped_urls"] = list(scraped_urls)
     _save_checkpoint(checkpoint)
-    return saved
 
+    return len(accumulated_records)
 
-def _run_district_fallback(
-    seed_min: int,
-    seed_max: int,
-    bracket_key: str,
-    scanner: CategoryScanner,
-    extractor: DataExtractor,
-    scraped_urls: set,
-    checkpoint: dict,
-) -> int:
-    """
-    District-level fallback: for each Izmir district, discover its pages for
-    this price range then immediately scrape them before moving to the next.
-
-    Progress is checkpointed per district so a CAPTCHA mid-loop resumes from
-    the next unfinished district rather than starting over.
-
-    Returns total records saved.
-    """
-    done_slugs: list[str] = checkpoint.setdefault(
-        "district_fallback_done", {}
-    ).get(bracket_key, [])
-
-    total_saved = 0
-
-    for slug in IZMIR_DISTRICT_SLUGS:
-        if slug in done_slugs:
-            logger.info(f"   ⏭️  District {slug} already done. Skipping.")
-            continue
-
-        logger.info(f"\n   🏙️  District fallback — {slug} ({seed_min}–{seed_max} TL)...")
-
-        # ── Discover this district's pages ────────────────────────────────
-        try:
-            pages = scanner.get_district_pages(slug, seed_min, seed_max)
-        except CaptchaDetectedException:
-            raise   # Let main loop handle identity reset
-        except Exception as e:
-            logger.warning(f"   ⚠️  Error discovering {slug}: {e}. Skipping.")
-            continue
-
-        if not pages:
-            logger.info(f"   📭 {slug}: 0 listings. Skipping.")
-            # Still mark as done so we don't re-check on resume
-            done_slugs.append(slug)
-            checkpoint["district_fallback_done"][bracket_key] = done_slugs
-            _save_checkpoint(checkpoint)
-            continue
-
-        logger.info(f"   ✓  {slug}: {len(pages)} pages to scrape.")
-
-        # ── Immediately scrape this district's pages ──────────────────────
-        try:
-            saved = _scrape_pages(
-                pages, extractor, scraped_urls, checkpoint,
-                save_incremental, label=f"[{slug}] "
-            )
-            total_saved += saved
-            logger.info(f"   💾 {slug}: saved {saved} records.")
-        except CaptchaDetectedException:
-            raise   # Let main loop handle identity reset
-
-        # Mark district as fully done
-        done_slugs.append(slug)
-        checkpoint["district_fallback_done"][bracket_key] = done_slugs
-        _save_checkpoint(checkpoint)
-
-        time.sleep(random.uniform(1.0, 3.0))
-
-    # Clean up fallback state for this bracket
-    checkpoint["district_fallback_done"].pop(bracket_key, None)
-    _save_checkpoint(checkpoint)
-
-    return total_saved
 
 # ── Main run loop ─────────────────────────────────────────────────────────────
 
@@ -261,159 +171,131 @@ def run(args: argparse.Namespace) -> None:
     else:
         checkpoint = _load_checkpoint()
 
-    scraped_urls: set[str]         = set(checkpoint["scraped_urls"])
-    completed_brackets: set[tuple] = {tuple(b) for b in checkpoint["completed_brackets"]}
-
+    scraped_urls: set[str] = set(checkpoint["scraped_urls"])
     total_saved = 0
-    driver      = None
+    driver = None
 
-    for seed_min, seed_max in config.SEED_RANGES:
-
-        if (seed_min, seed_max) in completed_brackets:
-            logger.info(f"⏭️  Skipping completed bracket: {seed_min}–{seed_max} TL")
+    for slug in IZMIR_DISTRICT_SLUGS:
+        if slug in checkpoint["completed_districts"]:
+            logger.info(f"⏭️  Skipping completed district: {slug}")
             continue
 
-        bracket_key  = f"{seed_min}_{seed_max}"
-        bracket_done = False
+        district_done = False
         captcha_hits = 0
 
-        while not bracket_done:
-
+        while not district_done:
             if driver is None:
                 driver = setup_driver()
                 warm_up_browser(driver)
 
-            scanner   = CategoryScanner(driver)
+            scanner = CategoryScanner(driver)
             extractor = DataExtractor(driver)
-            in_memory_records: list[dict] = []
 
             try:
-                # ── PHASE 1: DISCOVERY ────────────────────────────────────────
-                fully_discovered = checkpoint.get("fully_discovered_brackets", [])
+                # ── 1. Determine Execution Path for this District ─────────────
+                needs_split = False
+                total_listings = 0
 
-                # Check if we're mid-way through a district fallback from a
-                # previous run (CAPTCHA hit during district loop).
-                in_district_fallback = bracket_key in checkpoint.get("district_fallback_done", {})
+                if slug in checkpoint.get("district_ranges_done", {}):
+                    needs_split = True
+                else:
+                    total_listings = scanner.get_district_total(slug)
+                    if total_listings > config.MAX_LISTINGS_PER_QUERY:
+                        needs_split = True
+                    elif total_listings == 0:
+                        logger.info(f"📭 District {slug} has 0 listings. Skipping.")
+                        district_done = True
+                        checkpoint["completed_districts"].append(slug)
+                        _save_checkpoint(checkpoint)
+                        continue
 
-                if in_district_fallback:
-                    logger.info(
-                        f"\n--- 🏙️  RESUMING DISTRICT FALLBACK ({seed_min}–{seed_max} TL) ---"
-                    )
-                    saved = _run_district_fallback(
-                        seed_min, seed_max, bracket_key,
-                        scanner, extractor, scraped_urls, checkpoint,
-                    )
-                    total_saved += saved
+                # ── 2a. Simple Path (<= 1000 listings) ────────────────────────
+                if not needs_split:
+                    logger.info(f"\n--- 🏙️  DISTRICT {slug.upper()} ({total_listings} listings) ---")
 
-                elif bracket_key in fully_discovered:
-                    # Normal path: discovery already done, load URLs from checkpoint.
-                    logger.info(
-                        f"\n--- ⏭️  PHASE 1 SKIPPED ({seed_min}–{seed_max} TL): "
-                        f"URLs loaded from checkpoint ---"
-                    )
-                    target_urls: list[str] = checkpoint["discovered_urls"][bracket_key]
+                    base_key = f"{slug}_base"
+                    if base_key in checkpoint["discovered_urls"]:
+                        target_urls = checkpoint["discovered_urls"][base_key]
+                    else:
+                        target_urls = scanner.get_district_pages_no_price(slug, total_listings)
+                        checkpoint["discovered_urls"][base_key] = target_urls
+                        _save_checkpoint(checkpoint)
 
-                    # ── PHASE 2: EXTRACTION (normal path) ────────────────────
                     saved = _scrape_pages(
                         target_urls, extractor, scraped_urls, checkpoint,
-                        save_incremental,
+                        save_incremental, district_slug=slug, label=f"[{slug}] "
                     )
                     total_saved += saved
 
+                    district_done = True
+                    checkpoint["completed_districts"].append(slug)
+                    checkpoint["discovered_urls"].pop(base_key, None)
+                    _save_checkpoint(checkpoint)
+
+                    time.sleep(random.uniform(5.0, 10.0))
+
+                # ── 2b. Complex Path (> 1000 listings -> Split via Seed Ranges)
                 else:
-                    logger.info(
-                        f"\n--- 🔍 PHASE 1: DISCOVERING URLS ({seed_min}–{seed_max} TL) ---"
-                    )
+                    logger.info(f"\n--- 🏙️  DISTRICT {slug.upper()} (>1000 listings) -> Splitting ---")
+                    checkpoint.setdefault("district_ranges_done", {}).setdefault(slug, [])
+                    _save_checkpoint(checkpoint)
 
-                    results: list[str] = list(
-                        checkpoint.get("discovered_urls", {}).get(bracket_key, [])
-                    )
-                    if results:
-                        logger.info(f"   ↳ Resuming discovery — {len(results)} URLs already saved.")
+                    completed_ranges = [tuple(r) for r in checkpoint["district_ranges_done"][slug]]
 
-                    try:
-                        outcome = scanner.discover_bracket(seed_min, seed_max, results=results)
-                    except CaptchaDetectedException:
-                        logger.warning(
-                            f"🛑 CAPTCHA during Phase 1! Saving {len(results)} partial URLs..."
-                        )
-                        checkpoint["discovered_urls"][bracket_key] = list(dict.fromkeys(results))
-                        _save_checkpoint(checkpoint)
-                        raise
+                    for seed_min, seed_max in config.SEED_RANGES:
+                        if (seed_min, seed_max) in completed_ranges:
+                            continue
 
-                    if outcome is None:
-                        # ── District fallback path ────────────────────────────
-                        # scraper.py signalled that this bracket needs per-district
-                        # discover+scrape. Initialise the fallback tracker and run.
-                        logger.info(
-                            f"\n--- 🏙️  DISTRICT FALLBACK ({seed_min}–{seed_max} TL) ---"
-                        )
-                        checkpoint.setdefault("district_fallback_done", {})[bracket_key] = []
-                        _save_checkpoint(checkpoint)
+                        bracket_key = f"{slug}_{seed_min}_{seed_max}"
 
-                        saved = _run_district_fallback(
-                            seed_min, seed_max, bracket_key,
-                            scanner, extractor, scraped_urls, checkpoint,
-                        )
-                        total_saved += saved
+                        logger.info(f"\n--- 🔍 DISCOVERING: {slug} ({seed_min}–{seed_max} TL) ---")
+                        results = checkpoint.setdefault("discovered_urls", {}).get(bracket_key, [])
 
-                    else:
-                        # ── Normal path ───────────────────────────────────────
+                        try:
+                            scanner.discover_bracket(slug, seed_min, seed_max, results=results)
+                        except CaptchaDetectedException:
+                            logger.warning(f"🛑 CAPTCHA during discovery! Saving {len(results)} URLs...")
+                            checkpoint["discovered_urls"][bracket_key] = list(dict.fromkeys(results))
+                            _save_checkpoint(checkpoint)
+                            raise
+
                         target_urls = list(dict.fromkeys(results))
-                        checkpoint["discovered_urls"][bracket_key]      = target_urls
-                        checkpoint["fully_discovered_brackets"].append(bracket_key)
+                        checkpoint["discovered_urls"][bracket_key] = target_urls
                         _save_checkpoint(checkpoint)
-                        logger.info(f"   ✅ Discovery complete: {len(target_urls)} unique URLs.")
 
-                        # ── PHASE 2: EXTRACTION ───────────────────────────────
-                        logger.info(f"\n--- ⛏️  PHASE 2: EXTRACTING DATA ---")
+                        logger.info(f"   ✅ Discovery complete: {len(target_urls)} pages.")
+                        logger.info(f"\n--- ⛏️  EXTRACTING: {slug} ({seed_min}–{seed_max} TL) ---")
+
                         saved = _scrape_pages(
                             target_urls, extractor, scraped_urls, checkpoint,
-                            save_incremental,
+                            save_incremental, district_slug=slug, label=f"[{slug}|{seed_min}-{seed_max}] "
                         )
                         total_saved += saved
 
-                # ── Bracket success ───────────────────────────────────────────
-                bracket_done = True
-                captcha_hits = 0
+                        # ── Bracket Success & Cool Down ──────────────────────
+                        checkpoint["district_ranges_done"][slug].append([seed_min, seed_max])
+                        checkpoint["discovered_urls"].pop(bracket_key, None)
+                        _save_checkpoint(checkpoint)
 
-                completed_brackets.add((seed_min, seed_max))
-                checkpoint["completed_brackets"]  = [list(b) for b in completed_brackets]
-                checkpoint["scraped_urls"]         = list(scraped_urls)
-                checkpoint["discovered_urls"].pop(bracket_key, None)
-                checkpoint.get("district_fallback_done", {}).pop(bracket_key, None)
-                if bracket_key in checkpoint.get("fully_discovered_brackets", []):
-                    checkpoint["fully_discovered_brackets"].remove(bracket_key)
-                _save_checkpoint(checkpoint)
+                        rest_time = random.uniform(10.0, 18.0)
+                        logger.info(f"☕ Bracket done! Resting {rest_time:.1f}s before next bracket...")
+                        time.sleep(rest_time)
 
-                n = saved if "saved" in dir() else 0
-                if n < 100:
-                    sleep_t = random.uniform(1.0, 3.0)
-                elif n < 500:
-                    sleep_t = random.uniform(5.0, 10.0)
-                else:
-                    sleep_t = random.uniform(12.0, 20.0)
-
-                logger.info(
-                    f"☕ Bracket done! Saved {n} records. "
-                    f"Resting {sleep_t:.1f}s before next bracket..."
-                )
-                time.sleep(sleep_t)
+                    # All ranges for this district complete
+                    district_done = True
+                    checkpoint["completed_districts"].append(slug)
+                    _save_checkpoint(checkpoint)
 
             except CaptchaDetectedException:
                 captcha_hits += 1
                 wait = random.randint(45, 90) * captcha_hits
 
-                if in_memory_records:
-                    logger.warning(f"   💾 Flushing {len(in_memory_records)} in-memory records...")
-                    save_incremental(in_memory_records)
-                    total_saved += len(in_memory_records)
-
+                # Failsafe checkpoint flush
                 checkpoint["scraped_urls"] = list(scraped_urls)
                 _save_checkpoint(checkpoint)
 
                 logger.warning(
-                    f"🛑 CAPTCHA hit #{captcha_hits} for bracket {seed_min}–{seed_max}. "
+                    f"🛑 CAPTCHA hit #{captcha_hits} for district {slug}. "
                     f"Wiping identity. Waiting {wait}s..."
                 )
                 quit_driver(driver)
@@ -422,13 +304,7 @@ def run(args: argparse.Namespace) -> None:
                 time.sleep(wait)
 
             except Exception as e:
-                logger.error(
-                    f"💥 Unexpected error in bracket ({seed_min}–{seed_max}): {e}",
-                    exc_info=True,
-                )
-                if in_memory_records:
-                    save_incremental(in_memory_records)
-                    total_saved += len(in_memory_records)
+                logger.error(f"💥 Unexpected error in district ({slug}): {e}", exc_info=True)
                 checkpoint["scraped_urls"] = list(scraped_urls)
                 _save_checkpoint(checkpoint)
                 quit_driver(driver)
@@ -436,15 +312,13 @@ def run(args: argparse.Namespace) -> None:
                 break
 
     quit_driver(driver)
-    logger.info(f"\n🎉 Process Complete! Saved {total_saved} new records.")
-
+    logger.info(f"\n🎉 Process Complete! Saved a total of {total_saved} new records.")
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Modular Izmir Rent Scraper")
     parser.add_argument("--restart", action="store_true", help="Start over from scratch.")
     args = parser.parse_args()
     run(args)
-
 
 if __name__ == "__main__":
     main()
