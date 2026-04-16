@@ -3,6 +3,13 @@ scraper.py — Core scraping logic for the Izmir rent scraper.
 Components:
   1. CategoryScanner  — discovers and generates target URLs
   2. DataExtractor    — visits URLs and extracts listing data
+
+District fallback:
+  When a price bracket can't be split further by price and still has
+  >MAX_LISTINGS_PER_QUERY listings, discover_bracket returns an empty
+  list AND sets self.needs_district_fallback = True so main.py can
+  handle the district-level discover+scrape loop directly (with full
+  access to the extractor, checkpoint, and scraped_urls).
 """
 
 import csv
@@ -52,7 +59,7 @@ def delete_selenium_profile() -> None:
         logger.info("🗑️ Deleting old Selenium profile (resetting identity)...")
         if os.name == "nt":
             try:
-                subprocess.call("taskkill /F /IM chrome.exe /T",      shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+                subprocess.call("taskkill /F /IM chrome.exe /T",       shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
                 subprocess.call("taskkill /F /IM chromedriver.exe /T", shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
             except Exception:
                 pass
@@ -64,8 +71,7 @@ def setup_driver() -> uc.Chrome:
     options = uc.ChromeOptions()
     options.page_load_strategy = "eager"
 
-    # Disable image loading — pages load faster and use less bandwidth.
-    # Listings data is all in the HTML; images are not needed.
+    # Disable image loading — pages load faster, less bandwidth.
     prefs = {"profile.managed_default_content_settings.images": 2}
     options.add_experimental_option("prefs", prefs)
 
@@ -166,7 +172,6 @@ def load_and_bypass(driver: uc.Chrome, url: str) -> BeautifulSoup:
 
     driver.get(url)
     time.sleep(random.uniform(0.5, 1.0))
-
     handle_browser_check(driver)
 
     page_source = driver.page_source.lower()
@@ -218,46 +223,28 @@ class CategoryScanner:
                 return int(m.group(1))
         return None
 
-    def _district_fallback(self, min_price: int, max_price: int, indent: int, results: list) -> None:
+    def get_district_pages(self, slug: str, min_price: int, max_price: int) -> list[str]:
         """
-        When a price bracket can't be split further by price but still has
-        >MAX_LISTINGS_PER_QUERY listings, fan out across every Izmir district
-        and collect per-district page URLs instead.
+        Returns the list of paginated URLs for a single district+price range.
+        Returns [] if the district has no listings.
+        Called by main.py one district at a time so it can scrape immediately.
         """
-        pad = "  " * indent
-        logger.info(f"{pad}🏙️ Price bracket too narrow. Falling back to district-level search...")
+        district_url = (
+            f"https://www.sahibinden.com/kiralik/{slug}"
+            f"?pagingSize={config.PAGE_SIZE}&price_min={min_price}&price_max={max_price}"
+        )
+        soup  = load_and_bypass(self.driver, district_url)
+        total = self._extract_total_listings(soup)
 
-        for slug in IZMIR_DISTRICT_SLUGS:
-            district_url = (
-                f"https://www.sahibinden.com/kiralik/{slug}"
-                f"?pagingSize={config.PAGE_SIZE}&price_min={min_price}&price_max={max_price}"
+        if not total:
+            return []
+
+        if total > config.MAX_LISTINGS_PER_QUERY:
+            logger.warning(
+                f"    ⚠️ {slug} has {total} listings — still over limit. Capping at 20 pages."
             )
-            logger.info(f"{pad}  🔍 District: {slug} ({min_price}–{max_price} TL)...")
-            try:
-                soup  = load_and_bypass(self.driver, district_url)
-                total = self._extract_total_listings(soup)
 
-                if not total:
-                    logger.info(f"{pad}    📭 0 listings. Skipping.")
-                    continue
-
-                if total > config.MAX_LISTINGS_PER_QUERY:
-                    logger.warning(
-                        f"{pad}    ⚠️ {slug} has {total} listings — still over limit. Capping at 20 pages."
-                    )
-
-                page_urls = _build_page_urls(district_url, total)
-                results.extend(page_urls)
-                logger.info(f"{pad}    ✓ {slug}: {total} listings → {len(page_urls)} pages")
-
-            except CaptchaDetectedException:
-                raise
-            except Exception as e:
-                logger.warning(f"{pad}    ⚠️ Error on {slug}: {e}. Skipping.")
-
-            time.sleep(random.uniform(0.3, 0.6))
-
-        logger.info(f"{pad}🏙️ District fallback complete.")
+        return _build_page_urls(district_url, total)
 
     def discover_bracket(
         self,
@@ -265,12 +252,16 @@ class CategoryScanner:
         max_price: int,
         indent: int = 0,
         results: list | None = None,
-    ) -> list[str]:
+    ) -> list[str] | None:
         """
         Recursively discovers all page URLs for a price range.
 
-        `results` is mutated in-place so that partial progress is preserved
-        even if a CaptchaDetectedException fires mid-recursion.
+        Returns:
+          - list[str]  — page URLs to scrape (normal case)
+          - None       — signals that district-level fallback is needed;
+                         main.py should call get_district_pages() per district.
+
+        `results` is mutated in-place so partial progress survives a CAPTCHA.
         """
         if results is None:
             results = []
@@ -296,20 +287,30 @@ class CategoryScanner:
                 logger.info(f"{pad}  ✂️ Too dense ({total} listings). Splitting...")
                 mid = (min_price + max_price) // 2
 
+                # Check left and right sides, and capture their return values
                 if mid == min_price:
-                    self.discover_bracket(min_price, min_price, indent + 1, results)
+                    res1 = self.discover_bracket(min_price, min_price, indent + 1, results)
                     time.sleep(random.uniform(0.3, 0.6))
-                    self.discover_bracket(max_price, max_price, indent + 1, results)
+                    res2 = self.discover_bracket(max_price, max_price, indent + 1, results)
                 else:
-                    self.discover_bracket(min_price, mid, indent + 1, results)
+                    res1 = self.discover_bracket(min_price, mid, indent + 1, results)
                     time.sleep(random.uniform(0.3, 0.6))
-                    self.discover_bracket(mid + 1, max_price, indent + 1, results)
-            else:
-                # Width is 0 — single price point with >1000 listings → district fallback
-                logger.warning(f"{pad}  ⚠️ Massive cluster at exactly {min_price} TL! District fallback.")
-                self._district_fallback(min_price, max_price, indent, results)
+                    res2 = self.discover_bracket(mid + 1, max_price, indent + 1, results)
 
-            return results
+                # CRITICAL FIX: If any sub-bracket hits a massive cluster (>1000)
+                # and returns None, bubble that signal all the way back up to main.py!
+                if res1 is None or res2 is None:
+                    return None
+
+                return results
+            else:
+                # Width is 0 — single price point with >1000 listings.
+                # Signal main.py to handle district-level fallback.
+                logger.warning(
+                    f"{pad}  ⚠️ Massive cluster at exactly {min_price} TL! "
+                    f"Signalling district fallback to main.py."
+                )
+                return None  # ← district fallback signal
 
         # Safe range — generate paginated URLs
         page_urls = _build_page_urls(url, total)

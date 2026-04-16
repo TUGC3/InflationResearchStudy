@@ -42,12 +42,15 @@ def load_all_data(data_dir="."):
     # Create a Week (Year-Week) column (e.g., 2026-W13)
     master_df['YearWeek'] = master_df['Date'].dt.strftime('%Y-W%V')
 
+    # Create a Month (Year-Month) column (e.g., 2026-03)
+    master_df['YearMonth'] = master_df['Date'].dt.strftime('%Y-%m')
+
     return master_df
 
 
 def calculate_inflation(df, time_col):
     """
-    Calculates normal and weighted inflation based on the specified time period (Date or YearWeek).
+    Calculates normal and weighted inflation based on the specified time period (Date, YearWeek, or YearMonth).
     """
     # Step 1: Find average prices and listing counts grouped by time and number of rooms
     grouped = df.groupby([time_col, 'Rooms']).agg(
@@ -82,7 +85,7 @@ def calculate_inflation(df, time_col):
 
     final_report.rename(columns={'PriceInt': 'Overall_Avg_Price'}, inplace=True)
 
-    # Clean up the report (The first day/week change will be NaN)
+    # Clean up the report (The first day/week/month change will be NaN)
     final_report = final_report.round(2)
 
     return grouped, final_report
@@ -108,6 +111,9 @@ def generate_inflation_reports(input_dir, output_dir):
     # --- WEEKLY CALCULATIONS ---
     weekly_rooms_df, weekly_overall_df = calculate_inflation(df, 'YearWeek')
 
+    # --- MONTHLY CALCULATIONS ---
+    monthly_rooms_df, monthly_overall_df = calculate_inflation(df, 'YearMonth')
+
     print("📊 DAILY MARKET INFLATION (Last 5 Days):")
     print(daily_overall_df.tail(5).to_string(index=False))
     print("-" * 60)
@@ -116,15 +122,21 @@ def generate_inflation_reports(input_dir, output_dir):
     print(weekly_overall_df.tail(5).to_string(index=False))
     print("-" * 60)
 
+    print("\n📅 MONTHLY MARKET INFLATION:")
+    print(monthly_overall_df.tail(5).to_string(index=False))
+    print("-" * 60)
+
     # Ensure the output directory exists
     os.makedirs(output_dir, exist_ok=True)
 
     # Save the reports to the specified output directory
     daily_report_path = os.path.join(output_dir, "Daily_Inflation_Report.csv")
     weekly_report_path = os.path.join(output_dir, "Weekly_Inflation_Report.csv")
+    monthly_report_path = os.path.join(output_dir, "Monthly_Inflation_Report.csv")
 
     daily_overall_df.to_csv(daily_report_path, index=False, encoding="utf-8-sig")
     weekly_overall_df.to_csv(weekly_report_path, index=False, encoding="utf-8-sig")
+    monthly_overall_df.to_csv(monthly_report_path, index=False, encoding="utf-8-sig")
 
     print(f"\n💾 Reports successfully saved to:\n➡️  {os.path.abspath(output_dir)}")
 
