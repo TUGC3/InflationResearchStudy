@@ -99,38 +99,191 @@ def setup_driver() -> uc.Chrome:
 
 # ── Page loading & bot-check handling ────────────────────────────────────────
 
+def _find_accessibility_circle(driver: uc.Chrome):
+    """
+    Finds the circular accessibility icon button on the Sahibinden check screen.
+    This is the grey circle with the person/wheelchair icon (NOT the blue button).
+    It is typically an <img> or <svg> wrapped in a clickable container, OR
+    an element whose tag/class references accessibility/check concepts.
+    Returns the element or None.
+    """
+    # Priority selectors — from most specific to broadest.
+    # The circle icon is separate from the blue "Lütfen bekleyin"/"Tekrar basın" button.
+    selectors = [
+        # DataDome / Sahibinden known selectors for the icon circle
+        "input#icon",
+        "input[type='image']",
+        "#icon",
+        "[id*='icon']",
+        "[class*='icon']",
+        # SVG or img inside a wrapper
+        "svg",
+        "img[src*='access']",
+        "img[alt*='access']",
+        # Generic: any element that is NOT the blue button
+    ]
+
+    for sel in selectors:
+        try:
+            elems = driver.find_elements(By.CSS_SELECTOR, sel)
+            for e in elems:
+                txt = (e.text or "").strip().lower()
+                # Skip the blue button
+                if "bekleyin" in txt or "tekrar" in txt or "basın" in txt:
+                    continue
+                if e.is_displayed():
+                    return e
+        except Exception:
+            continue
+
+    # Fallback: use JavaScript to find the element by its visual position.
+    # The circle is always to the LEFT of the blue button on this page.
+    # Find all visible interactive-ish elements and return the leftmost one.
+    try:
+        elems = driver.find_elements(By.XPATH,
+            "//*[self::button or self::input or self::a or self::svg or self::img]"
+            "[not(contains(translate(text(),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'bekle'))]"
+            "[not(contains(translate(text(),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'tekrar'))]"
+        )
+        visible = [e for e in elems if e.is_displayed()]
+        if visible:
+            # Return the leftmost visible element (the circle is on the left)
+            visible.sort(key=lambda e: e.location.get("x", 9999))
+            return visible[0]
+    except Exception:
+        pass
+
+    return None
+
+
+def _try_click_hold_button(driver: uc.Chrome) -> bool:
+    """
+    Clicks the circular accessibility icon (the grey circle the user circled in red),
+    waits for the page to show 'Tekrar basın', then clicks that blue button.
+    Returns True if the full sequence succeeded.
+    """
+    try:
+        logger.info("🔍 Looking for the accessibility circle icon...")
+
+        # Wait up to 8s for the circle to be present
+        circle = None
+        deadline = time.time() + 8
+        while time.time() < deadline:
+            circle = _find_accessibility_circle(driver)
+            if circle:
+                break
+            time.sleep(0.5)
+
+        if not circle:
+            logger.warning("⚠️ Could not locate the accessibility circle icon.")
+            return False
+
+        logger.info(f"🖱️  Found circle element: <{circle.tag_name}> — clicking it...")
+        # Move naturally to the element, then click
+        ActionChains(driver) \
+            .move_to_element(circle) \
+            .pause(random.uniform(0.4, 0.9)) \
+            .click(circle) \
+            .perform()
+        logger.info("✅ Circle clicked. Waiting for 'Tekrar basın'...")
+
+        time.sleep(random.uniform(1.0, 2.0))
+
+        # Now wait for and click 'Tekrar basın'
+        clicked = _try_click_tekrar_basin(driver)
+        return clicked
+
+    except Exception as e:
+        logger.debug(f"_try_click_hold_button error: {e}")
+        return False
+
+
+def _try_click_tekrar_basin(driver: uc.Chrome) -> bool:
+    """
+    Waits for the blue 'Tekrar basın' button to appear and clicks it.
+    Tries ActionChains first, falls back to JS click.
+    Returns True on success.
+    """
+    deadline = time.time() + 20
+    while time.time() < deadline:
+        try:
+            src = driver.page_source.lower()
+            if "tekrar" in src:
+                # Find the blue button — it contains "Tekrar basın" text
+                for selector in ["button", "a", "[role='button']", "input[type='submit']"]:
+                    elems = driver.find_elements(By.CSS_SELECTOR, selector)
+                    for e in elems:
+                        txt = (e.text or e.get_attribute("value") or "").lower()
+                        if "tekrar" in txt and e.is_displayed():
+                            try:
+                                # Try natural mouse click first
+                                ActionChains(driver) \
+                                    .move_to_element(e) \
+                                    .pause(random.uniform(0.3, 0.7)) \
+                                    .click() \
+                                    .perform()
+                            except Exception:
+                                # Fallback: JavaScript click (works even if element is covered)
+                                driver.execute_script("arguments[0].click();", e)
+                            logger.info("🎯 Clicked 'Tekrar basın'.")
+                            time.sleep(random.uniform(2.5, 4.0))
+                            return True
+        except Exception:
+            pass
+        time.sleep(0.4)
+    logger.debug("'Tekrar basın' button not found within timeout.")
+    return False
+
+
 def handle_browser_check(driver: uc.Chrome) -> None:
     page_source = driver.page_source.lower()
     if "tarayıcınızı" not in page_source and "kontrol ediliyor" not in page_source:
         return
 
-    logger.info("🤖 Browser check detected. Waiting for it to resolve...")
+    logger.info("🤖 Browser check detected. Attempting automated bypass...")
     start_time = time.time()
 
-    while time.time() - start_time < 90:
+    while time.time() - start_time < 120:
         page_source = driver.page_source.lower()
 
+        # ── Fully resolved ───────────────────────────────────────────────────
         if ("tarayıcınızı" not in page_source
                 and "bekleyiniz" not in page_source
                 and "kontrol ediliyor" not in page_source):
-            logger.info("✅ Browser check resolved automatically!")
+            logger.info("✅ Browser check resolved!")
             time.sleep(1.5)
             return
 
+        # ── Press-and-Hold / Basılı Tut screen ──────────────────────────────
         if "basılı tutun" in page_source or "bağlantınız kontrol ediliyor" in page_source:
-            logger.warning("🚨 USER ACTION REQUIRED: 'Press and Hold' screen detected!")
-            logger.warning("👉 Go to Chrome and manually press & hold the button. Waiting up to 5 min...")
-            manual_start = time.time()
-            while time.time() - manual_start < 300:
-                src = driver.page_source.lower()
-                if "basılı tutun" not in src and "bağlantınız kontrol ediliyor" not in src:
-                    logger.info("✅ Manually passed! Resuming automation...")
-                    time.sleep(3)
-                    return
-                time.sleep(2)
-            logger.error("❌ No action taken for 5 minutes. Timeout!")
-            return
+            logger.info("🖱️  'Press & Hold' screen detected — attempting auto-click...")
+            success = _try_click_hold_button(driver)
+            if success:
+                # Give the page time to transition after the hold
+                time.sleep(random.uniform(3.0, 5.0))
+                continue  # Re-check page state
+            else:
+                # Auto-click failed; fall back to manual wait with shorter timeout
+                logger.warning("⚠️  Auto-click failed. Waiting for manual intervention (2 min)...")
+                manual_start = time.time()
+                while time.time() - manual_start < 120:
+                    src = driver.page_source.lower()
+                    if "basılı tutun" not in src and "bağlantınız kontrol ediliyor" not in src:
+                        logger.info("✅ Manually passed! Resuming automation...")
+                        time.sleep(3)
+                        return
+                    time.sleep(2)
+                logger.error("❌ Manual timeout reached.")
+                return
 
+        # ── Tekrar basın appeared without prior hold (edge case) ─────────────
+        if "tekrar" in page_source:
+            logger.info("🖱️  'Tekrar basın' detected — clicking...")
+            _try_click_tekrar_basin(driver)
+            time.sleep(random.uniform(2.0, 3.0))
+            continue
+
+        # ── Devam Et screen ──────────────────────────────────────────────────
         if "tarayıcınızı kontrol ediyoruz" in page_source and "devam et" in page_source:
             try:
                 wait_time = random.uniform(25.0, 30.0)
@@ -150,7 +303,7 @@ def handle_browser_check(driver: uc.Chrome) -> None:
 
         time.sleep(1)
 
-    logger.warning("⚠️ Browser check timed out after 90s.")
+    logger.warning("⚠️ Browser check timed out after 120s.")
 
 
 def accept_cookies(driver: uc.Chrome) -> None:
@@ -172,6 +325,14 @@ def load_and_bypass(driver: uc.Chrome, url: str) -> BeautifulSoup:
         time.sleep(random.uniform(2.0, 4.0))
         handle_browser_check(driver)
         accept_cookies(driver)
+        # Light human-like scroll to build session trust before navigating away
+        try:
+            driver.execute_script("window.scrollTo(0, document.body.scrollHeight * 0.3);")
+            time.sleep(random.uniform(0.6, 1.2))
+            driver.execute_script("window.scrollTo(0, 0);")
+            time.sleep(random.uniform(0.4, 0.8))
+        except Exception:
+            pass
 
     driver.get(url)
     time.sleep(random.uniform(0.5, 1.0))

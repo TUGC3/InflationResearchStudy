@@ -13,7 +13,7 @@ import config
 from scraper import (
     setup_driver, CategoryScanner, DataExtractor,
     CaptchaDetectedException, delete_selenium_profile, save_incremental,
-    handle_browser_check, IZMIR_DISTRICT_SLUGS, IZMIR_SLUG_TO_DISTRICT
+    IZMIR_DISTRICT_SLUGS, IZMIR_SLUG_TO_DISTRICT
 )
 
 logging.basicConfig(
@@ -53,45 +53,6 @@ def _save_checkpoint(data: dict) -> None:
 
 # ── Trust-score warm-up ───────────────────────────────────────────────────────
 
-_TRUST_WARMUP_PAGES = [
-    "https://www.sahibinden.com/kiralik-daire/izmir-bornova",
-    "https://www.sahibinden.com/kiralik-daire/izmir-karsiyaka",
-    "https://www.sahibinden.com/kiralik-daire/izmir-buca",
-    "https://www.sahibinden.com/kiralik-daire/izmir-konak",
-    "https://www.sahibinden.com/kiralik-daire/izmir-bayrakli",
-]
-
-def warm_up_browser(driver) -> None:
-    logger.info("🔥 Building trust score on Sahibinden...")
-    logger.info("    ↳ Visiting homepage to establish session...")
-    try:
-        driver.get("https://www.sahibinden.com/")
-        time.sleep(random.uniform(2.0, 4.0))
-        handle_browser_check(driver)
-        time.sleep(random.uniform(1.0, 2.0))
-    except CaptchaDetectedException:
-        raise
-    except Exception as e:
-        logger.debug(f"Homepage warm-up issue: {e}")
-
-    for page_url in random.sample(_TRUST_WARMUP_PAGES, 2):
-        logger.info(f"    ↳ Visiting: {page_url}")
-        try:
-            driver.get(page_url)
-            time.sleep(random.uniform(2.0, 3.5))
-            handle_browser_check(driver)
-            driver.execute_script("window.scrollTo(0, document.body.scrollHeight * 0.4);")
-            time.sleep(random.uniform(0.7, 1.2))
-            driver.execute_script("window.scrollTo(0, document.body.scrollHeight * 0.75);")
-            time.sleep(random.uniform(0.7, 1.2))
-            driver.execute_script("window.scrollTo(0, 0);")
-            time.sleep(random.uniform(1.0, 2.0))
-        except CaptchaDetectedException:
-            raise
-        except Exception as e:
-            logger.debug(f"Subpage warm-up skipped ({page_url}): {e}")
-
-    logger.info("✅ Warm-up complete. Proceeding to discovery.")
 
 def quit_driver(driver) -> None:
     if driver:
@@ -181,12 +142,10 @@ def run(args: argparse.Namespace) -> None:
             continue
 
         district_done = False
-        captcha_hits = 0
 
         while not district_done:
             if driver is None:
                 driver = setup_driver()
-                warm_up_browser(driver)
 
             scanner = CategoryScanner(driver)
             extractor = DataExtractor(driver)
@@ -287,15 +246,14 @@ def run(args: argparse.Namespace) -> None:
                     _save_checkpoint(checkpoint)
 
             except CaptchaDetectedException:
-                captcha_hits += 1
-                wait = random.randint(45, 90) * captcha_hits
+                wait = random.randint(45, 90)
 
                 # Failsafe checkpoint flush
                 checkpoint["scraped_urls"] = list(scraped_urls)
                 _save_checkpoint(checkpoint)
 
                 logger.warning(
-                    f"🛑 CAPTCHA hit #{captcha_hits} for district {slug}. "
+                    f"🛑 CAPTCHA hit for district {slug}. "
                     f"Wiping identity. Waiting {wait}s..."
                 )
                 quit_driver(driver)
