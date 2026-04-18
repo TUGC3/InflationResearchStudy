@@ -325,14 +325,6 @@ def load_and_bypass(driver: uc.Chrome, url: str) -> BeautifulSoup:
         time.sleep(random.uniform(2.0, 4.0))
         handle_browser_check(driver)
         accept_cookies(driver)
-        # Light human-like scroll to build session trust before navigating away
-        try:
-            driver.execute_script("window.scrollTo(0, document.body.scrollHeight * 0.3);")
-            time.sleep(random.uniform(0.6, 1.2))
-            driver.execute_script("window.scrollTo(0, 0);")
-            time.sleep(random.uniform(0.4, 0.8))
-        except Exception:
-            pass
 
     driver.get(url)
     time.sleep(random.uniform(0.5, 1.0))
@@ -347,18 +339,28 @@ def load_and_bypass(driver: uc.Chrome, url: str) -> BeautifulSoup:
     start_time = time.time()
     while time.time() - start_time < 20:
         soup = BeautifulSoup(driver.page_source, "lxml")
+        src = driver.page_source.lower()
 
-        if (soup.select("#searchResultsTable tbody tr.searchResultsItem")
-                or "ilan bulunamadı" in driver.page_source.lower()):
+        # CONDITION 1: Listings successfully loaded
+        if soup.select("#searchResultsTable tbody tr.searchResultsItem"):
             return soup
 
-        src = driver.page_source.lower()
+        # CONDITION 2: Sahibinden explicitly says there are no listings here
+        if any(phrase in src for phrase in ["ilan bulunamadı", "aradığınız kriterlere", "sonuç bulunamadı"]):
+            return soup
+
+        # CONDITION 3: The table frame loaded but it is completely empty (Last page scenario)
+        if soup.select_one("#searchResultsTable") and "giriş yap" not in src:
+            return soup
+
+        # Re-check for bot walls that might have popped up dynamically
         if "tarayıcınızı" in src or "kontrol ediliyor" in src:
             handle_browser_check(driver)
             start_time = time.time()
 
         time.sleep(0.3)
 
+    # If 20 seconds pass and none of the success conditions are met:
     driver.save_screenshot("debug_silent_block.png")
     final = driver.page_source.lower()
     if "giriş yap" in final and "searchresultstable" not in final:
