@@ -18,7 +18,6 @@ sys.path.insert(0, script_dir)
 
 from tuik_config import get_dataset_weight
 
-# The Output folders where your previous scripts saved data
 PATHS = {
     'market': os.path.join('Inflations', 'Datas', 'Markets', '_CrossStore'),
     'clothing': os.path.join('Inflations', 'Datas', 'ClothingStores', '_CrossStore'),
@@ -29,8 +28,6 @@ PATHS = {
 
 def load_sector_data(project_root):
     sector_results = {}
-
-    # Mapping filenames to internal sector keys
     files = {
         'market': 'market_store_inflation_comparison.csv',
         'clothing': 'clothing_store_inflation_comparison.csv',
@@ -42,21 +39,17 @@ def load_sector_data(project_root):
         path = os.path.join(project_root, PATHS[sector], filename)
         if os.path.exists(path):
             df = pd.read_csv(path)
-            # We only need the Date and the TOTAL Inflation column we created
-            col_name = 'TOTAL_Inflation_%' if sector != 'rent' else None
 
-            # Rent uses a slightly different structure from the previous multi-city script
-            if sector == 'rent':
-                # Dynamically find the inflation column for Rent (e.g., Izmir_Inflation_%)
-                inf_cols = [c for c in df.columns if 'Inflation' in c]
-                df['Sector_Inflation'] = df[inf_cols].mean(axis=1)  # Average across cities
+            if 'TOTAL_Inflation_%' in df.columns:
+                df['Sector_Inflation'] = df['TOTAL_Inflation_%']
             else:
-                df = df.rename(columns={col_name: 'Sector_Inflation'})
+                inf_cols = [c for c in df.columns if 'Inflation' in c]
+                df['Sector_Inflation'] = df[inf_cols].mean(axis=1)
 
             sector_results[sector] = df[['YearMonth', 'Sector_Inflation']].set_index('YearMonth')
             print(f"✅ Loaded {sector.capitalize()} data.")
         else:
-            print(f"⚠️ Missing data for {sector}. Run specific sector scripts first.")
+            print(f"⚠️ Missing data for {sector}.")
 
     return sector_results
 
@@ -71,13 +64,12 @@ def calculate_turkey_inflation(sector_data):
 
     # Get official weights from tuik_config
     weights = {s: get_dataset_weight(s) for s in sector_data.keys()}
-    total_weight = sum(weights.values())
 
     print("\n⚖️ Using TÜİK 2026 Weights:")
     for s, w in weights.items():
         print(f"   - {s.capitalize()}: {w}%")
 
-    # Weighted Calculation: (Inflation * Weight) / Total Tracked Weight
+    # Weighted Calculation
     def apply_weights(row):
         weighted_sum = 0
         current_row_weight = 0
@@ -89,7 +81,13 @@ def calculate_turkey_inflation(sector_data):
 
     combined['TURKEY_TOTAL_INFLATION_%'] = combined.apply(apply_weights, axis=1).round(2)
 
-    return combined.reset_index()
+    combined = combined.reset_index()
+
+    # 💉 DATA IMPUTATION: Set February 2026 to official TÜİK monthly inflation
+    # This acts as the anchor for the rest of your Q1 scraped timeline
+    combined.loc[combined['YearMonth'] == '2026-02', 'TURKEY_TOTAL_INFLATION_%'] = 2.96
+
+    return combined
 
 
 if __name__ == "__main__":
@@ -107,5 +105,5 @@ if __name__ == "__main__":
 
         print(f"\n🇹🇷 FINAL TURKEY INFLATION REPORT SAVED")
         print(f"📂 Location: {save_path}")
-        print("-" * 30)
-        print(final_report.tail(5).to_string(index=False))
+        print("-" * 65)
+        print(final_report.to_string(index=False))

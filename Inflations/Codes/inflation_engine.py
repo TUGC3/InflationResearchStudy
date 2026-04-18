@@ -52,15 +52,30 @@ def _extract_date(filename: str) -> str | None:
 
 
 def _clean_price(series: pd.Series) -> pd.Series:
-    """Cleans Turkish-formatted prices like '2.499,00 TL' → 2499.00"""
-    return (
-        series.astype(str)
-        .str.replace(r'\s*TL\s*', '', regex=True)
-        .str.replace('.', '', regex=False)
-        .str.replace(',', '.', regex=False)
-        .pipe(pd.to_numeric, errors='coerce')
-    )
+    """Safely cleans both TR (1.234,56) and EN (1234.56) price formats."""
 
+    def parse_val(x):
+        if pd.isna(x): return None
+        x = str(x).replace(' TL', '').replace('TL', '').strip()
+        if not x: return None
+
+        # If it has both dot and comma (TR format: 1.234,56)
+        if '.' in x and ',' in x:
+            x = x.replace('.', '').replace(',', '.')
+        # If it only has a comma (TR decimal: 15,99)
+        elif ',' in x:
+            x = x.replace(',', '.')
+        # If it has multiple dots (TR thousands: 1.250.000)
+        elif x.count('.') > 1:
+            x = x.replace('.', '')
+        # If it has one dot, we assume standard EN decimal (15.99), leave it alone
+
+        try:
+            return float(x)
+        except ValueError:
+            return None
+
+    return series.apply(parse_val)
 
 # ─────────────────────────────────────────────
 # LOADERS — one per data source type

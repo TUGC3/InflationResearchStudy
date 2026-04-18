@@ -7,20 +7,15 @@ For each store it computes monthly inflation, then ranks stores by:
   - Cheapest overall average price
   - Lowest inflation rate
   - Best/worst price per category
-
-Usage:
-    python CrossStore_Compare.py --type market
-    python CrossStore_Compare.py --type clothing
-    python CrossStore_Compare.py --type construction
-    python CrossStore_Compare.py --type market --stores Baskent Migros CarsiMarket
 """
 
 import os
 import sys
 import argparse
 import pandas as pd
+import re
 
-# Ensure the script can find inflation_engine and tuik_config in the same folder
+# Ensure the script can find inflation_engine in the same folder
 script_dir = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, script_dir)
 
@@ -30,7 +25,6 @@ from inflation_engine import (
     load_construction_data,
 )
 
-# Configuration for loaders and paths
 LOADERS = {
     'market': load_market_data,
     'clothing': load_clothing_data,
@@ -50,6 +44,42 @@ TYPE_OUT_DIRS = {
 }
 
 
+def normalize_product_names(df):
+    """Cleans, standardizes, and groups similar product names together."""
+    print("🧹 Normalizing and merging similar products...")
+
+    def clean_text(text):
+        if pd.isna(text): return "UNKNOWN"
+
+        # 1. Uppercase everything
+        t = str(text).upper()
+
+        # 2. Remove useless store tags
+        t = re.sub(r'\s*1\s*ADET\b', '', t)
+        t = re.sub(r'\bADET\b', '', t)
+
+        # 3. Standardize weights and volumes
+        t = re.sub(r'\s+GR\b', 'G', t)
+        t = re.sub(r'\s+G\b', 'G', t)
+        t = re.sub(r'\s+ML\b', 'ML', t)
+        t = re.sub(r'\s+KG\b', 'KG', t)
+        t = re.sub(r'\s+LT\b', 'L', t)
+
+        # 4. Remove punctuation
+        t = re.sub(r'[,\-]', ' ', t)
+
+        # 5. Remove extra whitespace
+        t = re.sub(r'\s+', ' ', t).strip()
+
+        # 6. Alphabetical Sorting (Matches "Arko Cool 90G" with "Arko 90G Cool")
+        words = t.split()
+        words.sort()
+        return ' '.join(words)
+
+    df['ProductName'] = df['ProductName'].apply(clean_text)
+    return df
+
+
 def load_all_stores(dataset_type, base_dir, store_filter=None):
     loader = LOADERS[dataset_type]
     if not os.path.exists(base_dir):
@@ -67,9 +97,8 @@ def load_all_stores(dataset_type, base_dir, store_filter=None):
         df = loader(path)
 
         if df is not None and not df.empty:
-            # FIX: Remove duplicate columns that cause the InvalidIndexError
+            # Drop duplicate columns to prevent InvalidIndexError during concat
             df = df.loc[:, ~df.columns.duplicated()].copy()
-
             df['Store'] = store
             frames.append(df)
             print(f"   ✅ {store}: {len(df):,} records")
@@ -78,34 +107,79 @@ def load_all_stores(dataset_type, base_dir, store_filter=None):
 
 
 def inflation_comparison(df):
-    """Generates monthly inflation pivot table + TOTAL inflation calculation."""
+    """Generates matched-product monthly inflation (Apples-to-Apples)."""
     df = df.copy()
     df['YearMonth'] = df['Date'].dt.strftime('%Y-%m')
 
-    # Per Store Calculations
-    monthly_avg = df.groupby(['YearMonth', 'Store'])['Active_Price'].mean().reset_index()
-    monthly_avg = monthly_avg.sort_values(['Store', 'YearMonth'])
-    monthly_avg['MoM_Inflation_%'] = (
-            monthly_avg.groupby('Store')['Active_Price']
-            .pct_change() * 100
-    ).round(2)
+    if 'ProductName' not in df.columns:
+        df['ProductName'] = 'UNKNOWN'
 
-    pivot_price = monthly_avg.pivot(index='YearMonth', columns='Store', values='Active_Price').round(2)
-    pivot_mom = monthly_avg.pivot(index='YearMonth', columns='Store', values='MoM_Inflation_%')
+    # --- TOTAL (Global) Calculations ---
+    product_monthly = df.groupby(['YearMonth', 'ProductName'])['Active_Price'].mean().unstack('ProductName')
 
-    pivot_price.columns = [f'{c}_AvgPrice' for c in pivot_price.columns]
-    pivot_mom.columns = [f'{c}_MoM_%' for c in pivot_mom.columns]
+    total_monthly = pd.DataFrame({
+        'TOTAL_AvgPrice': product_monthly.mean(axis=1).round(2),
+        'TOTAL_Inflation_%': (product_monthly.pct_change() * 100).mean(axis=1).round(2)
+    }).reset_index()
 
-    # TOTAL (Global) Calculations for the category
-    total_monthly = df.groupby('YearMonth')['Active_Price'].mean().reset_index()
-    total_monthly = total_monthly.sort_values('YearMonth')
-    total_monthly['TOTAL_AvgPrice'] = total_monthly['Active_Price'].round(2)
-    total_monthly['TOTAL_Inflation_%'] = (total_monthly['Active_Price'].pct_change() * 100).round(2)
+    # --- Per Store Calculations ---
+    store_mom = {}
+    store_price = {}
+    for store in df['Store'].unique():
+        sdf = df[df['Store'] == store]
+        sprod = sdf.groupby(['YearMonth', 'ProductName'])['Active_Price'].mean().unstack('ProductName')
 
-    total_cols = total_monthly[['YearMonth', 'TOTAL_AvgPrice', 'TOTAL_Inflation_%']].set_index('YearMonth')
+        store_mom[f'{store}_MoM_%'] = (sprod.pct_change() * 100).mean(axis=1)
+        store_price[f'{store}_AvgPrice'] = sprod.mean(axis=1)
 
-    combined = pd.concat([total_cols, pivot_price, pivot_mom], axis=1)
+    pivot_mom = pd.DataFrame(store_mom).round(2)
+    pivot_price = pd.DataFrame(store_price).round(2)
+
+    combined = pd.concat([total_monthly.set_index('YearMonth'), pivot_price, pivot_mom], axis=1)
+
+    # 🧹 Drop the first month where inflation is NaN
+    combined = combined.dropna(subset=['TOTAL_Inflation_%'])
+
     return combined.reset_index()
+
+
+def product_monthly_tracker(df):
+    """Creates a matrix of Products (rows) by Monthly Inflation % (columns)."""
+    df = df.copy()
+
+    if 'ProductName' not in df.columns:
+        df['ProductName'] = 'UNKNOWN'
+
+    df['YearMonth'] = df['Date'].dt.strftime('%Y-%m')
+
+    # 1. Pivot: Products as rows, Months as columns, Average Prices as values
+    monthly_price = df.groupby(['ProductName', 'YearMonth'])['Active_Price'].mean().unstack('YearMonth')
+    monthly_price = monthly_price.sort_index(axis=1)
+
+    # 2. Forward-fill missing months
+    monthly_price_filled = monthly_price.ffill(axis=1)
+
+    # 3. Calculate month-over-month percentage change and force rounding
+    monthly_inflation = (monthly_price_filled.pct_change(axis=1) * 100).round(2)
+
+    # 4. Drop the very first month
+    if len(monthly_inflation.columns) > 0:
+        first_col = monthly_inflation.columns[0]
+        monthly_inflation = monthly_inflation.drop(columns=[first_col])
+
+    monthly_inflation.columns = [f"{c}_Change_%" for c in monthly_inflation.columns]
+
+    # 5. Add an overall period change column for easy sorting, force rounding
+    first_valid = monthly_price.bfill(axis=1).iloc[:, 0]
+    last_valid = monthly_price.ffill(axis=1).iloc[:, -1]
+    total_change = ((last_valid - first_valid) / first_valid * 100).round(2)
+
+    monthly_inflation.insert(0, 'Total_Period_Change_%', total_change)
+
+    # 6. Fill remaining NaNs with 0.0 to prevent artifacting
+    monthly_inflation = monthly_inflation.fillna(0.0)
+
+    return monthly_inflation.reset_index()
 
 
 def run_cross_store(dataset_type, project_root, store_filter=None):
@@ -121,14 +195,31 @@ def run_cross_store(dataset_type, project_root, store_filter=None):
         print(f"⚠️ No data found for {dataset_type}. Skipping...")
         return
 
+    # 🧹 NEW: Apply the NLP Product Merger before doing any math!
+    full_df = normalize_product_names(full_df)
+
+    # 1. Generate standard store comparison
+    print("📊 Calculating matched-basket inflation...")
     inf_table = inflation_comparison(full_df)
 
+    # 2. Generate new Product Monthly Tracker
+    print("🔍 Generating product-level monthly changes...")
+    prod_tracker = product_monthly_tracker(full_df)
+
     os.makedirs(output_dir, exist_ok=True)
+
+    # Save standard report
     save_path = os.path.join(output_dir, f'{dataset_type}_store_inflation_comparison.csv')
     inf_table.to_csv(save_path, index=False, encoding='utf-8-sig')
 
-    print(f"💾 Report saved → {save_path}")
-    print(f"📈 Overall {dataset_type.capitalize()} Inflation (Latest): {inf_table['TOTAL_Inflation_%'].iloc[-1]}%")
+    # Save product tracker
+    prod_path = os.path.join(output_dir, f'{dataset_type}_product_monthly_changes.csv')
+    prod_tracker.to_csv(prod_path, index=False, encoding='utf-8-sig')
+
+    print(f"💾 Reports saved to: {output_dir}")
+    if not inf_table.empty:
+        print(
+            f"📈 Overall {dataset_type.capitalize()} Inflation (Latest MoM): {inf_table['TOTAL_Inflation_%'].iloc[-1]}%")
 
 
 if __name__ == "__main__":
