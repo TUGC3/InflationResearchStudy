@@ -116,7 +116,7 @@ class StradivariusScraper:
     CATALOG_V2_URL = f"{BASE_URL}/itxrest/2/catalog/store/{STORE_ID}/{REGION_ID}"
     CATALOG_V3_URL = f"{BASE_URL}/itxrest/3/catalog/store/{STORE_ID}/{REGION_ID}"
 
-    BATCH_SIZE       = 20
+    BATCH_SIZE       = 50
     MAX_RETRIES      = 5
     RETRY_BACKOFF    = 3
     RATE_LIMIT_SLEEP = 60
@@ -133,7 +133,7 @@ class StradivariusScraper:
         "Sec-Fetch-Site":  "same-origin",
     }
 
-    def __init__(self, output_dir: str = ".", delay: float = 0.5):
+    def __init__(self, output_dir: str = ".", delay: float = 0.2):
         self.output_dir = Path(output_dir)
         self.delay      = delay
         self._session: Optional[requests.Session] = None
@@ -306,7 +306,7 @@ class StradivariusScraper:
             data = self._get(url)
             if data:
                 all_products.extend(data.get("products", []))
-            time.sleep(0.3)
+            time.sleep(0.1)
         return all_products
 
     # ── Kayıt çıkarımı ────────────────────────────────────────────────────────
@@ -441,6 +441,18 @@ class StradivariusScraper:
                         })
                     continue
 
+                # Tum ID'ler zaten gorulduyse detay cekmeyi atla (editoryal/cross-cat)
+                new_ids = [pid for pid in product_ids if pid not in seen_ids]
+                if not new_ids:
+                    total_skip_id += n_ids
+                    logger.debug("'%s' -- tum %d ID zaten goruldu, atlaniyor.", cat_name, n_ids)
+                    if verify:
+                        cat_stats.append({
+                            "kategori": cat_path, "ids": n_ids, "detay": 0,
+                            "yazilan": 0, "skip_id": n_ids, "skip_renk": 0, "skip_dedup": 0,
+                        })
+                    continue
+
                 raw_products = self.fetch_product_details(product_ids, cat_id)
                 n_details = len(raw_products)
                 total_details_ok += n_details
@@ -468,7 +480,8 @@ class StradivariusScraper:
                     seen_ids.add(pid)
 
                     # Katman 3: renk bazinda dedup (case-insensitive)
-                    # Inditex ayni rengi bazen 'Bej' bazen 'BEJ' gonderebilir.
+                    # Inditex ayni rengi baz
+                    # en 'Bej' bazen 'BEJ' gonderebilir.
                     # .upper() ile normalize edilerek ayni renk sayilir.
                     # CSV'ye yazilan deger: ilk gelen (orijinal) isim — tutarlilik icin.
                     for record in color_records:
@@ -554,8 +567,8 @@ if __name__ == "__main__":
         help="CSV cikti dizini (varsayilan: .)"
     )
     parser.add_argument(
-        "--delay", type=float, default=0.5,
-        help="Kategori arasi bekleme suresi saniye (varsayilan: 0.5)"
+        "--delay", type=float, default=0.2,
+        help="Kategori arasi bekleme suresi saniye (varsayilan: 0.2)"
     )
     args = parser.parse_args()
 
