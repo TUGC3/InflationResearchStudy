@@ -138,6 +138,23 @@ MAIN_CATEGORIES = {
     for code, data in _HARDCODED_MAIN.items()
 }
 
+# Backward-compatible aliases for older calculators.
+# Keep these names stable so existing store-specific calculators continue working
+# while newer code can use the richer helper API above.
+TUIK_WEIGHTS = {
+    code: {'name': data['tr'], 'weight': data['weight']}
+    for code, data in MAIN_CATEGORIES.items()
+}
+
+
+def normalised_weights(present_codes):
+    """Return weights normalized to 100 among the provided COICOP codes."""
+    raw = {c: TUIK_WEIGHTS[c]['weight'] for c in present_codes if c in TUIK_WEIGHTS}
+    total = sum(raw.values())
+    if total == 0:
+        return {}
+    return {c: (w / total) * 100.0 for c, w in raw.items()}
+
 # Total weight (should be 100.00)
 TOTAL_WEIGHT = sum(d[2] for d in _HARDCODED_MAIN.values())
 
