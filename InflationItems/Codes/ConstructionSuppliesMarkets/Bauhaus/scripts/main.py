@@ -178,7 +178,7 @@ def save_checkpoint(cp_path, completed):
     with open(cp_path, 'w', encoding='utf-8') as f:
         json.dump(list(completed), f)
 
-def scrape_category_worker(cat, limit, session, cp_path, completed_ids):
+def scrape_category_worker(cat, limit, session, cp_path, completed_ids, resume_state=None):
     """
     Worker function to scrape a single category. Writes its ID to the checkpoint when done.
 
@@ -188,11 +188,23 @@ def scrape_category_worker(cat, limit, session, cp_path, completed_ids):
         session (requests.Session): Reusable HTTP session for this worker.
         cp_path (str): The checkpoint file to update.
         completed_ids (set): The shared set of completed IDs.
+        resume_state (dict, optional): State from a previous blocked attempt for
+            this category, containing 'start_page', 'seed_products',
+            'seed_last_skus', and 'seed_delay'. When provided, the scraper
+            resumes mid-pagination instead of restarting at page 1.
 
     Returns:
         list[dict]: Extracted product data for the category.
     """
-    products = product_fetcher.fetch_products_for_category(cat, session, limit)
+    kwargs = {}
+    if resume_state:
+        kwargs = {
+            "start_page": resume_state.get("start_page", 1),
+            "seed_products": resume_state.get("seed_products"),
+            "seed_last_skus": resume_state.get("seed_last_skus"),
+            "seed_delay": resume_state.get("seed_delay"),
+        }
+    products = product_fetcher.fetch_products_for_category(cat, session, limit, **kwargs)
     completed_ids.add(cat["id"])
     return products
 
@@ -275,9 +287,14 @@ def main():
     import time
     start_time = time.time()
 
-    # Retry loop: when 403 blocks occur, save partial products, cooldown, and retry
+    # Retry loop: when 403 blocks occur, cooldown and retry. We now keep
+    # per-category resume state (last page reached, seen SKUs, delay) so each
+    # retry continues mid-pagination instead of restarting at page 1 and
+    # repeatedly re-fetching the same prefix that the server just blocked on.
     retry_round = 0
     pending_cats = list(cats_to_scrape)
+    # Map cat_id -> {start_page, seed_products, seed_last_skus, seed_delay}
+    resume_by_cat = {}
 
     while pending_cats and retry_round <= config.MAX_403_RETRIES:
         # Create fresh sessions each round (important after a 403 block)
@@ -287,7 +304,8 @@ def main():
             cooldown = config.COOLDOWN_BASE * retry_round
             logger.info(f"⏳ 403 cooldown: waiting {cooldown}s before retry round {retry_round}/{config.MAX_403_RETRIES}…")
             time.sleep(cooldown)
-            logger.info(f"🔄 Retrying {len(pending_cats)} blocked categories with fresh sessions…")
+            logger.info(f"🔄 Retrying {len(pending_cats)} blocked categories with fresh sessions "
+                        f"(resuming from last reached page)…")
 
         blocked_cats = []
 
@@ -295,7 +313,13 @@ def main():
             future_to_cat = {}
             for i, cat in enumerate(pending_cats):
                 worker_session = worker_sessions[i % args.workers]
-                future = executor.submit(scrape_category_worker, cat, args.limit, worker_session, checkpoint_file, completed_ids)
+                resume_state = resume_by_cat.get(cat["id"])
+                future = executor.submit(
+                    scrape_category_worker,
+                    cat, args.limit, worker_session,
+                    checkpoint_file, completed_ids,
+                    resume_state,
+                )
                 future_to_cat[future] = cat
 
             for future in as_completed(future_to_cat):
@@ -303,6 +327,8 @@ def main():
                 try:
                     cat_prods = future.result()
                     all_products.extend(cat_prods)
+                    # Clear any stale resume state now that the category finished
+                    resume_by_cat.pop(cat["id"], None)
 
                     with count_lock:
                         completed_count += 1
@@ -314,9 +340,23 @@ def main():
 
                 except product_fetcher.BauhausBlockedException as blocked:
                     partial = blocked.products
-                    all_products.extend(partial)
                     blocked_cats.append(cat)
-                    logger.warning(f"⚠  Category '{cat['name']}' blocked (403). Saved {len(partial)} partial products. Will retry.")
+                    # Remember where this category got to so the next round can
+                    # resume instead of restarting at page 1. Bump the starting
+                    # delay so retries are gentler on the server.
+                    prev_delay = blocked.adaptive_delay if blocked.adaptive_delay is not None else config.REQUEST_DELAY
+                    next_delay = min(max(prev_delay * 1.5, config.REQUEST_DELAY * 2.0), 10.0)
+                    resume_by_cat[cat["id"]] = {
+                        "start_page": max(1, blocked.last_page + 1),
+                        "seed_products": list(partial),
+                        "seed_last_skus": set(blocked.last_page_skus),
+                        "seed_delay": next_delay,
+                    }
+                    logger.warning(
+                        f"⚠  Category '{cat['name']}' blocked (403) at page "
+                        f"{blocked.last_page + 1}. Saved {len(partial)} partial products. "
+                        f"Will resume from page {blocked.last_page + 1} next round."
+                    )
 
                 except Exception as exc:
                     logger.error(f"✗  Category '{cat['id']}' failed: {exc}")
@@ -328,6 +368,20 @@ def main():
 
         retry_round += 1
         pending_cats = blocked_cats
+
+    # After all retry rounds are exhausted, any category still in resume_by_cat
+    # never finished. Flush its last-known partial products into the output so
+    # we don't lose them (previous code extended all_products on every block,
+    # which duplicated items across rounds; we defer the flush to here instead
+    # and rely on final dedup as a safety net).
+    for cat in pending_cats:
+        state = resume_by_cat.get(cat["id"])
+        if state and state.get("seed_products"):
+            all_products.extend(state["seed_products"])
+            logger.info(
+                f"↪  Category '{cat['name']}' never fully completed; kept "
+                f"{len(state['seed_products'])} partial products from last attempt."
+            )
 
     if pending_cats and retry_round > config.MAX_403_RETRIES:
         logger.warning(f"⚠  {len(pending_cats)} categories still blocked after {config.MAX_403_RETRIES} retries: "

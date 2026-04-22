@@ -111,10 +111,18 @@ import config
 logger = logging.getLogger(__name__)
 
 class BauhausBlockedException(Exception):
-    """Raised when the server returns 403 Forbidden, carrying any partial products."""
-    def __init__(self, message, products=None):
+    """Raised when the server returns 403 Forbidden, carrying any partial products
+    plus enough pagination state so the category can be *resumed* on retry instead
+    of restarting from page 1."""
+    def __init__(self, message, products=None, last_page=0, last_page_skus=None, adaptive_delay=None):
         super().__init__(message)
         self.products = products or []
+        # Last page that was successfully fetched (0 if 403 hit before any success)
+        self.last_page = last_page
+        # SKUs seen on that last successful page (for dup-page termination on resume)
+        self.last_page_skus = last_page_skus or set()
+        # Adaptive delay at the time of blocking, so retries can start slower
+        self.adaptive_delay = adaptive_delay
 
 def create_session():
     """
@@ -155,7 +163,9 @@ def clean_price(price_str):
     except ValueError:
         return 0.0
 
-def fetch_products_for_category(category_dict, session=None, limit_pages=0):
+def fetch_products_for_category(category_dict, session=None, limit_pages=0,
+                                start_page=1, seed_products=None,
+                                seed_last_skus=None, seed_delay=None):
     """
     Iterates through the pages of a single category and extracts product data.
 
@@ -169,6 +179,15 @@ def fetch_products_for_category(category_dict, session=None, limit_pages=0):
         session (requests.Session, optional): The HTTP session to use for requests.
         limit_pages (int, optional): Maximum number of pages to scrape. Restricts
                                      the loop if > 0. Useful for testing.
+        start_page (int, optional): Page number to start from (resume support).
+                                    Defaults to 1.
+        seed_products (list[dict], optional): Products already collected in a previous
+                                              attempt. Merged into the result.
+        seed_last_skus (set, optional): SKUs from the last successfully fetched page
+                                        of the previous attempt, used for the
+                                        duplicate-page termination check.
+        seed_delay (float, optional): Starting adaptive delay to use (e.g. larger
+                                      than the base delay after a prior 403).
 
     Returns:
         list[dict]: A list of scraped products matching standard output fields.
@@ -177,17 +196,23 @@ def fetch_products_for_category(category_dict, session=None, limit_pages=0):
     cat_url = category_dict["url"]
     name = category_dict["name"]
     req_session = session or create_session()
-    
-    products = []
-    page = 1
-    last_page_skus = set()
-    
+
+    # Seed from previous (blocked) attempt so a retry can resume instead of
+    # starting from page 1 and re-fetching the same prefix forever.
+    products = list(seed_products) if seed_products else []
+    page = max(1, int(start_page))
+    last_page_skus = set(seed_last_skus) if seed_last_skus else set()
+
     # Adaptive rate limiting variables
-    adaptive_delay = config.REQUEST_DELAY
+    adaptive_delay = seed_delay if seed_delay is not None else config.REQUEST_DELAY
     consecutive_successes = 0
     consecutive_429s = 0
-    
-    logger.info(f"▶  [{name}] Starting scrape...")
+
+    if page > 1 or products:
+        logger.info(f"▶  [{name}] Resuming scrape from page {page} "
+                    f"(seeded with {len(products)} products, delay={adaptive_delay:.2f}s)...")
+    else:
+        logger.info(f"▶  [{name}] Starting scrape...")
     
     while True:
         if limit_pages > 0 and page > limit_pages:
@@ -228,8 +253,17 @@ def fetch_products_for_category(category_dict, session=None, limit_pages=0):
                 time.sleep(adaptive_delay)
                 continue
             elif "403" in str(e):
-                logger.warning(f"⚠  [{name}] Blocked (403) on page {page}. Collected {len(products)} products before block.")
-                raise BauhausBlockedException(str(e), products=products)
+                logger.warning(f"⚠  [{name}] Blocked (403) on page {page}. "
+                               f"Collected {len(products)} products before block.")
+                # Preserve pagination state so the retry in main.py can resume
+                # from this page instead of restarting at page 1.
+                raise BauhausBlockedException(
+                    str(e),
+                    products=products,
+                    last_page=max(0, page - 1),
+                    last_page_skus=last_page_skus,
+                    adaptive_delay=adaptive_delay,
+                )
             else:
                 break
             
