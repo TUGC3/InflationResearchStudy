@@ -5,14 +5,20 @@ A Python-based scraper that extracts product data from
 XML sitemap and the `data-tcproduct` JSON blob embedded in every
 product tile on a category page.
 
+Sephora sits behind **Akamai Bot Manager**, which blocks naive HTTP
+traffic via TLS / JA3 fingerprinting and server-side JS challenges.
+The scraper therefore drives a real Chrome browser through
+`undetected-chromedriver` — identical to how the `IstanbulAvrupa`
+scraper bypasses Sahibinden's identical Akamai setup.
+
 ## Architecture Overview
 
 The scraper is modular and mirrors the structure of the Koton / Migros
-/ Bauhaus scrapers in this repo:
+/ Bauhaus / IstanbulAvrupa scrapers in this repo:
 
 - **`main.py`** – CLI interface and orchestration controller
-- **`category_fetcher.py`** – XML sitemap-based category discovery
-- **`product_fetcher.py`** – HTML parsing and product data extraction
+- **`category_fetcher.py`** – XML sitemap-based category discovery (plain `requests`)
+- **`browser_fetcher.py`** – Scraping backend: real Chrome via `undetected-chromedriver`
 - **`config.py`** – Centralised configuration and constants
 
 ## Core Functionality
@@ -20,10 +26,11 @@ The scraper is modular and mirrors the structure of the Koton / Migros
 ### Category Discovery
 
 `category_fetcher.fetch_categories()` downloads
-`sitemap-customsitemap_category_0.xml`, parses its `<loc>` entries,
-and keeps URLs of the form `/<slug>-c<numeric-id>/`. By default it
-returns only the **eight top-level categories** declared in
-`config.MAIN_CATEGORY_SLUGS`:
+`sitemap-customsitemap_category_0.xml` with plain `requests` (the
+sitemap is served to search crawlers and is **not** Akamai-protected),
+parses its `<loc>` entries, and keeps URLs of the form
+`/<slug>-c<numeric-id>/`.  By default it returns only the **eight
+top-level categories** declared in `config.MAIN_CATEGORY_SLUGS`:
 
 - `makyaj-c302` (Makeup)
 - `parfum-c301` (Perfume)
@@ -48,20 +55,23 @@ it, and normalises the fields into a flat CSV schema.
 - **Pagination**: `?page=N` (detected from the paginator controls on
   page 1; the loop exits as soon as a page returns zero tiles).
 
-### Anti-bot Handling
+### Anti-bot Handling (Browser-Native)
 
-Sephora sits behind **Akamai Bot Manager** which blocks naive
-`requests` traffic via TLS / JA3 fingerprinting.  The scraper uses
-`curl_cffi` with Safari 17 impersonation by default and rotates to
-other Chrome / Safari profiles whenever a bot-challenge page is
-returned.  It also:
+A real Chrome browser is launched through `undetected-chromedriver`.
+Akamai's JS challenge runs naturally inside Chrome, which posts
+`sensor_data` back to Akamai and receives a valid `_abck` cookie.  If
+the cookie is not obtained automatically (rare, e.g. on a flagged IP)
+the scraper prompts you to solve the `Press & Hold` / reCAPTCHA
+manually in the visible Chrome window, then resumes automatically.
 
-- Warms every fresh session with a homepage GET before the first
-  category request
-- Sleeps `config.RATE_LIMIT_BACKOFF` (default 90 s) on HTTP 403/429
-- Sleeps `config.EMPTY_RESPONSE_BACKOFF` (default 60 s) on 200
-  responses whose body is the Akamai challenge HTML (no tiles)
-- Applies jittered delays between pages (`REQUEST_DELAY × uniform(JITTER_MIN, JITTER_MAX)`)
+- The Chrome user-data-dir persists in `SeleniumProfile/` so the
+  `_abck` cookie survives between runs — at most one CAPTCHA solve
+  per day.
+- On macOS Apple Silicon the chromedriver binary is pre-patched and
+  ad-hoc code-signed to avoid the `SIGKILL` that plain
+  `undetected-chromedriver` triggers.
+- Runs sequentially (one shared browser) because Chrome drivers do
+  not parallelise well and Akamai penalises concurrent traffic.
 
 ## Project Structure
 
@@ -69,9 +79,10 @@ returned.  It also:
 InflationItems/Codes/Cosmetics/Sephora/
 ├── scripts/
 │   ├── main.py              # CLI entry-point & orchestrator
-│   ├── category_fetcher.py  # Sitemap discovery
-│   ├── product_fetcher.py   # Per-category pagination + parsing
-│   └── config.py            # Constants, paths, anti-bot tuning
+│   ├── category_fetcher.py  # Sitemap discovery (requests)
+│   ├── browser_fetcher.py   # Chrome-based product extraction
+│   └── config.py            # Constants, paths, browser tuning
+├── SeleniumProfile/         # Chrome user-data-dir (auto-generated, git-ignored)
 ├── checkpoints/
 │   └── sephora_checkpoint_<DATE>.json   # Resume state (auto-generated)
 ├── requirements.txt
@@ -103,11 +114,11 @@ main.py
   │
   ├─ 3. Load / initialise today's checkpoint
   │
-  ├─ 4. ThreadPoolExecutor  (--workers N)
-  │       └─ _scrape_category()  →  fetch_products_for_category()
-  │               Warms a curl_cffi session, paginates through the
-  │               category, parses every `data-tcproduct` blob, and
-  │               returns normalised records.
+  ├─ 4. setup_driver()  →  fetch_products_for_category_browser(...)
+  │       Launches Chrome with the persistent profile, warms it on
+  │       the homepage, then visits each category URL sequentially,
+  │       paginating with ?page=N and parsing every data-tcproduct
+  │       blob into a normalised product record.
   │
   ├─ 5. Incremental CSV append + checkpoint save after each category
   │
@@ -138,7 +149,10 @@ main.py
 ### Prerequisites
 
 - Python 3.8+
+- Google Chrome installed locally
 - Virtual environment (recommended)
+- On macOS: `codesign` (bundled with Xcode CLI tools) for Apple
+  Silicon chromedriver re-signing
 
 ```bash
 cd InflationResearchStudy
@@ -149,11 +163,18 @@ pip install -r InflationItems/Codes/Cosmetics/Sephora/requirements.txt
 
 ### Dependencies
 
-- `curl_cffi >= 0.7.0` – TLS-impersonating HTTP client (required to pass
-  Akamai Bot Manager)
+- `selenium >= 4.20.0` + `undetected-chromedriver >= 3.5.5` – browser
+  automation
+- `requests >= 2.28.0` – sitemap download (not Akamai-protected)
 - `lxml >= 5.0.0` – fast HTML parser for tile extraction
 - `pandas >= 1.5.0` – CSV I/O + dedup
 - `tqdm >= 4.65.0` – progress bar
+
+The bundled chromedriver binary at
+`InflationItems/Codes/HousesRent/chromedriver` (Chrome 147, arm64) is
+reused automatically.  If you're on Intel macOS / Linux / Windows the
+scraper will ask `undetected-chromedriver` to download a matching
+driver.
 
 ## Operation Guide
 
@@ -186,11 +207,11 @@ python main.py --category cilt-bakimi-c303
 ### Full Catalogue Extraction
 
 ```bash
-# Scrape all eight top-level categories sequentially
+# Scrape all eight top-level categories
 python main.py
 
-# Slower per-page delay (raise if you see 403 / challenge pages)
-python main.py --delay 4
+# Slower per-page delay (raise if Chrome is struggling on your machine)
+python main.py --delay 5
 ```
 
 ### Session Management
@@ -201,20 +222,23 @@ python main.py --resume
 
 # Verbose logging for debugging
 python main.py --category cilt-bakimi-c303 -v
+
+# Headless Chrome (not recommended – Akamai detects headless more easily)
+python main.py --headless
 ```
 
 ### CLI Parameters
 
-| Parameter             | Default | Description                                     |
-| --------------------- | ------- | ----------------------------------------------- |
-| `--list-categories`   | –       | Print categories and exit                       |
-| `--all-categories`    | `False` | With `--list-categories`, include sub-categories |
-| `--category SLUG`     | All     | Scrape only this category slug                  |
-| `--workers N`         | `1`     | Parallel category workers (keep ≤ 2)            |
-| `--delay SECONDS`     | `2.5`   | Base per-page delay (jittered)                  |
-| `--limit PAGES`       | `0`     | Max pages per category (`0` = unlimited)        |
-| `--resume`            | –       | Skip categories in today's checkpoint           |
-| `-v, --verbose`       | –       | Debug-level logging                             |
+| Parameter             | Default | Description                                                  |
+| --------------------- | ------- | ------------------------------------------------------------ |
+| `--list-categories`   | –       | Print categories and exit                                    |
+| `--all-categories`    | `False` | With `--list-categories`, include sub-categories             |
+| `--category SLUG`     | All     | Scrape only this category slug                               |
+| `--headless`          | `False` | Run Chrome in headless mode                                  |
+| `--delay SECONDS`     | `3.5`   | Base per-page delay (jittered inside browser_fetcher)        |
+| `--limit PAGES`       | `0`     | Max pages per category (`0` = unlimited)                     |
+| `--resume`            | –       | Skip categories in today's checkpoint                        |
+| `-v, --verbose`       | –       | Debug-level logging                                          |
 
 ### Output Files
 
@@ -227,19 +251,17 @@ python main.py --category cilt-bakimi-c303 -v
 
 ## Configuration
 
-All knobs live in `scripts/config.py`.  The defaults are tuned for
-Akamai:
+All knobs live in `scripts/config.py`:
 
-| Parameter                | Default | Function                                              |
-| ------------------------ | ------- | ----------------------------------------------------- |
-| `REQUEST_DELAY`          | `2.5`   | Base per-page delay (seconds)                         |
-| `JITTER_MIN / JITTER_MAX`| `0.7 / 1.4` | Random multiplier range                           |
-| `MAX_RETRIES`            | `5`     | Max retries per page                                  |
-| `RETRY_BACKOFF`          | `4`     | Linear back-off seed for network errors              |
-| `RATE_LIMIT_BACKOFF`     | `90`    | Sleep seconds on HTTP 403 / 429                       |
-| `EMPTY_RESPONSE_BACKOFF` | `60`    | Sleep seconds on bot-challenge HTML                  |
-| `DEFAULT_WORKERS`        | `1`     | Parallel category workers                             |
-| `IMPERSONATE_PROFILES`   | Safari + Chrome | `curl_cffi` profile pool for rotation         |
+| Parameter                  | Default   | Function                                                     |
+| -------------------------- | --------- | ------------------------------------------------------------ |
+| `BROWSER_PAGE_LOAD_DELAY`  | `3.5`     | Base per-page sleep after `driver.get()`                     |
+| `BROWSER_MAX_WAIT_TILES`   | `30`      | Seconds to wait for `data-tcproduct` before CAPTCHA prompt   |
+| `BROWSER_HEADLESS`         | `False`   | Default headless flag (Akamai detects headless more easily)  |
+| `BROWSER_VERSION_MAIN`     | `147`     | Chrome major version (must match local Chrome + chromedriver)|
+| `CHROMEDRIVER_PATH`        | shared    | Reuses the binary from `HousesRent/chromedriver`             |
+| `SELENIUM_PROFILE_DIR`     | `./SeleniumProfile` | Persists cookies / `_abck` between runs            |
+| `MAIN_CATEGORY_SLUGS`      | 8 slugs   | Top-level category URLs that cover the full catalogue        |
 
 ### Path Configuration
 
@@ -251,13 +273,15 @@ All file paths are computed relative to `config.py`:
 
 ## Troubleshooting
 
-| Symptom                                         | Cause                              | Resolution                                                |
-| ----------------------------------------------- | ---------------------------------- | --------------------------------------------------------- |
-| `HTTP 403 / Access Denied`                      | Akamai flagged the IP              | Raise `--delay`, drop `--workers` to 1, let IP cool 10 min |
-| Many `Bot-challenge / empty response` warnings  | TLS fingerprint blocked            | The scraper rotates automatically; raise delay if needed  |
-| `data-tcproduct not found`                      | Sephora redesigned the tile markup | Update the XPath in `product_fetcher._extract_tiles`      |
-| `Category '<slug>' not found`                   | Sephora removed the category       | Remove the slug from `config.MAIN_CATEGORY_SLUGS`         |
-| `Cannot calculate inflation – no data for <date>` | Today's scrape didn't write a CSV  | Check the scraper finished and wrote the daily file       |
+| Symptom                                           | Cause                                    | Resolution                                                                      |
+| ------------------------------------------------- | ---------------------------------------- | ------------------------------------------------------------------------------- |
+| `Akamai bot-challenge detected` prompt            | Akamai JS challenge needs solving        | Solve the Press-&-Hold / CAPTCHA in the Chrome window, press Enter              |
+| Chrome crashes with `SIGKILL` on macOS            | Apple Silicon signature invalidated       | The scraper auto-re-signs via `codesign --force -s -` – reinstall Xcode CLI tools if missing |
+| `session not created: chromedriver version…`      | Chromedriver and Chrome out of sync       | Update `config.BROWSER_VERSION_MAIN` to match your local Chrome                 |
+| `Sitemap returned status 403`                     | Network blocking or IP reputation        | Retry after a few minutes; the sitemap usually responds to plain `requests`     |
+| `data-tcproduct not found`                        | Sephora redesigned the tile markup       | Update the XPath in `browser_fetcher._extract_tiles`                            |
+| `Category '<slug>' not found`                     | Sephora removed the category             | Remove the slug from `config.MAIN_CATEGORY_SLUGS`                               |
+| `Cannot calculate inflation – no data for <date>` | Today's scrape didn't write a CSV        | Check the scraper finished and wrote the daily file                             |
 
 ---
 

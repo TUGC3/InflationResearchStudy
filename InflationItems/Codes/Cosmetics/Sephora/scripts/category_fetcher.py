@@ -46,7 +46,7 @@ import xml.etree.ElementTree as ET
 from typing import Optional
 from urllib.parse import urlparse
 
-from curl_cffi import requests  # type: ignore
+import requests
 
 import config
 
@@ -58,11 +58,25 @@ _CATEGORY_RE = re.compile(r"-c(\d+)/?$")
 # XML default namespace used by sitemaps – stripped before parsing for simplicity.
 _NS_DECLARATION = 'xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"'
 
+# Sephora's sitemap endpoints are served to search crawlers and are NOT
+# protected by Akamai Bot Manager, so a plain ``requests`` GET with a
+# simple browser User-Agent is sufficient.  The main product pages still
+# require Chrome (see ``browser_fetcher.py``).
+_SITEMAP_HEADERS = {
+    "User-Agent": (
+        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+        "AppleWebKit/537.36 (KHTML, like Gecko) "
+        "Chrome/147.0.0.0 Safari/537.36"
+    ),
+    "Accept": "application/xml,text/xml,*/*;q=0.8",
+    "Accept-Language": "tr-TR,tr;q=0.9,en-US;q=0.8,en;q=0.7",
+}
 
-def _make_session() -> "requests.Session":
-    """Return a new curl_cffi session impersonating Safari 17."""
-    session = requests.Session(impersonate=config.IMPERSONATE_PROFILES[0])
-    session.headers.update(config.DEFAULT_HEADERS)
+
+def _make_session() -> requests.Session:
+    """Return a fresh requests session pre-configured for Sephora's sitemap."""
+    session = requests.Session()
+    session.headers.update(_SITEMAP_HEADERS)
     return session
 
 
@@ -132,23 +146,25 @@ def fetch_categories(
     url = config.CATEGORY_SITEMAP_URL
     logger.info("Downloading category sitemap: %s", url)
 
+    max_retries = 5
+    backoff_seed = 3  # linear: backoff_seed * attempt seconds
     resp = None
-    for attempt in range(1, config.MAX_RETRIES + 1):
+    for attempt in range(1, max_retries + 1):
         try:
             resp = session.get(url, timeout=30)
             if resp.status_code == 200 and resp.text.strip():
                 break
             logger.warning(
                 "Sitemap returned status %d (attempt %d/%d)",
-                resp.status_code, attempt, config.MAX_RETRIES,
+                resp.status_code, attempt, max_retries,
             )
-        except Exception as exc:  # noqa: BLE001 – curl_cffi raises various types
+        except Exception as exc:  # noqa: BLE001
             logger.warning("Sitemap attempt %d failed: %s", attempt, exc)
 
-        if attempt == config.MAX_RETRIES:
-            logger.error("Failed to download sitemap after %d attempts.", config.MAX_RETRIES)
+        if attempt == max_retries:
+            logger.error("Failed to download sitemap after %d attempts.", max_retries)
             return []
-        time.sleep(config.RETRY_BACKOFF * attempt)
+        time.sleep(backoff_seed * attempt)
 
     if resp is None:
         return []

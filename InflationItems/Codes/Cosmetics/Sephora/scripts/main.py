@@ -3,8 +3,19 @@ Sephora Türkiye Product Scraper — Main Entry Point and Orchestration Layer
 ==========================================================================
 
 CLI orchestrator for the Sephora Türkiye product scraper.  Mirrors the
-shape of the Koton / Migros / Bauhaus scrapers so the whole project has
-a consistent interface.
+shape of the Koton / Migros / Bauhaus / IstanbulAvrupa scrapers so the
+whole project has a consistent interface.
+
+Backend
+-------
+Sephora sits behind **Akamai Bot Manager**, which blocks naive HTTP
+traffic via TLS / JA3 fingerprinting and server-side JS challenges.
+The scraper drives a real Chrome browser through
+``undetected-chromedriver`` so Akamai's JS challenge runs naturally
+(identical approach to the IstanbulAvrupa / Sahibinden scraper in this
+repo).  A single Chrome instance is reused across categories so the
+Akamai ``_abck`` cookie is preserved — the expensive CAPTCHA (if any)
+is solved at most once per day.
 
 Pipeline
 --------
@@ -12,11 +23,10 @@ Pipeline
    eight top-level category URLs (see ``config.MAIN_CATEGORY_SLUGS``).
 2. Optionally filter to a single category via ``--category SLUG``.
 3. Load (or reset) today's checkpoint.
-4. Dispatch categories to a thread pool (default 1 worker — Akamai is
-   aggressive about flagging parallel traffic).
-5. After each completed category, append new products to the daily CSV
-   and update the checkpoint.
-6. Deduplicate the CSV by ``id`` and invoke the matching inflation
+4. Walk the categories sequentially with the shared Chrome driver,
+   appending each category's products to the daily CSV and updating
+   the checkpoint as they complete.
+5. Deduplicate the CSV by ``id`` and invoke the matching inflation
    calculator located under
    ``Inflations/Codes/Cosmetics/Sephora/inflation.py``.
 
@@ -26,14 +36,17 @@ Usage Examples
 # List every category the scraper can reach
 python main.py --list-categories
 
-# Scrape only the skincare category, capped at 1 page (smoke test)
-python main.py --category cilt-bakimi-c303 --limit 1
-
 # Full catalog scrape
 python main.py
 
+# Only skincare, 2-page smoke test
+python main.py --category cilt-bakimi-c303 --limit 2
+
 # Resume an interrupted run
 python main.py --resume
+
+# Headless Chrome (Akamai detects this more easily)
+python main.py --headless
 ```
 """
 
@@ -44,9 +57,7 @@ import json
 import logging
 import os
 import sys
-import threading
 import time
-from concurrent.futures import ThreadPoolExecutor, as_completed
 
 import pandas as pd
 from tqdm import tqdm
@@ -60,13 +71,13 @@ _INFLATION_DIR = os.path.join(
     "Inflations", "Codes", "Cosmetics", "Sephora",
 )
 sys.path.append(os.path.abspath(_INFLATION_DIR))
-import inflation  # noqa: E402  – imported after sys.path manipulation
+import inflation  # noqa: E402
 
 from category_fetcher import fetch_categories  # noqa: E402
-from product_fetcher import (  # noqa: E402
-    fetch_products_for_category,
-    make_session,
-    warm_session,
+from browser_fetcher import (  # noqa: E402
+    close_driver,
+    fetch_products_for_category_browser,
+    setup_driver,
 )
 
 logging.basicConfig(
@@ -75,11 +86,6 @@ logging.basicConfig(
     datefmt="%H:%M:%S",
 )
 logger = logging.getLogger(__name__)
-
-# ── Thread-safety locks ──────────────────────────────────────────────────────
-_csv_lock        = threading.Lock()
-_checkpoint_lock = threading.Lock()
-_counter_lock    = threading.Lock()
 
 
 # ── Checkpoint helpers ───────────────────────────────────────────────────────
@@ -94,31 +100,29 @@ def _load_checkpoint() -> dict:
 
 
 def _save_checkpoint(checkpoint: dict) -> None:
-    """Persist ``checkpoint`` atomically under the checkpoint lock."""
+    """Persist ``checkpoint`` atomically."""
     os.makedirs(config.CHECKPOINT_DIR, exist_ok=True)
-    with _checkpoint_lock:
-        with open(config.CHECKPOINT_FILE, "w", encoding="utf-8") as f:
-            json.dump(checkpoint, f, ensure_ascii=False, indent=2)
+    with open(config.CHECKPOINT_FILE, "w", encoding="utf-8") as f:
+        json.dump(checkpoint, f, ensure_ascii=False, indent=2)
 
 
 # ── Output helpers ───────────────────────────────────────────────────────────
 
 
 def _append_products(new_products: list[dict]) -> None:
-    """Thread-safely append ``new_products`` to the daily CSV."""
+    """Append ``new_products`` to the daily CSV (write header only once)."""
     if not new_products:
         return
     os.makedirs(config.OUTPUT_DIR, exist_ok=True)
     df_new = pd.DataFrame(new_products)
-    with _csv_lock:
-        write_header = not os.path.exists(config.CSV_OUTPUT_FILE)
-        df_new.to_csv(
-            config.CSV_OUTPUT_FILE,
-            mode="a",
-            index=False,
-            header=write_header,
-            encoding="utf-8-sig",
-        )
+    write_header = not os.path.exists(config.CSV_OUTPUT_FILE)
+    df_new.to_csv(
+        config.CSV_OUTPUT_FILE,
+        mode="a",
+        index=False,
+        header=write_header,
+        encoding="utf-8-sig",
+    )
 
 
 def _dedup_csv() -> int:
@@ -136,22 +140,33 @@ def _dedup_csv() -> int:
     return len(df)
 
 
-# ── Worker ───────────────────────────────────────────────────────────────────
-
-
-def _scrape_category(cat: dict, delay: float, page_limit: int) -> list[dict]:
-    """Scrape one category in an isolated worker thread."""
-    session = make_session()
-    warm_session(session)
-    return fetch_products_for_category(
-        category=cat,
-        session=session,
-        delay=delay,
-        page_limit=page_limit,
-    )
-
-
 # ── Core scraping logic ──────────────────────────────────────────────────────
+
+
+def _persist_category(
+    cat: dict,
+    cat_products: list[dict],
+    checkpoint: dict,
+    total_products: int,
+) -> int:
+    """Append products to CSV, update checkpoint, log progress.
+
+    Returns the updated ``total_products`` counter.
+    """
+    if cat_products:
+        _append_products(cat_products)
+        total_products += len(cat_products)
+
+    checkpoint["done"].append(cat["slug"])
+    _save_checkpoint(checkpoint)
+
+    if cat_products:
+        logger.info(
+            "✓  Category '%s': +%d products (total: %d)",
+            cat["name"], len(cat_products), total_products,
+        )
+        logger.info("💾 Checkpoint saved")
+    return total_products
 
 
 def run_scraper(args: argparse.Namespace) -> None:
@@ -199,47 +214,47 @@ def run_scraper(args: argparse.Namespace) -> None:
             logger.warning("⚠  Could not count existing products: %s", exc)
 
     logger.info(
-        "▶  Scraping %d categor%s with %d worker(s)...",
+        "▶  Scraping %d categor%s with Chrome…",
         len(categories_to_scrape),
         "y" if len(categories_to_scrape) == 1 else "ies",
-        args.workers,
     )
 
     start_time = time.time()
 
-    futures = {}
-    with ThreadPoolExecutor(max_workers=args.workers) as executor:
-        for cat in categories_to_scrape:
-            future = executor.submit(_scrape_category, cat, args.delay, args.limit)
-            futures[future] = cat
+    driver = None
+    try:
+        driver = setup_driver(headless=args.headless)
+        # Warm up: visit the homepage so Akamai can run its challenge
+        # once before we start paginating deeply into categories.
+        try:
+            driver.get(config.BASE_URL + "/")
+            time.sleep(2.0)
+        except Exception as exc:  # noqa: BLE001
+            logger.warning("Homepage warm-up failed: %s", exc)
 
-        with tqdm(total=len(futures), unit="category", desc="Categories") as pbar:
-            for future in as_completed(futures):
-                cat = futures[future]
+        with tqdm(total=len(categories_to_scrape), unit="category", desc="Categories") as pbar:
+            for cat in categories_to_scrape:
                 pbar.set_postfix_str(cat["name"])
                 try:
-                    cat_products = future.result()
+                    cat_products = fetch_products_for_category_browser(
+                        category=cat,
+                        driver=driver,
+                        delay=args.delay,
+                        page_limit=args.limit,
+                    )
                 except Exception as exc:  # noqa: BLE001
                     logger.error("✗  Category '%s' failed: %s", cat["name"], exc)
                     cat_products = []
 
-                if cat_products:
-                    _append_products(cat_products)
-                    with _counter_lock:
-                        total_products += len(cat_products)
-
-                with _checkpoint_lock:
-                    checkpoint["done"].append(cat["slug"])
-                _save_checkpoint(checkpoint)
-
-                if cat_products:
-                    logger.info(
-                        "✓  Category '%s': +%d products (total: %d)",
-                        cat["name"], len(cat_products), total_products,
-                    )
-                    logger.info("💾 Checkpoint saved")
-
+                total_products = _persist_category(
+                    cat=cat,
+                    cat_products=cat_products,
+                    checkpoint=checkpoint,
+                    total_products=total_products,
+                )
                 pbar.update(1)
+    finally:
+        close_driver(driver)
 
     elapsed = time.time() - start_time
     logger.info("⏱  Scraping completed in %.1fs (%.1f min)", elapsed, elapsed / 60)
@@ -267,6 +282,8 @@ def _build_parser() -> argparse.ArgumentParser:
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog=__doc__,
     )
+
+    # Category discovery / filtering
     parser.add_argument(
         "--list-categories",
         action="store_true",
@@ -287,22 +304,29 @@ def _build_parser() -> argparse.ArgumentParser:
         default=None,
         help="Scrape only this category slug (e.g. 'cilt-bakimi-c303').",
     )
+
+    # Browser controls
     parser.add_argument(
-        "--workers",
-        type=int,
-        default=config.DEFAULT_WORKERS,
-        metavar="N",
+        "--headless",
+        action="store_true",
+        default=config.BROWSER_HEADLESS,
         help=(
-            f"Number of parallel category workers (default: {config.DEFAULT_WORKERS}). "
-            "Keep low to avoid Akamai rate-limits."
+            "Run Chrome in headless mode.  Akamai detects headless Chrome "
+            "more easily, so leaving this off is recommended unless you "
+            "are running on a server."
         ),
     )
+
+    # Scraping knobs
     parser.add_argument(
         "--delay",
         type=float,
-        default=config.REQUEST_DELAY,
+        default=config.BROWSER_PAGE_LOAD_DELAY,
         metavar="SECONDS",
-        help=f"Delay between page requests per worker (default: {config.REQUEST_DELAY}).",
+        help=(
+            f"Base delay between category page loads "
+            f"(default: {config.BROWSER_PAGE_LOAD_DELAY})."
+        ),
     )
     parser.add_argument(
         "--limit",
