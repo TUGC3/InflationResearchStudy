@@ -2,9 +2,9 @@ import datetime as _dt
 from pathlib import Path as _Path
 
 # ── Paths ─────────────────────────────────────────────────────────────────────
-_SCRIPTS_DIR   = _Path(__file__).resolve().parent          # …/Izmir/scripts
-_SCRAPER_DIR   = _SCRIPTS_DIR.parent                       # …/Izmir
-_PROJECT_ROOT  = _SCRAPER_DIR.parent.parent.parent         # …/InflationResearchStudy
+_SCRIPTS_DIR   = _Path(__file__).resolve().parent
+_SCRAPER_DIR   = _SCRIPTS_DIR.parent
+_PROJECT_ROOT  = _SCRAPER_DIR.parent.parent.parent
 
 # ── City Settings ─────────────────────────────────────────────────────────────
 CITY_URL_NAME = "izmir"
@@ -22,12 +22,15 @@ SEED_RANGES = [
 MAX_LISTINGS_PER_QUERY = 1000
 MIN_BRACKET_WIDTH = 50
 PAGE_SIZE = 50
-BETWEEN_BRACKET_DELAY_MIN = 1.0
-BETWEEN_BRACKET_DELAY_MAX = 2.0
+
+# ── Page Load Timing Settings ────────────────────────────────────────────────
+PAGE_LOAD_DELAY = 1.5  # Reduced to 1.5s average
+PAGE_LOAD_STDEV = 0.3
+PAGE_LOAD_FLOOR = 1.0
 
 # ── Browser Settings ──────────────────────────────────────────────────────────
 SELENIUM_PROFILE_DIR = str(_SCRAPER_DIR / "SeleniumProfile")
-CHROMEDRIVER_PATH = r"C:\chromedriver\chromedriver.exe"  # ← your actual path
+CHROMEDRIVER_PATH = r"C:\chromedriver\chromedriver.exe"
 
 # ── Output Settings ───────────────────────────────────────────────────────────
 _TODAY = _dt.date.today().strftime("%Y-%m-%d")
