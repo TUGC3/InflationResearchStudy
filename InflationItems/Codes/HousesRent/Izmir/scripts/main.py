@@ -75,7 +75,6 @@ def run(args):
 
                     if recs:
                         for r in recs:
-                            r["Neighborhood"] = r["District"]
                             r["District"] = IZMIR_SLUG_TO_DISTRICT.get(slug, "Unknown")
 
                         saved_count = save_incremental(recs)
