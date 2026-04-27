@@ -23,8 +23,8 @@ CATEGORY_URLS = {
 }
 
 # ── Tuning ────────────────────────────────────────────────────────────────────
-SCROLL_AMOUNT = 1000
-SCROLL_PAUSE = 0.8
+SCROLL_AMOUNT = 600 # Reduced from 1000
+SCROLL_PAUSE = 1
 MAX_RETRIES = 3
 MAX_DRY_ROUNDS = 6
 
@@ -99,12 +99,55 @@ def retry_call(fn, retries=MAX_RETRIES):
     return None
 
 
-def scroll_and_collect(driver, category_name):
+def wait_for_brand_count(driver, category_count, timeout=15):
+    """Poll every 0.5 s until the result counter differs from the full-category count."""
+    deadline = time.time() + timeout
+    while time.time() < deadline:
+        current = get_total_count(driver)
+        if current is not None and current != category_count:
+            return current
+        time.sleep(0.5)
+    return get_total_count(driver)  # last-chance read
+
+
+def click_brand_with_retry(driver, label, category_count, base_url, max_attempts=3):
+    """
+    Scroll the label into view, click it, and confirm the page count changed.
+    Retries up to max_attempts times.  Returns (brand_count, success_bool).
+    """
+    for attempt in range(1, max_attempts + 1):
+        # Scroll label to center of viewport so it is truly visible
+        driver.execute_script(
+            "arguments[0].scrollIntoView({block:'center', inline:'nearest'});", label)
+        time.sleep(0.4)
+
+        # Prefer a real Selenium click; fall back to JS click
+        try:
+            label.click()
+        except Exception:
+            driver.execute_script("arguments[0].click();", label)
+
+        time.sleep(1.5)  # give the XHR request time to fire
+
+        brand_count = wait_for_brand_count(driver, category_count, timeout=15)
+        if brand_count is not None and brand_count != category_count:
+            return brand_count, True
+
+        print(f"    ⚠️  Click attempt {attempt}/{max_attempts}: count still {category_count}. Retrying...")
+        time.sleep(1)
+
+    return get_total_count(driver), False
+
+
+def scroll_and_collect(driver, category_name, brand_expected=None):
+    """
+    Scroll the current filtered page and collect products in a single pass.
+    """
     collected = {}
     dry_streak = 0
     consecutive_errors = 0
 
-    total_expected = get_total_count(driver)
+    total_expected = brand_expected if brand_expected is not None else get_total_count(driver)
     if total_expected:
         print(f"    🎯 Target: {total_expected} products.")
 
@@ -117,8 +160,12 @@ def scroll_and_collect(driver, category_name):
                 try:
                     name = titles[i].text.strip()
                     price = clean_price(prices[i].text)
-                    if name and price is not None and name not in collected:
-                        collected[name] = price
+
+                    # Combined unique key (name + price) to capture product variants
+                    unique_key = f"{name}_{price}"
+
+                    if name and price is not None and unique_key not in collected:
+                        collected[unique_key] = {"name": name, "price": price}
                 except Exception:
                     continue
 
@@ -129,12 +176,15 @@ def scroll_and_collect(driver, category_name):
             else:
                 dry_streak += 1
 
+        # Break if we hit the target
         if total_expected and len(collected) >= total_expected:
             break
 
+        # Stop if we haven't found anything new for a while (prevents infinite loops)
         if dry_streak >= MAX_DRY_ROUNDS:
             break
 
+        # Detect if we are at the bottom and nothing new is loading
         try:
             at_bottom = driver.execute_script(
                 "return (window.innerHeight + window.scrollY) >= document.body.scrollHeight - 150")
@@ -143,8 +193,8 @@ def scroll_and_collect(driver, category_name):
         except:
             pass
 
+        # Scroll down
         result = retry_call(lambda: driver.execute_script(f"window.scrollBy(0, {SCROLL_AMOUNT}); return true;"))
-
         if result is None:
             consecutive_errors += 1
             if consecutive_errors >= 5:
@@ -154,13 +204,25 @@ def scroll_and_collect(driver, category_name):
         consecutive_errors = 0
         time.sleep(SCROLL_PAUSE)
 
-    return [{"Product Name": n, "Price": p, "Category": category_name} for n, p in collected.items()]
+    # Log the final result for this brand
+    if total_expected and len(collected) < total_expected:
+        shortfall = total_expected - len(collected)
+        print(f"    ⚠️ Final result: {len(collected)}/{total_expected} ({shortfall} missing). Saving what we have.")
+
+    return [{"Product Name": d["name"], "Price": d["price"], "Category": category_name} for d in collected.values()]
 
 
 def create_driver():
     options = uc.ChromeOptions()
     options.add_argument("--no-sandbox")
     options.add_argument("--disable-dev-shm-usage")
+
+    # --- Prevent Chrome from sleeping when out of focus ---
+    options.add_argument("--disable-background-timer-throttling")
+    options.add_argument("--disable-backgrounding-occluded-windows")
+    options.add_argument("--disable-renderer-backgrounding")
+    # ------------------------------------------------------
+
     return uc.Chrome(options=options, version_main=147)
 
 
@@ -222,11 +284,26 @@ def run_boyner_scraper():
 
                     print(f"\n  👉 [{i + 1}/{total_brands}] {brand_name}")
 
-                    driver.execute_script("arguments[0].click();", target_label)
-                    time.sleep(4.5 if i == 0 else 3)
+                    # Read category-level count BEFORE clicking so we can detect the change
+                    category_count = get_total_count(driver)
+
+                    # Scroll into view + click with retry until the page count changes
+                    brand_count, confirmed = click_brand_with_retry(
+                        driver, target_label, category_count, base_url, max_attempts=2)
+
+                    if confirmed:
+                        print(f"    ✅ Brand count confirmed: {brand_count} products.")
+                    else:
+                        print(f"    ❌ Could not confirm brand filter after 3 click attempts. Skipping brand.")
+                        retry_call(lambda: driver.get(base_url))
+                        time.sleep(2)
+                        continue
 
                     driver.execute_script("window.scrollTo(0, 0); return true;")
-                    products = scroll_and_collect(driver, category_name)
+                    products = scroll_and_collect(
+                        driver, category_name,
+                        brand_expected=brand_count
+                    )
 
                     if products:
                         total_session_items += len(products)
