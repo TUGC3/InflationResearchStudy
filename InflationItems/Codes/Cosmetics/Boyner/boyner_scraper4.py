@@ -19,7 +19,6 @@ SCRIPT_IDENTIFIER = "part4"
 # Delete the others so your other 3 scripts can handle them.
 CATEGORY_URLS = {
     "Makyaj": "https://www.boyner.com.tr/makyaj-x-c4003",
-    "Güneş Bakım": "https://www.boyner.com.tr/gunes-urunleri-x-c3340247",
 }
 
 # ── Tuning ────────────────────────────────────────────────────────────────────

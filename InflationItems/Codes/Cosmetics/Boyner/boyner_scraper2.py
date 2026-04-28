@@ -21,6 +21,7 @@ CATEGORY_URLS = {
     "Nemlendirici": "https://www.boyner.com.tr/yuz-nemlendirici-x-c400202",
     "Kore Kozmetik": "https://www.boyner.com.tr/kampanya/kore-kozmetik-urunleri-x-c23894732",
     "Saç Bakım": "https://www.boyner.com.tr/sampuan-sac-bakim-x-c3405682",
+    "Güneş Bakım": "https://www.boyner.com.tr/gunes-urunleri-x-c3340247",
 }
 
 # ── Tuning ────────────────────────────────────────────────────────────────────
