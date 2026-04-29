@@ -103,9 +103,19 @@ import os
 
 # --- Request Settings ---
 DEFAULT_HEADERS = {
-    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+    "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
     "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
     "Accept-Language": "tr-TR,tr;q=0.9,en-US;q=0.8,en;q=0.7",
+    "Accept-Encoding": "gzip, deflate, br",
+    "Upgrade-Insecure-Requests": "1",
+    "Sec-Fetch-Dest": "document",
+    "Sec-Fetch-Mode": "navigate",
+    "Sec-Fetch-Site": "none",
+    "Sec-Fetch-User": "?1",
+    "Sec-CH-UA": '"Chromium";v="124", "Google Chrome";v="124", "Not-A.Brand";v="99"',
+    "Sec-CH-UA-Mobile": "?0",
+    "Sec-CH-UA-Platform": '"macOS"',
+    "Connection": "keep-alive",
 }
 
 BASE_URL = "https://www.bauhaus.com.tr"
@@ -118,8 +128,20 @@ RETRY_BACKOFF = 3    # Exponential backoff seed
 
 DEFAULT_WORKERS = 2  # Number of parallel workers
 
-MAX_403_RETRIES = 3    # Max retry rounds for 403-blocked categories
-COOLDOWN_BASE = 60     # Base cooldown in seconds (multiplied by retry round)
+# Browser TLS fingerprint to impersonate via curl_cffi. Bauhaus blocks
+# stock python-requests TLS handshakes with 403 even when headers look fine,
+# so we impersonate a real Chrome client at the TLS level.
+IMPERSONATE_BROWSER = "chrome124"
+
+MAX_403_RETRIES = 5    # Max retry rounds for 403-blocked categories
+COOLDOWN_BASE = 120    # Base cooldown in seconds (multiplied by retry round)
+
+# In-page 403 handling: retry the same page with a fresh session and growing
+# backoff before giving up and bubbling a BauhausBlockedException up to the
+# category-level retry loop. This recovers from transient IP/TLS rate limits
+# that would otherwise wipe an entire category from the day's output.
+MAX_403_PAGE_RETRIES = 3       # Per-page 403 retry attempts before bailing
+PAGE_403_COOLDOWN_BASE = 30    # Base seconds; actual = BASE * attempt
 
 # --- Paths ---
 # By default, save to InflationItems/Datas/ConstructionSuppliesMarkets/Datas/

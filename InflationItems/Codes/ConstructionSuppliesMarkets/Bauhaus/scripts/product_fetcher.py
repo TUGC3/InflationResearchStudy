@@ -103,9 +103,7 @@ import time
 import random
 import logging
 from bs4 import BeautifulSoup
-import requests
-from requests.adapters import HTTPAdapter
-from urllib3.util.retry import Retry
+from curl_cffi import requests
 import config
 
 logger = logging.getLogger(__name__)
@@ -126,21 +124,18 @@ class BauhausBlockedException(Exception):
 
 def create_session():
     """
-    Creates a requests session configured with retry adapters and headers.
+    Creates a curl_cffi session that impersonates a real Chrome client at the
+    TLS/HTTP layer. Bauhaus blocks plain python-requests with 403 even when
+    headers look correct, so TLS-fingerprint impersonation is required.
 
     Returns:
-        requests.Session: A session object with custom headers and exponential
-                          backoff retry logic for resilience against 5xx and 429 errors.
+        curl_cffi.requests.Session: A session object with browser impersonation
+                                     and custom headers. Per-request retry on
+                                     5xx/429 is handled in the page loop in
+                                     fetch_products_for_category.
     """
-    session = requests.Session()
+    session = requests.Session(impersonate=config.IMPERSONATE_BROWSER)
     session.headers.update(config.DEFAULT_HEADERS)
-    retries = Retry(
-        total=config.MAX_RETRIES,
-        backoff_factor=config.RETRY_BACKOFF,
-        status_forcelist=[429, 500, 502, 503, 504]
-    )
-    session.mount('http://', HTTPAdapter(max_retries=retries))
-    session.mount('https://', HTTPAdapter(max_retries=retries))
     return session
 
 def clean_price(price_str):
@@ -207,6 +202,8 @@ def fetch_products_for_category(category_dict, session=None, limit_pages=0,
     adaptive_delay = seed_delay if seed_delay is not None else config.REQUEST_DELAY
     consecutive_successes = 0
     consecutive_429s = 0
+    page_403_attempts = 0  # Per-page 403 retry counter (resets on any successful page)
+    page_net_attempts = 0  # Per-page transient network/timeout retry counter
 
     if page > 1 or products:
         logger.info(f"▶  [{name}] Resuming scrape from page {page} "
@@ -230,6 +227,8 @@ def fetch_products_for_category(category_dict, session=None, limit_pages=0,
             if resp.status_code == 200:
                 consecutive_successes += 1
                 consecutive_429s = 0
+                page_403_attempts = 0  # Recovered, reset per-page 403 counter
+                page_net_attempts = 0  # Recovered, reset per-page network counter
                 
                 # Gradually reduce delay after consecutive successes
                 if consecutive_successes >= 3 and adaptive_delay > config.REQUEST_DELAY * 0.5:
@@ -253,8 +252,39 @@ def fetch_products_for_category(category_dict, session=None, limit_pages=0,
                 time.sleep(adaptive_delay)
                 continue
             elif "403" in str(e):
-                logger.warning(f"⚠  [{name}] Blocked (403) on page {page}. "
-                               f"Collected {len(products)} products before block.")
+                # In-page 403 retry: rather than immediately bailing on the
+                # whole category (which previously wiped categories from the
+                # day's output when a transient block hit), retry the same
+                # page a few times with a fresh TLS session and growing
+                # cooldown. Only escalate to BauhausBlockedException once
+                # those in-page retries are exhausted.
+                page_403_attempts += 1
+                consecutive_successes = 0
+                # Bump adaptive delay so subsequent pages are gentler if we recover
+                adaptive_delay = min(max(adaptive_delay * 1.5, config.REQUEST_DELAY * 2.0), 10.0)
+
+                if page_403_attempts <= config.MAX_403_PAGE_RETRIES:
+                    cooldown = config.PAGE_403_COOLDOWN_BASE * page_403_attempts
+                    logger.warning(
+                        f"⚠  [{name}] 403 on page {page} "
+                        f"(in-page attempt {page_403_attempts}/{config.MAX_403_PAGE_RETRIES}). "
+                        f"Sleeping {cooldown}s and rotating session before retry…"
+                    )
+                    time.sleep(cooldown)
+                    # Replace this category's session with a fresh one so the
+                    # blocked TLS/connection state is discarded for the rest
+                    # of this category's pages.
+                    try:
+                        req_session = create_session()
+                    except Exception as se:
+                        logger.warning(f"⚠  [{name}] Could not rotate session: {se}")
+                    continue  # Retry the same page
+
+                logger.warning(
+                    f"⚠  [{name}] Blocked (403) on page {page} after "
+                    f"{config.MAX_403_PAGE_RETRIES} in-page retries. "
+                    f"Collected {len(products)} products before block."
+                )
                 # Preserve pagination state so the retry in main.py can resume
                 # from this page instead of restarting at page 1.
                 raise BauhausBlockedException(
@@ -265,8 +295,39 @@ def fetch_products_for_category(category_dict, session=None, limit_pages=0,
                     adaptive_delay=adaptive_delay,
                 )
             else:
-                break
-            
+                # Transient network errors (timeouts, connection resets,
+                # SSL hiccups, etc.). Previously this branch did `break`,
+                # which silently dropped every remaining page in the
+                # category after a single bad request. Instead, retry the
+                # same page a few times with growing backoff and a fresh
+                # session; if it still fails, skip that one page rather
+                # than abandoning the whole category.
+                page_net_attempts += 1
+                consecutive_successes = 0
+
+                if page_net_attempts <= config.MAX_RETRIES:
+                    backoff = config.RETRY_BACKOFF * page_net_attempts
+                    logger.warning(
+                        f"⚠  [{name}] Network error on page {page} "
+                        f"(attempt {page_net_attempts}/{config.MAX_RETRIES}). "
+                        f"Sleeping {backoff}s and rotating session before retry…"
+                    )
+                    time.sleep(backoff)
+                    try:
+                        req_session = create_session()
+                    except Exception as se:
+                        logger.warning(f"⚠  [{name}] Could not rotate session: {se}")
+                    continue  # Retry the same page
+
+                logger.warning(
+                    f"⚠  [{name}] Giving up on page {page} after "
+                    f"{config.MAX_RETRIES} network retries; skipping to next page."
+                )
+                page += 1
+                page_net_attempts = 0
+                time.sleep(adaptive_delay)
+                continue
+
         soup = BeautifulSoup(resp.text, 'lxml')
         
         # Look for product cards
@@ -278,7 +339,8 @@ def fetch_products_for_category(category_dict, session=None, limit_pages=0,
             
         current_page_skus = set()
         new_products_found = False
-        
+        products_before_page = len(products)
+
         for item in items:
             # Check price, some items without price might be hidden or placeholders
             price_span = item.select_one('span.price')
@@ -334,11 +396,19 @@ def fetch_products_for_category(category_dict, session=None, limit_pages=0,
             })
             new_products_found = True
             
+        page_added = len(products) - products_before_page
+        # Per-page progress so long categories are visible in real time
+        # instead of going silent until the whole category finishes.
+        logger.info(
+            f"  [{name}] page {page}: +{page_added} products "
+            f"(category total: {len(products)}, delay={adaptive_delay:.2f}s)"
+        )
+
         # Stop condition: if this page's SKUs are identical to last page
         if current_page_skus == last_page_skus or not new_products_found:
             logger.info(f"✓  [{name}] Page {page} has duplicate/empty items. Ending.")
             break
-            
+
         last_page_skus = current_page_skus
         page += 1
         

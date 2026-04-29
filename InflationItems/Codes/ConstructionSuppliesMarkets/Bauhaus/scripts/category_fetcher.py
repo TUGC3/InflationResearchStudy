@@ -84,7 +84,7 @@ Adaptive Features
 - Scalable processing for large navigation structures
 """
 
-import requests
+from curl_cffi import requests
 from bs4 import BeautifulSoup
 import logging
 import config
@@ -109,7 +109,7 @@ def fetch_categories(session=None):
             - 'url': The absolute URL to the category page
             - 'name': The human-readable name of the category
     """
-    req_session = session or requests.Session()
+    req_session = session or requests.Session(impersonate=config.IMPERSONATE_BROWSER)
     req_session.headers.update(config.DEFAULT_HEADERS)
 
     logger.info(f"▶  Fetching categories from {config.BASE_URL}...")

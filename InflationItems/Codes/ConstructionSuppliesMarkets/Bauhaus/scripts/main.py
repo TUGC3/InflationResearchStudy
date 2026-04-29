@@ -175,8 +175,48 @@ def save_checkpoint(cp_path, completed):
         cp_path (str): Path to the checkpoint JSON file.
         completed (set): Set of completed string IDs.
     """
-    with open(cp_path, 'w', encoding='utf-8') as f:
+    # Atomic write: tmp then rename, so an interrupted save can't corrupt the
+    # checkpoint file (important now that we save after every category).
+    tmp = cp_path + ".tmp"
+    with open(tmp, 'w', encoding='utf-8') as f:
         json.dump(list(completed), f)
+    os.replace(tmp, cp_path)
+
+def load_products_checkpoint(pp_path):
+    """
+    Loads previously scraped products from a per-category checkpoint file.
+
+    Args:
+        pp_path (str): Path to the products JSON file.
+
+    Returns:
+        list[dict]: Products accumulated by previous (completed) categories.
+                    Empty list if no file is found.
+    """
+    if os.path.exists(pp_path):
+        try:
+            with open(pp_path, 'r', encoding='utf-8') as f:
+                data = json.load(f)
+            if isinstance(data, list):
+                return data
+        except (json.JSONDecodeError, OSError) as e:
+            logger.warning(f"⚠  Could not load products checkpoint {pp_path}: {e}")
+    return []
+
+def save_products_checkpoint(pp_path, products):
+    """
+    Persists the running list of scraped products so that a --resume after an
+    interrupted run can recover the data instead of re-scraping every category
+    that the previous run had already finished.
+
+    Args:
+        pp_path (str): Path to the products JSON file.
+        products (list[dict]): All products collected so far this session.
+    """
+    tmp = pp_path + ".tmp"
+    with open(tmp, 'w', encoding='utf-8') as f:
+        json.dump(products, f, ensure_ascii=False)
+    os.replace(tmp, pp_path)
 
 def scrape_category_worker(cat, limit, session, cp_path, completed_ids, resume_state=None):
     """
@@ -263,26 +303,31 @@ def main():
 
     date_str = datetime.now().strftime("%Y-%m-%d")
     checkpoint_file = os.path.join(config.CHECKPOINT_DIR, f"bauhaus_checkpoint_{date_str}.json")
-    
+    products_checkpoint_file = os.path.join(config.CHECKPOINT_DIR, f"bauhaus_products_{date_str}.json")
+
     completed_ids = set()
+    all_products = []
     if args.resume:
         completed_ids = load_checkpoint(checkpoint_file)
-        logger.info(f"↩  Resuming: {len(completed_ids)} categories already completed.")
+        all_products = load_products_checkpoint(products_checkpoint_file)
+        logger.info(
+            f"↩  Resuming: {len(completed_ids)} categories already completed, "
+            f"{len(all_products)} products restored from checkpoint."
+        )
 
-    all_products = []
-    
     cats_to_scrape = [c for c in cats if c["id"] not in completed_ids]
     cat_count = len(cats_to_scrape)
     logger.info(f"▶  Scraping {cat_count} categor{'y' if cat_count == 1 else 'ies'} with {args.workers} worker(s)…")
 
-    # For thread safety of checking checkpoints
-    # Though set operations in python are thread safe, saving is not. 
-    # But since workers just add to set and write json, it's fairly safe if we use a lock or just one file per worker. 
-    # To be extremely safe, we will collect products and write checkpoint in main thread after future completes.
+    # Checkpointing strategy: after every completed category we persist both
+    # (a) the set of completed category IDs and (b) the running products list.
+    # This way an interrupted run (Ctrl+C, crash, transient infra issue) can be
+    # resumed via --resume without re-scraping anything that already finished
+    # *and* without losing the products that were collected.
 
     completed_count = 0
     count_lock = threading.Lock()
-    checkpoint_interval = 5  # Save checkpoint every 5 categories
+    checkpoint_interval = 1  # Save checkpoint after every completed category
     
     import time
     start_time = time.time()
@@ -336,7 +381,11 @@ def main():
 
                         if completed_count % checkpoint_interval == 0 or completed_count == cat_count:
                             save_checkpoint(checkpoint_file, completed_ids)
-                            logger.info(f"💾 Checkpoint saved: {completed_count}/{cat_count} categories completed")
+                            save_products_checkpoint(products_checkpoint_file, all_products)
+                            logger.info(
+                                f"💾 Checkpoint saved: {completed_count}/{cat_count} categories, "
+                                f"{len(all_products)} products on disk"
+                            )
 
                 except product_fetcher.BauhausBlockedException as blocked:
                     partial = blocked.products
@@ -362,6 +411,7 @@ def main():
                     logger.error(f"✗  Category '{cat['id']}' failed: {exc}")
 
         save_checkpoint(checkpoint_file, completed_ids)
+        save_products_checkpoint(products_checkpoint_file, all_products)
 
         if not blocked_cats:
             break
