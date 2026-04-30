@@ -1,4 +1,5 @@
 ﻿District,Rooms,Price
+Erdemli / Limonlu,3+1,4500
 Erdemli / Arpaçbahşiş,1+1,10000
 Akdeniz / Barış,3+1,10000
 Toroslar / Halkkent,2+1,9000
@@ -10,6 +11,7 @@ Erdemli / Beldeler,1+1,3750
 Erdemli / Merkez,1+1,2000
 Tarsus / Anıt,1+1,8500
 Silifke / Köyler,2+1,10000
+Erdemli / Arpaçbahşiş,1+1,10000
 Erdemli / Arpaçbahşiş,1+1,10000
 Erdemli / Limonlu,2+1,7000
 Yenişehir / Cumhuriyet,3+1,9800
@@ -29,7 +31,6 @@ Silifke / Taşucu,2+1,3000
 Erdemli / Akdeniz,1+1,2000
 Erdemli / Beldeler,1+1,3000
 Silifke / Taşucu,3+1,10000
-Toroslar / Akbelen,1+1,10000
 Erdemli / Çeşmeli,2+1,7000
 Yenişehir / Köyler,1+1,10000
 Akdeniz / Camiişerif,1+1,10000
@@ -53,7 +54,7 @@ Gülnar / Ovacık,2+0,10500
 Akdeniz / Barış,3+1,10000
 Yenişehir / Bahçelievler,Stüdyo (1+0),10000
 Erdemli / Kocahasanlı,1+1,10000
-Erdemli / Beldeler,1+1,3000
+Erdemli / Beldeler,1+1,2000
 Akdeniz / Nusratiye,2+1,9000
 Erdemli / Alata,1+1,2000
 Erdemli / Beldeler,1+1,2000
@@ -68,7 +69,6 @@ Toroslar / Sağlık,1+1,9000
 Erdemli / Limonlu,1+1,10000
 Erdemli / Arpaçbahşiş,1+1,5000
 Silifke / Taşucu,2+1,3750
-Gülnar / Ovacık,Stüdyo (1+0),10000
 Yenişehir / Cumhuriyet,1+1,10000
 Erdemli / Çeşmeli,3+1,6500
 Erdemli / Merkez,1+1,2500
@@ -104,7 +104,6 @@ Akdeniz / Nusratiye,3+1,12000
 Yenişehir / Çiftlikköy,1+1,11500
 Toroslar / Çavuşlu,3+1,11000
 Toroslar / Sağlık,2+1,12000
-Erdemli / Arpaçbahşiş,1+1,12000
 Mezitli,1+1,12000
 Yenişehir / Cumhuriyet,1+1,11000
 Yenişehir / Egriçam,2+1,12000
@@ -120,6 +119,7 @@ Yenişehir / Cumhuriyet,1+1,11000
 Silifke / Gazi,1+1,11000
 Toroslar / Halkkent,2+1,12500
 Toroslar / Halkkent,2+1,11000
+Silifke / Gazi,2+1,12000
 Silifke / Taşucu,1+1,12000
 Toroslar / Akbelen,2+1,12500
 Yenişehir / Çiftlikköy,1+1,12500
@@ -147,7 +147,6 @@ Akdeniz / Barış,3+1,12500
 Yenişehir / Bahçelievler,2+1,11000
 Toroslar / Akbelen,2+1,12000
 Akdeniz / Yenitaşkent,,12500
-Erdemli / Beldeler,1+1,12000
 Toroslar / Halkkent,2+1,12500
 Silifke / Taşucu,1+1,12000
 Toroslar / Sağlık,2+1,11000
@@ -177,7 +176,6 @@ Aydıncık,2+1,12500
 Mezitli,1+1,12500
 Erdemli / Beldeler,1+1,12000
 Mezitli / Davultepe,1+1,12500
-Mezitli / Tece,2+1,12000
 Toroslar / Halkkent,2+1,12500
 Akdeniz / Çankaya,2+1,11000
 Toroslar / Halkkent,2+1,12999
@@ -193,7 +191,6 @@ Erdemli / Köyler,2+1,11000
 Erdemli / Çeşmeli,1+1,11000
 Mezitli,1+1,12500
 Toroslar / Halkkent,2+1,11000
-Yenişehir / Egriçam,2+1,12000
 Erdemli / Merkez,1+1,12000
 Erdemli / Limonlu,2+1,12000
 Toroslar / Akbelen,2+1,11000
@@ -220,14 +217,14 @@ Toroslar / Çavuşlu,2+1,12000
 Akdeniz / Özgürlük,2+1,11000
 Yenişehir / Gazi,1+1,11000
 Yenişehir / Çiftlikköy,1+1,12000
-Yenişehir / Gazi,2+1,12500
-Toroslar / Halkkent,2+1,12900
-Yenişehir / Egriçam,1+1,12500
 Erdemli / Akdeniz,1+1,12000
 Akdeniz / Barış,3+1,12000
 Mut,4+1,12000
 Erdemli / Limonlu,1+1,13000
 Mezitli,1+1,14900
+Yenişehir / Çiftlikköy,1+1,14000
+Erdemli / Kargıpınarı,1+1,13500
+Yenişehir / Çiftlikköy,1+1,13500
 Mezitli,1+1,13000
 Erdemli / Arpaçbahşiş,1+1,13000
 Akdeniz / Nusratiye,3+1,13000
@@ -235,6 +232,7 @@ Akdeniz / Nusratiye,3+1,14000
 Mezitli,1+1,14000
 Mezitli / Köyler,2+1,14000
 Mezitli / Köyler,2+1,14000
+Mezitli,1+1,13000
 Toroslar / Alsancak,2+1,13000
 Mezitli,1+1,14500
 Toroslar,2+1,14000
@@ -272,6 +270,7 @@ Gülnar / Merkez,2+1,13000
 Erdemli / Kocahasanlı,1+1,14000
 Toroslar / Halkkent,2+1,13500
 Erdemli / Arpaçbahşiş,1+1,13000
+Erdemli / Arpaçbahşiş,1+1,14000
 Erdemli / Alata,1+1,14500
 Mezitli / Köyler,2+1,14000
 Mezitli / Davultepe,1+1,14000
@@ -284,11 +283,11 @@ Toroslar / Halkkent,2+1,13000
 Mezitli,1+1,13000
 Akdeniz / Nusratiye,3+1,13000
 Erdemli / Arpaçbahşiş,1+1,13000
-Erdemli / Merkez,3+1,13000
 Erdemli / Limonlu,1+1,14000
 Mezitli,3+1,13500
 Toroslar / Halkkent,2+1,13000
 Akdeniz / Barış,3+1,13000
+Yenişehir / Gazi,1+1,13000
 Mezitli / Tece,1+1,13000
 Akdeniz / Camiişerif,3+1,14000
 Akdeniz / Barış,3+1,13000
@@ -305,7 +304,7 @@ Erdemli / Arpaçbahşiş,1+1,13000
 Yenişehir / Çiftlikköy,1+1,13500
 Erdemli / Akdeniz,3+1,13000
 Erdemli / Çeşmeli,1+1,13000
-Toroslar / Çavuşlu,2+1,14000
+Toroslar / Çavuşlu,2+1,13500
 Mezitli,1+1,13500
 Tarsus / Altaylılar,3+0,14250
 Silifke / Taşucu,1+1,14000
@@ -320,7 +319,6 @@ Toroslar / Çavuşlu,1.5+1,13000
 Erdemli / Merkez,1+1,14000
 Tarsus / Beydeğirmeni,1+1,13500
 Yenişehir / Çiftlikköy,2+1,14500
-Erdemli / Kargıpınarı,1+1,13500
 Akdeniz / Karaduvar,2+1,13500
 Mut,3+1,14500
 Mezitli,1+1,13250
@@ -338,6 +336,7 @@ Mezitli,1+1,13500
 Mezitli / Tece,1+1,14000
 Mezitli,1+1,13000
 Silifke / Gazi,2+1,14250
+Erdemli / Kargıpınarı,1+1,13500
 Erdemli / Kargıpınarı,1+1,13000
 Erdemli / Merkez,1+1,14000
 Erdemli / Çeşmeli,1+1,13750
@@ -357,7 +356,6 @@ Yenişehir / Çiftlikköy,1+1,13500
 Mezitli,1+1,14500
 Mezitli / Davultepe,1+1,13000
 Silifke / Taşucu,2+1,14000
-Mezitli / Tece,3+1,13000
 Erdemli / Merkez,1+1,13000
 Erdemli / Akdeniz,2+1,14000
 Mezitli,1+1,14500
@@ -383,6 +381,7 @@ Erdemli / Merkez,1+1,13500
 Toroslar / Sağlık,2+1,13000
 Mezitli,1+1,14000
 Silifke / Saray,2+1,13250
+Mezitli,1+1,13000
 Akdeniz / Barış,1+1,14000
 Mezitli,1+1,14000
 Toroslar / Akbelen,3+1,14000
@@ -432,7 +431,6 @@ Silifke / Taşucu,1+1,13000
 Erdemli / Alata,1+1,14500
 Toroslar,2+1,14500
 Erdemli / Akdeniz,3+1,14000
-Erdemli / Kocahasanlı,1+1,14500
 Yenişehir / Egriçam,2+1,14000
 Akdeniz / Nusratiye,2+1,14000
 Tarsus / Anıt,3+1,14000
@@ -471,17 +469,15 @@ Toroslar / Sağlık,3+1,14000
 Tarsus / Altaylılar,3+1,13000
 Erdemli / Arpaçbahşiş,1+1,14000
 Erdemli / Kocahasanlı,1+1,13000
-Yenişehir / Çiftlikköy,1+1,13500
 Mezitli,1+1,14000
-Erdemli / Kocahasanlı,1+1,14990
-Yenişehir / Hürriyet,2+1,13000
 Yenişehir / Çiftlikköy,2+1,13000
 Mezitli,1+1,13000
 Yenişehir / Çiftlikköy,1+1,14500
 Mezitli,1+1,13000
-Toroslar / Alsancak,2+1,14000
-Yenişehir / Çiftlikköy,1+1,14250
 Yenişehir / Çiftlikköy,1+1,14500
+Toroslar / Alsancak,2+1,14000
+Yenişehir / Çiftlikköy,1+1,14500
+Yenişehir / Çiftlikköy,1+1,14250
 Mezitli,1+1,14000
 Yenişehir / Çiftlikköy,1+1,14500
 Yenişehir / Çiftlikköy,1+1,13000
@@ -489,6 +485,9 @@ Mezitli / Davultepe,2+1,16000
 Toroslar / Akbelen,2+1,16000
 Mezitli,1+1,15000
 Mezitli / Davultepe,1+1,15500
+Silifke / Taşucu,4+1,15000
+Yenişehir / Çiftlikköy,1+1,16000
+Mezitli,1+1,15000
 Erdemli / Arpaçbahşiş,1+1,16000
 Erdemli / Merkez,2+1,16000
 Yenişehir / Çiftlikköy,1+1,16000
@@ -508,8 +507,6 @@ Silifke / Gazi,2+1,16000
 Mezitli / Tece,1+1,15000
 Erdemli / Çeşmeli,1+1,15500
 Akdeniz / Mithatpaşa,3+1,16500
-Yenişehir / Çiftlikköy,Stüdyo (1+0),15000
-Mezitli,1.5+1,15000
 Erdemli / Kargıpınarı,1+1,16000
 Erdemli / Kargıpınarı,1+1,15000
 Mezitli,1+1,15000
@@ -523,6 +520,7 @@ Akdeniz / Barış,3+1,15000
 Erdemli / Merkez,2+1,16000
 Erdemli / Akdeniz,1.5+1,15000
 Akdeniz / Nusratiye,1+1,16000
+Silifke / Gazi,2+1,16500
 Silifke / Taşucu,2+1,16000
 Mezitli / Tece,1+1,15000
 Erdemli / Arpaçbahşiş,1+1,16000
@@ -541,9 +539,11 @@ Erdemli / Arpaçbahşiş,2+1,15000
 Mezitli / Kuyuluk,1+1,15000
 Erdemli / Çeşmeli,1+1,15000
 Akdeniz / Çankaya,3+1,16000
+Yenişehir / Çiftlikköy,Stüdyo (1+0),15000
 Toroslar / Halkkent,3+1,15500
 Akdeniz / Barış,2+1,15000
 Mezitli,2+1,16000
+Mezitli,1.5+1,15000
 Toroslar / Çavuşlu,3+1,15000
 Yenişehir / Çiftlikköy,1+1,16500
 Yenişehir / Egriçam,1+1,15000
@@ -558,7 +558,6 @@ Mezitli,1+1,15000
 Akdeniz / Nusratiye,3+1,16000
 Mezitli,1+1,15000
 Yenişehir / Hürriyet,1+1,15000
-Erdemli / Kargıpınarı,2+1,15000
 Erdemli / Arpaçbahşiş,1+1,15999
 Mut,3+1,15000
 Mezitli,1+1,15500
@@ -588,10 +587,9 @@ Mezitli / Tece,1+1,15000
 Mezitli,1+1,15500
 Tarsus / Köyler,1+1,16000
 Erdemli / Çeşmeli,2+1,15000
+Erdemli / Kargıpınarı,2+1,15000
 Akdeniz / Merkez,3+1,15000
 Tarsus / Beydeğirmeni,2+1,15800
-Mezitli,1+1,16000
-Erdemli / Arpaçbahşiş,1+1,15000
 Erdemli / Akdeniz,1+1,16000
 Erdemli / Merkez,1+1,15000
 Yenişehir / Barbaros,2+1,15000
@@ -635,7 +633,6 @@ Mezitli,1+1,15000
 Mezitli / Köyler,3+1,16500
 Erdemli / Merkez,1+1,15000
 Toroslar / Akbelen,3+1,15000
-Akdeniz / Nusratiye,3+1,15000
 Akdeniz / Nusratiye,3+1,15000
 Silifke / Gazi,3+1,16500
 Mezitli,1+1,15750
@@ -684,12 +681,10 @@ Yenişehir / Çiftlikköy,1+1,15000
 Mezitli,2+1,16500
 Akdeniz / Barış,3+1,16500
 Mezitli,1+1,16000
-Mezitli,1+1,16000
 Mezitli / Davultepe,1+1,15000
 Erdemli / Beldeler,1+1,16000
 Yenişehir / Bahçelievler,1+1,15000
 Erdemli / Merkez,1+1,16500
-Yenişehir / Barbaros,1+1,15000
 Erdemli / Merkez,1+1,15000
 Yenişehir / Çiftlikköy,1+1,16500
 Mezitli,1+1,15000
@@ -705,6 +700,7 @@ Tarsus / Köyler,3+1,16500
 Yenişehir / Egriçam,1+1,15500
 Mezitli,1+1,16000
 Mezitli,1+1,15000
+Mezitli,1+1,16000
 Mezitli,1+1,15000
 Yenişehir / Çiftlikköy,2+1,16000
 Mezitli,1+1,15000
@@ -718,6 +714,7 @@ Mezitli,2+1,15000
 Akdeniz / Barış,3+1,15000
 Mezitli,1+1,15000
 Erdemli / Arpaçbahşiş,2+1,15000
+Yenişehir / Barbaros,1+1,15000
 Mezitli,1+1,16500
 Erdemli / Merkez,1+1,16000
 Silifke / Atakent,2+1,15000
@@ -726,7 +723,6 @@ Akdeniz / Çankaya,1+1,15000
 Yenişehir / Çiftlikköy,1+1,16250
 Yenişehir / Egriçam,2+1,16000
 Mezitli / Tece,1+1,15000
-Mezitli,1+1,15000
 Mezitli,1+1,16000
 Anamur / Köyler,3+1,15500
 Yenişehir / Çiftlikköy,1+1,15000
@@ -747,6 +743,7 @@ Yenişehir / Bahçelievler,1+1,15000
 Anamur / Merkez,1+1,16500
 Erdemli / Arpaçbahşiş,1+1,15000
 Yenişehir / Bahçelievler,1+1,16000
+Mezitli,1+1,15000
 Erdemli / Beldeler,2+1,15000
 Mezitli / Davultepe,1+1,15000
 Yenişehir / Çiftlikköy,1.5+1,15000
@@ -761,6 +758,7 @@ Mezitli / Davultepe,3+1,16500
 Toroslar / Alsancak,1+1,16000
 Silifke / Gazi,2+1,15000
 Yenişehir / Çiftlikköy,2+1,16000
+Erdemli / Merkez,1+1,15000
 Yenişehir / Çiftlikköy,1+1,16500
 Akdeniz / Camiişerif,3+1,16500
 Yenişehir / Çiftlikköy,1+1,16000
@@ -796,6 +794,7 @@ Mezitli / Tece,1+1,16500
 Mezitli,1+1,15000
 Erdemli / Arpaçbahşiş,1+1,15000
 Yenişehir / Çiftlikköy,1+1,15000
+Erdemli / Akdeniz,1+1,16000
 Mezitli / Kuyuluk,1+1,15000
 Silifke / Atayurt,3+1,15000
 Tarsus / Kavaklı,2+1,16000
@@ -829,6 +828,7 @@ Erdemli / Arpaçbahşiş,1+1,15000
 Tarsus / Altaylılar,3+1,16500
 Mezitli,2+1,16750
 Mezitli,2+1,15000
+Toroslar / Sağlık,1+1,16750
 Mezitli,1+1,15000
 Toroslar / Akbelen,2+1,15000
 Erdemli / Akdeniz,1+1,16000
@@ -836,7 +836,6 @@ Erdemli / Alata,1+1,15000
 Mezitli,1+1,15000
 Akdeniz / Barış,1+1,16000
 Toroslar,2+1,15000
-Mezitli,1+1,15000
 Mezitli,1+1,15000
 Yenişehir / Çiftlikköy,1+1,16000
 Akdeniz / Nusratiye,2+1,16000
@@ -866,6 +865,7 @@ Erdemli / Merkez,2+1,16500
 Yenişehir / Köyler,3+1,16000
 Toroslar / Yalınayak,4+1,15000
 Erdemli / Alata,1+1,15000
+Akdeniz / Barış,2+1,15000
 Yenişehir / Çiftlikköy,1+1,15500
 Erdemli / Merkez,2+1,15000
 Mezitli,3+1,16000
@@ -900,7 +900,6 @@ Mezitli,1+1,15000
 Mezitli,1+1,15000
 Gülnar / Ovacık,3+1,16000
 Mezitli,3+1,15000
-Mezitli / Kuyuluk,2+1,16000
 Mezitli,3+1,16000
 Yenişehir / Çiftlikköy,1+1,16000
 Mezitli,2+1,16500
@@ -928,6 +927,7 @@ Yenişehir / Çiftlikköy,1+1,15000
 Mezitli,1+1,16000
 Akdeniz / Barış,1+1,16000
 Mezitli / Kuyuluk,1+1,15000
+Yenişehir / Çiftlikköy,2+1,16000
 Akdeniz / Barış,3+1,15000
 Toroslar / Alsancak,3+1,16500
 Erdemli / Merkez,1+1,15000
@@ -1003,7 +1003,6 @@ Silifke / Gazi,2+1,16000
 Gülnar / Ovacık,2+1,15000
 Toroslar / Alsancak,3+1,15000
 Mezitli,1+1,15000
-Akdeniz / Nusratiye,2+1,16500
 Mezitli,2+1,15000
 Yenişehir / Cumhuriyet,3+1,16000
 Akdeniz / Barış,2+1,15000
@@ -1028,8 +1027,8 @@ Silifke / Taşucu,2+1,16000
 Yenişehir / Egriçam,3+1,15500
 Yenişehir / Çiftlikköy,1+1,15000
 Yenişehir / Cumhuriyet,1+1,15000
+Silifke / Gazi,1+1,15000
 Yenişehir / Çiftlikköy,1+1,16500
-Toroslar / Akbelen,2+1,15000
 Erdemli / Alata,1+1,15000
 Silifke / Gazi,2+1,15000
 Toroslar,3+1,16000
@@ -1038,11 +1037,11 @@ Erdemli / Merkez,1+1,15000
 Yenişehir / Çiftlikköy,1+1,16000
 Mezitli,1+1,16000
 Yenişehir / Egriçam,3+1,16000
-Yenişehir / Bahçelievler,3+1,16500
 Mezitli,2+1,16000
 Yenişehir / Çiftlikköy,1+1,15000
 Erdemli / Merkez,1+1,16000
 Erdemli / Merkez,1+1,15000
+Mezitli,1+1,15000
 Mezitli,2+1,16000
 Yenişehir / Çiftlikköy,1+1,16500
 Yenişehir / Çiftlikköy,1+1,16000
@@ -1052,6 +1051,12 @@ Tarsus / Anıt,Stüdyo (1+0),15000
 Yenişehir / Çiftlikköy,1+1,15000
 Anamur / İskele,2+1,16000
 Mezitli / Davultepe,1+1,16000
+Yenişehir / Cumhuriyet,4+1,17000
+Yenişehir / Çiftlikköy,1+1,17500
+Mezitli / Davultepe,1+1,18000
+Yenişehir / Çiftlikköy,1+1,17000
+Tarsus / 82 Evler,2+1,18000
+Mezitli / Kuyuluk,1+1,18500
 Mezitli,1+1,18000
 Erdemli / Merkez,1+1,18000
 Erdemli / Merkez,1+1,18000
@@ -1065,6 +1070,7 @@ Yenişehir / Hürriyet,3+1,18000
 Mezitli,3+1,18000
 Akdeniz / Çankaya,1+1,18000
 Yenişehir / Çiftlikköy,1+1,17000
+Yenişehir / Bahçelievler,3+1,17000
 Toroslar / Akbelen,2+1,17000
 Yenişehir / Egriçam,2+1,18000
 Yenişehir / Bahçelievler,1+1,18000
@@ -1090,14 +1096,12 @@ Erdemli / Arpaçbahşiş,1+1,17000
 Yenişehir / Cumhuriyet,3+1,18000
 Mezitli,1+1,17500
 Mezitli / Davultepe,1+1,18000
-Akdeniz / Çankaya,1+1,18000
 Yenişehir / Çiftlikköy,1+1,17000
 Akdeniz / Çankaya,3+1,17000
 Gülnar / Ovacık,3+1,18000
 Mezitli,2+1,17000
 Gülnar / Merkez,3+1,18000
 Akdeniz / Camiişerif,1+1,18000
-Erdemli / Merkez,2+1,18000
 Mezitli,3+1,17000
 Yenişehir / Çiftlikköy,1+1,18500
 Akdeniz / Barış,3+1,17500
@@ -1148,6 +1152,7 @@ Akdeniz / Çankaya,2+1,18500
 Yenişehir / Çiftlikköy,1+1,18000
 Mezitli / Tece,1+1,18000
 Erdemli / Merkez,2+1,18000
+Erdemli / Merkez,2+1,18000
 Erdemli / Arpaçbahşiş,1+1,17000
 Yenişehir / Egriçam,2+1,18000
 Yenişehir / Çiftlikköy,1.5+1,18500
@@ -1165,7 +1170,6 @@ Mezitli / Kuyuluk,1+1,17000
 Erdemli / Çeşmeli,1+1,17000
 Silifke / Gazi,2+1,18000
 Yenişehir / Çiftlikköy,1+1,17000
-Yenişehir / Çiftlikköy,1+1,17500
 Erdemli / Akdeniz,3+1,18000
 Mezitli,1+1,18000
 Mezitli,3+1,18500
@@ -1189,6 +1193,7 @@ Erdemli / Çeşmeli,2+1,17500
 Erdemli / Arpaçbahşiş,2+1,17000
 Akdeniz / Barış,2.5+1,17500
 Mezitli,1+1,17000
+Yenişehir / Çiftlikköy,3+1,18500
 Erdemli / Akdeniz,1+1,18000
 Toroslar / Akbelen,2+1,18000
 Toroslar / Akbelen,1+1,17000
@@ -1217,6 +1222,7 @@ Mezitli,1+1,17000
 Anamur / İskele,2+1,18000
 Silifke / Gazi,3+1,17000
 Mezitli / Tece,2+0,18000
+Mezitli,2+1,18000
 Erdemli / Akdeniz,1+1,18000
 Erdemli / Akdeniz,1+1,18750
 Yenişehir / Hürriyet,3+1,18700
@@ -1262,6 +1268,7 @@ Mezitli,1+1,18000
 Tarsus / Akşemsettin,3+1,17750
 Anamur / Göktaş,3+1,17000
 Gülnar / Ovacık,2+1,18000
+Mezitli,1+1,18000
 Yenişehir / Egriçam,2.5+1,17500
 Mezitli / Kuyuluk,1+1,17500
 Tarsus / Beydeğirmeni,1+1,17000
@@ -1295,11 +1302,9 @@ Tarsus / Beydeğirmeni,2+1,18500
 Erdemli / Merkez,1+1,18000
 Yenişehir / Bahçelievler,3+1,18000
 Akdeniz / Nusratiye,3+1,18000
-Tarsus / Altaylılar,2+1,17750
 Mezitli,2+1,18000
 Yenişehir / Merkez,2+0,18000
 Mezitli / Tece,1+1,17500
-Mezitli,2+1,18000
 Yenişehir / Çiftlikköy,1+1,17000
 Mezitli,2+1,18000
 Yenişehir / Çiftlikköy,1+1,18500
@@ -1325,6 +1330,7 @@ Silifke / Taşucu,3+1,18000
 Mezitli,1+1,17000
 Mezitli / Kuyuluk,1+1,18500
 Silifke / Gazi,3+1,17000
+Yenişehir / Çiftlikköy,2+1,18000
 Mezitli / Kuyuluk,1+1,18500
 Mezitli / Tece,1+1,18000
 Mezitli,1+1,18500
@@ -1350,6 +1356,7 @@ Akdeniz / Barış,3+1,18000
 Yenişehir / Çiftlikköy,2+1,18250
 Toroslar / Sağlık,3+1,17000
 Erdemli / Merkez,2+1,17000
+Erdemli / Merkez,2+1,17000
 Yenişehir / Çiftlikköy,1+1,17000
 Akdeniz / Çankaya,3+1,17000
 Erdemli / Kargıpınarı,2+1,17000
@@ -1364,9 +1371,7 @@ Erdemli / Merkez,2+1,18500
 Mezitli / Davultepe,3+1,18000
 Toroslar / Sağlık,3+1,18000
 Erdemli / Çeşmeli,3+1,18000
-Yenişehir / Çiftlikköy,1+1,18000
 Mezitli / Kuyuluk,1+1,18000
-Yenişehir / Çiftlikköy,1+1,18000
 Mezitli,2+1,18000
 Yenişehir / Merkez,2+1,17000
 Mezitli / Davultepe,2+1,18500
@@ -1383,6 +1388,7 @@ Akdeniz / Barış,3+1,18000
 Mezitli,2+1,18000
 Yenişehir / Cumhuriyet,3+1,18000
 Mezitli,2+1,18000
+Yenişehir / Barbaros,3+1,18500
 Mezitli,2+1,18000
 Mezitli,2+1,18000
 Mezitli / Kuyuluk,1+1,17000
@@ -1413,12 +1419,10 @@ Yenişehir / Gazi,3+1,17500
 Mezitli,1+1,18500
 Akdeniz / Barış,2+1,17500
 Mezitli / Kuyuluk,1+1,17000
-Mezitli / Davultepe,1+1,18000
 Yenişehir / Çiftlikköy,1+1,18000
 Yenişehir / Çiftlikköy,1+1,18000
 Erdemli / Alata,3+1,17000
 Mezitli,1+1,18000
-Tarsus / 82 Evler,2+1,18000
 Yenişehir / Çiftlikköy,1+1,18500
 Mezitli,1+1,17000
 Mezitli / Kuyuluk,1+1,17000
@@ -1438,10 +1442,9 @@ Yenişehir / Barbaros,3+1,17000
 Mezitli,1+1,18000
 Mezitli,2+1,17800
 Yenişehir / Çiftlikköy,1+1,18000
-Yenişehir / Çiftlikköy,1+1,17000
 Yenişehir / Gazi,3+1,18000
+Tarsus / Altaylılar,1+1,18000
 Silifke / Gazi,3+1,18000
-Mezitli / Kuyuluk,1+1,18500
 Erdemli / Merkez,2+1,18000
 Tarsus / Altaylılar,1+1,17500
 Yenişehir / Çiftlikköy,2+1,17500
@@ -1460,7 +1463,6 @@ Erdemli / Arpaçbahşiş,2+1,18500
 Mezitli / Kuyuluk,1+1,17500
 Erdemli / Merkez,1+1,17000
 Mezitli,1+1,17000
-Yenişehir / Çiftlikköy,1+1,18000
 Mezitli / Davultepe,1+1,18000
 Mezitli,2+1,18000
 Silifke / Gazi,2+1,18500
@@ -1470,6 +1472,7 @@ Erdemli / Merkez,2+1,17000
 Mezitli,1+1,17000
 Toroslar / Çavuşlu,2+1,18000
 Mezitli,3+1,17000
+Yenişehir / Çiftlikköy,1+1,18000
 Mezitli,1+1,17000
 Toroslar / Çavuşlu,1+1,18000
 Mezitli,2+1,18000
@@ -1486,6 +1489,7 @@ Erdemli / Merkez,3+1,18000
 Erdemli / Merkez,2+1,17000
 Yenişehir / Gazi,3+1,17500
 Yenişehir / Bahçelievler,3+1,18000
+Mezitli,3+1,17000
 Yenişehir / Bahçelievler,3+1,18000
 Akdeniz / Barış,3+1,17000
 Erdemli / Alata,2+1,17000
@@ -1505,7 +1509,6 @@ Erdemli / Arpaçbahşiş,1+1,17000
 Toroslar / Akbelen,1+1,17000
 Mezitli,1+1,17000
 Silifke / Gazi,2+1,17000
-Erdemli / Merkez,2+1,18000
 Akdeniz / Nusratiye,2+1,18500
 Yenişehir / Çiftlikköy,1+1,17500
 Erdemli / Arpaçbahşiş,2+1,18500
@@ -1520,7 +1523,6 @@ Mezitli,2+1,18000
 Silifke / Atakent,2+1,18500
 Erdemli / Arpaçbahşiş,2+1,18500
 Yenişehir / Çiftlikköy,1+1,18000
-Silifke / Gazi,2+1,17000
 Aydıncık,3+1,17000
 Akdeniz / Çankaya,3+1,17000
 Mezitli,1+1,18000
@@ -1557,6 +1559,7 @@ Mezitli / Tece,1+1,17500
 Mezitli,2+1,18000
 Toroslar / Sağlık,2+1,18000
 Mezitli / Tece,1+1,18000
+Mezitli / Tece,1+1,18000
 Yenişehir / Bahçelievler,2+1,17000
 Erdemli / Alata,3+1,18500
 Silifke / Gazi,2+1,18000
@@ -1565,7 +1568,7 @@ Akdeniz / Barış,3+1,18500
 Mezitli,1+1,17000
 Yenişehir / Çiftlikköy,1+1,17500
 Yenişehir / Çiftlikköy,1+1,17500
-Erdemli / Alata,3+1,18000
+Erdemli / Alata,3+1,17000
 Mezitli,1+1,17000
 Silifke / Gazi,3+1,18000
 Silifke / Köyler,1+1,18000
@@ -1581,7 +1584,6 @@ Yenişehir / Çiftlikköy,1+1,18000
 Erdemli / Akdeniz,2+1,17000
 Erdemli / Beldeler,1+1,18000
 Tarsus / Caminur,4+1,18000
-Mezitli,1+1,18000
 Toroslar / Sağlık,3+1,18000
 Mezitli,1+1,17000
 Yenişehir / Cumhuriyet,3+1,18000
@@ -1593,15 +1595,14 @@ Tarsus / Akşemsettin,2+1,17200
 Yenişehir / Çiftlikköy,1+1,18500
 Toroslar / Sağlık,3+1,18000
 Yenişehir / Egriçam,2+1,17000
-Yenişehir / Cumhuriyet,4+1,17000
-Yenişehir / Çiftlikköy,1+1,17000
+Mezitli,1+1,18000
 Tarsus / Altaylılar,2+1,17500
 Mezitli / Kuyuluk,2+1,18000
 Mezitli / Kuyuluk,2+1,17500
 Toroslar / Akbelen,2+1,17500
 Erdemli / Merkez,1+1,18500
-Yenişehir / Barbaros,1+1,18000
 Erdemli / Arpaçbahşiş,2+1,18000
+Yenişehir / Barbaros,1+1,18000
 Yenişehir / Çiftlikköy,1+1,18000
 Mezitli,1+1,18000
 Yenişehir / Çiftlikköy,1+1,17500
@@ -1614,14 +1615,23 @@ Yenişehir / Çiftlikköy,1+1,18000
 Mezitli,2+1,17500
 Yenişehir / Çiftlikköy,Stüdyo (1+0),17000
 Yenişehir / Çiftlikköy,2+1,18000
+Mezitli,1+1,17000
 Yenişehir / Çiftlikköy,1.5+1,17999
 Yenişehir / Çiftlikköy,1+1,17000
 Yenişehir / Çiftlikköy,3+1,18000
 Mezitli / Kuyuluk,1+1,19500
 Mezitli,3+1,20000
+Erdemli / Akdeniz,1+1,19000
+Erdemli / Alata,1+1,20000
+Yenişehir / Egriçam,2+1,20500
+Erdemli / Kargıpınarı,3+1,20000
+Akdeniz / Barış,3+1,20500
+Mezitli,3+1,20000
+Mezitli / Davultepe,3+1,20000
+Yenişehir / Bahçelievler,2+1,19000
+Mezitli,2+1,20500
 Tarsus / Köyler,1+1,20500
 Mezitli / Davultepe,2.5+1,20000
-Mezitli,3+1,20000
 Aydıncık,3+1,20500
 Toroslar / Akbelen,2+1,20000
 Mezitli,2+1,19500
@@ -1646,7 +1656,6 @@ Tarsus / 82 Evler,2+1,20000
 Mezitli / Davultepe,1+1,19500
 Erdemli / Alata,1+1,20500
 Mezitli,1+1,19000
-Mezitli,1+1,19000
 Mezitli,3+1,20000
 Yenişehir / Merkez,1+1,20000
 Yenişehir / Egriçam,2+1,19500
@@ -1661,6 +1670,7 @@ Yenişehir / Gazi,3+1,20000
 Yenişehir / Çiftlikköy,1+1,20000
 Yenişehir / Çiftlikköy,1+1,19000
 Yenişehir / Çiftlikköy,1+1,20000
+Mezitli,3+1,20000
 Tarsus / Kavaklı,3+1,19000
 Erdemli / Çeşmeli,1+1,20000
 Yenişehir / Çiftlikköy,2+1,20500
@@ -1683,8 +1693,8 @@ Erdemli / Alata,3+1,19000
 Erdemli / Merkez,1+1,20000
 Mezitli,2+1,20000
 Yenişehir / Cumhuriyet,2+1,20000
-Yenişehir / Hürriyet,2+1,20000
 Erdemli / Arpaçbahşiş,1+1,20000
+Mezitli,1+1,19000
 Erdemli / Alata,2+1,20000
 Mezitli,1+1,20000
 Tarsus / Caminur,3+1,20000
@@ -1692,11 +1702,10 @@ Erdemli / Akdeniz,2+1,20000
 Yenişehir / Çiftlikköy,1+1,20000
 Mezitli,2+1,20000
 Erdemli / Çeşmeli,2+1,19500
+Erdemli / Alata,4+1,20000
 Yenişehir / Egriçam,2+1,20000
 Tarsus / Caminur,2+1,20000
 Yenişehir / Çiftlikköy,1+1,20000
-Yenişehir / Çiftlikköy,1+1,20000
-Mezitli,1+1,20000
 Mezitli,1+1,20000
 Akdeniz / Nusratiye,2+1,20000
 Yenişehir / Egriçam,1+1,20000
@@ -1719,7 +1728,6 @@ Yenişehir / Gazi,3+1,20000
 Yenişehir / Hürriyet,3+1,20000
 Toroslar / Çavuşlu,3+1,20000
 Erdemli / Alata,1+1,20000
-Yenişehir / Egriçam,3+1,20000
 Yenişehir / Çiftlikköy,1+1,20500
 Yenişehir / Bahçelievler,2.5+1,20000
 Mezitli,1+1,20000
@@ -1734,16 +1742,18 @@ Mezitli,1+1,20000
 Tarsus / Altaylılar,3+1,20000
 Mezitli / Davultepe,2+1,20000
 Mezitli,2+1,20000
-Yenişehir / Cumhuriyet,3+1,20000
+Yenişehir / Cumhuriyet,3+1,19500
 Yenişehir / Çiftlikköy,1+1,20000
 Mezitli,3+1,19000
 Mezitli,2+1,20000
+Yenişehir / Çiftlikköy,1+1,20000
 Silifke / Taşucu,2+1,20000
 Erdemli / Akdeniz,1+1,20000
 Toroslar / Alsancak,3+1,20000
 Yenişehir / Çiftlikköy,1+1,19000
 Tarsus / Altaylılar,2+1,19500
 Yenişehir / Çiftlikköy,1+1,20000
+Mezitli,1+1,20000
 Mezitli / Davultepe,2+1,20000
 Mezitli / Tece,1+1,20000
 Erdemli / Alata,3+1,19500
@@ -1760,7 +1770,6 @@ Yenişehir / Bahçelievler,1+1,20000
 Mezitli / Tece,1+1,20000
 Erdemli / Merkez,2+1,19500
 Mezitli / Davultepe,3+1,20000
-Yenişehir / Çiftlikköy,1+1,20000
 Silifke / Atayurt,3+1,19600
 Mezitli,2+1,20000
 Tarsus / Anıt,2+1,19000
@@ -1768,7 +1777,7 @@ Mezitli / Kuyuluk,1+1,19000
 Yenişehir / Çiftlikköy,1+1,20000
 Silifke / Saray,3+1,19000
 Yenişehir / Çiftlikköy,1+1,19999
-Yenişehir / Çiftlikköy,1+1,20000
+Yenişehir / Egriçam,3+1,20000
 Mezitli,2+1,20000
 Mezitli,2+1,20025
 Tarsus / Anıt,3+1,20000
@@ -1795,12 +1804,14 @@ Yenişehir / Çiftlikköy,1+1,20000
 Yenişehir / Bahçelievler,3+1,19000
 Mezitli / Kuyuluk,2+1,19500
 Yenişehir / Bahçelievler,3+1,20000
+Yenişehir / Bahçelievler,2+1,20000
 Yenişehir / Barbaros,1+1,20000
 Toroslar / Alsancak,2+1,19500
 Erdemli / Arpaçbahşiş,1+1,20000
 Mezitli / Davultepe,1+1,19500
 Yenişehir / Çiftlikköy,1+1,19000
 Erdemli / Merkez,1+1,19500
+Yenişehir / Çiftlikköy,1+1,20000
 Yenişehir / Çiftlikköy,1+1,20000
 Mezitli,1+1,19000
 Tarsus / Kavaklı,3+1,19000
@@ -1828,8 +1839,6 @@ Yenişehir / Egriçam,3+1,20500
 Mezitli / Kuyuluk,1+1,19000
 Mezitli,1+1,20000
 Anamur / İskele,2+1,20000
-Yenişehir / Bahçelievler,2+1,20000
-Mezitli / Kuyuluk,2+1,20000
 Mezitli,2+1,19000
 Yenişehir / Çiftlikköy,2+1,19000
 Mezitli,1+1,20000
@@ -1871,11 +1880,10 @@ Mezitli,2+1,20000
 Yenişehir / Egriçam,2+1,19000
 Toroslar / Akbelen,3+1,20000
 Yenişehir / Cumhuriyet,3+1,20000
+Mezitli / Kuyuluk,2+1,20000
 Tarsus / Anıt,1+1,19000
 Mezitli / Davultepe,1+1,20000
-Mezitli,1+1,20000
 Toroslar / Çavuşlu,2+1,19000
-Yenişehir / Çiftlikköy,1+1,20000
 Mezitli,2+1,20000
 Yenişehir / Çiftlikköy,1+1,20000
 Yenişehir / Çiftlikköy,2.5+1,20000
@@ -1910,6 +1918,7 @@ Yenişehir / Gazi,3+1,20000
 Yenişehir / Çiftlikköy,1+1,20000
 Mezitli,1+1,19500
 Yenişehir / Bahçelievler,3+1,20000
+Yenişehir / Çiftlikköy,1+1,20000
 Yenişehir / Egriçam,2+1,20000
 Mezitli,1+1,20000
 Mezitli,2+1,20000
@@ -1918,7 +1927,6 @@ Yenişehir / Egriçam,3+1,20000
 Yenişehir / Hürriyet,3+1,19000
 Yenişehir / Bahçelievler,1+1,19500
 Erdemli / Merkez,1+1,20000
-Yenişehir / Çiftlikköy,1+1,19000
 Yenişehir / Çiftlikköy,2+1,20000
 Mezitli,3+1,20000
 Mezitli / Davultepe,2+1,20000
@@ -1945,6 +1953,8 @@ Yenişehir / Çiftlikköy,1+1,20000
 Bozyazı,2+1,19950
 Yenişehir / Merkez,1+1,19000
 Silifke / Gazi,2.5+1,20000
+Yenişehir / Egriçam,2+1,20000
+Yenişehir / Çiftlikköy,1+1,19000
 Silifke / Atakent,2+1,20000
 Yenişehir / Cumhuriyet,2+1,20000
 Silifke / Gazi,3+1,20000
@@ -1964,7 +1974,9 @@ Mezitli / Davultepe,2+1,20000
 Erdemli / Akdeniz,2+1,20000
 Yenişehir / Cumhuriyet,3+1,19500
 Yenişehir / Çiftlikköy,1+1,20000
+Yenişehir / Çiftlikköy,1+1,20000
 Akdeniz / Camiişerif,3+1,19000
+Mezitli,2+1,20000
 Mezitli,2+1,20000
 Mezitli,1+1,19000
 Mezitli,2+1,20000
@@ -1973,6 +1985,7 @@ Yenişehir / Çiftlikköy,1+1,19000
 Erdemli / Merkez,1+1,20000
 Yenişehir / Egriçam,1+1,20000
 Toroslar / Akbelen,3+1,19000
+Erdemli / Beldeler,1+1,20000
 Yenişehir / Bahçelievler,3+1,19000
 Yenişehir / Çiftlikköy,1+1,20000
 Mezitli / Kuyuluk,1+1,20000
@@ -2010,7 +2023,6 @@ Yenişehir / Hürriyet,3+1,19000
 Mezitli,1+1,20000
 Erdemli / Beldeler,1+1,19000
 Yenişehir / Çiftlikköy,1+1,20000
-Erdemli / Akdeniz,1+1,20000
 Mezitli / Davultepe,3+1,20000
 Tarsus / Kavaklı,3+1,19500
 Toroslar / Yalınayak,2+1,19000
@@ -2027,7 +2039,6 @@ Yenişehir / Çiftlikköy,1+1,19900
 Akdeniz / Nusratiye,3+1,20000
 Silifke / Gazi,3+1,20000
 Yenişehir / Çiftlikköy,1+1,20000
-Yenişehir / Egriçam,1+1,20000
 Mezitli,1+1,20000
 Yenişehir / Çiftlikköy,2+1,20000
 Mezitli,2+1,20000
@@ -2041,10 +2052,9 @@ Mezitli,3+1,20000
 Mezitli,3+1,20000
 Mezitli,3+1,19000
 Mezitli / Davultepe,2+1,20000
-Mezitli,1+1,19000
 Mezitli / Davultepe,2+1,20000
-Yenişehir / Çiftlikköy,2+1,19000
 Silifke / Gazi,3+1,20000
+Yenişehir / Egriçam,3+1,20000
 Yenişehir / Çiftlikköy,1+1,20000
 Mezitli,1+1,20000
 Mezitli,2+1,20000
@@ -2064,6 +2074,7 @@ Erdemli / Köyler,3+1,19000
 Yenişehir / Gazi,2+1,20000
 Mezitli,2+1,20000
 Yenişehir / Çiftlikköy,1+1,20000
+Mezitli,1+1,19000
 Mezitli,3+1,20000
 Silifke / Gazi,3+1,19000
 Silifke / Saray,2.5+1,19000
@@ -2075,17 +2086,15 @@ Toroslar / Çavuşlu,2+1,20000
 Yenişehir / Çiftlikköy,2+1,19000
 Yenişehir / Çiftlikköy,1+1,19000
 Mezitli,2+1,19000
+Yenişehir / Çiftlikköy,3+1,20000
 Mezitli,3+1,20000
-Toroslar / Yalınayak,3+1,20000
 Yenişehir / Cumhuriyet,3+1,19500
-Akdeniz / Barış,3+1,20500
 Yenişehir / Bahçelievler,3+1,20000
 Erdemli / Çeşmeli,1+1,19000
 Mezitli,3+1,20000
 Mezitli,2+1,19000
 Anamur / İskele,3+1,20000
 Mezitli,2+1,20000
-Mezitli,2+1,19000
 Yenişehir / Egriçam,2+1,20000
 Mezitli,2+1,20000
 Yenişehir / Çiftlikköy,2+1,20000
@@ -2127,7 +2136,6 @@ Mezitli / Kuyuluk,2+1,20000
 Mezitli,2+1,20000
 Yenişehir / Çiftlikköy,2+1,19999
 Anamur / Göktaş,3+1,20000
-Anamur / Göktaş,1+1,19999
 Mezitli / Davultepe,2+1,20000
 Mezitli / Davultepe,2+1,20000
 Toroslar / Sağlık,3+1,19000
@@ -2150,6 +2158,7 @@ Erdemli / Merkez,1+1,20000
 Mezitli,1+1,19000
 Tarsus / Altaylılar,2+1,20500
 Mezitli,3+1,20000
+Mezitli / Davultepe,1+1,20000
 Anamur / İskele,1+1,20000
 Mezitli,1+1,20000
 Yenişehir / Çiftlikköy,2+1,20000
@@ -2172,6 +2181,7 @@ Mezitli / Davultepe,1+1,20000
 Aydıncık,3+1,19000
 Mezitli,1+1,20000
 Erdemli / Alata,3+1,20000
+Mezitli / Davultepe,1+1,20000
 Anamur / Göktaş,2+1,19500
 Akdeniz / Çankaya,3+1,20000
 Mezitli,1+1,20000
@@ -2192,13 +2202,13 @@ Yenişehir / Çiftlikköy,1+1,20000
 Mezitli,2+1,20000
 Yenişehir / Barbaros,3+1,20000
 Mezitli / Davultepe,2+0,19000
+Akdeniz / Çankaya,2+1,20000
 Erdemli / Kargıpınarı,1+1,20000
 Yenişehir / Bahçelievler,4+1,20000
 Erdemli / Merkez,1+1,20000
 Mezitli,3+1,20000
 Mut,3+1,20000
 Yenişehir / Çiftlikköy,1+1,20000
-Mezitli,1+1,20000
 Mezitli,3+1,20000
 Mezitli / Davultepe,1+1,20000
 Mezitli,2+1,19000
@@ -2206,6 +2216,7 @@ Yenişehir / Çiftlikköy,2+1,20000
 Akdeniz / Camiişerif,3+1,20000
 Erdemli / Arpaçbahşiş,1+1,20000
 Silifke / Atakent,1+1,20000
+Mezitli,1+1,20000
 Anamur / İskele,1+1,20000
 Yenişehir / Gazi,3+1,19000
 Erdemli / Arpaçbahşiş,1+1,20000
@@ -2256,8 +2267,6 @@ Erdemli / Alata,2+1,19000
 Erdemli / Çeşmeli,2.5+1,20000
 Mezitli / Davultepe,2+1,20000
 Erdemli / Arpaçbahşiş,2+1,20000
-Mezitli / Davultepe,3+1,20000
-Yenişehir / Çiftlikköy,3+1,19999
 Yenişehir / Çiftlikköy,1+1,20000
 Mezitli,1+1,20000
 Yenişehir / Çiftlikköy,1+1,20000
@@ -2268,18 +2277,15 @@ Yenişehir / Çiftlikköy,3+1,20000
 Yenişehir / Çiftlikköy,2+1,20000
 Mezitli,2+1,19000
 Erdemli / Akdeniz,1+1,20000
-Mezitli,2+1,20500
 Silifke / Gazi,3+1,20000
 Mezitli,3+1,20000
-Mezitli,1+1,20000
 Erdemli / Merkez,2+1,20000
+Mezitli,1+1,20000
 Akdeniz / Barış,2+1,20000
 Yenişehir / Çiftlikköy,1+1,19500
 Yenişehir / Çiftlikköy,1+1,20750
 Yenişehir / Çiftlikköy,1+1,20500
-Mezitli,3+1,20000
 Yenişehir / Çiftlikköy,1+1,20000
-Mezitli,2+1,20000
 Anamur / Göktaş,3+1,19000
 Mezitli,3+1,19850
 Yenişehir / Çiftlikköy,2+1,20000
@@ -2290,12 +2296,16 @@ Mezitli,2+1,19000
 Yenişehir / Çiftlikköy,2+1,20000
 Yenişehir / Çiftlikköy,1+1,20000
 Yenişehir / Çiftlikköy,1+1,20000
-Yenişehir / Çiftlikköy,1+1,20000
 Yenişehir / Çiftlikköy,2+1,20000
 Yenişehir / Çiftlikköy,1+1,20000
 Mezitli,1+1,19000
 Gülnar / Merkez,3+1,20000
 Mezitli,2+1,23000
+Mezitli,1+1,22000
+Mezitli,2+1,21000
+Mezitli,2.5+1,21000
+Yenişehir / Hürriyet,1+1,21000
+Tarsus / Kavaklı,2+1,23000
 Tarsus / Altaylılar,2+1,22500
 Mezitli,3+1,23000
 Mezitli,2+1,22000
@@ -2310,13 +2320,11 @@ Yenişehir / Barbaros,2+1,23000
 Yenişehir / Çiftlikköy,1+1,23000
 Yenişehir / Hürriyet,1+1,23000
 Yenişehir / Gazi,2+1,22000
-Mezitli,2+1,22000
 Yenişehir / Çiftlikköy,2+1,23500
 Mezitli,2+1,22000
 Mezitli,1+1,22000
 Yenişehir / Gazi,3+1,21000
 Mezitli / Davultepe,2+1,22000
-Mezitli,2+1,21000
 Mezitli / Tece,1+1,22000
 Tarsus / Altaylılar,2+1,21000
 Yenişehir / Çiftlikköy,2+1,21500
@@ -2337,13 +2345,11 @@ Mezitli / Davultepe,2+1,21000
 Yenişehir / Gazi,3+1,21000
 Tarsus / Altaylılar,1+1,21000
 Mezitli,1+1,21000
-Mezitli,2+1,22000
 Mezitli,2+1,23000
 Yenişehir / Bahçelievler,1+1,21000
 Yenişehir / Barbaros,2+1,22500
 Mezitli,1+1,22000
 Yenişehir / Çiftlikköy,1+1,23500
-Mezitli,2+1,22000
 Mezitli,1+1,22000
 Erdemli / Akdeniz,3+1,21000
 Mezitli,2+1,22500
@@ -2360,6 +2366,7 @@ Erdemli / Kargıpınarı,2+1,21000
 Mezitli,2+1,21000
 Mezitli / Davultepe,2+1,22000
 Yenişehir / Egriçam,2+1,23000
+Yenişehir / Çiftlikköy,3+1,23000
 Yenişehir / Egriçam,3+1,21000
 Akdeniz / Nusratiye,2+1,23000
 Anamur / Yıldırımbeyazıt,2+1,22000
@@ -2377,6 +2384,7 @@ Yenişehir / Çiftlikköy,1+1,22000
 Tarsus / Eskiömerli,1+1,23000
 Mezitli / Davultepe,1+1,21000
 Mezitli / Tece,3+1,21000
+Yenişehir / Çiftlikköy,2+1,21500
 Yenişehir / Cumhuriyet,3+1,23500
 Mezitli,3+1,21000
 Mezitli / Davultepe,2+1,22000
@@ -2400,6 +2408,7 @@ Erdemli / Akdeniz,3+1,22000
 Mezitli,2+1,23500
 Yenişehir / Egriçam,2+1,23000
 Yenişehir / Çiftlikköy,2+1,23000
+Tarsus / Altaylılar,2+1,23000
 Mezitli,2+1,22000
 Yenişehir / Çiftlikköy,2+1,23000
 Mezitli,1+1,22500
@@ -2414,7 +2423,6 @@ Yenişehir / Bahçelievler,1+1,21000
 Erdemli / Merkez,2+1,22000
 Tarsus / Altaylılar,2+1,22500
 Anamur / Göktaş,3+1,22000
-Yenişehir / Çiftlikköy,2+1,22500
 Tarsus / Caminur,2+1,22300
 Mezitli,2+1,23000
 Mezitli,1+1,22000
@@ -2507,6 +2515,7 @@ Mezitli,2+1,22000
 Tarsus / Karacailyas,3+1,21000
 Yenişehir / Çiftlikköy,1+1,23000
 Mezitli,3+1,22000
+Yenişehir / Çiftlikköy,2+1,23000
 Erdemli / Merkez,2+1,22000
 Yenişehir / Bahçelievler,1+1,23000
 Mezitli / Kuyuluk,2+1,23500
@@ -2536,10 +2545,8 @@ Toroslar / Akbelen,2+1,21000
 Yenişehir / Çiftlikköy,1+1,22000
 Mezitli / Davultepe,2+1,21500
 Yenişehir / Çiftlikköy,1+1,22500
-Mezitli,1+1,21000
 Yenişehir / Bahçelievler,2+1,22000
 Toroslar / Çavuşlu,3+1,23000
-Mezitli,2+1,22000
 Erdemli / Alata,3+1,22500
 Yenişehir / Barbaros,2+1,22000
 Yenişehir / Hürriyet,1+1,22000
@@ -2553,7 +2560,6 @@ Akdeniz / Barış,3+1,21000
 Yenişehir / Çiftlikköy,1+1,22000
 Tarsus / Beydeğirmeni,3+1,23000
 Mezitli,4+1,23500
-Mezitli,2+1,23000
 Toroslar / Alsancak,3+1,21500
 Yenişehir / Çiftlikköy,2+1,23000
 Yenişehir / Çiftlikköy,1+1,23000
@@ -2575,7 +2581,6 @@ Yenişehir / Merkez,1+1,21000
 Yenişehir / Çiftlikköy,2+1,23000
 Mezitli,4+1,21000
 Anamur / İskele,2+1,22000
-Toroslar / Akbelen,2+1,22000
 Yenişehir / Gazi,3+1,21000
 Mezitli / Davultepe,2+1,21000
 Erdemli / Alata,3+1,22000
@@ -2587,7 +2592,6 @@ Toroslar / Alsancak,2+1,22000
 Yenişehir / Gazi,3+1,22000
 Mezitli,2+1,23000
 Silifke / Taşucu,2+1,21000
-Mezitli / Davultepe,2+1,23000
 Mezitli,1+1,21000
 Toroslar,3+1,22000
 Toroslar / Yalınayak,3+1,22000
@@ -2607,6 +2611,7 @@ Toroslar / Yalınayak,3+1,22000
 Yenişehir / Gazi,3+1,23000
 Silifke / Saray,3+1,21000
 Tarsus / Caminur,2+1,22750
+Mezitli / Davultepe,2+1,23000
 Mezitli / Kuyuluk,2+1,22000
 Mezitli,3+1,22500
 Yenişehir / Çiftlikköy,2+1,23000
@@ -2620,6 +2625,7 @@ Yenişehir / Çiftlikköy,1+1,23000
 Mezitli,2+1,21000
 Silifke / Atakent,2+1,21000
 Erdemli / Kargıpınarı,2+1,21000
+Mezitli / Davultepe,1+1,21000
 Mezitli / Kuyuluk,2+1,21500
 Silifke / Gazi,3+1,23000
 Toroslar / Akbelen,2+1,21000
@@ -2627,6 +2633,7 @@ Silifke / Taşucu,2+1,22000
 Mezitli,2+1,22500
 Mezitli,1+1,23500
 Yenişehir / Cumhuriyet,1+1,22000
+Toroslar / Sağlık,3+1,23000
 Mezitli,2+1,22000
 Mezitli,2+1,22000
 Mezitli / Davultepe,2+1,22000
@@ -2635,7 +2642,6 @@ Mezitli,2+1,21500
 Mezitli,3+1,23000
 Yenişehir / Bahçelievler,4+1,22000
 Mezitli / Kuyuluk,1+1,23000
-Tarsus / Altaylılar,2+1,22500
 Yenişehir / Gazi,3+1,23000
 Mezitli,2+1,21000
 Mezitli / Davultepe,2+1,22000
@@ -2675,7 +2681,6 @@ Mezitli,2+1,22000
 Mezitli / Kuyuluk,2+1,22000
 Mezitli,2+1,21000
 Mezitli,2+1,21000
-Yenişehir / Barbaros,1+1,22000
 Yenişehir / Egriçam,2+1,21000
 Anamur / İskele,2+1,22500
 Tarsus / Altaylılar,3+1,23900
@@ -2713,7 +2718,6 @@ Mezitli,2+1,23000
 Yenişehir / Çiftlikköy,1+1,21000
 Mezitli,2+1,21000
 Mezitli,2+1,21000
-Mezitli / Davultepe,2+1,21000
 Mezitli,1+1,22000
 Mezitli,3+1,23000
 Mezitli / Kuyuluk,2+1,22000
@@ -2739,6 +2743,7 @@ Mezitli,1+1,21000
 Yenişehir / Çiftlikköy,1+1,23000
 Yenişehir / Çiftlikköy,1+1,21000
 Erdemli / Çeşmeli,2+1,23000
+Erdemli / Akdeniz,3+1,23000
 Erdemli / Köyler,3+1,22000
 Yenişehir / Hürriyet,3+1,22000
 Yenişehir / Çiftlikköy,1+1,23000
@@ -2750,17 +2755,16 @@ Yenişehir / Cumhuriyet,3+1,22000
 Tarsus / Caminur,3+1,21750
 Erdemli / Akdeniz,4+1,23000
 Erdemli / Kargıpınarı,1+1,23000
+Yenişehir / Çiftlikköy,2+1,23000
 Erdemli / Çeşmeli,1+1,22500
 Mezitli,2+1,21000
 Tarsus / Anıt,4+1,21000
 Mezitli / Davultepe,2+1,23000
 Mezitli,1+1,23500
 Mezitli / Tece,1+1,22000
-Yenişehir / Çiftlikköy,1+1,23000
 Yenişehir / Çiftlikköy,1+1,22500
 Yenişehir / Çiftlikköy,1+1,23500
 Yenişehir / Gazi,3+1,21000
-Yenişehir / Çiftlikköy,2+1,23000
 Silifke / Taşucu,2+1,22000
 Erdemli / Çeşmeli,1+1,22500
 Erdemli / Merkez,1+1,23000
@@ -2768,14 +2772,11 @@ Yenişehir / Hürriyet,2+1,23000
 Mezitli,1+1,22000
 Yenişehir / Çiftlikköy,1+1,23000
 Mezitli,1+1,22500
-Akdeniz / Çankaya,2+1,21500
 Mezitli,2.5+1,21000
 Yenişehir / Çiftlikköy,1+1,23000
 Yenişehir / Cumhuriyet,2+1,21000
 Yenişehir / Bahçelievler,1+1,21000
 Mezitli,1+1,23000
-Mezitli,1+1,21000
-Erdemli / Arpaçbahşiş,2+1,23000
 Mezitli,3+1,21000
 Erdemli / Çeşmeli,1+1,22500
 Yenişehir / Bahçelievler,4+1,23000
@@ -2792,12 +2793,14 @@ Toroslar / Çavuşlu,3+1,23000
 Toroslar / Çavuşlu,3+1,23000
 Yenişehir / Hürriyet,2+1,23500
 Mezitli / Davultepe,2+1,23000
+Mezitli,1+1,21000
 Mezitli,2+1,23000
 Yenişehir / Çiftlikköy,2+1,22500
 Mezitli,3+1,21000
 Mezitli,1+1,22500
 Tarsus / Beydeğirmeni,1+1,23500
 Tarsus / Altaylılar,2+1,21000
+Yenişehir / Bahçelievler,2+1,23000
 Mezitli,1+1,23000
 Anamur / Göktaş,3+1,23000
 Mezitli / Davultepe,2+1,22000
@@ -2835,29 +2838,26 @@ Yenişehir / Barbaros,2+1,21000
 Mezitli,3+1,22000
 Mezitli / Kuyuluk,1+1,23000
 Yenişehir / Çiftlikköy,2+1,23000
-Mezitli,1+1,23500
 Yenişehir / Çiftlikköy,1+1,23000
 Yenişehir / Çiftlikköy,1+1,23000
 Yenişehir / Bahçelievler,3+1,23500
 Yenişehir / Çiftlikköy,1+1,22500
-Mezitli / Davultepe,1+1,21000
 Mezitli / Davultepe,2+1,22000
+Mezitli,1+1,23500
 Yenişehir / Egriçam,3+1,22000
 Mezitli / Kuyuluk,2+1,22500
 Yenişehir / Çiftlikköy,1+1,23000
 Mezitli,3+1,22000
-Mezitli,2+1,21000
 Mezitli,1+1,22000
+Yenişehir / Çiftlikköy,1+1,21000
 Mezitli / Davultepe,2.5+1,21000
 Mezitli,2+1,22500
-Yenişehir / Çiftlikköy,1+1,21000
 Mezitli,2+1,23000
 Mezitli,2+1,21500
 Yenişehir / Çiftlikköy,2+1,23000
 Yenişehir / Çiftlikköy,1+1,23000
 Yenişehir / Çiftlikköy,1+1,23000
 Yenişehir / Çiftlikköy,3+1,22500
-Mezitli,2+1,23000
 Yenişehir / Hürriyet,3+1,22000
 Anamur / Göktaş,3+1,23000
 Yenişehir / Çiftlikköy,1+1,22000
@@ -2866,6 +2866,13 @@ Yenişehir / Çiftlikköy,2+1,22000
 Silifke / Gazi,4+1,22500
 Yenişehir / Çiftlikköy,1+1,25000
 Yenişehir / Çiftlikköy,2+1,24000
+Mezitli,2+1,25000
+Yenişehir / Egriçam,3+1,24500
+Yenişehir / Egriçam,2+1,26000
+Anamur / İskele,2+1,25000
+Yenişehir / Çiftlikköy,2+1,26000
+Erdemli / Akdeniz,3+1,25000
+Yenişehir / Cumhuriyet,3+1,25000
 Yenişehir / Barbaros,2+1,26000
 Mezitli,2+1,26000
 Yenişehir / Merkez,2+1,25000
@@ -2888,7 +2895,6 @@ Yenişehir / Egriçam,4+1,25000
 Mezitli,3+1,25000
 Tarsus / Caminur,3+1,24500
 Yenişehir / Bahçelievler,2+1,24000
-Yenişehir / Barbaros,2.5+1,25000
 Mezitli,2+1,25000
 Mezitli,2+1,25000
 Yenişehir / Çiftlikköy,1+1,24000
@@ -2905,16 +2911,17 @@ Mezitli,2+1,25000
 Erdemli / Kocahasanlı,2+1,25000
 Erdemli / Arpaçbahşiş,2+1,25000
 Tarsus / Altaylılar,2.5+1,25000
-Yenişehir / Çiftlikköy,3+1,25000
 Mezitli / Kuyuluk,2+1,25000
 Mezitli,3+1,25000
 Toroslar / Yalınayak,2+1,24500
 Mezitli,2+1,25000
 Toroslar / Akbelen,2+1,26000
 Yenişehir / Çiftlikköy,1+1,25000
+Yenişehir / Barbaros,2.5+1,25000
 Mezitli,2.5+1,25000
 Tarsus / Altaylılar,3+1,25000
 Tarsus / Anıt,3+1,24000
+Tarsus / Eskiömerli,3+1,24000
 Mezitli / Kuyuluk,2+1,25000
 Mezitli,3+1,25000
 Mezitli / Tece,1+1,25000
@@ -2965,7 +2972,6 @@ Erdemli / Kargıpınarı,3+1,25000
 Yenişehir / Çiftlikköy,2+1,26000
 Erdemli / Arpaçbahşiş,2+1,26000
 Yenişehir / Çiftlikköy,1+1,26500
-Yenişehir / Çiftlikköy,1+1,26500
 Yenişehir / Barbaros,2+1,24000
 Tarsus / Altaylılar,3+1,24000
 Mezitli,2+1,25000
@@ -2987,9 +2993,9 @@ Anamur / İskele,2+1,25000
 Mezitli,2+1,25000
 Mezitli,2+1,24500
 Tarsus / Altaylılar,4+1,26000
+Yenişehir / Barbaros,2+1,25000
 Mezitli,3+1,25000
 Yenişehir / Çiftlikköy,1+1,25000
-Yenişehir / Bahçelievler,2+1,25000
 Toroslar,1.5+1,24000
 Yenişehir / Çiftlikköy,1+1,24000
 Mezitli,1+1,24000
@@ -3032,7 +3038,6 @@ Yenişehir / Çiftlikköy,1+1,25000
 Mezitli,2+1,25000
 Mezitli,3+1,25000
 Mezitli / Davultepe,2+1,25000
-Mezitli,4+1,25000
 Yenişehir / Egriçam,3+1,25000
 Mezitli,3+1,25000
 Yenişehir / Egriçam,1+1,26000
@@ -3072,7 +3077,6 @@ Yenişehir / Egriçam,1+1,25000
 Erdemli / Arpaçbahşiş,2+1,25000
 Yenişehir / Cumhuriyet,3+1,25000
 Erdemli / Alata,4+1,25000
-Yenişehir / Çiftlikköy,3+1,26000
 Yenişehir / Çiftlikköy,1+1,25000
 Tarsus / 82 Evler,2+1,24000
 Mezitli,2+1,26000
@@ -3103,6 +3107,7 @@ Yenişehir / Çiftlikköy,2+1,25000
 Erdemli / Beldeler,2+1,25000
 Mezitli / Davultepe,2.5+1,25000
 Mezitli / Kuyuluk,3+1,24500
+Yenişehir / Çiftlikköy,3+1,26000
 Erdemli / Akdeniz,2+1,25000
 Mezitli,2+1,25000
 Mezitli,2+1,24500
@@ -3117,13 +3122,14 @@ Yenişehir / Çiftlikköy,2+1,25000
 Yenişehir / Çiftlikköy,1+1,25000
 Yenişehir / Hürriyet,2+1,24000
 Yenişehir / Çiftlikköy,1+1,25000
+Mezitli,2+1,25000
 Mezitli,3+1,26000
-Yenişehir / Çiftlikköy,2+1,25000
 Yenişehir / Çiftlikköy,2+1,25000
 Tarsus / Köyler,3+1,26000
 Tarsus / Anıt,3+1,25000
 Silifke / Atakent,2+1,25000
 Mezitli,3+1,25000
+Mezitli,3+1,26000
 Toroslar / Halkkent,3+1,25000
 Mezitli,2+1,26000
 Mezitli,3+1,25000
@@ -3140,7 +3146,6 @@ Tarsus / Eskiömerli,3+1,25000
 Mezitli,2+1,26000
 Yenişehir / Çiftlikköy,1+1,25000
 Mezitli / Davultepe,2+1,25000
-Mezitli,2+1,25000
 Mezitli,3+1,25000
 Mezitli,3+1,26000
 Erdemli / Alata,1+1,25000
@@ -3153,7 +3158,6 @@ Tarsus / 82 Evler,2+1,25000
 Mezitli,3+1,25000
 Mezitli,2+1,25000
 Mezitli / Davultepe,3+1,24000
-Mezitli,3+1,25000
 Mezitli,3+1,25000
 Anamur / İskele,3+1,26900
 Yenişehir / Çiftlikköy,1+1,24000
@@ -3168,11 +3172,9 @@ Yenişehir / Bahçelievler,3+1,25000
 Mezitli,2+1,25000
 Mezitli,2+1,24000
 Mezitli / Kuyuluk,2+1,26000
-Mezitli,2+1,24500
 Yenişehir / Çiftlikköy,2+1,25000
 Mezitli,2+1,25000
 Yenişehir / Gazi,3+1,24000
-Mezitli,2+1,25000
 Mezitli,2+1,25000
 Yenişehir / Çiftlikköy,2+1,26000
 Yenişehir / Çiftlikköy,1+1,25000
@@ -3188,6 +3190,7 @@ Yenişehir / Bahçelievler,3+1,25000
 Mezitli,2+1,25000
 Yenişehir / Çiftlikköy,2+1,25000
 Mezitli / Davultepe,2+1,26000
+Mezitli,2+1,24500
 Mezitli / Kuyuluk,1+1,25000
 Mezitli,2+1,25000
 Anamur / İskele,2+1,25000
@@ -3208,7 +3211,7 @@ Tarsus / 82 Evler,3+1,25500
 Yenişehir / Çiftlikköy,1+1,25000
 Yenişehir / Merkez,2+1,26000
 Mezitli,3+1,25000
-Tarsus / Akşemsettin,1+1,26500
+Tarsus / Akşemsettin,1+1,26000
 Erdemli / Arpaçbahşiş,1+1,25000
 Yenişehir / Gazi,3+1,25000
 Yenişehir / Bahçelievler,2+1,25000
@@ -3217,12 +3220,13 @@ Yenişehir / Çiftlikköy,2+1,26000
 Yenişehir / Çiftlikköy,1+1,24000
 Toroslar / Akbelen,3+1,25500
 Yenişehir / Gazi,1+1,25500
+Mezitli / Davultepe,1+1,26000
 Toroslar / Çavuşlu,3+1,26000
+Yenişehir / Egriçam,3+1,24000
 Mezitli,2+1,25000
 Mezitli,2+1,25000
 Yenişehir / Çiftlikköy,2+1,26500
 Yenişehir / Barbaros,3+1,25000
-Yenişehir / Çiftlikköy,1+1,25000
 Mut,3+1,25000
 Toroslar / Çavuşlu,3+1,24000
 Yenişehir / Barbaros,2+1,25000
@@ -3232,7 +3236,6 @@ Yenişehir / Bahçelievler,3+1,25000
 Tarsus / Eskiömerli,2+1,25000
 Mezitli,2+1,24000
 Mezitli,2+1,25000
-Mezitli,3+1,25000
 Mezitli / Davultepe,3+1,25000
 Erdemli / Çeşmeli,2+1,26000
 Erdemli / Arpaçbahşiş,2+1,25000
@@ -3245,10 +3248,10 @@ Erdemli / Alata,2.5+1,26000
 Mezitli,2+1,26500
 Erdemli / Beldeler,2+1,25500
 Mezitli / Kuyuluk,2+1,25500
-Toroslar / Sağlık,3+1,25000
 Yenişehir / Çiftlikköy,1+1,24500
 Yenişehir / Çiftlikköy,1+1,26000
 Yenişehir / Gazi,3+1,25000
+Yenişehir / Çiftlikköy,1+1,25000
 Yenişehir / Bahçelievler,3+1,25000
 Mezitli,2+1,26000
 Mezitli / Davultepe,2.5+1,25000
@@ -3269,7 +3272,6 @@ Tarsus / Beydeğirmeni,3+1,24000
 Mezitli,2+1,26000
 Erdemli / Akdeniz,1+1,25000
 Yenişehir / Hürriyet,2+1,25000
-Yenişehir / Hürriyet,2+1,25000
 Akdeniz / Barış,1+1,25000
 Mezitli,2+1,25000
 Erdemli / Arpaçbahşiş,3+1,25000
@@ -3285,9 +3287,9 @@ Mezitli,2+1,24000
 Anamur / Göktaş,2+1,25000
 Mezitli,2+1,26000
 Yenişehir / Köyler,2+1,25500
+Yenişehir / Hürriyet,1+1,25000
 Yenişehir / Barbaros,2+1,24000
 Yenişehir / Çiftlikköy,2+1,24000
-Yenişehir / Cumhuriyet,3+1,25000
 Yenişehir / Merkez,2+1,25000
 Tarsus / Altaylılar,1+1,25000
 Mezitli / Kuyuluk,2+1,26000
@@ -3298,7 +3300,6 @@ Toroslar / Çavuşlu,3+1,25000
 Toroslar / Arpaçsakarlar,3+1,25000
 Tarsus / Kavaklı,4+1,26000
 Yenişehir / Cumhuriyet,3+1,25000
-Yenişehir / Hürriyet,2+1,25000
 Erdemli / Arpaçbahşiş,2+1,25000
 Mezitli,2+1,26500
 Yenişehir / Çiftlikköy,1+1,25000
@@ -3307,7 +3308,6 @@ Yenişehir / Çiftlikköy,2+1,24000
 Mezitli,2+1,25000
 Mezitli,1+1,25000
 Yenişehir / Barbaros,3+1,25000
-Yenişehir / Hürriyet,1+1,25000
 Silifke / Taşucu,2.5+1,25500
 Yenişehir / Bahçelievler,2+1,24000
 Mezitli,1+1,25000
@@ -3327,6 +3327,7 @@ Mezitli,2+1,26000
 Mezitli,2+1,25000
 Mezitli,2+1,25000
 Silifke / Saray,4+1,25000
+Silifke / Saray,2+1,24000
 Toroslar / Çavuşlu,3+1,24000
 Mezitli,3+1,26000
 Mezitli / Kuyuluk,2+1,26000
@@ -3343,7 +3344,7 @@ Toroslar / Akbelen,3+1,25000
 Yenişehir / Çiftlikköy,2+1,25000
 Yenişehir / Egriçam,3+1,25000
 Mezitli,3+1,25000
-Yenişehir / Çiftlikköy,2+1,25000
+Mezitli / Davultepe,2+1,24750
 Mezitli,3+1,25000
 Mezitli,1+1,25000
 Mezitli,2+1,25000
@@ -3356,6 +3357,7 @@ Mezitli,1+1,25500
 Yenişehir / Barbaros,2+1,25000
 Yenişehir / Bahçelievler,2+1,24000
 Yenişehir / Çiftlikköy,1+1,25000
+Yenişehir / Çiftlikköy,2+1,25000
 Yenişehir / Çiftlikköy,2+1,25000
 Yenişehir / Bahçelievler,2+1,24000
 Yenişehir / Gazi,3+1,25000
@@ -3370,6 +3372,7 @@ Yenişehir / Çiftlikköy,1+1,25000
 Mezitli,3+1,25000
 Mezitli,3+1,25000
 Tarsus / Altaylılar,3+1,25000
+Mezitli / Kuyuluk,2+1,26000
 Yenişehir / Çiftlikköy,2+1,25000
 Mezitli / Kuyuluk,1.5+1,25000
 Mezitli / Kuyuluk,2+1,25000
@@ -3409,9 +3412,11 @@ Yenişehir / Çiftlikköy,2+1,25000
 Anamur / İskele,3+1,25000
 Mezitli,2+1,25000
 Mezitli,2+1,25000
+Yenişehir / Çiftlikköy,3+1,24500
 Yenişehir / Çiftlikköy,2.5+1,24500
 Mezitli,2+1,25000
 Yenişehir / Çiftlikköy,1+1,24000
+Erdemli / Arpaçbahşiş,2+1,25000
 Tarsus / Caminur,3+1,25000
 Silifke / Gazi,4+1,25000
 Mezitli / Davultepe,3+1,26500
@@ -3432,7 +3437,7 @@ Mezitli,2+1,24000
 Mezitli,2+1,25000
 Yenişehir / Çiftlikköy,2+1,25000
 Mezitli,2+1,25000
-Yenişehir / Çiftlikköy,1+1,25000
+Yenişehir / Çiftlikköy,1+1,24000
 Yenişehir / Bahçelievler,4+1,26000
 Mezitli,2+1,26000
 Mezitli / Kuyuluk,2+1,25000
@@ -3446,7 +3451,6 @@ Mezitli,1+1,24000
 Mezitli,2+1,26000
 Mezitli,3+1,25000
 Erdemli / Çeşmeli,2+1,25000
-Yenişehir / Çiftlikköy,1+1,24000
 Mezitli / Tece,2+1,25000
 Erdemli / Çeşmeli,1+1,25000
 Mezitli,2+1,25000
@@ -3470,7 +3474,6 @@ Mezitli,1+1,25000
 Mezitli,2+1,25000
 Yenişehir / Çiftlikköy,3+1,24500
 Yenişehir / Bahçelievler,3+1,25000
-Yenişehir / Bahçelievler,3+1,25000
 Mezitli,3+1,25000
 Tarsus / Altaylılar,3+1,24000
 Toroslar,3+1,25000
@@ -3481,8 +3484,6 @@ Mezitli / Tece,2+1,25000
 Erdemli / Akdeniz,4+1,26000
 Mezitli,3+1,25000
 Yenişehir / Bahçelievler,3+1,25000
-Yenişehir / Egriçam,3+1,24500
-Erdemli / Kargıpınarı,3+1,24000
 Mezitli,3+1,25000
 Erdemli / Beldeler,1+1,25000
 Yenişehir / Çiftlikköy,1+1,25000
@@ -3496,14 +3497,24 @@ Yenişehir / Çiftlikköy,2.5+1,24500
 Tarsus / Anıt,3+1,25000
 Yenişehir / Egriçam,2+1,25000
 Tarsus / Caminur,3+1,26000
-Yenişehir / Gazi,3+1,27000
 Yenişehir / Çiftlikköy,2+1,30000
+Erdemli / Akdeniz,2+1,30000
+Mezitli,2+1,30000
+Yenişehir / Çiftlikköy,2+1,28500
+Mezitli,3+1,30000
+Tarsus / Kavaklı,3+1,27000
+Yenişehir / Hürriyet,3+1,28000
+Akdeniz / Barış,3+1,28000
+Mezitli,2+1,27000
+Mezitli,3+1,28000
+Mezitli,2+1,28000
 Tarsus / Altaylılar,4+1,28000
 Yenişehir / Çiftlikköy,1+1,28000
 Yenişehir / Bahçelievler,1+1,29000
 Toroslar / Alsancak,2+1,28000
 Mezitli / Davultepe,3+1,30000
 Mezitli,3+1,28000
+Mezitli,2+1,28000
 Yenişehir / Köyler,2+1,30000
 Yenişehir / Çiftlikköy,2+1,30000
 Mezitli,3+1,30000
@@ -3519,6 +3530,7 @@ Mezitli / Davultepe,2+1,27000
 Mezitli,3+1,27000
 Toroslar,4+1,30000
 Mezitli / Kuyuluk,3+1,27000
+Erdemli / Akdeniz,4+1,30000
 Yenişehir / Barbaros,2+1,28000
 Yenişehir / Barbaros,1+1,30000
 Erdemli / Merkez,1+1,29500
@@ -3535,7 +3547,6 @@ Mezitli,2+1,28000
 Tarsus / Altaylılar,3+1,28500
 Mezitli,2+1,27000
 Mezitli,3+1,30000
-Yenişehir / Çiftlikköy,1+1,30000
 Silifke / Taşucu,2+1,27000
 Yenişehir / Bahçelievler,2+1,27000
 Yenişehir / Egriçam,3+1,30000
@@ -3563,9 +3574,10 @@ Yenişehir / Gazi,3+1,30000
 Yenişehir / Çiftlikköy,1+1,28000
 Yenişehir / Çiftlikköy,2+1,30000
 Yenişehir / Cumhuriyet,3+1,28000
+Yenişehir / Çiftlikköy,1+1,30000
 Tarsus / Altaylılar,3+1,29000
+Yenişehir / Egriçam,3+1,30000
 Yenişehir / Egriçam,3+1,28000
-Yenişehir / Çiftlikköy,3+1,30000
 Mezitli,2.5+1,29000
 Tarsus / Karacailyas,3+1,30000
 Yenişehir / Hürriyet,3+1,29000
@@ -3604,6 +3616,7 @@ Yenişehir / Egriçam,2+1,30000
 Mezitli,4+1,28500
 Mezitli,3+1,30000
 Mezitli,3+1,29000
+Mezitli,2+1,27000
 Yenişehir / Çiftlikköy,2+1,30000
 Yenişehir / Çiftlikköy,2+1,28000
 Yenişehir / Bahçelievler,2+1,29000
@@ -3613,11 +3626,12 @@ Yenişehir / Egriçam,2+1,27000
 Yenişehir / Barbaros,2+1,27000
 Mezitli,3+1,30000
 Yenişehir / Barbaros,3+1,30000
+Yenişehir / Çiftlikköy,3+1,30000
 Yenişehir / Çiftlikköy,2+1,30000
 Tarsus / Altaylılar,4+1,28000
 Silifke / Taşucu,2+1,30000
 Yenişehir / Çiftlikköy,2+1,30000
-Yenişehir / Egriçam,2+1,30000
+Mezitli,2+1,30000
 Mezitli,3+1,30000
 Yenişehir / Çiftlikköy,2+1,28000
 Tarsus / Kavaklı,3+1,29000
@@ -3629,7 +3643,6 @@ Yenişehir / Çiftlikköy,2+1,30000
 Toroslar / Yalınayak,3+1,30000
 Tarsus / Bahçe,5+1,30000
 Mezitli,3+1,30000
-Mezitli,2+1,27000
 Mezitli / Kuyuluk,2+1,30000
 Yenişehir / Çiftlikköy,3+1,28500
 Mezitli,1+1,30000
@@ -3644,6 +3657,7 @@ Mezitli / Davultepe,2+1,27000
 Erdemli / Çeşmeli,2+1,30000
 Mezitli,2+1,30000
 Mezitli,3+1,30000
+Yenişehir / Bahçelievler,3+1,30000
 Mezitli,2+1,27000
 Erdemli / Arpaçbahşiş,1+1,30000
 Mezitli,2+1,27000
@@ -3669,7 +3683,6 @@ Yenişehir / Merkez,3+1,30000
 Yenişehir / Barbaros,3+1,30000
 Yenişehir / Cumhuriyet,3+1,27000
 Yenişehir / Çiftlikköy,2+1,28500
-Mezitli,4+1,30000
 Mezitli,3+1,30000
 Mezitli,3+1,30000
 Anamur / Göktaş,3+1,30000
@@ -3722,7 +3735,6 @@ Mezitli / Davultepe,4+1,30000
 Yenişehir / Çiftlikköy,2+1,30000
 Mezitli,2+1,28000
 Mezitli,3+1,27000
-Toroslar / Yalınayak,3+1,30000
 Mezitli,2+1,28000
 Mezitli,2+1,30000
 Toroslar / Yalınayak,4+1,28000
@@ -3744,7 +3756,6 @@ Mezitli,2+1,30000
 Yenişehir / Barbaros,1+1,30000
 Mezitli,2+1,30000
 Mezitli,2+1,30000
-Yenişehir / Çiftlikköy,2+1,29000
 Mezitli,3+1,30000
 Yenişehir / Gazi,3+1,30000
 Mezitli,2.5+1,29000
@@ -3762,7 +3773,7 @@ Mezitli,3+1,30000
 Yenişehir / Çiftlikköy,2+1,30000
 Mezitli,2+1,27000
 Yenişehir / Çiftlikköy,2+1,30000
-Tarsus / Altaylılar,3+1,28000
+Yenişehir / Çiftlikköy,2+1,29000
 Mezitli,3+1,27500
 Mezitli / Davultepe,2+1,30000
 Anamur / İskele,3+1,30000
@@ -3779,16 +3790,17 @@ Mezitli,2+1,30000
 Toroslar,5+2,30000
 Mezitli,2.5+1,29166
 Erdemli / Beldeler,3+1,30000
+Tarsus / Altaylılar,3+1,28000
 Yenişehir / Çiftlikköy,1+1,30000
 Toroslar / Akbelen,3+1,30000
 Yenişehir / Çiftlikköy,2+1,28000
 Mezitli / Davultepe,1+1,27000
 Mezitli,2+1,30000
-Yenişehir / Cumhuriyet,2+1,30000
 Erdemli / Merkez,4+1,30000
 Mezitli,2+1,30000
 Mezitli,3+1,30000
 Yenişehir / Bahçelievler,3+1,28000
+Mezitli,2+1,29000
 Mezitli,2+1,29000
 Yenişehir / Çiftlikköy,2+1,28000
 Yenişehir / Çiftlikköy,1+1,30000
@@ -3801,7 +3813,6 @@ Yenişehir / Hürriyet,4+1,30000
 Mezitli,2+1,30000
 Mezitli,2+1,27500
 Mezitli,3+1,30000
-Yenişehir / Çiftlikköy,3+1,30000
 Silifke / Gazi,4+1,27000
 Mezitli,3+1,30000
 Toroslar / Alsancak,2+1,28000
@@ -3828,11 +3839,11 @@ Yenişehir / Çiftlikköy,1+1,30000
 Yenişehir / Hürriyet,3+1,30000
 Tarsus / Altaylılar,4+1,30000
 Yenişehir / Çiftlikköy,3+1,30000
-Yenişehir / Çiftlikköy,2+1,28500
+Mezitli,3+1,30000
 Tarsus / Caminur,3+1,30000
 Mezitli,3+1,30000
-Tarsus / Kavaklı,3+1,27000
 Silifke / Gazi,4+1,30000
+Yenişehir / Çiftlikköy,3+1,30000
 Mezitli,2+1,28500
 Tarsus / Altaylılar,4+1,30000
 Mezitli,3+1,30000
@@ -3847,13 +3858,13 @@ Yenişehir / Barbaros,3+1,30000
 Yenişehir / Hürriyet,2+1,27000
 Yenişehir / Çiftlikköy,1+1,27500
 Tarsus / Köyler,4+1,30000
-Yenişehir / Çiftlikköy,1+1,30000
 Mezitli,2+1,27000
 Yenişehir / Bahçelievler,1+1,29000
 Mezitli,2+1,27000
+Yenişehir / Çiftlikköy,1+1,30000
 Yenişehir / Çiftlikköy,2+1,30000
 Silifke / Köyler,3+1,30000
-Yenişehir / Çiftlikköy,2+1,28200
+Yenişehir / Çiftlikköy,2+1,28100
 Yenişehir / Çiftlikköy,2+1,30000
 Mezitli,2+1,28000
 Tarsus / Beydeğirmeni,2+1,30000
@@ -3883,10 +3894,10 @@ Yenişehir / Çiftlikköy,2+1,27500
 Mezitli,3+1,30000
 Yenişehir / Egriçam,2+1,27000
 Mezitli,2+1,30000
+Tarsus / Caminur,4+1,30000
 Tarsus / Akşemsettin,3+1,30000
 Mezitli,3+1,30000
 Anamur / Köyler,2+1,30000
-Silifke / Köyler,3+1,28000
 Yenişehir / Çiftlikköy,3+1,30000
 Yenişehir / Bahçelievler,1+1,30000
 Yenişehir / Hürriyet,1+1,27000
@@ -3914,19 +3925,21 @@ Yenişehir / Çiftlikköy,2+1,27000
 Yenişehir / Cumhuriyet,3+1,30000
 Mezitli,3+1,30000
 Erdemli / Arpaçbahşiş,1+1,27000
-Yenişehir / Egriçam,4+1,30000
 Mezitli,3+1,30500
-Yenişehir / Çiftlikköy,1+1,27000
 Yenişehir / Merkez,2+1,27500
 Yenişehir / Çiftlikköy,3+1,30000
 Mezitli,3+1,27000
+Yenişehir / Çiftlikköy,2+1,30000
 Yenişehir / Hürriyet,2+1,30000
 Yenişehir / Çiftlikköy,3+1,29500
 Mezitli / Kuyuluk,2+1,27000
+Mezitli,3+1,29500
+Yenişehir / Egriçam,4+1,30000
 Erdemli / Beldeler,2+1,30000
 Mezitli,3+1,29000
 Yenişehir / Egriçam,2+1,30000
 Yenişehir / Barbaros,2+1,30000
+Yenişehir / Çiftlikköy,1+1,27000
 Yenişehir / Gazi,3+1,30000
 Yenişehir / Barbaros,3+1,30000
 Mezitli / Davultepe,2+1,27500
@@ -3953,12 +3966,10 @@ Tarsus / Altaylılar,3+1,27500
 Mezitli,3+1,30000
 Erdemli / Akdeniz,4.5+1,30000
 Mezitli,4+1,30000
-Tarsus / Anıt,3+1,27500
 Yenişehir / Çiftlikköy,2+1,28000
 Silifke / Taşucu,2+1,30000
 Mezitli,3+1,30000
-Yenişehir / Gazi,4+1,28000
-Mezitli,2+1,30000
+Mezitli,3+1,30000
 Mezitli,3+1,30000
 Yenişehir / Çiftlikköy,3+1,29500
 Yenişehir / Çiftlikköy,2+1,30000
@@ -3969,9 +3980,11 @@ Yenişehir / Çiftlikköy,2+1,28500
 Yenişehir / Çiftlikköy,2+1,32000
 Tarsus / Eskiömerli,4+1,35000
 Tarsus / Altaylılar,4+1,32500
+Mezitli,4+1,35000
+Mezitli,3+1,32000
+Toroslar / Alsancak,4+1,35000
 Mezitli,3+1,33000
 Mezitli,4+1,31500
-Mezitli,4+1,35000
 Mezitli,3+1,35000
 Mezitli,2+1,32500
 Mezitli,3+1,33900
@@ -3983,6 +3996,7 @@ Mezitli / Kuyuluk,3+1,35000
 Mezitli,3+1,35000
 Mezitli,3+1,35000
 Mezitli,2+1,35000
+Mezitli,4+1,35000
 Yenişehir / Bahçelievler,3+1,35000
 Yenişehir / Egriçam,3+1,35000
 Yenişehir / Cumhuriyet,2+1,32000
@@ -4013,7 +4027,7 @@ Yenişehir / Merkez,2+1,32000
 Yenişehir / Barbaros,3+1,35000
 Yenişehir / Merkez,3+1,35000
 Yenişehir / Çiftlikköy,2+1,32000
-Yenişehir / Çiftlikköy,3+1,35000
+Silifke / Gazi,3+1,35000
 Yenişehir / Çiftlikköy,2+1,31000
 Yenişehir / Çiftlikköy,2+1,35000
 Mezitli / Kuyuluk,3+1,35000
@@ -4037,10 +4051,10 @@ Erdemli / Çeşmeli,2+1,34000
 Yenişehir / Barbaros,3+1,34000
 Mezitli / Davultepe,3+1,35000
 Yenişehir / Çiftlikköy,1+1,35000
+Erdemli / Çeşmeli,2+1,34000
 Yenişehir / Merkez,3+1,33500
 Mezitli / Tece,4+1,35000
 Yenişehir / Merkez,1+1,35000
-Mezitli / Kuyuluk,3+1,33000
 Mezitli,2.5+1,32000
 Mezitli,2+1,32000
 Yenişehir / Barbaros,3+1,33000
@@ -4062,7 +4076,6 @@ Mezitli,3+1,35000
 Mezitli,4+1,35000
 Yenişehir / Barbaros,1+1,31000
 Mezitli,4+1,35000
-Yenişehir / Çiftlikköy,2+1,35000
 Yenişehir / Merkez,3+1,35000
 Yenişehir / Çiftlikköy,1+1,31000
 Mezitli,3+1,35000
@@ -4078,6 +4091,7 @@ Mezitli,3+1,35000
 Tarsus / Altaylılar,4+1,33500
 Mezitli,3+1,31500
 Yenişehir / Egriçam,3+1,35000
+Yenişehir / Çiftlikköy,2+1,35000
 Mezitli,3+1,35000
 Mezitli,3+1,34000
 Yenişehir / Hürriyet,4+1,33000
@@ -4101,7 +4115,6 @@ Mezitli,4+1,33500
 Erdemli / Alata,4+1,31000
 Mezitli,4+1,35000
 Yenişehir / Gazi,3+1,33000
-Yenişehir / Çiftlikköy,1+1,35000
 Mezitli,4+1,32000
 Mezitli,4+1,33500
 Yenişehir / Çiftlikköy,2+1,32000
@@ -4111,6 +4124,7 @@ Erdemli / Akdeniz,3+1,32500
 Yenişehir / Merkez,3+1,35000
 Mezitli,4+1,34000
 Mezitli,4+1,32500
+Yenişehir / Çiftlikköy,1+1,35000
 Mezitli,4+1,35000
 Mezitli,4+1,32500
 Yenişehir / Çiftlikköy,3+1,32000
@@ -4123,7 +4137,6 @@ Tarsus / Caminur,3+1,32000
 Tarsus / Altaylılar,4+1,35000
 Yenişehir / Barbaros,2+1,33000
 Yenişehir / Egriçam,3+1,32500
-Erdemli / Arpaçbahşiş,2+1,35000
 Yenişehir / Barbaros,3+1,35000
 Mezitli,4+1,33000
 Silifke / Taşucu,3+1,32000
@@ -4157,7 +4170,7 @@ Yenişehir / Egriçam,3+1,35000
 Toroslar,5+1,35000
 Erdemli / Akdeniz,4+1,35000
 Yenişehir / Çiftlikköy,2+1,35000
-Toroslar / Alsancak,4+1,35000
+Yenişehir / Bahçelievler,4+1,35000
 Yenişehir / Hürriyet,4+1,35000
 Yenişehir / Bahçelievler,3+1,33000
 Mezitli,4+1,35000
@@ -4170,12 +4183,10 @@ Yenişehir / Cumhuriyet,2+1,35000
 Tarsus / Caminur,4+1,35000
 Yenişehir / Çiftlikköy,2+1,35000
 Yenişehir / Bahçelievler,3+1,33000
-Yenişehir / Bahçelievler,4+1,35000
 Mezitli,2+1,33000
 Yenişehir / Cumhuriyet,2+1,35000
 Mezitli,3+1,33000
 Yenişehir / Çiftlikköy,1+1,35000
-Erdemli / Arpaçbahşiş,3+1,35000
 Toroslar / Akbelen,3+1,35000
 Yenişehir / Egriçam,2+1,35000
 Mezitli,2+1,35000
@@ -4198,20 +4209,20 @@ Yenişehir / Barbaros,1+1,35000
 Mezitli / Kuyuluk,3+1,35000
 Yenişehir / Bahçelievler,3+1,35000
 Mezitli,3+1,35000
-Mezitli,4+1,35000
 Tarsus / Altaylılar,4+1,33000
 Yenişehir / Çiftlikköy,3+1,35000
+Yenişehir / Bahçelievler,2+1,35000
 Mezitli,2+1,35000
 Toroslar / Alsancak,3+1,35000
 Mezitli,3+1,35000
 Erdemli / Çeşmeli,3+1,34500
 Yenişehir / Çiftlikköy,2+1,33000
-Mezitli,4+1,35000
 Yenişehir / Çiftlikköy,3+1,33000
 Mezitli,2+1,35000
 Mezitli,2+1,32000
 Mezitli,3+1,35000
 Mezitli,3+1,32000
+Mezitli,4+1,35000
 Yenişehir / Hürriyet,4+1,35000
 Yenişehir / Çiftlikköy,2+1,35000
 Yenişehir / Egriçam,4+1,35000
@@ -4226,6 +4237,7 @@ Yenişehir / Çiftlikköy,3+1,35000
 Yenişehir / Çiftlikköy,3+1,34000
 Mezitli,3.5+1,33000
 Mezitli,2+1,35000
+Yenişehir / Çiftlikköy,5+1,35000
 Toroslar / Çavuşlu,3+1,32000
 Mezitli,3+1,33000
 Yenişehir / Barbaros,3+1,35000
@@ -4236,7 +4248,6 @@ Erdemli / Beldeler,2+1,33000
 Mezitli,4+1,35000
 Yenişehir / Çiftlikköy,2+1,33000
 Yenişehir / Merkez,2+1,35000
-Yenişehir / Çiftlikköy,2+1,35000
 Yenişehir / Çiftlikköy,2+1,35000
 Mezitli,3+1,31000
 Silifke / Taşucu,3+1,35000
@@ -4251,7 +4262,6 @@ Yenişehir / Egriçam,2+1,35000
 Yenişehir / Çiftlikköy,3+1,35000
 Mezitli,4+1,35000
 Yenişehir / Çiftlikköy,2+1,35150
-Yenişehir / Barbaros,2+1,32500
 Yenişehir / Çiftlikköy,2+1,35000
 Mezitli,2+1,31500
 Yenişehir / Çiftlikköy,3+1,33500
@@ -4259,6 +4269,11 @@ Yenişehir / Gazi,4+1,35000
 Yenişehir / Çiftlikköy,2+1,33000
 Yenişehir / Çiftlikköy,1+1,35000
 Mezitli,4+1,37000
+Yenişehir / Bahçelievler,3+1,42000
+Mezitli,3+1,40000
+Yenişehir / Merkez,2+1,37500
+Mezitli,3+1,42000
+Yenişehir / Barbaros,2.5+1,40000
 Mezitli,3+1,40000
 Mezitli,4+1,42000
 Yenişehir / Gazi,4+1,36000
@@ -4281,7 +4296,6 @@ Erdemli / Merkez,Stüdyo (1+0),40000
 Toroslar / Alsancak,4+1,39000
 Yenişehir / Çiftlikköy,2.5+1,40000
 Mezitli,3+1,37000
-Erdemli / Arpaçbahşiş,3+1,40000
 Yenişehir / Barbaros,3+1,37000
 Tarsus / Altaylılar,3+1,43000
 Mezitli,3+1,40000
@@ -4298,7 +4312,6 @@ Erdemli / Arpaçbahşiş,1+1,37500
 Mezitli,3+1,40000
 Yenişehir / Çiftlikköy,2+1,42000
 Erdemli / Alata,4+1,39000
-Silifke / Gazi,3+1,40000
 Mezitli / Köyler,4+1,40000
 Yenişehir / Egriçam,3+1,40000
 Tarsus / Caminur,5+1,41000
@@ -4327,7 +4340,6 @@ Yenişehir / Egriçam,3+1,40000
 Mezitli,4+1,40000
 Yenişehir / Barbaros,4+1,40000
 Mezitli,4+1,36000
-Mezitli,4+1,37500
 Tarsus / Altaylılar,4+1,38000
 Yenişehir / Merkez,2+1,38500
 Yenişehir / Merkez,3+1,43500
@@ -4391,12 +4403,8 @@ Erdemli / Merkez,2+1,40000
 Mezitli,4+1,38000
 Mezitli,4+1,42000
 Mezitli,3+1,36000
-Mezitli,3+1,40000
-Yenişehir / Merkez,2+1,37500
-Yenişehir / Barbaros,2.5+1,40000
 Yenişehir / Çiftlikköy,2+1,36000
 Yenişehir / Çiftlikköy,3+1,36000
-Yenişehir / Bahçelievler,3+0,40000
 Mezitli,4+1,39000
 Yenişehir / Çiftlikköy,3+1,40000
 Yenişehir / Egriçam,3+1,37000
@@ -4418,11 +4426,11 @@ Mezitli,5+1,38000
 Yenişehir / Hürriyet,2+1,38000
 Mezitli,4+1,37000
 Mezitli,2+1,39000
+Yenişehir / Çiftlikköy,1+1,38000
 Mezitli,4+1,37500
 Mezitli,3+1,42000
 Mezitli,1+1,38500
 Yenişehir / Çiftlikköy,4+1,36000
-Yenişehir / Çiftlikköy,1+1,38000
 Yenişehir / Gazi,3+1,40000
 Mezitli,3+1,36000
 Mezitli / Kuyuluk,4+1,40000
@@ -4442,17 +4450,16 @@ Erdemli / Akdeniz,4+1,39000
 Yenişehir / Çiftlikköy,2+1,40000
 Mezitli,4+1,39000
 Yenişehir / Merkez,3+1,37000
-Yenişehir / Bahçelievler,3+1,36000
 Yenişehir / Bahçelievler,3+1,38000
 Silifke / Taşucu,2+1,40000
 Tarsus / Altaylılar,4+1,40000
 Yenişehir / Barbaros,3+1,36000
 Toroslar,3+1,38000
 Mezitli,3+1,40000
-Yenişehir / Hürriyet,4+1,42500
 Mezitli,3+1,36000
 Yenişehir / Merkez,3+1,40000
 Mezitli,3+1,40000
+Yenişehir / Hürriyet,4+1,42500
 Silifke / Taşucu,3+1,40000
 Yenişehir / Egriçam,3+1,36000
 Tarsus / Beydeğirmeni,4+1,37000
@@ -4463,6 +4470,10 @@ Yenişehir / Egriçam,4+1,40000
 Mezitli,3+1,38000
 Yenişehir / Barbaros,3+1,44500
 Yenişehir / Gazi,3+1,40000
+Mezitli,5+1,45000
+Yenişehir / Hürriyet,4+1,55000
+Yenişehir / Çiftlikköy,3+1,45000
+Yenişehir / Hürriyet,4+1,50000
 Toroslar / Çavuşlu,3+1,45000
 Yenişehir / Barbaros,2+1,45000
 Yenişehir / Merkez,3+1,50000
@@ -4479,11 +4490,9 @@ Yenişehir / Barbaros,3+1,50000
 Mezitli,4+1,45000
 Yenişehir / Egriçam,5+1,55000
 Mezitli,4+1,45000
-Mezitli,4+1,53000
 Silifke / Atakent,3+1,53000
 Mezitli,4+1,55000
 Yenişehir / Barbaros,3+1,55000
-Yenişehir / Hürriyet,4+1,55000
 Yenişehir / Egriçam,3+1,45000
 Yenişehir / Çiftlikköy,2+1,46000
 Yenişehir / Barbaros,5+1,45000
@@ -4521,12 +4530,12 @@ Mezitli,5+1,45000
 Mezitli,4+1,50000
 Mezitli,4+1,45000
 Erdemli / Merkez,2+1,55000
-Yenişehir / Çiftlikköy,2+1,55000
 Mezitli / Kuyuluk,4+1,55000
 Yenişehir / Çiftlikköy,4+1,57500
 Erdemli / Limonlu,2+1,55000
 Yenişehir / Hürriyet,2+1,45000
 Mezitli,3+1,55000
+Yenişehir / Çiftlikköy,2+1,55000
 Yenişehir / Egriçam,4+1,45000
 Mezitli,3+1,45000
 Yenişehir / Hürriyet,4+1,45000
@@ -4553,9 +4562,7 @@ Yenişehir / Çiftlikköy,4+1,52000
 Mezitli,3+1,45000
 Anamur / İskele,3+1,48000
 Yenişehir / Çiftlikköy,4+1,45000
-Yenişehir / Hürriyet,4+1,55000
 Yenişehir / Çiftlikköy,4+1,45000
-Mezitli,5+1,45000
 Yenişehir / Egriçam,5+1,50000
 Yenişehir / Barbaros,3+1,50000
 Erdemli / Arpaçbahşiş,1+1,50000
@@ -4563,7 +4570,6 @@ Yenişehir / Barbaros,3+1,45000
 Yenişehir / Merkez,4+1,55000
 Yenişehir / Merkez,4+1,45000
 Mezitli,5+1,59000
-Mezitli,4+1,45000
 Mezitli,4+1,45000
 Yenişehir / Çiftlikköy,2.5+1,45000
 Akdeniz / Barış,3+1,50000
@@ -4575,8 +4581,8 @@ Yenişehir / Barbaros,3+1,45000
 Mezitli,3+1,49000
 Yenişehir / Hürriyet,3.5+1,58000
 Yenişehir / Merkez,3+1,50000
-Mezitli,5+1,50000
 Yenişehir / Hürriyet,3+1,45000
+Mezitli,5+1,50000
 Yenişehir / Bahçelievler,4+1,45000
 Tarsus / Altaylılar,4+1,45000
 Yenişehir / Barbaros,4+1,45000
@@ -4589,9 +4595,9 @@ Mezitli,5+1,52000
 Yenişehir / Hürriyet,3+1,50000
 Yenişehir / Barbaros,3+1,47000
 Mezitli,4+1,48000
-Yenişehir / Barbaros,4+1,45000
 Yenişehir / Çiftlikköy,2+1,46200
 Erdemli / Çeşmeli,1+1,300000
+Yenişehir / Çiftlikköy,2+1,480000
 Yenişehir / Çiftlikköy,4+1,60000
 Yenişehir / Barbaros,3+1,625000
 Toroslar,2+1,160000
@@ -4620,7 +4626,6 @@ Yenişehir / Çiftlikköy,2+1,360000
 Erdemli / Merkez,2+1,100000
 Mezitli,1+1,240000
 Erdemli / Limonlu,2+1,240000
-Yenişehir / Bahçelievler,2+1,260000
 Mezitli,4+1,425000
 Yenişehir / Bahçelievler,3+1,465000
 Yenişehir / Çiftlikköy,2+1,360000
@@ -4637,6 +4642,7 @@ Toroslar,4+1,240000
 Yenişehir / Gazi,3+1,250000
 Toroslar / Alsancak,3+1,420000
 Yenişehir / Çiftlikköy,3+1,490000
+Erdemli / Beldeler,2+1,100000
 Erdemli / Beldeler,2+1,100000
 Silifke / Köyler,2+1,135000
 Akdeniz / Barış,4+1,400000
@@ -4688,7 +4694,6 @@ Erdemli / Beldeler,2+1,110000
 Yenişehir / Bahçelievler,1+1,200000
 Yenişehir / Hürriyet,4+1,91500
 Yenişehir / Barbaros,5+1,650000
-Toroslar,4+1,180000
 Tarsus / Eskiömerli,2+1,170000
 Çamlıyayla,3+1,250000
 Yenişehir / Gazi,4+1,65000
@@ -4696,7 +4701,6 @@ Erdemli / Çeşmeli,3+1,180000
 Mezitli,4+1,60000
 Yenişehir / Barbaros,1+1,280000
 Silifke / Köyler,4+1,1000000
-Yenişehir / Çiftlikköy,3+1,650000
 Yenişehir / Egriçam,4+1,650000
 Yenişehir / Bahçelievler,4+1,625000
 Mezitli,4+1,360000
@@ -4718,6 +4722,7 @@ Yenişehir / Barbaros,3+1,650000
 Silifke / Atakent,2+1,145000
 Yenişehir / Hürriyet,4+1,650000
 Yenişehir / Barbaros,5+1,700000
+Yenişehir / Çiftlikköy,3+1,650000
 Yenişehir / Çiftlikköy,3+1,550000
 Erdemli / Limonlu,2+1,90000
 Erdemli / Merkez,2+1,150000
@@ -4744,7 +4749,6 @@ Erdemli / Beldeler,3+1,235000
 Toroslar,2+1,130000
 Mezitli,5+2,600000
 Toroslar,3+1,215000
-Yenişehir / Çiftlikköy,2+1,500000
 Yenişehir / Barbaros,4+1,750000
 Mezitli,5+1,65000
 Yenişehir / Egriçam,2+1,420000
@@ -4762,7 +4766,7 @@ Mezitli,3+1,400000
 Yenişehir / Çiftlikköy,3+1,70000
 Yenişehir / Barbaros,4+1,250000
 Yenişehir / Hürriyet,4+1,110000
-Yenişehir / Çiftlikköy,3+1,360000
+Yenişehir / Çiftlikköy,2+1,500000
 Yenişehir / Bahçelievler,4+1,650000
 Mezitli / Kuyuluk,4+1,60000
 Erdemli / Çeşmeli,2+1,65000
@@ -4779,6 +4783,7 @@ Silifke / Köyler,3+1,90000
 Erdemli / Çeşmeli,2+1,120000
 Erdemli / Merkez,2+1,300000
 Mezitli,4+1,590000
+Yenişehir / Çiftlikköy,3+1,360000
 Yenişehir / Barbaros,5+1,80000
 Mezitli / Kuyuluk,5+1,60000
 Yenişehir / Hürriyet,2+1,390000
@@ -4789,7 +4794,7 @@ Mezitli,4+1,330000
 Mezitli,4+1,520000
 Toroslar,4+1,65000
 Yenişehir / Hürriyet,5+1,65000
-Mezitli,5+1,740000
+Mezitli,5+1,700000
 Yenişehir / Bahçelievler,3+1,500000
 Yenişehir / Egriçam,3+1,330000
 Yenişehir / Cumhuriyet,3+1,550000
@@ -4835,9 +4840,8 @@ Mezitli,2+1,240000
 Yenişehir / Egriçam,5+1,75000
 Yenişehir / Bahçelievler,2+1,250000
 Mezitli,4+1,750000
-Yenişehir / Egriçam,2+1,570000
+Yenişehir / Egriçam,2+1,560000
 Yenişehir / Bahçelievler,2+1,240000
-Mezitli,3.5+1,60000
 Erdemli / Merkez,2+1,200000
 Erdemli / Çeşmeli,3+1,160000
 Yenişehir / Çiftlikköy,1+1,170000
@@ -4858,12 +4862,12 @@ Toroslar / Ayvagediği,1+1,120000
 Yenişehir / Barbaros,5+1,60000
 Erdemli / Limonlu,1+1,100000
 Tarsus / Altaylılar,3+1,210000
-Yenişehir / Çiftlikköy,2+1,420000
 Toroslar,3+1,205000
 Mezitli,5+1,60000
 Erdemli / Çeşmeli,2+1,340000
 Yenişehir / Hürriyet,3+1,420000
 Çamlıyayla,2+1,300000
+Yenişehir / Çiftlikköy,2+1,420000
 Yenişehir / Barbaros,4+1,125000
 Yenişehir / Çiftlikköy,5+1,950000
 Yenişehir / Hürriyet,1+1,340000
@@ -4892,13 +4896,12 @@ Toroslar / Alsancak,4+1,500000
 Mezitli,3+1,775000
 Toroslar / Köyler,2+1,199000
 Toroslar,2+1,65000
-Yenişehir / Çiftlikköy,2+1,480000
-Yenişehir / Hürriyet,3+1,70000
 Yenişehir / Hürriyet,3.5+1,100000
 Yenişehir / Çiftlikköy,2+1,280000
 Yenişehir / Bahçelievler,4+1,600000
 Toroslar,2+1,210000
 Mezitli,4+1,360000
+Yenişehir / Hürriyet,3+1,70000
 Erdemli / Merkez,4+1,90000
 Toroslar / Beldeler,2+1,110000
 Toroslar,6+1,135000
@@ -4918,7 +4921,6 @@ Toroslar / Köyler,3+1,650000
 Mezitli / Kuyuluk,5+1,755000
 Erdemli / Çeşmeli,2+1,300000
 Tarsus / Yenice,2.5+1,179000
-Toroslar / Ayvagediği,3+1,170000
 Erdemli / Merkez,2+1,330000
 Mezitli / Kuyuluk,4+1,65000
 Toroslar / Ayvagediği,1+1,100000
@@ -4932,17 +4934,17 @@ Yenişehir / Çiftlikköy,4+1,650000
 Silifke / Beldeler,2.5+1,75000
 Erdemli / Merkez,3+1,270000
 Mezitli,4+1,420000
-Yenişehir / Hürriyet,4+1,1250000
 Mezitli,4+1,690000
 Tarsus / Gülek,2+1,170000
 Silifke / Atakent,2+1,180000
 Erdemli / Çeşmeli,1+1,255000
 Erdemli / Çeşmeli,2+1,125000
 Mezitli,6+1,950000
-Yenişehir / Hürriyet,4+1,1150000
+Yenişehir / Hürriyet,4+1,1250000
 Yenişehir / Çiftlikköy,2.5+1,420000
 Yenişehir / Barbaros,5+1,65000
 Çamlıyayla,2+1,200000
+Yenişehir / Hürriyet,4+1,1150000
 Erdemli / Kargıpınarı,4+1,1500000
 Yenişehir / Çiftlikköy,2+1,430000
 Tarsus / Caminur,3+1,180000
