@@ -88,3 +88,4 @@ ShaderCache/
 downloaded_files/
 checkpoints/
 test_*.py
+/run_all.bat
