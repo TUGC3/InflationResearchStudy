@@ -18,8 +18,14 @@ _THIS_DIR = Path(__file__).resolve().parent
 _CODES_DIR = _THIS_DIR.parent.parent
 _PROJECT_ROOT = _CODES_DIR.parent.parent
 
-sys.path.insert(0, str(_THIS_DIR))
-from tuik_config import karaca_category_to_tuik, normalised_weights
+_tuik_config_path = _THIS_DIR / "tuik_config.py"
+_tuik_spec = importlib.util.spec_from_file_location("karaca_tuik_config", _tuik_config_path)
+if _tuik_spec is None or _tuik_spec.loader is None:
+    raise ImportError(f"Could not load local TUIK config from {_tuik_config_path}")
+_tuik_config = importlib.util.module_from_spec(_tuik_spec)
+_tuik_spec.loader.exec_module(_tuik_config)
+karaca_category_to_tuik = _tuik_config.karaca_category_to_tuik
+normalised_weights = _tuik_config.normalised_weights
 
 try:
     _SCRAPER_DIR = (
