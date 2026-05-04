@@ -93,6 +93,10 @@ def count_items_from_log(lines):
         if m: return int(m.group(1))
         m = re.search(r"\[DONE\]\s*(\d+)", clean)
         if m: return int(m.group(1))
+        m = re.search(r"Snapshot updated:\s*(\d+)\s+unique\b", clean)
+        if m: return int(m.group(1))
+        m = re.search(r"Final unique .* count:\s*(\d+)", clean)
+        if m: return int(m.group(1))
         # EEB specific: "(total so far: 301)"
         m = re.search(r"total so far:\s*(\d+)", clean)
         if m: return int(m.group(1))
@@ -110,7 +114,9 @@ def get_historical_stats(name, codes_dir):
         "Nalburadam": os.path.join(datas_root, "ConstructionSuppliesMarkets", "Nalburadam", "nalburadam_*.csv"),
         "Bershka":    os.path.join(datas_root, "ClothingStores", "Bershka", "ProductData", "bershka_*.csv"),
         "Hapeloglu":  os.path.join(datas_root, "Markets", "Hapeloglu", "hapeloglu_*.csv"),
-        "EEB":        os.path.join(datas_root, "HousesRent", "ErzurumErzincanBayburt", "*", "*_*.csv")
+        "EEB":        os.path.join(datas_root, "HousesRent", "ErzurumErzincanBayburt", "*", "*_*.csv"),
+        "Karaca":     os.path.join(datas_root, "HomeGoods", "Karaca", "karaca_*.csv"),
+        "GoldenRose": os.path.join(datas_root, "Cosmetics", "GoldenRose", "goldenrose_*.csv"),
     }
     
     if name not in patterns: return 0
@@ -170,13 +176,13 @@ def _build_parser():
         "--only",
         type=str,
         default="",
-        help="Comma-separated scraper names to run: Nalburadam,Bershka,Hapeloglu,EEB",
+        help="Comma-separated scraper names to run: Nalburadam,Bershka,Hapeloglu,EEB,Karaca,GoldenRose",
     )
     parser.add_argument(
         "--skip",
         type=str,
         default="",
-        help="Comma-separated scraper names to skip: Nalburadam,Bershka,Hapeloglu,EEB",
+        help="Comma-separated scraper names to skip: Nalburadam,Bershka,Hapeloglu,EEB,Karaca,GoldenRose",
     )
     parser.add_argument(
         "--skip-inflation",
@@ -207,7 +213,9 @@ def main():
         ("Nalburadam", os.path.join(codes_dir, "ConstructionSuppliesMarkets", "Nalburadam")),
         ("Bershka",    os.path.join(codes_dir, "ClothingStores", "Bershka")),
         ("Hapeloglu",  os.path.join(codes_dir, "Markets", "Hapeloglu")),
-        ("EEB",    os.path.join(codes_dir, "HousesRent", "ErzurumErzincanBayburt"))
+        ("EEB",        os.path.join(codes_dir, "HousesRent", "ErzurumErzincanBayburt")),
+        ("Karaca",     os.path.join(codes_dir, "HomeGoods", "Karaca")),
+        ("GoldenRose", os.path.join(codes_dir, "Cosmetics", "GoldenRose")),
     ]
 
     allowed_names = {name.lower() for name, _ in my_scrapers}
@@ -259,7 +267,7 @@ def main():
             for line in BANNER:
                 print(f"   {WHITE}{BOLD}{line}{RESET}")
 
-            print(f"\n{YELLOW}Starting {len(my_scrapers)} core scrapers...{RESET}\n")
+            print(f"\n{YELLOW}Starting {len(my_scrapers)} scrapers...{RESET}\n")
 
             print(f"{WHITE}╔{'═' * (TABLE_WIDTH - 2)}╗{RESET}")
             print(format_row(f"{BOLD}ACTIVE ENGINE STATUS{RESET}", f"Elapsed: {YELLOW}{str(elapsed).split('.')[0]}{RESET}"))
