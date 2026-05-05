@@ -84,8 +84,7 @@ def run(args):
                     checkpoint["scraped_urls"] = list(scraped_urls)
                     _save_checkpoint(checkpoint)
 
-                    # Cool down before moving to next page (Reduced for 6-7s total budget)
-                    time.sleep(random.uniform(0.5, 1.5))
+                    time.sleep(random.uniform(0.1, 0.4))
 
                 checkpoint["completed_districts"].append(slug)
                 _save_checkpoint(checkpoint)

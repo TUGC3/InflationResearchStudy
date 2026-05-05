@@ -39,8 +39,8 @@ IZMIR_SLUG_TO_DISTRICT = {
 }
 
 
-def human_like_scroll(driver: WebDriver, target_duration: float = 4.0):
-    """Simulates a natural scroll while collecting data on a strict time budget."""
+# Change target_duration from 4.0 to 1.5 or 2.0
+def human_like_scroll(driver: WebDriver, target_duration: float = 2.0):
     start_time = time.time()
     logger.info(f"      🖱️  Simulating human scroll behavior (~{int(target_duration)}s)...")
 
@@ -55,44 +55,47 @@ def human_like_scroll(driver: WebDriver, target_duration: float = 4.0):
             new_pos = max(0, total_height - random.randint(100, 300))
 
         driver.execute_script(f"window.scrollTo({{top: {new_pos}, behavior: 'smooth'}});")
-        time.sleep(random.uniform(0.5, 0.9))
 
-        # 15% chance of a small "hesitation" scroll back up
+        # REDUCED: Was 0.5 to 0.9
+        time.sleep(random.uniform(0.1, 0.3))
+
         if random.random() < 0.15:
             current_pos = driver.execute_script("return window.pageYOffset;")
             new_pos = max(0, current_pos - random.randint(50, 150))
             driver.execute_script(f"window.scrollTo({{top: {new_pos}, behavior: 'smooth'}});")
-            time.sleep(random.uniform(0.4, 0.7))
+
+            # REDUCED: Was 0.4 to 0.7
+            time.sleep(random.uniform(0.1, 0.3))
 
     driver.execute_script(f"window.scrollTo({{top: {random.randint(100, 400)}, behavior: 'smooth'}});")
-    time.sleep(0.5)
+    time.sleep(0.2)  # REDUCED: Was 0.5
 
 
 def _wait_for_listings(driver: WebDriver) -> BeautifulSoup:
     """Manual intervention logic for CAPTCHAs."""
-    load_delay = max(config.PAGE_LOAD_FLOOR, random.normalvariate(config.PAGE_LOAD_DELAY, config.PAGE_LOAD_STDEV))
-    time.sleep(load_delay)
+    # REMOVED the hard load_delay time.sleep() here to check instantly.
 
-    while True:
+    for _ in range(15):  # Increased attempts because we poll faster
         try:
             btns = driver.find_elements("xpath",
                                         "//*[contains(translate(., 'ABCÇDEFGHIİJKLMNOÖPRSŞTUÜVYZ', 'abcçdefghıijklmnoöprsştuüvyz'), 'devam et')]")
             if btns:
                 logger.info("   🔵 Found 'devam et' button! Clicking...")
                 driver.execute_script("arguments[0].click();", btns[0])
-                time.sleep(3)
+                time.sleep(1)  # Reduced from 3s
         except:
             pass
 
-        for _ in range(6):
-            soup = BeautifulSoup(driver.page_source, "lxml")
-            if soup.select(
-                    "#searchResultsTable tbody tr.searchResultsItem") or "ilan bulunamadı" in driver.page_source.lower():
-                return soup
-            time.sleep(2)
+        soup = BeautifulSoup(driver.page_source, "lxml")
+        if soup.select(
+                "#searchResultsTable tbody tr.searchResultsItem") or "ilan bulunamadı" in driver.page_source.lower():
+            return soup
 
-        print("\n" + "=" * 60 + "\n🛑 CAPTCHA/BOT CHECK! Solve it manually.\n" + "=" * 60)
-        input("   ▶ Press ENTER after listings are visible... ")
+        # FASTER POLLING: Check every 0.5s instead of every 2.0s
+        time.sleep(0.5)
+
+    print("\n" + "=" * 60 + "\n🛑 CAPTCHA/BOT CHECK! Solve it manually.\n" + "=" * 60)
+    input("   ▶ Press ENTER after listings are visible... ")
 
 
 def warmup_session(driver: WebDriver) -> None:
