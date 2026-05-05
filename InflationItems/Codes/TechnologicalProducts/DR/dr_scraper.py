@@ -55,6 +55,11 @@ TECH_CATEGORY_ROOTS = {
     "Outdoor": "Elektronik",
 }
 TECH_CATEGORY_ORDER = list(TECH_CATEGORY_ROOTS)
+EXCLUDED_SUBCATEGORIES = {
+    "Bavul & Valiz",
+    "Cricut Sarf Malzemeleri",
+    "Giyotinler",
+}
 
 DEFAULT_HEADERS = {
     "User-Agent": (
@@ -352,6 +357,8 @@ def _parse_card(card: Any, category: Category) -> dict[str, Any] | None:
     top_category = _normalise_text(str(gtm.get("item_category", category.root_section)))
     mid_category = _normalise_text(str(gtm.get("item_category2", category.name)))
     subcategory = _normalise_text(str(gtm.get("item_category3", "")))
+    if subcategory in EXCLUDED_SUBCATEGORIES:
+        return None
 
     return {
         "Product Name": product_name,

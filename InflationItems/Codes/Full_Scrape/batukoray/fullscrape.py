@@ -61,9 +61,14 @@ def parse_advanced_progress(name, lines):
     sub_page_pct = 0.0
     for line in reversed(lines):
         line_clean = strip_ansi(line)
-        page_match = re.search(r"Page (\d+):", line_clean)
+        page_match = re.search(r"[Pp]age\s+(\d+)(?:/(\d+))?", line_clean)
         if page_match:
-            sub_page_pct = min(0.95, int(page_match.group(1)) / 20.0)
+            page_now = int(page_match.group(1))
+            page_total = page_match.group(2)
+            if page_total and page_total.isdigit() and int(page_total) > 0:
+                sub_page_pct = min(0.99, page_now / int(page_total))
+            else:
+                sub_page_pct = min(0.95, page_now / 20.0)
             break
 
     # 4. Scraper-specific parsing
@@ -71,7 +76,23 @@ def parse_advanced_progress(name, lines):
         for line in reversed(lines):
             for i, cat in enumerate(HAPELOGLU_CATS):
                 if cat.lower() in line.lower(): return i + 1, len(HAPELOGLU_CATS), sub_page_pct
-                    
+
+    # 5. Generic discovered-category parsers used by Karaca / GoldenRose / DR
+    discovered_total = None
+    completed_categories = 0
+    for line in lines:
+        line_clean = strip_ansi(line)
+        match = re.search(r"Discovered\s+(\d+)\s+.*categories to scrape", line_clean, re.IGNORECASE)
+        if match:
+            discovered_total = int(match.group(1))
+        if re.search(r"Finished .+ with \d+ rows before dedup\.", line_clean):
+            completed_categories += 1
+
+    if discovered_total:
+        if completed_categories >= discovered_total:
+            return discovered_total, discovered_total, 0.0
+        return min(completed_categories + 1, discovered_total), discovered_total, sub_page_pct
+
     return None
 
 def parse_tqdm_eta(lines):
@@ -97,6 +118,8 @@ def count_items_from_log(lines):
         if m: return int(m.group(1))
         m = re.search(r"Final unique .* count:\s*(\d+)", clean)
         if m: return int(m.group(1))
+        m = re.search(r"Final unique products:\s*(\d+)", clean)
+        if m: return int(m.group(1))
         # EEB specific: "(total so far: 301)"
         m = re.search(r"total so far:\s*(\d+)", clean)
         if m: return int(m.group(1))
@@ -117,6 +140,7 @@ def get_historical_stats(name, codes_dir):
         "EEB":        os.path.join(datas_root, "HousesRent", "ErzurumErzincanBayburt", "*", "*_*.csv"),
         "Karaca":     os.path.join(datas_root, "HomeGoods", "Karaca", "karaca_*.csv"),
         "GoldenRose": os.path.join(datas_root, "Cosmetics", "GoldenRose", "goldenrose_*.csv"),
+        "DR":         os.path.join(datas_root, "TechnologicalProducts", "DR", "dr_*.csv"),
     }
     
     if name not in patterns: return 0
@@ -176,13 +200,13 @@ def _build_parser():
         "--only",
         type=str,
         default="",
-        help="Comma-separated scraper names to run: Nalburadam,Bershka,Hapeloglu,EEB,Karaca,GoldenRose",
+        help="Comma-separated scraper names to run: Nalburadam,Bershka,Hapeloglu,EEB,Karaca,GoldenRose,DR",
     )
     parser.add_argument(
         "--skip",
         type=str,
         default="",
-        help="Comma-separated scraper names to skip: Nalburadam,Bershka,Hapeloglu,EEB,Karaca,GoldenRose",
+        help="Comma-separated scraper names to skip: Nalburadam,Bershka,Hapeloglu,EEB,Karaca,GoldenRose,DR",
     )
     parser.add_argument(
         "--skip-inflation",
@@ -216,6 +240,7 @@ def main():
         ("EEB",        os.path.join(codes_dir, "HousesRent", "ErzurumErzincanBayburt")),
         ("Karaca",     os.path.join(codes_dir, "HomeGoods", "Karaca")),
         ("GoldenRose", os.path.join(codes_dir, "Cosmetics", "GoldenRose")),
+        ("DR",         os.path.join(codes_dir, "TechnologicalProducts", "DR")),
     ]
 
     allowed_names = {name.lower() for name, _ in my_scrapers}

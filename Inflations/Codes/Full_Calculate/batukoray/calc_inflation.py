@@ -2,8 +2,8 @@
 run_full_inflation.py — Run Batu's inflation calculators, auto-filling gaps.
 
 For each scraper (Bershka, Hapeloglu, Nalburadam, ErzurumErzincanBayburt,
-Karaca, GoldenRose), finds all dates that have scraped data but no inflation
-output yet, and runs the calculator for each missing date.
+Karaca, GoldenRose, DR), finds all dates that have scraped data but no
+inflation output yet, and runs the calculator for each missing date.
 
 Usage:
     python run_full_inflation.py            # Auto-fill all gaps
@@ -81,6 +81,9 @@ def _get_scraper_dates():
         "GoldenRose": _extract_dates_from_files(
             data_root / "Cosmetics" / "GoldenRose", "goldenrose_*.csv"
         ),
+        "DR": _extract_dates_from_files(
+            data_root / "TechnologicalProducts" / "DR", "dr_*.csv"
+        ),
     }
 
 
@@ -106,6 +109,9 @@ def _get_inflation_dates():
         "GoldenRose": _extract_dates_from_files(
             inflation_root / "Cosmetics" / "GoldenRose", "goldenrose_inflation_*.csv"
         ),
+        "DR": _extract_dates_from_files(
+            inflation_root / "TechnologicalProducts" / "DR", "dr_inflation_*.csv"
+        ),
     }
 
 
@@ -128,6 +134,11 @@ def _run_calculator(name, date_str):
         calculate_inflation = _load_calculator_from_path(
             "goldenrose_inflation_module",
             _CODES_DIR / "Cosmetics" / "GoldenRose" / "inflation.py",
+        )
+    elif name == "DR":
+        calculate_inflation = _load_calculator_from_path(
+            "dr_inflation_module",
+            _CODES_DIR / "TechnologicalProducts" / "DR" / "inflation.py",
         )
     else:
         return False
@@ -155,7 +166,7 @@ def main():
     total_calculated = 0
     total_skipped = 0
 
-    for name in ["Bershka", "Hapeloglu", "Nalburadam", "ErzurumErzincanBayburt", "Karaca", "GoldenRose"]:
+    for name in ["Bershka", "Hapeloglu", "Nalburadam", "ErzurumErzincanBayburt", "Karaca", "GoldenRose", "DR"]:
         available = scraper_dates[name]
         existing = set(inflation_dates[name])
 
