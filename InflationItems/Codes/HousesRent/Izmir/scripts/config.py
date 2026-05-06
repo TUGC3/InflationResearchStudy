@@ -24,7 +24,7 @@ MIN_BRACKET_WIDTH = 50
 PAGE_SIZE = 50
 
 # ── Page Load Timing Settings ────────────────────────────────────────────────
-PAGE_LOAD_DELAY = 1.5  # Reduced to 1.5s average
+PAGE_LOAD_DELAY = 1.5
 PAGE_LOAD_STDEV = 0.3
 PAGE_LOAD_FLOOR = 1.0
 
