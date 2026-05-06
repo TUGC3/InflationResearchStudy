@@ -118,7 +118,7 @@ class DataExtractor:
 class Storage:
     @staticmethod
     def data_dir_for_market():
-        return os.path.join("InflationItems", "Datas", "ConstructionSuppliesMarkets", "FiltaşYapı")
+        return os.path.join("InflationItems", "Datas", "ConstructionSuppliesMarkets", "FiltasYapi")
 
     @staticmethod
     def save(rows: list[dict]) -> str:
