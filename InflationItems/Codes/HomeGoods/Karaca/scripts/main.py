@@ -6,6 +6,7 @@ import argparse
 import csv
 import json
 import logging
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
 import requests
 
@@ -30,6 +31,27 @@ def _make_session() -> requests.Session:
     session = requests.Session()
     session.headers.update(config.DEFAULT_HEADERS)
     return session
+
+
+def _scrape_category_worker(
+    category: dict,
+    delay: float,
+    page_limit: int,
+) -> tuple[dict, object]:
+    session = _make_session()
+    logger.info(
+        "Scraping category: %s [%s]",
+        category["name"],
+        category["main_category"],
+    )
+    result = fetch_products_for_category(
+        category,
+        session=session,
+        delay=delay,
+        page_limit=page_limit,
+    )
+    logger.info("Finished %s with %d rows before dedup.", category["name"], len(result.products))
+    return category, result
 
 
 def _load_checkpoint() -> dict:
@@ -106,6 +128,32 @@ def _write_snapshot(rows: dict[str, dict]) -> None:
             writer.writerow({field: row.get(field, "") for field in config.CSV_FIELDNAMES})
 
 
+def _persist_category_result(
+    category: dict,
+    result,
+    product_rows: dict[str, dict],
+    checkpoint: dict,
+) -> None:
+    _merge_products(product_rows, result.products)
+    _write_snapshot(product_rows)
+
+    done = checkpoint.setdefault("done", [])
+    if result.complete:
+        if category["id"] not in done:
+            done.append(category["id"])
+        _save_checkpoint(checkpoint)
+    else:
+        logger.warning(
+            "Category '%s' was not checkpointed as complete because the scrape stopped early.",
+            category["name"],
+        )
+
+    logger.info(
+        "Snapshot updated: %d unique Karaca products saved.",
+        len(product_rows),
+    )
+
+
 def _parse_category_filter(raw_values: list[str]) -> set[str]:
     values: set[str] = set()
     for raw in raw_values:
@@ -145,6 +193,12 @@ def _build_parser() -> argparse.ArgumentParser:
         type=float,
         default=config.REQUEST_DELAY,
         help="Delay in seconds between paginated requests.",
+    )
+    parser.add_argument(
+        "--workers",
+        type=int,
+        default=config.CATEGORY_WORKERS,
+        help="Number of Karaca categories to scrape in parallel.",
     )
     parser.add_argument(
         "--include-promotions",
@@ -191,46 +245,69 @@ def main() -> None:
     if not args.resume:
         _save_checkpoint(checkpoint)
 
-    logger.info("Karaca scrape starting with %d categories.", len(categories))
-    logger.info("CSV output: %s", config.CSV_OUTPUT_FILE)
-
+    pending_categories = []
     for category in categories:
         if args.resume and category["id"] in completed:
             logger.info("Skipping already completed category: %s", category["name"])
             continue
+        pending_categories.append(category)
 
-        logger.info(
-            "Scraping category: %s [%s]",
-            category["name"],
-            category["main_category"],
-        )
-        result = fetch_products_for_category(
-            category,
-            session=session,
-            delay=args.delay,
-            page_limit=args.limit,
-        )
-        products = result.products
-        logger.info("Finished %s with %d rows before dedup.", category["name"], len(products))
+    logger.info(
+        "Karaca scrape starting with %d categories (%d pending) using %d worker(s).",
+        len(categories),
+        len(pending_categories),
+        max(1, args.workers),
+    )
+    logger.info("CSV output: %s", config.CSV_OUTPUT_FILE)
 
-        _merge_products(product_rows, products)
-        _write_snapshot(product_rows)
+    if not pending_categories:
+        logger.info("No pending Karaca categories remain for today.")
+        logger.info("Karaca scrape complete. Final unique product count: %d", len(product_rows))
+        return
 
-        if result.complete:
-            checkpoint.setdefault("done", []).append(category["id"])
-            _save_checkpoint(checkpoint)
-        else:
-            logger.warning(
-                "Category '%s' was not checkpointed as complete because the scrape stopped early.",
-                category["name"],
-            )
+    failures: list[str] = []
+    worker_count = max(1, args.workers)
 
-        logger.info(
-            "Snapshot updated: %d unique Karaca products saved.",
-            len(product_rows),
-        )
+    if worker_count == 1 or len(pending_categories) == 1:
+        for category in pending_categories:
+            try:
+                category_result, result = _scrape_category_worker(
+                    category,
+                    args.delay,
+                    args.limit,
+                )
+            except Exception as exc:
+                logger.error("Category '%s' failed: %s", category["name"], exc)
+                failures.append(category["name"])
+                continue
+            _persist_category_result(category_result, result, product_rows, checkpoint)
+    else:
+        with ThreadPoolExecutor(max_workers=worker_count) as executor:
+            futures = {
+                executor.submit(
+                    _scrape_category_worker,
+                    category,
+                    args.delay,
+                    args.limit,
+                ): category
+                for category in pending_categories
+            }
+
+            for future in as_completed(futures):
+                category = futures[future]
+                try:
+                    category_result, result = future.result()
+                except Exception as exc:
+                    logger.error("Category '%s' failed: %s", category["name"], exc)
+                    failures.append(category["name"])
+                    continue
+                _persist_category_result(category_result, result, product_rows, checkpoint)
 
     logger.info("Karaca scrape complete. Final unique product count: %d", len(product_rows))
+    if failures:
+        raise SystemExit(
+            "Karaca categories failed: " + ", ".join(sorted(failures))
+        )
 
 
 if __name__ == "__main__":

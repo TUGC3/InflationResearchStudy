@@ -17,6 +17,13 @@ uv run python -m scripts.run_scraper
 uv run python -m scripts.run_scraper --category yemek-takimlari
 uv run python -m scripts.run_scraper --resume
 uv run python -m scripts.run_scraper --include-promotions
+uv run python -m scripts.run_scraper --workers 1
 ```
 
 The CSV output always writes `Product Name` as column 1 and `Product Cost` as column 2.
+
+## Performance
+
+Karaca now scrapes categories in parallel by default with a conservative
+worker pool.  Use `--workers 1` to return to the original sequential mode if
+you want the gentlest possible request pattern for debugging.
