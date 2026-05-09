@@ -1,0 +1,452 @@
+Location,Rooms,Monthly Inflation(%)
+Aksu,1+1,-0.7503700177823704
+Aksu,1.5+1,18.91891891891892
+Aksu,2+0,0.0
+Aksu,2+1,-0.08870666264696911
+Aksu,3+1,12.928059239285627
+Aksu,4+1,3.1537450722733245
+Aksu,4+2,0.0
+Aksu,5+1,12.202380952380956
+Aksu,6+1,0.0
+Aksu,7+1,0.0
+Aksu,Stüdyo (1+0),60.0
+Aksu/Köyler,1+1,-1.524411417459552
+Aksu/Köyler,2+1,-8.625675845592857
+Aksu/Köyler,3+1,-0.36820446177171634
+Aksu/Köyler,3.5+1,0.0
+Aksu/Köyler,4+1,-24.652777777777775
+Aksu/Köyler,4+2,0.0
+Aksu/Köyler,6+2,-25.806451612903224
+Aksu/Pınarlı,1+1,-42.5
+Aksu/Pınarlı,2+1,-9.090909090909092
+Aksu/Pınarlı,3+1,0.0
+Aksu/Pınarlı,6+1,0.0
+Aksu/Pınarlı,Stüdyo (1+0),0.0
+Aksu/Çalkaya,3+1,0.0
+Alanya,1+1,7.323001287514801
+Alanya,1.5+1,0.0
+Alanya,2+0,0.8333333333333334
+Alanya,2+1,7.624451776159848
+Alanya,2+2,11.11111111111111
+Alanya,2.5+1,-20.792079207920793
+Alanya,3+1,1.2877170229972743
+Alanya,3+2,0.0
+Alanya,3.5+1,-6.666666666666667
+Alanya,4+1,-12.637732222934012
+Alanya,4+2,14.285714285714285
+Alanya,4.5+2,0.0
+Alanya,5+1,59.86884176182706
+Alanya,6+1,69.6969696969697
+Alanya,Stüdyo (1+0),2.7027027027027026
+Alanya/Beldeler,1+1,5.048560470218462
+Alanya/Beldeler,2+1,10.398977693639914
+Alanya/Beldeler,2.5+1,-16.666666666666664
+Alanya/Beldeler,3+1,4.243845218139045
+Alanya/Beldeler,3+2,0.0
+Alanya/Beldeler,3.5+1,0.0
+Alanya/Beldeler,4+1,-12.166819852941178
+Alanya/Beldeler,4+2,0.0
+Alanya/Beldeler,4.5+1,5.714285714285714
+Alanya/Beldeler,5+1,-28.000000000000004
+Alanya/Beldeler,6+2,0.0
+Alanya/Beldeler,Stüdyo (1+0),12.71676300578035
+Alanya/Demirtaş,1+1,6.666666666666672
+Alanya/Demirtaş,3+1,0.0
+Alanya/Köyler,1+1,0.0
+Alanya/Köyler,2+1,15.294117647058824
+Alanya/Köyler,3+1,74.12935323383084
+Alanya/Köyler,4+1,0.0
+Alanya/Köyler,Stüdyo (1+0),0.0
+Alanya/İncekum (Yeşilköy),1+1,8.333333333333332
+Alanya/İncekum (Yeşilköy),2+1,-16.666666666666664
+Alanya/İncekum (Yeşilköy),3+1,-12.215909090909086
+Alanya/İncekum (Yeşilköy),4+1,10.317460317460316
+Demre/Kale(Demre),1+1,1.4836795252225563
+Demre/Kale(Demre),2+0,0.0
+Demre/Kale(Demre),2+1,17.060548559599802
+Demre/Kale(Demre),3+0,0.0
+Demre/Kale(Demre),3+1,2.6592140921409144
+Demre/Kale(Demre),5+1,0.0
+Demre/Kale(Demre),5+2,0.0
+Demre/Kale(Demre),6+3,0.0
+Demre/Kale(Demre),Stüdyo (1+0),0.0
+Demre/Köyler,1+1,0.0
+Demre/Köyler,2+1,28.57142857142857
+Döşemealtı/Düzlerçamı,1+1,0.0
+Döşemealtı/Düzlerçamı,3+1,0.0
+Döşemealtı/Düzlerçamı,4+1,0.0
+Döşemealtı/Düzlerçamı,5+1,-7.187500000000006
+Döşemealtı/Düzlerçamı,6+1,0.0
+Döşemealtı/Köyler,2+1,-31.666666666666664
+Döşemealtı/Köyler,3+1,-5.263157894736842
+Döşemealtı/Merkez,1+1,1.6197084668665325
+Döşemealtı/Merkez,2+1,0.38209606986899564
+Döşemealtı/Merkez,3+1,3.8961038961039076
+Döşemealtı/Merkez,4+1,8.923854119692264
+Döşemealtı/Merkez,5+1,9.686609686609682
+Döşemealtı/Merkez,5+2,0.0
+Döşemealtı/Merkez,6+1,26.31578947368421
+Döşemealtı/Merkez,6+3,0.0
+Döşemealtı/Merkez,7+1,-16.666666666666664
+Döşemealtı/Merkez,Stüdyo (1+0),18.181818181818183
+Döşemealtı/Yeniköy,1+1,-1.1351580491046254
+Döşemealtı/Yeniköy,2+0,-36.0
+Döşemealtı/Yeniköy,2+1,-2.9349503449172722
+Döşemealtı/Yeniköy,2.5+1,0.0
+Döşemealtı/Yeniköy,3+1,0.005886495965163226
+Döşemealtı/Yeniköy,4+1,46.95652173913044
+Döşemealtı/Yeniköy,5+1,12.068965517241379
+Döşemealtı/Yeniköy,Stüdyo (1+0),0.0
+Döşemealtı/Yeşilbayır,1+1,14.682539682539675
+Döşemealtı/Yeşilbayır,2+1,-17.57575757575757
+Döşemealtı/Yeşilbayır,2.5+1,0.0
+Döşemealtı/Yeşilbayır,3+1,-3.556851311953351
+Döşemealtı/Yeşilbayır,4+1,4.291497975708502
+Döşemealtı/Yeşilbayır,5+1,-1.1627906976744187
+Döşemealtı/Yeşilbayır,5.5+1,0.0
+Döşemealtı/Yeşilbayır,6+1,0.0
+Döşemealtı/Yeşilbayır,7+1,180.0
+Döşemealtı/Yeşilbayır,8+2,0.0
+Döşemealtı/Çığlık,2+1,0.0
+Elmalı,1+1,0.0
+Elmalı,2+1,6.8181818181818175
+Elmalı,3+1,1.652892561983465
+Finike,1+1,0.7198387561186184
+Finike,1.5+1,0.0
+Finike,2+1,-2.268325007646036
+Finike,3+1,-5.72390572390572
+Finike,3.5+1,-7.6923076923076925
+Finike,4+1,0.0
+Finike/Beldeler,1+1,1.3026613563611926
+Finike/Beldeler,2+1,-3.1110711718188377
+Finike/Beldeler,3+1,6.743666169895672
+Finike/Beldeler,4+1,-3.4482758620689653
+Gazipaşa,1+1,12.118489476980047
+Gazipaşa,2+1,4.50794780274373
+Gazipaşa,3+1,5.383345128568064
+Gazipaşa,4+1,34.61538461538461
+Gazipaşa/Köyler,1+1,-5.0
+Gazipaşa/Köyler,2+1,-82.22222222222221
+Gazipaşa/Köyler,3+1,26.31578947368421
+Kaş,1+1,-10.634920634920634
+Kaş,2+1,11.783644558918223
+Kaş,3+1,29.276315789473685
+Kaş,4+1,0.0
+Kaş,5+1,0.0
+Kaş,Stüdyo (1+0),32.35294117647058
+Kaş/Kalkan,1+1,-26.771825501236652
+Kaş/Kalkan,2+1,-15.541929014263411
+Kaş/Kalkan,2.5+1,0.0
+Kaş/Kalkan,3+1,-15.35467770146325
+Kaş/Kalkan,3.5+1,0.0
+Kaş/Kalkan,4+1,-9.140109555367086
+Kaş/Kalkan,5+1,12.691600245248313
+Kaş/Kalkan,5+2,0.0
+Kaş/Kalkan,6+1,0.0
+Kaş/Kalkan,Stüdyo (1+0),-35.2112676056338
+Kaş/Köyler,1+1,6.355517142034007
+Kaş/Köyler,2,0.0
+Kaş/Köyler,2+1,20.241545893719795
+Kaş/Köyler,2+2,5.88235294117647
+Kaş/Köyler,3+1,-7.768883415435142
+Kaş/Köyler,3+2,0.0
+Kaş/Köyler,4+1,-64.44444444444444
+Kaş/Köyler,5+4,0.0
+Kaş/Köyler,8+1,0.0
+Kaş/Köyler,Stüdyo (1+0),-11.11111111111111
+Kemer,1+1,11.957923112986405
+Kemer,2+1,28.99012672004976
+Kemer,3+1,20.678448100751577
+Kemer,3+2,0.0
+Kemer,3.5+1,0.0
+Kemer,4+1,14.795244385733167
+Kemer,4+4,-10.0
+Kemer,5+1,0.0
+Kemer,6+1,0.0
+Kemer,Stüdyo (1+0),-16.666666666666664
+Kemer/Göynük,1+1,1.2658227848101415
+Kemer/Göynük,1.5+1,0.0
+Kemer/Göynük,2+1,5.466666666666651
+Kemer/Göynük,3+1,137.1647509578544
+Kemer/Göynük,4+1,-28.749999999999996
+Kemer/Göynük,5+1,0.0
+Kemer/Göynük,Stüdyo (1+0),-5.490239139130503
+Kemer/Köyler,1+1,-5.714285714285714
+Kemer/Köyler,2+1,-2.0689655172413794
+Kemer/Köyler,2.5+1,0.0
+Kemer/Köyler,3+0,0.0
+Kemer/Köyler,3+1,58.675496688741724
+Kemer/Köyler,Stüdyo (1+0),0.0
+Kemer/Tekirova,1+1,-5.072463768115947
+Kemer/Tekirova,2+1,1.4492753623188406
+Kemer/Tekirova,3+1,-63.33333333333333
+Kemer/Tekirova,5+1,0.0
+Kemer/Tekirova,Stüdyo (1+0),0.0
+Kepez/Ahatlı,1+1,-0.3799459040250993
+Kepez/Ahatlı,2+0,4.29327709308776
+Kepez/Ahatlı,2+1,1.6133241975190864
+Kepez/Ahatlı,3+0,0.0
+Kepez/Ahatlı,3+1,-2.9898338147578545
+Kepez/Ahatlı,4+4,0.0
+Kepez/Ahatlı,5+1,31.25
+Kepez/Ahatlı,Stüdyo (1+0),5.395539309017655
+Kepez/Dokuma,1+1,2.194976076555031
+Kepez/Dokuma,1.5+1,4.761904761904762
+Kepez/Dokuma,2+0,0.0
+Kepez/Dokuma,2+1,3.656780881082642
+Kepez/Dokuma,3+0,0.0
+Kepez/Dokuma,3+1,-2.319618725868716
+Kepez/Dokuma,4+1,12.676056338028168
+Kepez/Dokuma,Stüdyo (1+0),-19.32773109243697
+Kepez/Duraliler,1+1,-10.33566132632843
+Kepez/Duraliler,2+0,13.464566929133849
+Kepez/Duraliler,2+1,-0.7662605440437444
+Kepez/Duraliler,3+1,-12.580893059375509
+Kepez/Duraliler,3.5+1,0.0
+Kepez/Duraliler,4+1,29.729729729729726
+Kepez/Duraliler,4+2,-36.065573770491795
+Kepez/Duraliler,6+1,131.57894736842107
+Kepez/Duraliler,Stüdyo (1+0),3.316523920061902
+Kepez/Düdenbaşı,1+1,2.9063309437289564
+Kepez/Düdenbaşı,2+1,2.733059810895636
+Kepez/Düdenbaşı,3+1,3.4940719507437623
+Kepez/Erenköy,1+1,-1.7670380437392392
+Kepez/Erenköy,2+0,10.144927536231885
+Kepez/Erenköy,2+1,-4.239584282471236
+Kepez/Erenköy,2+2,48.148148148148145
+Kepez/Erenköy,3+1,-3.904715414347503
+Kepez/Erenköy,4+1,-13.570247933884302
+Kepez/Erenköy,5+1,-18.181818181818183
+Kepez/Erenköy,Stüdyo (1+0),18.33333333333334
+Kepez/Köyler,2+1,20.740740740740744
+Kepez/Köyler,3+1,-13.178294573643406
+Kepez/Köyler,3+2,0.0
+Kepez/Köyler,4+1,-9.210526315789473
+Kepez/Köyler,5+1,-3.7735849056603774
+Kepez/Merkez,1+1,7.683816103098623
+Kepez/Merkez,2+1,17.702596380802525
+Kepez/Merkez,3+1,-2.0224719101123596
+Kepez/Merkez,4+1,-10.404624277456648
+Kepez/Merkez,5+1,0.0
+Kepez/Merkez,Stüdyo (1+0),-15.723270440251577
+Kepez/Sütçüler,1+1,2.0762471151551707
+Kepez/Sütçüler,2+1,-0.05334112307259673
+Kepez/Sütçüler,3+1,2.2671568627451024
+Kepez/Sütçüler,4+1,1.3333333333333335
+Kepez/Sütçüler,4+2,-4.761904761904762
+Kepez/Sütçüler,6+1,0.0
+Kepez/Sütçüler,Stüdyo (1+0),0.0
+Kepez/Varsak,1+1,2.8948914468624816
+Kepez/Varsak,2+1,1.8911036272699226
+Kepez/Varsak,3+1,-0.5569791019729913
+Kepez/Varsak,4+1,8.527131782945736
+Kepez/Varsak,5+2,3.571428571428571
+Kepez/Varsak,Stüdyo (1+0),0.0
+Kepez/Yeniemek,1+1,4.980326025857215
+Kepez/Yeniemek,2+1,-6.794144820800467
+Kepez/Yeniemek,2+2,0.0
+Kepez/Yeniemek,3+1,-2.2892238972641
+Kepez/Yeniemek,5+1,7.6923076923076925
+Kepez/Yeniemek,Stüdyo (1+0),12.5
+Konyaaltı/Arapsuyu,1+1,0.040789778982338445
+Konyaaltı/Arapsuyu,2+0,4.545454545454546
+Konyaaltı/Arapsuyu,2+1,-1.8550710461483684
+Konyaaltı/Arapsuyu,3+1,-6.464666654107878
+Konyaaltı/Arapsuyu,3+2,-12.257019438444924
+Konyaaltı/Arapsuyu,4+1,-11.36878957022545
+Konyaaltı/Arapsuyu,4+2,8.80829015544041
+Konyaaltı/Arapsuyu,5+1,3.0358856688987284
+Konyaaltı/Arapsuyu,5+2,5.555555555555555
+Konyaaltı/Arapsuyu,6+1,8.111111111111105
+Konyaaltı/Arapsuyu,6+2,0.0
+Konyaaltı/Arapsuyu,7+1,19.148936170212767
+Konyaaltı/Arapsuyu,Stüdyo (1+0),30.688622754491025
+Konyaaltı/Doyran,2+1,10.0
+Konyaaltı/Köyler,1+1,4.959919839679359
+Konyaaltı/Köyler,2+1,29.411764705882355
+Konyaaltı/Köyler,3+1,49.44134078212291
+Konyaaltı/Köyler,3+2,100.0
+Konyaaltı/Köyler,4+1,22.448979591836736
+Konyaaltı/Köyler,4+3,0.0
+Konyaaltı/Köyler,5+1,-25.925925925925924
+Konyaaltı/Köyler,6+2,33.33333333333333
+Konyaaltı/Merkez,1+1,-0.21134439745403294
+Konyaaltı/Merkez,2+0,0.0
+Konyaaltı/Merkez,2+1,-0.7207617880623286
+Konyaaltı/Merkez,3+1,-4.059758452982095
+Konyaaltı/Merkez,4+1,8.186813186813195
+Konyaaltı/Merkez,5+1,-1.5151515151515151
+Konyaaltı/Merkez,Stüdyo (1+0),-12.871287128712872
+Korkuteli,1+1,-22.459893048128343
+Korkuteli,2+0,-1.4492753623188406
+Korkuteli,2+1,15.927777777777784
+Korkuteli,3+1,-0.6145741878841038
+Korkuteli,3.5+1,0.0
+Korkuteli,4+1,0.0
+Korkuteli/Köyler,2+1,-8.333333333333332
+Korkuteli/Köyler,3+1,13.333333333333334
+Kumluca,1+1,-0.2798507462686567
+Kumluca,2+0,0.0
+Kumluca,2+1,9.263909078895201
+Kumluca,3+1,8.345564253098493
+Kumluca,4+1,-42.5
+Kumluca,Stüdyo (1+0),0.0
+Kumluca/Beldeler,1+1,-25.0
+Kumluca/Beldeler,2+1,-40.0
+Kumluca/Beldeler,3+1,0.0
+Kumluca/Beykonak,3+1,76.74418604651163
+Kumluca/Beykonak,4+1,0.0
+Kumluca/Köyler,1+1,2.0408163265306123
+Kumluca/Köyler,1.5+1,0.0
+Kumluca/Köyler,2+1,48.021108179419535
+Kumluca/Köyler,3+1,0.0
+Kumluca/Köyler,5+1,0.0
+Kumluca/Mavikent,1+1,0.0
+Kumluca/Mavikent,2+1,-5.0
+Kumluca/Mavikent,4+2,37.5
+Kumluca/Mavikent,5+1,83.33333333333334
+Kumluca/Mavikent,6+1,24.285714285714285
+Manavgat,1+1,6.279695807254858
+Manavgat,1.5+1,6.382978723404255
+Manavgat,2+0,-20.171673819742495
+Manavgat,2+1,5.4197978544528915
+Manavgat,3+1,4.436390184063049
+Manavgat,3+2,0.0
+Manavgat,4+1,8.261991933544763
+Manavgat,4+2,0.0
+Manavgat,4.5+1,0.0
+Manavgat,5+1,-10.08547008547008
+Manavgat,Stüdyo (1+0),1.3942307692307756
+Manavgat/Ilıca,1+1,5.221174764321974
+Manavgat/Ilıca,2+1,6.6185537280483775
+Manavgat/Ilıca,2.5+1,0.0
+Manavgat/Ilıca,3+1,-12.590579710144928
+Manavgat/Ilıca,4+1,-8.914170506912445
+Manavgat/Ilıca,4+2,0.0
+Manavgat/Ilıca,4.5+1,0.0
+Manavgat/Ilıca,5+1,-8.8785046728972
+Manavgat/Ilıca,6+1,-21.21212121212121
+Manavgat/Köyler,1+1,-3.2407407407407454
+Manavgat/Köyler,2+0,60.71428571428571
+Manavgat/Köyler,2+1,30.775361831033333
+Manavgat/Köyler,3+1,-2.0128930403894274
+Manavgat/Köyler,4+1,-8.212560386473431
+Manavgat/Köyler,4+2,0.0
+Manavgat/Köyler,4+3,0.0
+Manavgat/Köyler,6+1,0.0
+Manavgat/Sarılar,1+1,12.777777777777777
+Manavgat/Sarılar,2+0,0.0
+Manavgat/Sarılar,2+1,4.708944628490297
+Manavgat/Sarılar,2.5+1,0.0
+Manavgat/Sarılar,3+1,8.333333333333332
+Manavgat/Sarılar,4+1,-1.1627906976744187
+Manavgat/Taşağıl,1+1,-15.94202898550725
+Manavgat/Taşağıl,2+1,-38.70967741935484
+Manavgat/Taşağıl,3+1,-6.862745098039216
+Manavgat/Çolaklı,1+1,0.0
+Manavgat/Çolaklı,2+1,21.142492420615923
+Manavgat/Çolaklı,2.5+1,0.0
+Manavgat/Çolaklı,3+1,21.21212121212122
+Manavgat/Çolaklı,Stüdyo (1+0),20.720720720720713
+Muratpaşa/Bahçelievler,1+1,3.0668872735163313
+Muratpaşa/Bahçelievler,2+0,25.0
+Muratpaşa/Bahçelievler,2+1,-1.4803167269534978
+Muratpaşa/Bahçelievler,3+1,0.6618278573954661
+Muratpaşa/Bahçelievler,4+1,17.589576547231278
+Muratpaşa/Bahçelievler,Stüdyo (1+0),13.684210526315796
+Muratpaşa/Eskisanayi,1+1,4.417238812143267
+Muratpaşa/Eskisanayi,2+1,4.6436986740655115
+Muratpaşa/Eskisanayi,3+1,4.579448329448329
+Muratpaşa/Eskisanayi,4+1,17.24137931034483
+Muratpaşa/Eskisanayi,5+1,-6.25
+Muratpaşa/Eskisanayi,Stüdyo (1+0),16.666666666666664
+Muratpaşa/Fener,1+1,6.665492728239335
+Muratpaşa/Fener,1.5+1,0.0
+Muratpaşa/Fener,2+0,0.0
+Muratpaşa/Fener,2+1,-4.995256825543729
+Muratpaşa/Fener,3+1,2.409899061259001
+Muratpaşa/Fener,4+1,7.864500792393028
+Muratpaşa/Fener,5+1,-4.527472527472527
+Muratpaşa/Gençlik,1+1,3.9669790272199967
+Muratpaşa/Gençlik,2+1,12.081527735862604
+Muratpaşa/Gençlik,3+0,0.0
+Muratpaşa/Gençlik,3+1,5.2097738833253775
+Muratpaşa/Gençlik,4+1,52.65804597701148
+Muratpaşa/Gençlik,Stüdyo (1+0),-6.18181818181818
+Muratpaşa/Güzeloluk,0,0.0
+Muratpaşa/Güzeloluk,1+1,-3.570996247427675
+Muratpaşa/Güzeloluk,2+1,8.784624961095542
+Muratpaşa/Güzeloluk,3+1,3.200692041522494
+Muratpaşa/Güzeloluk,4+1,-9.917355371900827
+Muratpaşa/Güzeloluk,5+1,-9.122807017543865
+Muratpaşa/Güzeloluk,6+1,-6.451612903225806
+Muratpaşa/Kızıltoprak,1+1,-5.808281338627333
+Muratpaşa/Kızıltoprak,2+1,0.1476325730678573
+Muratpaşa/Kızıltoprak,3+1,6.191249162198392
+Muratpaşa/Kızıltoprak,4+1,0.0
+Muratpaşa/Kızıltoprak,5+1,0.0
+Muratpaşa/Kızıltoprak,Stüdyo (1+0),0.0
+Muratpaşa/Lara,1+1,9.663545112175859
+Muratpaşa/Lara,2+0,21.929824561403517
+Muratpaşa/Lara,2+1,1.4503264120941914
+Muratpaşa/Lara,2+2,0.0
+Muratpaşa/Lara,3+1,3.8954130130810336
+Muratpaşa/Lara,3+2,0.0
+Muratpaşa/Lara,3+3,-6.976744186046512
+Muratpaşa/Lara,4+1,6.439646742926319
+Muratpaşa/Lara,4+2,-11.206896551724139
+Muratpaşa/Lara,5+1,-5.641136385449646
+Muratpaşa/Lara,5+2,-40.666666666666664
+Muratpaşa/Lara,6+1,-8.390022675736967
+Muratpaşa/Lara,6+3,0.0
+Muratpaşa/Lara,Stüdyo (1+0),-3.0104712041884816
+Muratpaşa/Meltem,1+1,-1.4080241221723355
+Muratpaşa/Meltem,2+0,30.303030303030308
+Muratpaşa/Meltem,2+1,1.6076606060606118
+Muratpaşa/Meltem,3+1,-0.2756295012615024
+Muratpaşa/Meltem,4+1,0.0
+Muratpaşa/Meltem,Stüdyo (1+0),16.219008264462808
+Muratpaşa/Merkez,2+1,-22.142857142857142
+Muratpaşa/Merkez,3+1,17.367137981472442
+Muratpaşa/Merkez,4+1,0.0
+Muratpaşa/Yenigün,1+1,1.6124243058937777
+Muratpaşa/Yenigün,2+1,5.010818263875915
+Muratpaşa/Yenigün,3+1,-7.6625053809728785
+Muratpaşa/Yenigün,4+1,-20.25862068965517
+Muratpaşa/Yenigün,Stüdyo (1+0),22.5
+Muratpaşa/Çarşı,1+1,-4.2283298097251585
+Muratpaşa/Çarşı,2+0,17.5
+Muratpaşa/Çarşı,2+1,5.978030067098888
+Muratpaşa/Çarşı,3+1,-14.779509283819623
+Muratpaşa/Çarşı,4+1,-5.431309904153355
+Muratpaşa/Çarşı,Stüdyo (1+0),30.91641490433032
+Serik,1+1,-1.1002830037890585
+Serik,10+1,-16.666666666666664
+Serik,2+0,-8.333333333333332
+Serik,2+1,-0.17839481077408548
+Serik,2.5+1,0.0
+Serik,3+1,-4.238496213564381
+Serik,3.5+1,361.53846153846155
+Serik,4+1,13.04077929519626
+Serik,5+1,7.530120481927717
+Serik,6+1,-12.000000000000002
+Serik,7+1,0.0
+Serik,8+1,0.0
+Serik/Belek,1+1,-2.0496885674100858
+Serik/Belek,10 Üzeri,-6.73400673400674
+Serik/Belek,2+1,21.210197820797628
+Serik/Belek,2.5+1,33.33333333333333
+Serik/Belek,3+1,10.366785532348455
+Serik/Belek,3.5+1,0.0
+Serik/Belek,4+1,-2.6579520697167807
+Serik/Belek,4+2,0.0
+Serik/Belek,5+1,-18.75
+Serik/Belek,5+2,0.0
+Serik/Belek,6+1,21.314496314496314
+Serik/Belek,Stüdyo (1+0),15.151515151515152
+Serik/Köyler,2+1,-17.5
+Serik/Köyler,3+1,-48.57142857142857
+Serik/Köyler,4+1,3.765690376569038
+Serik/Köyler,Stüdyo (1+0),0.0
+Serik/Yukarıkocayatak,2+1,-5.607476635514019
+Serik/Yukarıkocayatak,3+1,-9.090909090909092
