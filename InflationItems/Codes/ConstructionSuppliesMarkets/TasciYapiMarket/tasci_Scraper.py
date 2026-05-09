@@ -22,7 +22,6 @@ os.makedirs(save_dir, exist_ok=True)
 today_date = datetime.now().strftime('%Y-%m-%d')
 csv_file_path = os.path.join(save_dir, f'tasciyapi_products_{today_date}.csv')
 
-
 # --- Scraping Configuration ---
 categories = [
     'alarm',
@@ -44,12 +43,21 @@ categories = [
     'tesisat-malzemesi'
 ]
 
+# Upgraded headers to mimic a real browser closely
 headers = {
-    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8',
+    'Accept-Language': 'tr-TR,tr;q=0.9,en-US;q=0.8,en;q=0.7',
+    'Connection': 'keep-alive',
+    'Upgrade-Insecure-Requests': '1'
 }
 
 # --- Execution ---
 print(f"Data will be saved to: {csv_file_path}")
+
+# Initialize a Session to maintain connection pooling and cookies
+session = requests.Session()
+session.headers.update(headers)
 
 with open(csv_file_path, 'w', newline='', encoding='utf-8') as file:
     writer = csv.writer(file)
@@ -67,11 +75,26 @@ with open(csv_file_path, 'w', newline='', encoding='utf-8') as file:
 
             print(f"Scraping: {url}")
 
-            response = requests.get(url, headers=headers)
+            # Robust error handling for the network request
+            try:
+                response = session.get(url, timeout=15)
 
-            if response.status_code != 200:
+                if response.status_code != 200:
+                    print(f"Received status code {response.status_code}. Moving to next category.")
+                    break
+
+            except requests.exceptions.ConnectionError as e:
+                print(f"Connection aborted by server (10054). Waiting 5 seconds before moving to next category...")
+                time.sleep(5)
+                break
+            except requests.exceptions.Timeout:
+                print(f"Request timed out. Moving to next category...")
+                break
+            except Exception as e:
+                print(f"An unexpected error occurred: {e}. Moving to next category...")
                 break
 
+            # Parse the response
             soup = BeautifulSoup(response.content, 'html.parser')
             products = soup.find_all('div', class_='product-item-container')
 
@@ -98,9 +121,11 @@ with open(csv_file_path, 'w', newline='', encoding='utf-8') as file:
                             pass
 
                 if clean_price > 0:
-                    writer.writerow([ name, clean_price, category])
+                    writer.writerow([name, clean_price, category])
 
             offset += 15
-            time.sleep(1)
+
+            # Sleep to prevent rapid-fire requests from triggering bot protection
+            time.sleep(2)
 
 print(f"\nScraping complete! Data saved successfully to:\n{csv_file_path}")
