@@ -19,6 +19,7 @@ import argparse
 import csv
 import json
 import logging
+import os
 import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import dataclass
@@ -115,8 +116,15 @@ def _output_dir() -> Path:
     return _project_root() / "InflationItems" / "Datas" / "TechnologicalProducts" / "DR"
 
 
+def _scrape_date_str() -> str:
+    override = os.getenv("SCRAPE_DATE_OVERRIDE", "").strip()
+    if override:
+        return datetime.fromisoformat(override).strftime("%Y-%m-%d")
+    return datetime.now().strftime("%Y-%m-%d")
+
+
 def _default_output_path() -> Path:
-    return _output_dir() / f"dr_{datetime.now().strftime('%Y-%m-%d')}.csv"
+    return _output_dir() / f"dr_{_scrape_date_str()}.csv"
 
 
 def _normalise_text(value: str | None) -> str:

@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import datetime as _dt
+import os as _os
 from pathlib import Path as _Path
 
 BASE_URL = "https://shop.goldenrose.com.tr"
@@ -78,7 +79,11 @@ _PROJECT_ROOT = _SCRAPER_DIR.parents[3]
 OUTPUT_DIR = _PROJECT_ROOT / "InflationItems" / "Datas" / "Cosmetics" / "GoldenRose"
 CHECKPOINT_DIR = _SCRAPER_DIR / "checkpoints"
 
-_TODAY = _dt.date.today().strftime("%Y-%m-%d")
+_DATE_OVERRIDE = _os.getenv("SCRAPE_DATE_OVERRIDE", "").strip()
+if _DATE_OVERRIDE:
+    _TODAY = _dt.date.fromisoformat(_DATE_OVERRIDE).strftime("%Y-%m-%d")
+else:
+    _TODAY = _dt.date.today().strftime("%Y-%m-%d")
 
 CSV_OUTPUT_FILE = OUTPUT_DIR / f"goldenrose_{_TODAY}.csv"
 CHECKPOINT_FILE = CHECKPOINT_DIR / f"goldenrose_checkpoint_{_TODAY}.json"
