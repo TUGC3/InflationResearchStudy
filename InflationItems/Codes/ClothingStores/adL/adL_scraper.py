@@ -1,9 +1,11 @@
 import requests
+from requests.adapters import HTTPAdapter
+from urllib3.util.retry import Retry
 import pandas as pd
 from datetime import datetime
 import time
 import os
-import random  # <-- ADDED for randomized waiting
+import random
 
 # --- Configuration ---
 categories = [
@@ -18,6 +20,17 @@ headers = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
     "Accept": "application/json"
 }
+
+# --- Setup Robust Session ---
+# This tells the script to automatically retry 3 times if it hits a timeout or a bad server response (like 500 or 503)
+session = requests.Session()
+retries = Retry(
+    total=3,
+    backoff_factor=1.5, # Wait 1.5s, then 3s, then 4.5s between retries
+    status_forcelist=[429, 500, 502, 503, 504],
+    allowed_methods=["GET"]
+)
+session.mount('https://', HTTPAdapter(max_retries=retries))
 
 
 # --- Scraping Function ---
@@ -35,28 +48,33 @@ def scrape_adl_api(category_slug):
         print(f"  -> Fetching API: {category_name} (Page {page})")
 
         try:
-            # Increased timeout just in case the server is slow
-            response = requests.get(api_url, headers=headers, timeout=(5, 10))
+            # Using the robust session, and increasing the timeout to 10 seconds to connect, 30 seconds to read.
+            response = session.get(api_url, headers=headers, timeout=(10, 30))
 
             if response.status_code != 200:
-                print(f"  -> Failed or reached the end. Status: {response.status_code}")
-                break
+                print(f"  -> Failed. Server returned status: {response.status_code}. Skipping page.")
+                page += 1
+                continue # Skip this page but keep trying the next ones
 
             json_data = response.json()
 
         except requests.exceptions.Timeout:
-            print(f"  -> Request timed out on page {page}. Moving to next category.")
-            break
+            # We only get here if the adapter fails all 3 retries
+            print(f"  -> [ERROR] Request completely timed out on page {page} after retries. Skipping page.")
+            page += 1
+            continue
         except requests.exceptions.RequestException as e:
-            print(f"  -> Network error occurred: {e}")
-            break
+            print(f"  -> [ERROR] Network error occurred on page {page}: {e}")
+            page += 1
+            continue
         except ValueError:
-            print(f"  -> Failed to parse JSON on page {page}.")
-            break
+            print(f"  -> [ERROR] Failed to parse JSON on page {page}.")
+            page += 1
+            continue
 
         if "products" not in json_data or len(json_data["products"]) == 0:
-            print(f"  -> No products found. Moving to next category.")
-            break
+            print(f"  -> No more products found in {category_name}. Moving to next category.")
+            break # It's safe to break here because we've naturally hit the end
 
         for product in json_data["products"]:
             try:
@@ -76,13 +94,11 @@ def scrape_adl_api(category_slug):
         total_pages = pagination.get("totalPages", 1)
 
         if page >= total_pages - 1:
-            print(f"  -> Reached the final page ({total_pages}).")
+            print(f"  -> Reached the final page ({total_pages}) for {category_name}.")
             break
 
         page += 1
 
-        # --- INCREASED PAGE DELAY HERE ---
-        # Waits a random amount of time between 2.5 and 5.0 seconds between pages
         sleep_time = random.uniform(2.5, 5.0)
         time.sleep(sleep_time)
 
@@ -120,8 +136,6 @@ for category in categories:
     else:
         print(f"  -> No data found for {category}, nothing to save.")
 
-    # --- INCREASED CATEGORY DELAY HERE ---
-    # Waits a random amount of time between 5.0 and 10.0 seconds between major categories
     cat_sleep_time = random.uniform(5.0, 10.0)
     print(f"  -> Resting for {cat_sleep_time:.1f} seconds before the next category...")
     time.sleep(cat_sleep_time)
