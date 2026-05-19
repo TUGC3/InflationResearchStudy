@@ -4,6 +4,7 @@ import csv
 import time
 import os
 from datetime import datetime
+import random  # Added for the randomized sleep timer
 
 # --- Path & Timestamp Configuration  ---
 # 1. Get the directory where this script is located
@@ -75,27 +76,42 @@ with open(csv_file_path, 'w', newline='', encoding='utf-8') as file:
 
             print(f"Scraping: {url}")
 
-            # Robust error handling for the network request
-            try:
-                response = session.get(url, timeout=15)
+            # --- IMPLEMENTING RETRIES ---
+            max_retries = 3
+            success = False
 
-                if response.status_code != 200:
-                    print(f"Received status code {response.status_code}. Moving to next category.")
-                    break
+            for attempt in range(max_retries):
+                try:
+                    response = session.get(url, timeout=15)
 
-            except requests.exceptions.ConnectionError as e:
-                print(f"Connection aborted by server (10054). Waiting 5 seconds before moving to next category...")
-                time.sleep(5)
-                break
-            except requests.exceptions.Timeout:
-                print(f"Request timed out. Moving to next category...")
-                break
-            except Exception as e:
-                print(f"An unexpected error occurred: {e}. Moving to next category...")
-                break
+                    if response.status_code == 200:
+                        success = True
+                        break  # Break out of the retry loop on success
+                    else:
+                        print(f"Received status {response.status_code}. Retrying ({attempt + 1}/{max_retries})...")
+                        time.sleep(3)
 
-            # Parse the response
-            soup = BeautifulSoup(response.content, 'html.parser')
+                except requests.exceptions.ConnectionError:
+                    print(
+                        f"Connection aborted (10054). Waiting 10 seconds before retry ({attempt + 1}/{max_retries})...")
+                    time.sleep(10)
+                except requests.exceptions.Timeout:
+                    print(f"Request timed out. Waiting 5 seconds before retry ({attempt + 1}/{max_retries})...")
+                    time.sleep(5)
+                except Exception as e:
+                    print(f"Unexpected error: {e}. Retrying ({attempt + 1}/{max_retries})...")
+                    time.sleep(3)
+
+            # If all retries fail, skip this page but DON'T break the whole category
+            if not success:
+                print(f"Failed to scrape {url} after {max_retries} attempts. Moving to next page...")
+                offset += 15
+                continue
+
+            # --- FIXING ENCODING ---
+            response.encoding = 'utf-8'
+            soup = BeautifulSoup(response.text, 'html.parser')
+
             products = soup.find_all('div', class_='product-item-container')
 
             if not products:
@@ -125,7 +141,9 @@ with open(csv_file_path, 'w', newline='', encoding='utf-8') as file:
 
             offset += 15
 
-            # Sleep to prevent rapid-fire requests from triggering bot protection
-            time.sleep(2)
+            # --- RANDOMIZED SLEEP ---
+            # Sleep between 2 to 5 seconds to mimic human browsing behavior
+            sleep_time = random.uniform(2.0, 5.0)
+            time.sleep(sleep_time)
 
 print(f"\nScraping complete! Data saved successfully to:\n{csv_file_path}")
