@@ -31,14 +31,18 @@ from pathlib import Path
 import pandas as pd
 
 # ── Path setup ────────────────────────────────────────────────────────────────
+# Bu dosya: Inflations/Codes/Cosmetics/Dermomarket/dermomarket_inflation.py
+# Veri:     InflationItems/Datas/Cosmetics/Dermomarket/
+# Çıktı:    Inflations/Datas/Cosmetics/Dermomarket/
 _THIS_DIR = Path(__file__).resolve().parent
+REPO_ROOT  = _THIS_DIR.parents[4]
 sys.path.insert(0, str(_THIS_DIR))
 from dermomarket_tuik_config import dermomarket_category_to_tuik, normalised_weights
 
 logger = logging.getLogger(__name__)
 
-DATA_DIR   = _THIS_DIR
-OUTPUT_DIR = _THIS_DIR
+DATA_DIR   = REPO_ROOT / "InflationItems" / "Datas" / "Cosmetics" / "Dermomarket"
+OUTPUT_DIR = REPO_ROOT / "Inflations"     / "Datas" / "Cosmetics" / "Dermomarket"
 
 KEY = ["category", "product_name"]
 
