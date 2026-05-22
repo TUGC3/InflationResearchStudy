@@ -18,7 +18,7 @@ REPO_ROOT = Path(__file__).resolve().parent
 
 # ── Scraper'lar (sırayla çalışır) ────────────────────────────────────────────
 SCRAPERS = [
-    REPO_ROOT / "InflationItems/Codes/Markets/Marketzade/marketzade_scraper.py",
+    REPO_ROOT / "InflationItems/Codes/Markets/Marketzade/scraper_claude.py",
     REPO_ROOT / "InflationItems/Codes/Cosmetics/Dermomarket/dermomarket_scraper.py",
     REPO_ROOT / "InflationItems/Codes/HomeGoods/EnglishHome/englishhome_scraper.py",
     REPO_ROOT / "InflationItems/Codes/ConstructionSuppliesMarkets/Hausmart/hausmart_scraper.py",
