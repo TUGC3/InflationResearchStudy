@@ -3,10 +3,18 @@ import csv
 import os
 import tempfile
 from datetime import date, datetime
+from pathlib import Path
 import undetected_chromedriver as uc
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+
+# ── Repo-relative output path ─────────────────────────────────────────────────
+# Bu dosya: InflationItems/Codes/TechnologicalProducts/Koçtaş/koctas_scraper.py
+# Veri:     InflationItems/Datas/TechnologicalProducts/Koçtaş/
+REPO_ROOT = Path(__file__).resolve().parents[4]
+OUT_DIR   = REPO_ROOT / "InflationItems" / "Datas" / "TechnologicalProducts" / "Koçtaş"
+OUT_DIR.mkdir(parents=True, exist_ok=True)
 
 CATEGORIES = [
     ("Akülü Vidalamalar",      "https://www.koctas.com.tr/elektrikli-el-aletleri/akulu-vidalamalar/c/106007",              "05", 7),
@@ -20,8 +28,7 @@ CATEGORIES = [
 ]
 
 DATE_STR    = date.today().strftime("%Y.%m.%d")
-OUT_DIR     = r"C:\Users\Batu\PycharmProjects\KoctasScraper"
-OUT_FILE    = os.path.join(OUT_DIR, f"koctas_{DATE_STR}.csv")
+OUT_FILE    = OUT_DIR / f"koctas_{DATE_STR}.csv"
 START_TIME  = None
 
 def elapsed():
@@ -127,7 +134,6 @@ def main():
     START_TIME = datetime.now()
     print(f"Başlangıç: {START_TIME.strftime('%H:%M:%S')}")
 
-    os.makedirs(OUT_DIR, exist_ok=True)
     if os.path.exists(OUT_FILE):
         print(f"Dosya zaten var, atlanıyor: {OUT_FILE}")
         return
