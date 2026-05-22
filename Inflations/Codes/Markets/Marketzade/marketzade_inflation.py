@@ -35,9 +35,10 @@ from marketzade_tuik_config import marketzade_category_to_tuik, normalised_weigh
 
 logger = logging.getLogger(__name__)
 
-# Input and output directory: same folder as this script
-DATA_DIR = _THIS_DIR
-OUTPUT_DIR = _THIS_DIR
+# Repo-relative paths
+_REPO_ROOT = _THIS_DIR.parents[3]  # .../InflationResearchStudy
+DATA_DIR   = _REPO_ROOT / "InflationItems" / "Datas" / "Markets" / "Marketzade"
+OUTPUT_DIR = _REPO_ROOT / "Inflations" / "Datas" / "Markets" / "Marketzade"
 
 
 # ── Data loading ──────────────────────────────────────────────────────────────
