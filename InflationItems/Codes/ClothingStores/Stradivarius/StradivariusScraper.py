@@ -29,6 +29,12 @@ from datetime import date
 from pathlib import Path
 from typing import Optional
 
+# ── Repo-relative output path ─────────────────────────────────────────────────
+# Bu dosya: InflationItems/Codes/ClothingStores/Stradivarius/StradivariusScraper.py
+# Veri:     InflationItems/Datas/ClothingStores/Stradivarius/
+_REPO_ROOT = Path(__file__).resolve().parents[4]
+_DEFAULT_OUT_DIR = _REPO_ROOT / "InflationItems" / "Datas" / "ClothingStores" / "Stradivarius"
+
 from curl_cffi import requests
 from tqdm import tqdm
 
@@ -133,7 +139,7 @@ class StradivariusScraper:
         "Sec-Fetch-Site":  "same-origin",
     }
 
-    def __init__(self, output_dir: str = ".", delay: float = 0.2):
+    def __init__(self, output_dir: str = str(_DEFAULT_OUT_DIR), delay: float = 0.2):
         self.output_dir = Path(output_dir)
         self.delay      = delay
         self._session: Optional[requests.Session] = None
@@ -563,8 +569,8 @@ if __name__ == "__main__":
         help="Detayli ID/yazilan/atlanan istatistikleri logla, sorunlu kategorileri raporla"
     )
     parser.add_argument(
-        "--output-dir", default=".",
-        help="CSV cikti dizini (varsayilan: .)"
+        "--output-dir", default=str(_DEFAULT_OUT_DIR),
+        help="CSV cikti dizini (varsayilan: repo InflationItems/Datas/ClothingStores/Stradivarius)"
     )
     parser.add_argument(
         "--delay", type=float, default=0.2,
