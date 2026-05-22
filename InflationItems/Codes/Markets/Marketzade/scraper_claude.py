@@ -15,7 +15,8 @@ import os
 import re
 import logging
 import sys
-from datetime import    date
+from datetime import date
+from pathlib import Path
 
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
@@ -57,7 +58,12 @@ class scraper_claude:
 
     def __init__(self):
         self.today         = str(date.today())
-        self.csv_file      = f"{self.today}.csv"
+        # Repo-relative path: InflationItems/Datas/Markets/Marketzade/
+        _SCRIPT_DIR = Path(__file__).resolve().parent          # .../Codes/Markets/Marketzade
+        _REPO_ROOT  = _SCRIPT_DIR.parents[3]                   # .../InflationResearchStudy
+        _DATA_DIR   = _REPO_ROOT / "InflationItems" / "Datas" / "Markets" / "Marketzade"
+        _DATA_DIR.mkdir(parents=True, exist_ok=True)
+        self.csv_file      = str(_DATA_DIR / f"{self.today}.csv")
         self.total_scraped = 0
         self._ensure_file()
         self.driver = self._init_driver()
@@ -212,6 +218,7 @@ class scraper_claude:
         if not soup:
             log.error(f"  {category} atlandı.")
             return
+
         products = self._parse_products(soup, category)
         self._save_products(products)
         log.info(f"  ✓ {category}: {len(products)} ürün kaydedildi.\n")
