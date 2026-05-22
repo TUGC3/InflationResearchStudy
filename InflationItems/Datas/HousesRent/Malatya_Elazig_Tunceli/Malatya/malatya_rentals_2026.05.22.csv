@@ -1,9 +1,12 @@
 District,Rooms,Price
 Battalgazi / Merkez,1+1,17.999 TL
 Battalgazi / Merkez,3+1,15.000 TL
+Battalgazi / Merkez,3+1,12.750 TL
+Battalgazi / Merkez,1+1,15.000 TL
 Battalgazi / Merkez,3+1,18.000 TL
 Battalgazi / Merkez,2+1,14.000 TL
 Yeşilyurt / Merkez,1+1,18.000 TL
+Battalgazi / Merkez,3+1,16.000 TL
 Yeşilyurt / Köyler,3+1,11.000 TL
 Yeşilyurt / Merkez,2+1,11.000 TL
 Battalgazi / Merkez,3+1,14.000 TL
@@ -14,6 +17,12 @@ Yeşilyurt / Merkez,3+1,17.500 TL
 Battalgazi / Merkez,1+1,18.000 TL
 Battalgazi / Merkez,2+1,18.000 TL
 Yeşilyurt / Köyler,3+1,15.000 TL
+Battalgazi / Merkez,3+1,13.000 TL
+Battalgazi / Merkez,3+1,19.500 TL
+Battalgazi / Merkez,2+1,13.500 TL
+Battalgazi / Merkez,3+1,13.000 TL
+Battalgazi / Merkez,3+1,16.000 TL
+Battalgazi / Merkez,3+1,16.000 TL
 Battalgazi / Merkez,2+1,13.000 TL
 Yeşilyurt / Merkez,3+1,18.500 TL
 Yeşilyurt / Köyler,3+1,8.000 TL
@@ -34,8 +43,6 @@ Battalgazi / Merkez,2+1,18.000 TL
 Battalgazi / Merkez,3+1,18.000 TL
 Battalgazi / Merkez,3+1,15.000 TL
 Yeşilyurt / Merkez,3.5+1,17.500 TL
-Yeşilyurt,1+1,17.000 TL
-Battalgazi / Merkez,3+1,15.000 TL
 Yeşilyurt / Köyler,3+1,12.000 TL
 Yeşilyurt / Merkez,3+1,18.000 TL
 Yeşilyurt / Merkez,4.5+1,19.000 TL
@@ -74,15 +81,17 @@ Battalgazi / Merkez,1+1,10.000 TL
 Battalgazi / Merkez,3+1,15.000 TL
 Yeşilyurt / Merkez,3+1,17.999 TL
 Battalgazi / Merkez,2+1,15.250 TL
+Battalgazi / Merkez,3+1,15.000 TL
+Yeşilyurt / Köyler,3+1,16.000 TL
 Battalgazi / Merkez,3+1,19.000 TL
 Battalgazi / Merkez,1+1,18.500 TL
-Battalgazi / Merkez,3+1,18.500 TL
 Yeşilyurt / Köyler,3+1,9.500 TL
 Battalgazi / Merkez,2+1,11.000 TL
 Yeşilyurt / Merkez,1+1,17.000 TL
 Battalgazi / Merkez,3+1,14.000 TL
 Yeşilyurt / Merkez,1+1,13.000 TL
 Battalgazi / Merkez,3+1,10.000 TL
+Battalgazi / Merkez,3+1,16.000 TL
 Yeşilyurt / Merkez,4+1,17.000 TL
 Yeşilyurt / Köyler,3+1,11.000 TL
 Battalgazi / Merkez,2+1,15.000 TL
@@ -112,7 +121,6 @@ Battalgazi / Merkez,1+1,12.000 TL
 Battalgazi / Merkez,3+1,16.500 TL
 Battalgazi / Merkez,3+1,12.500 TL
 Yeşilyurt / Köyler,3+1,9.500 TL
-Yeşilyurt / Köyler,3+1,16.000 TL
 Battalgazi / Merkez,3+1,14.500 TL
 Yeşilyurt / Merkez,2+1,12.000 TL
 Yeşilyurt / Köyler,3+1,12.000 TL
@@ -121,11 +129,11 @@ Battalgazi / Merkez,3.5+1,15.000 TL
 Battalgazi / Merkez,4+1,17.000 TL
 Yeşilyurt / Köyler,3+1,19.000 TL
 Battalgazi / Merkez,2+1,17.000 TL
-Battalgazi / Merkez,3+1,9.500 TL
 Yeşilyurt / Köyler,3+1,16.000 TL
 Yeşilyurt / Merkez,1+1,9.000 TL
 Battalgazi / Merkez,1+1,14.500 TL
 Yeşilyurt / Merkez,3+1,19.000 TL
+Battalgazi / Merkez,2+1,13.000 TL
 Battalgazi / Merkez,2+1,18.000 TL
 Battalgazi / Merkez,4+1,17.000 TL
 Battalgazi / Merkez,2+1,16.000 TL
@@ -164,10 +172,8 @@ Battalgazi / Merkez,2+1,12.000 TL
 Battalgazi / Merkez,3+1,16.000 TL
 Yeşilyurt / Merkez,3+1,14.000 TL
 Battalgazi / Merkez,3+1,14.000 TL
-Battalgazi / Merkez,3+1,15.000 TL
 Battalgazi / Merkez,2+1,15.000 TL
 Yeşilyurt / Merkez,3+1,12.500 TL
-Yeşilyurt / Köyler,3+1,11.000 TL
 Battalgazi / Merkez,3+1,14.000 TL
 Battalgazi / Merkez,3+1,15.000 TL
 Battalgazi / Merkez,3+1,13.000 TL
@@ -180,7 +186,6 @@ Akçadağ / Köyler,3+1,8.500 TL
 Akçadağ / Köyler,3+1,10.000 TL
 Battalgazi / Merkez,3+1,18.500 TL
 Battalgazi / Merkez,2+1,15.000 TL
-Yeşilyurt / Köyler,3+1,17.000 TL
 Battalgazi / Merkez,2+1,9.000 TL
 Yeşilyurt / Köyler,3+1,9.000 TL
 Yeşilyurt / Köyler,3+1,16.000 TL
@@ -190,6 +195,7 @@ Yeşilyurt,3+1,16.000 TL
 Battalgazi / Merkez,3+1,12.500 TL
 Battalgazi / Merkez,2+1,14.000 TL
 Yeşilyurt / Merkez,4+1,18.000 TL
+Battalgazi / Merkez,3+1,15.000 TL
 Battalgazi / Merkez,1+1,11.000 TL
 Battalgazi / Merkez,2+1,12.000 TL
 Yeşilyurt / Merkez,2+1,11.000 TL
@@ -198,6 +204,7 @@ Battalgazi / Merkez,2+1,17.000 TL
 Yeşilyurt / Merkez,1+1,12.000 TL
 Yeşilyurt / Merkez,3+1,17.500 TL
 Battalgazi / Merkez,3+1,17.000 TL
+Yeşilyurt / Köyler,3+1,16.000 TL
 Battalgazi / Merkez,1+1,16.500 TL
 Yeşilyurt / Köyler,3+1,10.000 TL
 Yeşilyurt / Merkez,3+1,16.500 TL
@@ -222,8 +229,8 @@ Battalgazi / Merkez,3+1,18.000 TL
 Battalgazi / Merkez,3+1,19.500 TL
 Battalgazi / Merkez,3+1,17.500 TL
 Battalgazi / Merkez,3+1,19.500 TL
-Battalgazi / Merkez,3+1,12.500 TL
 Battalgazi / Merkez,3+1,12.000 TL
+Battalgazi / Merkez,3+1,12.500 TL
 Yeşilyurt / Merkez,2+1,16.000 TL
 Yeşilyurt / Merkez,2+1,18.500 TL
 Battalgazi / Merkez,3+1,14.000 TL
@@ -242,7 +249,6 @@ Battalgazi / Merkez,1+1,18.000 TL
 Yeşilyurt / Merkez,3+1,14.000 TL
 Battalgazi / Merkez,2+1,18.000 TL
 Battalgazi / Merkez,3+1,15.000 TL
-Yeşilyurt / Merkez,3+1,18.000 TL
 Battalgazi / Merkez,3+1,15.000 TL
 Battalgazi / Merkez,2+1,15.000 TL
 Yeşilyurt / Köyler,3+1,10.000 TL
@@ -255,7 +261,6 @@ Yeşilyurt / Merkez,2+1,12.500 TL
 Battalgazi / Merkez,3+1,14.000 TL
 Battalgazi / Merkez,3+1,18.000 TL
 Yeşilyurt / Merkez,2+1,19.000 TL
-Battalgazi / Merkez,2+1,14.000 TL
 Yeşilyurt / Merkez,2+1,13.000 TL
 Yeşilyurt / Merkez,3+1,18.000 TL
 Yeşilyurt / Merkez,2+1,15.000 TL
@@ -273,12 +278,10 @@ Battalgazi / Merkez,3+1,12.750 TL
 Battalgazi / Merkez,2+1,17.250 TL
 Yeşilyurt / Merkez,3+1,18.000 TL
 Yeşilyurt / Merkez,1+1,19.000 TL
-Battalgazi / Merkez,3+1,12.750 TL
 Battalgazi / Merkez,3+1,17.000 TL
 Yeşilyurt / Köyler,3+1,11.000 TL
 Battalgazi / Merkez,2+1,17.000 TL
 Yeşilyurt / Merkez,3+1,17.000 TL
-Battalgazi / Merkez,1+1,15.000 TL
 Yeşilyurt / Merkez,2+1,9.000 TL
 Battalgazi / Merkez,2+1,14.500 TL
 Yeşilyurt / Köyler,3+1,12.000 TL
@@ -286,6 +289,7 @@ Battalgazi / Merkez,3+1,18.000 TL
 Battalgazi / Merkez,3+1,14.000 TL
 Battalgazi / Merkez,3+1,18.000 TL
 Yeşilyurt / Merkez,1+1,15.000 TL
+Battalgazi / Merkez,1+1,18.000 TL
 Yeşilyurt / Merkez,1+1,13.000 TL
 Battalgazi / Merkez,2+1,17.500 TL
 Battalgazi / Merkez,3+1,15.000 TL
@@ -299,11 +303,13 @@ Battalgazi / Merkez,1+1,19.000 TL
 Battalgazi / Merkez,3+1,15.000 TL
 Battalgazi / Merkez,3+1,19.500 TL
 Battalgazi / Merkez,3+1,16.000 TL
+Yeşilyurt / Köyler,3+1,9.000 TL
 Battalgazi / Merkez,2+1,14.500 TL
 Battalgazi / Merkez,3+1,16.000 TL
 Yeşilyurt / Merkez,2+1,18.000 TL
 Battalgazi / Merkez,2+1,16.500 TL
 Battalgazi / Merkez,3+1,15.000 TL
+Yeşilyurt / Köyler,2+1,17.000 TL
 Battalgazi / Merkez,3+1,16.000 TL
 Yeşilyurt / Merkez,3+1,18.000 TL
 Yeşilyurt / Köyler,3+1,12.500 TL
@@ -359,7 +365,6 @@ Yeşilyurt / Merkez,2+1,10.000 TL
 Battalgazi / Merkez,2+1,18.000 TL
 Battalgazi / Merkez,3+1,8.500 TL
 Battalgazi / Merkez,3+1,17.000 TL
-Yeşilyurt / Köyler,3+1,9.000 TL
 Doğanşehir,3+1,12.000 TL
 Yeşilyurt / Köyler,3+1,10.000 TL
 Yeşilyurt / Merkez,1+1,11.000 TL
@@ -373,7 +378,6 @@ Battalgazi / Merkez,3+1,17.000 TL
 Battalgazi / Merkez,2+1,15.000 TL
 Battalgazi / Merkez,2+1,15.000 TL
 Yeşilyurt / Merkez,3+1,16.000 TL
-Battalgazi / Merkez,3+1,10.000 TL
 Battalgazi / Merkez,3+1,15.000 TL
 Battalgazi / Merkez,1+1,15.000 TL
 Battalgazi / Merkez,1.5+1,14.500 TL
@@ -437,13 +441,10 @@ Battalgazi / Merkez,2+1,19.000 TL
 Yeşilyurt / Köyler,3+1,16.000 TL
 Yeşilyurt / Köyler,3+1,13.500 TL
 Yeşilyurt / Köyler,3+1,11.000 TL
-Battalgazi / Merkez,3+1,12.000 TL
-Battalgazi / Merkez,3+1,18.000 TL
 Yeşilyurt,3+1,17.500 TL
 Yeşilyurt / Köyler,3+1,15.500 TL
 Yeşilyurt / Merkez,4+1,15.000 TL
 Yeşilyurt / Merkez,3+1,18.000 TL
-Yeşilyurt / Köyler,3+1,10.000 TL
 Yeşilyurt / Merkez,2+1,16.000 TL
 Battalgazi / Merkez,3+1,15.500 TL
 Yeşilyurt / Merkez,3+1,18.500 TL
@@ -475,6 +476,7 @@ Yeşilyurt / Merkez,1+1,8.000 TL
 Yeşilyurt / Köyler,3+1,14.000 TL
 Yeşilyurt / Merkez,2+1,11.500 TL
 Yeşilyurt / Merkez,3+1,11.250 TL
+Yeşilyurt,3+1,17.500 TL
 Battalgazi / Merkez,3+1,11.500 TL
 Battalgazi / Merkez,3+1,13.500 TL
 Yeşilyurt / Merkez,3+1,13.000 TL
@@ -487,14 +489,11 @@ Battalgazi / Merkez,3.5+1,16.000 TL
 Battalgazi / Merkez,3+1,15.000 TL
 Battalgazi / Merkez,3+1,15.000 TL
 Yeşilyurt,3+1,18.000 TL
-Yeşilyurt,3+1,17.500 TL
 Yeşilyurt / Merkez,2+1,12.000 TL
 Battalgazi / Merkez,2+1,14.500 TL
 Yeşilyurt / Merkez,3+1,13.000 TL
 Battalgazi / Merkez,3+1,13.000 TL
-Battalgazi / Merkez,1+1,14.000 TL
 Battalgazi / Merkez,2+1,18.000 TL
-Battalgazi / Merkez,3+1,15.000 TL
 Battalgazi / Merkez,2+1,13.000 TL
 Battalgazi / Merkez,3+1,18.000 TL
 Battalgazi / Merkez,1+1,19.000 TL
@@ -502,11 +501,11 @@ Hekimhan,2+1,13.000 TL
 Battalgazi / Merkez,2+1,13.500 TL
 Battalgazi / Merkez,3+1,17.000 TL
 Yeşilyurt / Merkez,3+1,15.750 TL
-Yeşilyurt / Köyler,3+1,12.000 TL
 Battalgazi / Merkez,3+1,16.000 TL
 Battalgazi / Merkez,3+1,14.500 TL
 Yeşilyurt / Merkez,1+1,10.000 TL
 Yeşilyurt / Merkez,2+1,12.000 TL
+Battalgazi / Merkez,3+1,15.000 TL
 Battalgazi / Merkez,2+1,14.000 TL
 Yeşilyurt / Merkez,3+1,14.500 TL
 Battalgazi / Merkez,3+1,15.500 TL
@@ -531,6 +530,7 @@ Yeşilyurt / Merkez,3+1,12.000 TL
 Yeşilyurt,3+1,17.500 TL
 Battalgazi / Merkez,1+1,19.000 TL
 Yeşilyurt / Merkez,1+1,17.000 TL
+Yeşilyurt,2+1,12.500 TL
 Battalgazi / Merkez,3+1,19.500 TL
 Battalgazi / Merkez,4+1,15.000 TL
 Battalgazi / Merkez,2+1,16.000 TL
@@ -548,7 +548,6 @@ Yeşilyurt / Köyler,3+1,15.000 TL
 Battalgazi / Merkez,3+1,13.000 TL
 Yeşilyurt / Merkez,3+1,17.500 TL
 Kale / Köyler,2+1,8.000 TL
-Yeşilyurt / Merkez,3+1,14.000 TL
 Battalgazi / Merkez,3+1,18.000 TL
 Kale / Köyler,2+1,8.000 TL
 Battalgazi / Merkez,2+1,19.000 TL
@@ -568,9 +567,10 @@ Battalgazi / Merkez,3+1,15.000 TL
 Battalgazi / Merkez,2+1,17.000 TL
 Yeşilyurt,3+1,18.000 TL
 Battalgazi / Merkez,3+1,16.500 TL
-Battalgazi / Merkez,2+1,16.500 TL
+Battalgazi / Merkez,2+1,18.500 TL
 Yeşilyurt / Merkez,1+1,18.000 TL
 Battalgazi / Merkez,4+1,14.000 TL
+Battalgazi / Merkez,3+1,16.000 TL
 Yeşilyurt / Köyler,3+1,14.000 TL
 Battalgazi / Merkez,4+1,19.000 TL
 Yeşilyurt / Merkez,1+1,18.500 TL
@@ -618,15 +618,15 @@ Yeşilyurt / Merkez,3+1,12.000 TL
 Battalgazi / Merkez,3+1,11.000 TL
 Battalgazi / Merkez,3+1,18.000 TL
 Yeşilyurt / Merkez,3+1,17.000 TL
+Yeşilyurt / Merkez,1+1,16.500 TL
 Yeşilyurt / Merkez,3+1,19.000 TL
-Yeşilyurt / Köyler,3+1,12.000 TL
 Battalgazi / Merkez,1+1,13.000 TL
+Yeşilyurt / Merkez,2+1,9.500 TL
 Battalgazi / Merkez,1+1,16.500 TL
 Yeşilyurt / Merkez,2+1,10.000 TL
 Battalgazi / Merkez,3+1,15.500 TL
 Battalgazi / Merkez,3+1,14.500 TL
 Yeşilyurt / Merkez,2+1,13.500 TL
-Yeşilyurt / Merkez,2+1,9.500 TL
 Battalgazi / Merkez,3+1,18.000 TL
 Battalgazi / Merkez,4+1,16.500 TL
 Battalgazi / Merkez,2+1,15.000 TL
@@ -663,17 +663,16 @@ Hekimhan,3+1,10.000 TL
 Darende,3+1,10.000 TL
 Battalgazi / Merkez,1+1,16.000 TL
 Battalgazi / Merkez,3+1,12.000 TL
+Akçadağ / Köyler,1+1,12.000 TL
 Battalgazi / Merkez,1+1,18.250 TL
 Yeşilyurt / Merkez,2+1,12.000 TL
 Battalgazi / Merkez,3+1,19.000 TL
 Battalgazi / Merkez,2+1,14.000 TL
-Yeşilyurt / Köyler,3+1,17.499 TL
 Battalgazi / Merkez,1+1,16.000 TL
 Yeşilyurt / Merkez,4+1,19.000 TL
 Akçadağ / Köyler,3+1,9.000 TL
 Battalgazi / Merkez,2+1,17.000 TL
 Yeşilyurt / Köyler,3+1,18.500 TL
-Akçadağ,2+1,12.750 TL
 Yeşilyurt / Merkez,3+1,15.000 TL
 Battalgazi / Merkez,3+1,10.000 TL
 Battalgazi / Merkez,3+1,17.000 TL
@@ -681,7 +680,6 @@ Battalgazi / Merkez,3+1,17.000 TL
 Yeşilyurt / Merkez,3+1,19.000 TL
 Battalgazi / Merkez,1+1,26.000 TL
 Yeşilyurt / Merkez,3+1,25.500 TL
-Yeşilyurt / Merkez,4+1,20.000 TL
 Battalgazi / Merkez,1+1,25.000 TL
 Yeşilyurt / Merkez,3+1,25.000 TL
 Yeşilyurt / Merkez,3+1,23.000 TL
@@ -693,10 +691,14 @@ Battalgazi / Merkez,4+1,20.000 TL
 Battalgazi / Merkez,2+1,20.000 TL
 Battalgazi / Merkez,3+1,20.000 TL
 Battalgazi / Merkez,4+1,27.500 TL
-Yeşilyurt / Merkez,3+1,35.000 TL
 Yeşilyurt / Merkez,4+1,26.000 TL
 Yeşilyurt / Merkez,3+1,25.000 TL
 Yeşilyurt / Köyler,3+1,20.000 TL
+Yeşilyurt / Merkez,3+1,27.000 TL
+Yeşilyurt / Merkez,4+1,20.000 TL
+Yeşilyurt / Merkez,4+1,35.000 TL
+Yeşilyurt / Merkez,4+1,34.000 TL
+Battalgazi / Merkez,3+1,20.000 TL
 Battalgazi / Merkez,3+1,20.000 TL
 Yeşilyurt / Merkez,3+1,22.000 TL
 Battalgazi / Merkez,3+1,26.000 TL
@@ -739,7 +741,6 @@ Battalgazi / Merkez,1+1,21.000 TL
 Yeşilyurt,3+1,20.000 TL
 Yeşilyurt / Merkez,3+1,33.000 TL
 Battalgazi / Merkez,2+1,20.500 TL
-Yeşilyurt / Merkez,3+1,20.750 TL
 Yeşilyurt / Merkez,3+1,21.000 TL
 Yeşilyurt / Merkez,3+1,27.000 TL
 Yeşilyurt / Merkez,3+1,22.000 TL
@@ -769,6 +770,7 @@ Yeşilyurt / Merkez,3+1,27.000 TL
 Battalgazi / Merkez,3+1,20.000 TL
 Yeşilyurt / Köyler,5+1,25.000 TL
 Yeşilyurt,3+1,20.000 TL
+Battalgazi / Merkez,1+1,32.000 TL
 Yeşilyurt / Merkez,3+1,32.000 TL
 Yeşilyurt / Merkez,3+1,22.000 TL
 Yeşilyurt / Merkez,4+1,31.000 TL
@@ -783,7 +785,6 @@ Yeşilyurt / Merkez,3+1,24.000 TL
 Yeşilyurt / Köyler,4+1,22.000 TL
 Battalgazi / Merkez,2+1,25.000 TL
 Yeşilyurt / Merkez,4+1,21.000 TL
-Battalgazi / Merkez,2+1,26.500 TL
 Yeşilyurt / Merkez,3+1,24.000 TL
 Battalgazi / Merkez,3+1,22.500 TL
 Yeşilyurt / Merkez,3+1,20.500 TL
@@ -792,7 +793,6 @@ Battalgazi / Merkez,2+1,27.000 TL
 Battalgazi / Merkez,2+1,23.000 TL
 Yeşilyurt / Merkez,3+1,21.000 TL
 Yeşilyurt / Merkez,5+1,33.000 TL
-Battalgazi / Merkez,2+1,20.000 TL
 Yeşilyurt / Merkez,3+1,28.500 TL
 Battalgazi / Merkez,3+1,25.000 TL
 Yeşilyurt / Merkez,3.5+1,24.100 TL
@@ -817,6 +817,7 @@ Battalgazi / Merkez,1+1,21.500 TL
 Yeşilyurt / Merkez,2+1,25.000 TL
 Yeşilyurt / Merkez,3+1,23.000 TL
 Yeşilyurt / Merkez,4+1,25.000 TL
+Battalgazi / Merkez,2+1,20.000 TL
 Yeşilyurt / Merkez,3+1,22.000 TL
 Yeşilyurt / Merkez,3+1,20.000 TL
 Yeşilyurt / Merkez,3+1,29.500 TL
@@ -824,6 +825,7 @@ Battalgazi / Merkez,5+1,35.000 TL
 Battalgazi / Merkez,3+1,22.000 TL
 Yeşilyurt / Köyler,3+1,20.000 TL
 Yeşilyurt / Köyler,2+1,20.000 TL
+Yeşilyurt / Merkez,3+1,20.000 TL
 Yeşilyurt / Köyler,4+1,25.000 TL
 Yeşilyurt / Merkez,3+1,20.000 TL
 Yeşilyurt / Köyler,3+1,20.000 TL
@@ -857,7 +859,6 @@ Yeşilyurt / Merkez,3+1,25.000 TL
 Yeşilyurt / Merkez,1+1,30.000 TL
 Yeşilyurt / Merkez,2+1,26.100 TL
 Arapgir,3+1,30.000 TL
-Yeşilyurt / Köyler,3+1,23.500 TL
 Yeşilyurt / Merkez,3+1,20.000 TL
 Yeşilyurt / Merkez,3+1,23.000 TL
 Yeşilyurt / Merkez,3+1,22.000 TL
@@ -912,7 +913,6 @@ Yeşilyurt / Merkez,3+1,20.500 TL
 Yeşilyurt / Merkez,3+1,23.000 TL
 Yeşilyurt / Merkez,2+1,21.000 TL
 Yeşilyurt / Merkez,3+1,20.000 TL
-Yeşilyurt / Köyler,3+1,21.500 TL
 Yeşilyurt / Merkez,4+1,24.500 TL
 Battalgazi / Merkez,1+1,28.000 TL
 Yeşilyurt / Merkez,5+1,24.000 TL
@@ -972,7 +972,6 @@ Yeşilyurt / Merkez,3+1,24.500 TL
 Yeşilyurt,3+1,25.000 TL
 Yeşilyurt / Merkez,3+1,33.000 TL
 Yeşilyurt / Merkez,3+1,20.000 TL
-Yeşilyurt,3+1,20.500 TL
 Battalgazi / Merkez,4+1,25.000 TL
 Yeşilyurt / Merkez,3+1,20.500 TL
 Yeşilyurt / Merkez,4+1,25.000 TL
@@ -981,6 +980,7 @@ Battalgazi / Merkez,2+1,25.000 TL
 Yeşilyurt / Merkez,2+1,35.000 TL
 Yeşilyurt / Merkez,3+1,20.000 TL
 Yeşilyurt,3+1,21.000 TL
+Yeşilyurt / Merkez,3+1,20.500 TL
 Yeşilyurt / Merkez,3+1,25.000 TL
 Yeşilyurt,3+1,20.000 TL
 Battalgazi / Merkez,3+1,25.000 TL
@@ -988,7 +988,6 @@ Yeşilyurt / Merkez,3+1,22.000 TL
 Yeşilyurt,4+1,20.500 TL
 Battalgazi / Merkez,4+1,20.000 TL
 Yeşilyurt / Köyler,3+1,22.000 TL
-Darende,3+1,25.000 TL
 Yeşilyurt / Merkez,4+1,23.000 TL
 Yeşilyurt / Merkez,3+1,20.000 TL
 Battalgazi / Merkez,5+1,22.500 TL
@@ -1001,10 +1000,10 @@ Battalgazi / Merkez,3+1,20.000 TL
 Battalgazi / Merkez,3+1,20.000 TL
 Yeşilyurt / Merkez,4.5+1,23.000 TL
 Yeşilyurt / Merkez,4+1,26.000 TL
+Yeşilyurt / Merkez,3+1,22.000 TL
 Battalgazi / Merkez,1+1,22.000 TL
 Battalgazi / Merkez,3+1,25.000 TL
 Yeşilyurt / Merkez,2+1,22.000 TL
-Yeşilyurt / Merkez,3+1,20.500 TL
 Yeşilyurt / Merkez,4+1,22.000 TL
 Yeşilyurt / Merkez,3+1,21.000 TL
 Yeşilyurt / Merkez,2+1,20.000 TL
@@ -1018,6 +1017,7 @@ Yeşilyurt / Merkez,2+1,32.000 TL
 Battalgazi / Merkez,2+0,21.000 TL
 Yeşilyurt / Merkez,3+1,25.000 TL
 Yeşilyurt / Merkez,2+1,35.000 TL
+Yeşilyurt,4+1,25.000 TL
 Battalgazi / Merkez,4.5+1,28.000 TL
 Yeşilyurt / Merkez,4+1,28.000 TL
 Battalgazi / Merkez,1+1,21.000 TL
@@ -1028,6 +1028,7 @@ Yeşilyurt / Merkez,1+1,25.000 TL
 Battalgazi / Merkez,4+1,20.500 TL
 Yeşilyurt,4.5+1,27.500 TL
 Yeşilyurt / Köyler,4+1,20.000 TL
+Battalgazi / Merkez,1+1,21.000 TL
 Battalgazi / Merkez,1+1,20.000 TL
 Yeşilyurt / Köyler,3+1,20.000 TL
 Yeşilyurt / Merkez,4+1,33.000 TL
@@ -1035,7 +1036,6 @@ Battalgazi / Merkez,4+1,24.500 TL
 Yeşilyurt,4+1,26.000 TL
 Yeşilyurt / Merkez,2+1,25.000 TL
 Yeşilyurt / Merkez,1+1,30.000 TL
-Yeşilyurt,4+1,25.000 TL
 Yeşilyurt / Köyler,3+1,28.000 TL
 Yeşilyurt / Merkez,4+1,37.500 TL
 Yeşilyurt / Merkez,1+1,20.000 TL
@@ -1045,7 +1045,6 @@ Battalgazi / Merkez,1+1,22.000 TL
 Battalgazi / Merkez,3+1,20.000 TL
 Yeşilyurt / Merkez,3+1,20.000 TL
 Battalgazi / Merkez,3+1,25.000 TL
-Battalgazi / Merkez,1+1,21.000 TL
 Yeşilyurt / Köyler,4+1,20.000 TL
 Yeşilyurt / Merkez,2+1,22.500 TL
 Yeşilyurt / Köyler,3+1,19.750 TL
@@ -1072,10 +1071,10 @@ Yeşilyurt / Merkez,3+1,23.000 TL
 Battalgazi / Merkez,3+1,26.000 TL
 Yeşilyurt / Merkez,2+1,21.000 TL
 Yeşilyurt / Merkez,4+1,33.000 TL
+Battalgazi / Merkez,2+0,22.000 TL
 Yeşilyurt / Merkez,4+1,26.000 TL
 Yeşilyurt / Köyler,4+1,35.000 TL
 Battalgazi / Merkez,2+0,20.000 TL
-Battalgazi / Merkez,3+1,20.000 TL
 Yeşilyurt / Merkez,3+1,25.000 TL
 Yeşilyurt,3+1,21.000 TL
 Yeşilyurt / Merkez,4+1,25.000 TL
@@ -1100,6 +1099,7 @@ Yeşilyurt,3+1,22.500 TL
 Yeşilyurt / Merkez,3+1,30.000 TL
 Yeşilyurt / Merkez,3+1,20.250 TL
 Battalgazi / Merkez,1+1,23.000 TL
+Yeşilyurt,4+1,24.000 TL
 Yeşilyurt / Merkez,3+1,20.000 TL
 Yeşilyurt / Merkez,4+1,24.000 TL
 Yeşilyurt / Merkez,3+1,25.500 TL
@@ -1114,25 +1114,24 @@ Yeşilyurt / Merkez,3+1,20.000 TL
 Battalgazi / Merkez,1+1,25.000 TL
 Kale / Köyler,2+1,30.000 TL
 Yeşilyurt / Merkez,3+1,27.000 TL
+Yeşilyurt / Merkez,3+1,20.000 TL
 Battalgazi / Merkez,3+1,30.000 TL
+Yeşilyurt / Merkez,4+1,29.000 TL
 Battalgazi / Merkez,2+1,20.000 TL
-Yeşilyurt / Köyler,3+1,23.000 TL
 Battalgazi / Merkez,2+1,24.000 TL
 Battalgazi / Merkez,2+1,20.000 TL
 Yeşilyurt / Merkez,2+1,20.000 TL
 Yeşilyurt / Merkez,2+1,30.000 TL
 Yeşilyurt / Merkez,4+1,24.000 TL
-Yeşilyurt / Merkez,3+1,20.000 TL
 Yeşilyurt / Merkez,3+1,22.000 TL
 Yeşilyurt,3+1,22.000 TL
-Yeşilyurt / Merkez,4+1,29.000 TL
 Yeşilyurt / Merkez,2+1,23.000 TL
+Yeşilyurt / Köyler,3+1,20.000 TL
 Yeşilyurt / Köyler,3+1,21.000 TL
 Battalgazi / Merkez,3+1,33.000 TL
 Battalgazi / Merkez,3+1,23.000 TL
 Yeşilyurt / Merkez,4+1,20.000 TL
 Battalgazi / Merkez,5+1,37.000 TL
-Yeşilyurt / Köyler,3+1,20.000 TL
 Yeşilyurt / Merkez,1+1,23.500 TL
 Yeşilyurt / Merkez,3+1,25.000 TL
 Battalgazi / Merkez,3+1,21.000 TL
@@ -1144,6 +1143,7 @@ Yeşilyurt / Merkez,3+1,20.000 TL
 Battalgazi / Merkez,3+1,22.500 TL
 Battalgazi / Merkez,2+1,20.000 TL
 Yeşilyurt / Merkez,1+1,24.000 TL
+Battalgazi / Merkez,3+1,27.000 TL
 Battalgazi / Merkez,3+1,26.500 TL
 Battalgazi / Merkez,1+1,23.000 TL
 Yeşilyurt / Köyler,3+1,20.500 TL
@@ -1159,11 +1159,12 @@ Battalgazi / Merkez,3+1,30.000 TL
 Battalgazi / Merkez,2+1,20.000 TL
 Battalgazi / Merkez,4+1,29.500 TL
 Battalgazi / Merkez,4+1,28.000 TL
-Battalgazi / Merkez,2+1,30.000 TL
 Yeşilyurt,3+1,21.500 TL
 Battalgazi / Merkez,1+1,23.000 TL
+Yeşilyurt / Merkez,3+1,26.750 TL
 Battalgazi / Merkez,3+1,20.000 TL
 Yeşilyurt,4+1,23.750 TL
+Yeşilyurt / Merkez,4+1,75.000 TL
 Yeşilyurt / Merkez,3+1,45.000 TL
 Yeşilyurt / Merkez,3+1,40.000 TL
 Battalgazi / Merkez,4+1,55.000 TL
@@ -1174,7 +1175,6 @@ Battalgazi / Merkez,3+1,40.000 TL
 Yeşilyurt / Merkez,2+1,65.000 TL
 Yeşilyurt / Köyler,5+1,50.000 TL
 Yeşilyurt / Merkez,2+1,42.500 TL
-Yeşilyurt / Merkez,4+1,50.000 TL
 Yeşilyurt / Merkez,3+1,48.000 TL
 Yeşilyurt / Merkez,3+1,48.000 TL
 Battalgazi / Merkez,3+1,40.000 TL

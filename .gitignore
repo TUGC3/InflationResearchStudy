@@ -89,3 +89,13 @@ downloaded_files/
 checkpoints/
 test_*.py
 /run_all.bat
+
+# Sahibinden Chrome debug profilleri (190MB+)
+ChromeDebugProfile/
+**/ChromeDebugProfile/
+NoDriverProfile*/
+**/NoDriverProfile*/
+
+# Sahibinden scraper checkpoint dosyalari
+checkpoint_*.json
+**/checkpoint_*.json

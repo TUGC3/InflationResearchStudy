@@ -80,46 +80,93 @@ BETWEEN_BRACKET_DELAY  = (1.5, 3.0)
 def connect_to_chrome() -> ChromiumPage:
     """
     Chrome'a baglanir. Zaten port 9222'de aciksa ona baglanir,
-    yoksa Chrome'u otomatik baslatir.
+    yoksa ayri bir profil ile debug Chrome baslatir.
+
+    Normal Chrome acik kalabilir — debug Chrome ayri profil kullanir,
+    cakisma olmaz.
     """
-    import subprocess, socket
+    import subprocess, socket, shutil
+
+    DEBUG_PROFILE = SCRIPT_DIR / "ChromeDebugProfile"
 
     def _port_open():
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
             return s.connect_ex(("127.0.0.1", 9222)) == 0
 
-    # 1. Zaten acik mi?
-    if _port_open():
-        logger.info("Port 9222 acik — mevcut Chrome'a baglaniyor.")
-    else:
-        # 2. Chrome'u debug port ile baslat
-        logger.info("Chrome baslatiliyor (port 9222)...")
-        chrome_paths = [
+    def _find_chrome() -> str:
+        for p in [
             r"C:\Program Files\Google\Chrome\Application\chrome.exe",
             r"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe",
-        ]
-        chrome_exe = None
-        for p in chrome_paths:
+        ]:
             if Path(p).exists():
-                chrome_exe = p
-                break
+                return p
+        logger.error("Chrome bulunamadi!")
+        raise SystemExit(1)
 
-        if not chrome_exe:
-            logger.error("Chrome bulunamadi!")
-            raise SystemExit(1)
+    def _kill_debug_chrome():
+        """Port 9222'deki debug Chrome'u kapat (normal Chrome'a dokunma)."""
+        try:
+            # PowerShell ile debug Chrome process'lerini bul ve kapat
+            ps_cmd = (
+                "Get-CimInstance Win32_Process -Filter "
+                "\"name='chrome.exe'\" "
+                "| Where-Object { $_.CommandLine -like '*remote-debugging-port=9222*' } "
+                "| ForEach-Object { Stop-Process -Id $_.ProcessId -Force -ErrorAction SilentlyContinue }"
+            )
+            subprocess.run(
+                ["powershell", "-NoProfile", "-Command", ps_cmd],
+                capture_output=True, timeout=10
+            )
+        except Exception:
+            pass
 
-        subprocess.Popen([
-            chrome_exe,
-            "--remote-debugging-port=9222",
-        ])
-        # Chrome'un acilmasini bekle
-        for _ in range(15):
-            time.sleep(1)
-            if _port_open():
-                break
-        else:
-            logger.error("Chrome baslatilamadi.")
-            raise SystemExit(1)
+    # 1. Port zaten acik mi?
+    if _port_open():
+        logger.info("Port 9222 acik — mevcut Chrome'a baglaniyor.")
+        page = ChromiumPage(addr_or_opts="127.0.0.1:9222")
+        logger.info("Chrome'a basariyla baglandi.")
+        return page
+
+    # 2. Eski debug Chrome kalmissa temizle
+    _kill_debug_chrome()
+    time.sleep(1)
+
+    # 3. Profil dizinindeki kilidi temizle (varsa)
+    lock_file = DEBUG_PROFILE / "SingletonLock"
+    if lock_file.exists():
+        try:
+            lock_file.unlink()
+        except OSError:
+            pass
+
+    # 4. Chrome'u ayri profil + debug port ile baslat
+    chrome_exe = _find_chrome()
+    DEBUG_PROFILE.mkdir(parents=True, exist_ok=True)
+
+    logger.info("Debug Chrome baslatiliyor (port 9222, ayri profil)...")
+    subprocess.Popen([
+        chrome_exe,
+        "--remote-debugging-port=9222",
+        f"--user-data-dir={DEBUG_PROFILE}",
+        "--no-first-run",
+        "--no-default-browser-check",
+        "about:blank",
+    ])
+
+    # 5. Port'un acilmasini bekle
+    for i in range(30):
+        time.sleep(1)
+        if _port_open():
+            logger.info(f"Port 9222 acildi ({i+1}s).")
+            break
+    else:
+        logger.error(
+            "Port 9222 acilamadi (30s timeout).\n"
+            "  Manuel cozum:\n"
+            "  1) Tum Chrome'lari kapat\n"
+            "  2) Tekrar dene"
+        )
+        raise SystemExit(1)
 
     page = ChromiumPage(addr_or_opts="127.0.0.1:9222")
     logger.info("Chrome'a basariyla baglandi.")
@@ -142,6 +189,89 @@ def wait_for_listings(page, timeout: int = 120) -> bool:
     return False
 
 
+# ── Bot koruma tespiti ─────────────────────────────────────────────────────────
+
+_BOT_KEYWORDS = [
+    "oturum",              # "oturum açın" — login/verification prompt
+    "doğrulama",           # verification (unicode)
+    "dogrulama",           # verification (ascii)
+    "güvenlik kontrol",    # security check (unicode)
+    "guvenlik kontrol",    # security check (ascii)
+    "captcha",
+    "basili tut",          # Cloudflare "hold button"
+    "baglantiniz kontrol", # "checking your connection"
+    "robot olmad",         # "prove you're not a robot"
+    "tekrar dene",         # "try again"
+    "erişim engel",        # "access blocked" (unicode)
+    "erisim engel",        # "access blocked" (ascii)
+    "hcaptcha",
+    "challenge-platform",
+]
+
+
+def detect_bot_protection(html: str) -> bool:
+    """Sayfada bot koruma/captcha/dogrulama var mi kontrol eder."""
+    if not html or len(html) < 1000:
+        return True  # Cok kisa HTML = muhtemelen blok
+
+    # Normal sahibinden icerigi varsa bot koruma yok
+    if "searchResultsTable" in html or "searchResultsItem" in html:
+        return False
+    if "result-text" in html:
+        return False  # "X ilan bulundu" metni mevcut
+
+    html_lower = html.lower()
+    for keyword in _BOT_KEYWORDS:
+        if keyword in html_lower:
+            return True
+
+    return False
+
+
+def wait_for_human_verification(page, max_attempts: int = 3) -> bool:
+    """
+    Bot koruma tespit edildiginde duraksatir ve kullanicidan
+    Chrome'da captcha/dogrulamayi cozmesini bekler.
+
+    True:  kullanici cozdu, sayfa normal
+    False: kullanici 'skip' dedi veya cozemedi
+    """
+    for attempt in range(1, max_attempts + 1):
+        print("\n" + "!" * 60)
+        print("  ⚠️  BOT KORUMASI / CAPTCHA TESPIT EDILDI!")
+        print("  " + "-" * 54)
+        print("  Chrome'da su adimlari yapin:")
+        print("    1. Acik sayfadaki dogrulamayi / captcha'yi gecin")
+        print("    2. Sahibinden ilan listesini gorebildiginizden emin olun")
+        print(f"  (Deneme {attempt}/{max_attempts})")
+        print("!" * 60)
+        resp = input("  Hazir misiniz? ENTER | Atlamak icin 'skip': ").strip().lower()
+
+        if resp == "skip":
+            logger.warning("Kullanici dogrulamayi atladi.")
+            return False
+
+        # Kontrol: sayfa artik normal mi?
+        try:
+            html = page.html
+            if "searchResultsItem" in html or "searchResultsTable" in html:
+                logger.info("Bot korumasi asildi — devam ediliyor.")
+                return True
+            if "result-text" in html:
+                logger.info("Sayfa normal gorunuyor — devam ediliyor.")
+                return True
+        except Exception:
+            pass
+
+        if attempt < max_attempts:
+            logger.warning("Hala ilan listesi gorunmuyor, tekrar deneyin.")
+
+    logger.error("Bot korumasi asilamadi (%d deneme sonra).", max_attempts)
+    return False
+
+
+# ── Sayfa yukleyici ───────────────────────────────────────────────────────────
+
 def fetch_page(page, url: str) -> str | None:
     """Sayfa yukler, tablo renderini bekler ve HTML doner."""
     try:
@@ -158,12 +288,25 @@ def fetch_page(page, url: str) -> str | None:
             # Cloudflare challenge kontrolu
             if "basili tutun" in html.lower() or "baglantiniz kontrol" in html.lower():
                 logger.warning("Cloudflare challenge cikti — manual gecis gerekiyor.")
-                print("\n  >>> Cloudflare challenge cikti! Lutfen gecin... <<<\n")
-                if not wait_for_listings(page, timeout=60):
-                    return None
-                return page.html
+                if wait_for_human_verification(page):
+                    # Dogrulama gecildi — sayfayi tekrar yukle
+                    page.get(url)
+                    time.sleep(2)
+                    return page.html
+                return None
 
-        # 15 sn doldu, tablo bulunamadi — yine de HTML don
+        # 15 sn doldu, tablo bulunamadi — bot koruma mi?
+        html = page.html
+        if detect_bot_protection(html):
+            logger.warning("Bot korumasi tespit edildi!")
+            if wait_for_human_verification(page):
+                # Dogrulama gecildi — sayfayi tekrar yukle
+                page.get(url)
+                time.sleep(2)
+                return page.html
+            return None
+
+        # Tablo yok ama bot koruma da yok — gercekten bos sayfa
         logger.warning("Tablo elementi bulunamadi, mevcut HTML donduruluyor.")
         time.sleep(random.uniform(REQUEST_DELAY_MIN, REQUEST_DELAY_MAX))
         return page.html
@@ -287,12 +430,30 @@ class SahibindenScraper:
 
     def _save_to_csv(self, records: list[dict]) -> None:
         path = self._csv_path()
+
+        # Dedup: mevcut kayitlari oku, ayni kayitlari tekrar ekleme
+        existing_keys: set[tuple] = set()
+        if path.exists():
+            with open(path, "r", encoding="utf-8") as f:
+                reader = csv.DictReader(f)
+                for row in reader:
+                    existing_keys.add(
+                        (row.get("District", ""), row.get("Rooms", ""), row.get("Price", ""))
+                    )
+
+        new_records = [
+            r for r in records
+            if (r["District"], r["Rooms"], r["Price"]) not in existing_keys
+        ]
+        if not new_records:
+            return
+
         file_exists = path.exists()
         with open(path, mode="a", newline="", encoding="utf-8") as f:
             writer = csv.DictWriter(f, fieldnames=["District", "Rooms", "Price"])
             if not file_exists:
                 writer.writeheader()
-            writer.writerows(records)
+            writer.writerows(new_records)
 
     # ── Core: adaptive binary split ────────────────────────────────────────────
 
@@ -339,6 +500,22 @@ class SahibindenScraper:
             return saved
 
         if total_listings is None:
+            # Bot koruma mi yoksa gercekten sonuc yok mu?
+            if detect_bot_protection(html):
+                logger.warning(
+                    "%s   ⚠️ Bot korumasi tespit edildi — range 'done' isaretlenMEYECEK!",
+                    pad,
+                )
+                if wait_for_human_verification(self.page):
+                    # Kullanici cozdu — bu range'i bastan dene
+                    return self._scrape_range(
+                        url_slug, min_price, max_price,
+                        done_ranges, checkpoint, indent,
+                    )
+                # Kullanici atladi — done isaretleme, resume tekrar denesin
+                logger.warning("%s   Range atlanıyor (done DEGiL): %d-%d TL", pad, min_price, max_price)
+                return 0
+
             logger.info("%s   Sonuc yok, atlaniyor: %d-%d TL", pad, min_price, max_price)
             done_ranges.add((min_price, max_price))
             checkpoint["done_ranges"] = [list(r) for r in done_ranges]
@@ -353,9 +530,11 @@ class SahibindenScraper:
         records: list[dict] = []
         rooms_idx = None
         page_num  = 1
+        bot_interrupted = False
 
         while True:
             if html is None:
+                bot_interrupted = True  # fetch_page None dondu = muhtemelen bot koruma
                 break
             page_records = parse_listings(html, rooms_idx)
             records.extend(page_records)
@@ -377,6 +556,14 @@ class SahibindenScraper:
         if records:
             self._save_to_csv(records)
             logger.info("%s  %d kayit kaydedildi (%d-%d TL).", pad, len(records), min_price, max_price)
+
+        if bot_interrupted:
+            logger.warning(
+                "%s  ⚠️ Sayfalama bot korumasi nedeniyle kesildi — "
+                "range 'done' isaretlenMEYECEK! (%d/%s kayit)",
+                pad, len(records), total_listings,
+            )
+            return len(records)
 
         done_ranges.add((min_price, max_price))
         checkpoint["done_ranges"] = [list(r) for r in done_ranges]

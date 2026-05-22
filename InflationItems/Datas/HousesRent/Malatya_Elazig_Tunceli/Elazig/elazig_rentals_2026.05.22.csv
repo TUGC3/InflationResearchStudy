@@ -2,6 +2,7 @@ District,Rooms,Price
 Merkez / İzzetpaşa,1+1,22.500 TL
 Merkez / İzzetpaşa,Stüdyo (1+0),15.000 TL
 Merkez / İzzetpaşa,Stüdyo (1+0),17.000 TL
+Merkez / İzzetpaşa,4+1,20.000 TL
 Merkez / Yurtbaşı,1+1,16.000 TL
 Merkez / Sürsürü,2+0,15.500 TL
 Merkez / Sürsürü,1+1,21.000 TL
@@ -10,6 +11,15 @@ Merkez / Sürsürü,1+1,25.000 TL
 Merkez / 1800 Evler,3+1,21.000 TL
 Merkez,3+1,13.000 TL
 Merkez / 1800 Evler,1+1,16.000 TL
+Merkez / Sürsürü,1+1,19.000 TL
+Merkez / Mustafapaşa,3+1,13.500 TL
+Merkez / Aksaray,3+1,17.000 TL
+Merkez / İzzetpaşa,3+1,8.000 TL
+Merkez / Sürsürü,1+1,23.500 TL
+Merkez / 1800 Evler,3+1,14.000 TL
+Merkez / Sürsürü,1+1,17.000 TL
+Merkez,3+1,12.000 TL
+Merkez / İzzetpaşa,3+1,16.000 TL
 Merkez,1+1,22.000 TL
 Merkez / Nailbey,3+1,13.000 TL
 Merkez,3+1,11.000 TL
@@ -18,6 +28,7 @@ Merkez,3+1,11.500 TL
 Merkez / Mustafapaşa,3+1,9.000 TL
 Merkez / İzzetpaşa,Stüdyo (1+0),8.500 TL
 Merkez / Sürsürü,2+1,22.000 TL
+Merkez / 1800 Evler,1+1,20.000 TL
 Merkez / Sürsürü,3+1,13.000 TL
 Merkez,3+1,12.750 TL
 Merkez / Köyler,3+1,25.000 TL
@@ -53,6 +64,7 @@ Merkez / İzzetpaşa,2+1,18.000 TL
 Merkez / Sürsürü,3+1,10.000 TL
 Merkez / 1800 Evler,3+1,16.000 TL
 Merkez / Sürsürü,4+1,22.500 TL
+Merkez,3+1,17.000 TL
 Merkez / Yurtbaşı,2.5+1,22.000 TL
 Merkez / Sürsürü,1+1,14.500 TL
 Merkez / Sürsürü,1+1,21.250 TL
@@ -72,7 +84,6 @@ Merkez / 1800 Evler,7+1,60.000 TL
 Merkez / Sürsürü,4+1,23.000 TL
 Merkez / Sürsürü,3+1,12.000 TL
 Merkez / Yurtbaşı,2+1,9.500 TL
-Merkez / İzzetpaşa,3+1,13.000 TL
 Merkez / Mustafapaşa,3+1,12.500 TL
 Merkez / 1800 Evler,3+1,20.000 TL
 Merkez / 1800 Evler,3+1,17.500 TL
@@ -117,13 +128,13 @@ Merkez / 1800 Evler,2+1,13.000 TL
 Merkez,2+1,10.750 TL
 Merkez / Nailbey,3+1,15.500 TL
 Merkez,2+1,13.500 TL
+Merkez,3+1,160.000 TL
 Merkez / Aksaray,3+1,14.000 TL
 Merkez / 1800 Evler,1+1,15.500 TL
 Merkez / Sürsürü,1+1,16.500 TL
 Merkez / Sürsürü,2+1,16.500 TL
-Merkez / Mustafapaşa,2+1,12.500 TL
 Merkez / 1800 Evler,6+2,160.000 TL
-Merkez / Sürsürü,3+1,25.000 TL
+Merkez / Sürsürü,3+1,24.000 TL
 Merkez / Sürsürü,1+1,21.000 TL
 Merkez,3+1,10.000 TL
 Merkez / İzzetpaşa,1+1,35.000 TL
@@ -131,12 +142,12 @@ Merkez / Mustafapaşa,3+1,15.500 TL
 Merkez / İzzetpaşa,4+1,20.500 TL
 Merkez,2+1,12.000 TL
 Merkez / İzzetpaşa,3+1,12.000 TL
+Merkez / İzzetpaşa,3+1,13.000 TL
 Merkez / Köyler,3+1,9.000 TL
 Merkez / 1800 Evler,3+1,15.000 TL
 Merkez / İzzetpaşa,3+1,14.000 TL
 Merkez / Köyler,2+1,21.000 TL
 Merkez / Sürsürü,2+1,10.000 TL
-Merkez,2+1,10.500 TL
 Merkez / İzzetpaşa,3+1,19.000 TL
 Merkez,3.5+1,11.000 TL
 Merkez / 1800 Evler,4+1,16.000 TL
@@ -180,8 +191,8 @@ Merkez / Mustafapaşa,3+1,12.500 TL
 Merkez / İzzetpaşa,1+1,23.000 TL
 Merkez / 1800 Evler,1+1,20.000 TL
 Merkez / Mustafapaşa,3+1,9.000 TL
+Merkez / Nailbey,3+1,10.500 TL
 Merkez / Sürsürü,1+1,22.500 TL
-Merkez / 1800 Evler,3+1,15.500 TL
 Merkez / Sürsürü,1+1,23.000 TL
 Merkez,3+1,9.000 TL
 Merkez / 1800 Evler,4+1,55.000 TL
@@ -189,6 +200,7 @@ Merkez / Doğukent,3+1,20.000 TL
 Merkez / Sürsürü,3+1,25.500 TL
 Merkez / Yurtbaşı,3+1,9.900 TL
 Merkez,3+1,10.500 TL
+Merkez,2+1,10.500 TL
 Merkez / İzzetpaşa,3+1,13.500 TL
 Merkez / İzzetpaşa,4+1,20.000 TL
 Merkez / İzzetpaşa,3+1,23.500 TL
@@ -210,6 +222,7 @@ Merkez / İzzetpaşa,3+1,12.750 TL
 Merkez / Sürsürü,3+1,14.900 TL
 Merkez / Doğukent,1+1,17.000 TL
 Merkez / Köyler,3+1,8.500 TL
+Merkez,3+1,7.000 TL
 Merkez / Mustafapaşa,3+1,7.000 TL
 Merkez / Sürsürü,1+1,22.250 TL
 Merkez / İzzetpaşa,1+1,15.000 TL
@@ -257,7 +270,6 @@ Merkez,3+1,10.000 TL
 Merkez / Sürsürü,3+1,25.000 TL
 Merkez / Sürsürü,3+1,21.500 TL
 Merkez / İzzetpaşa,2+0,19.000 TL
-Merkez / Sürsürü,1+1,18.000 TL
 Merkez,3+1,9.000 TL
 Merkez / Nailbey,3+1,12.000 TL
 Merkez / Sürsürü,2+1,10.000 TL
@@ -292,6 +304,7 @@ Merkez / İzzetpaşa,2+1,13.000 TL
 Merkez / Sürsürü,1+1,14.500 TL
 Merkez / 1800 Evler,2+1,18.000 TL
 Merkez / Sürsürü,1+1,15.500 TL
+Merkez / Sürsürü,1+1,18.000 TL
 Merkez / Mustafapaşa,2+1,13.500 TL
 Merkez / Sürsürü,1+1,19.000 TL
 Merkez / 1800 Evler,4+1,26.000 TL
@@ -317,7 +330,6 @@ Karakoçan,2+1,7.000 TL
 Merkez,2+1,11.000 TL
 Merkez / Sürsürü,3+1,25.000 TL
 Merkez / Sürsürü,2+1,19.000 TL
-Merkez,3+1,20.500 TL
 Merkez / Sürsürü,2+1,21.000 TL
 Merkez / 1800 Evler,4+1,16.500 TL
 Merkez / İzzetpaşa,2+0,18.000 TL
@@ -329,6 +341,7 @@ Merkez / Mustafapaşa,3+1,16.000 TL
 Merkez / Sürsürü,3+1,16.000 TL
 Merkez / Sürsürü,1+1,22.000 TL
 Merkez / İzzetpaşa,2+0,26.500 TL
+Merkez / Sürsürü,4+1,19.500 TL
 Merkez,3+1,8.000 TL
 Merkez / Sürsürü,2+1,10.000 TL
 Merkez / Sürsürü,4+1,21.000 TL
@@ -406,7 +419,7 @@ Merkez / Sürsürü,1+1,24.000 TL
 Merkez / Sürsürü,3+1,24.000 TL
 Merkez / 1800 Evler,4+1,25.000 TL
 Merkez / Sürsürü,3+1,13.500 TL
-Merkez / Doğukent,3+1,16.900 TL
+Merkez / Doğukent,3+1,16.750 TL
 Merkez,3+1,13.000 TL
 Merkez / Sürsürü,3+1,20.000 TL
 Merkez / Sürsürü,3+1,12.000 TL
@@ -422,19 +435,17 @@ Merkez / Nailbey,3+1,9.000 TL
 Merkez / Sürsürü,1+1,24.500 TL
 Merkez / Sürsürü,2+1,13.500 TL
 Merkez / Sürsürü,2+1,13.650 TL
-Merkez / İzzetpaşa,4+1,20.000 TL
 Merkez / Sürsürü,1+1,20.000 TL
 Merkez / 1800 Evler,4+1,25.000 TL
 Merkez / Sürsürü,2+1,7.000 TL
 Merkez / Mustafapaşa,2+1,28.500 TL
 Merkez / Nailbey,2+1,12.000 TL
-Merkez / Sürsürü,3+1,21.000 TL
 Merkez / İzzetpaşa,2+1,18.500 TL
 Merkez / Sürsürü,1+1,20.500 TL
 Merkez / Nailbey,3+1,13.000 TL
 Merkez / Mustafapaşa,3+1,15.000 TL
 Merkez,3+1,9.000 TL
-Merkez / Sürsürü,2+1,10.000 TL
+Merkez / Sürsürü,2+1,9.500 TL
 Merkez,2+1,10.000 TL
 Merkez / Sürsürü,1+1,23.000 TL
 Merkez,1+1,20.000 TL
@@ -473,6 +484,7 @@ Merkez / Sürsürü,1+1,18.000 TL
 Merkez / 1800 Evler,3+1,20.500 TL
 Merkez / 1800 Evler,4+1,20.000 TL
 Merkez,3+1,10.000 TL
+Merkez / İzzetpaşa,3+1,8.000 TL
 Merkez / 1800 Evler,3+1,13.500 TL
 Merkez / Sürsürü,4+1,20.000 TL
 Merkez / İzzetpaşa,2+1,25.000 TL
@@ -574,7 +586,6 @@ Merkez / Sürsürü,2+1,13.500 TL
 Merkez / Sürsürü,1+1,22.000 TL
 Merkez / Sürsürü,3+1,15.500 TL
 Merkez / Sürsürü,1+1,15.000 TL
-Merkez / İzzetpaşa,1+1,22.000 TL
 Merkez / Yurtbaşı,3+1,18.000 TL
 Merkez / 1800 Evler,2+1,20.500 TL
 Merkez / Mustafapaşa,3+1,9.500 TL
@@ -607,12 +618,10 @@ Merkez,3+1,8.500 TL
 Merkez / Sürsürü,3+1,20.000 TL
 Merkez / İzzetpaşa,1+1,23.500 TL
 Merkez / Doğukent,4+1,24.500 TL
-Merkez / Sürsürü,1+1,19.000 TL
 Merkez / İzzetpaşa,1+1,21.500 TL
 Merkez / Sürsürü,3+1,13.500 TL
-Merkez / İzzetpaşa,3+1,16.000 TL
-Merkez / Doğukent,3.5+1,17.000 TL
 Merkez / İzzetpaşa,2+1,9.000 TL
+Merkez / İzzetpaşa,1+1,22.000 TL
 Sivrice,2+1,7.750 TL
 Merkez / İzzetpaşa,3+1,13.000 TL
 Merkez / Doğukent,1+1,21.000 TL
@@ -633,7 +642,6 @@ Merkez,4+1,23.000 TL
 Merkez / 1800 Evler,3+1,17.000 TL
 Merkez / Mustafapaşa,3.5+1,9.000 TL
 Merkez / Nailbey,3+1,14.000 TL
-Merkez / Sürsürü,1+1,23.500 TL
 Merkez / Yurtbaşı,3+1,9.500 TL
 Merkez / İzzetpaşa,2+1,17.500 TL
 Merkez / Sürsürü,1+1,15.000 TL
@@ -670,7 +678,6 @@ Merkez / Doğukent,2+1,24.000 TL
 Merkez / Sürsürü,2+1,10.000 TL
 Merkez / İzzetpaşa,1+1,23.000 TL
 Merkez / Sürsürü,3+1,7.000 TL
-Merkez,2+1,10.500 TL
 Merkez / İzzetpaşa,1+1,23.000 TL
 Merkez / Sürsürü,2+1,11.000 TL
 Merkez,1+1,21.000 TL
@@ -696,12 +703,12 @@ Merkez / İzzetpaşa,2+0,20.000 TL
 Merkez / Sürsürü,3+1,10.000 TL
 Merkez / Sürsürü,3+1,12.000 TL
 Merkez / Sürsürü,1+1,20.500 TL
+Merkez,2+1,10.500 TL
 Sivrice,2+1,15.000 TL
 Merkez / Köyler,3+1,10.000 TL
 Merkez / Sürsürü,2+1,13.000 TL
 Merkez / 1800 Evler,3+1,20.000 TL
 Merkez / Sürsürü,3+1,19.000 TL
-Merkez,2+1,12.000 TL
 Merkez / 1800 Evler,1+1,21.000 TL
 Merkez / Nailbey,4+1,17.500 TL
 Merkez / Sürsürü,3+1,15.000 TL
@@ -710,6 +717,7 @@ Merkez,3+1,22.000 TL
 Merkez / 1800 Evler,1+1,24.000 TL
 Merkez / Nailbey,3+1,13.500 TL
 Merkez,2+1,15.000 TL
+Merkez / Sürsürü,3+1,21.500 TL
 Merkez / İzzetpaşa,3+1,16.000 TL
 Merkez,2+1,8.500 TL
 Merkez,3+1,12.500 TL
@@ -719,6 +727,7 @@ Merkez,3+1,12.000 TL
 Merkez,2+1,15.000 TL
 Merkez / Sürsürü,4+1,28.000 TL
 Merkez / Sürsürü,1+1,15.000 TL
+Merkez,2+1,12.000 TL
 Merkez / Yurtbaşı,3+1,11.000 TL
 Merkez / Sürsürü,1+1,18.000 TL
 Merkez,2+1,13.000 TL
@@ -730,7 +739,6 @@ Merkez / İzzetpaşa,2+0,26.500 TL
 Merkez / Sürsürü,3+1,34.000 TL
 Merkez / İzzetpaşa,3+1,16.000 TL
 Merkez / Doğukent,3+1,23.500 TL
-Merkez,3+1,17.500 TL
 Merkez / Yurtbaşı,3+1,25.500 TL
 Merkez / Sürsürü,4+1,35.000 TL
 Merkez / Yurtbaşı,3+1,10.500 TL
@@ -765,8 +773,9 @@ Merkez / İzzetpaşa,1+1,20.000 TL
 Merkez / Sürsürü,2+1,25.000 TL
 Merkez / Yurtbaşı,2+1,7.500 TL
 Merkez / Sürsürü,3+1,23.500 TL
-Merkez / İzzetpaşa,2+1,6.500 TL
+Merkez / İzzetpaşa,2+1,5.000 TL
 Merkez,3+1,13.000 TL
+Merkez,3+1,9.500 TL
 Merkez / Sürsürü,1+1,20.500 TL
 Merkez,3+1,10.000 TL
 Merkez / Sürsürü,1+1,16.500 TL
@@ -859,7 +868,6 @@ Merkez / Sürsürü,1+1,20.000 TL
 Merkez,3+1,10.000 TL
 Merkez / İzzetpaşa,1+1,22.000 TL
 Merkez / Mustafapaşa,3+1,8.000 TL
-Merkez,3+1,8.600 TL
 Merkez / Nailbey,2+1,11.000 TL
 Merkez,3+1,9.990 TL
 Merkez / Sürsürü,2+1,15.000 TL
@@ -879,7 +887,6 @@ Merkez / 1800 Evler,4+1,20.000 TL
 Merkez,3+1,14.000 TL
 Merkez / Yurtbaşı,3+1,7.000 TL
 Merkez,3+1,10.000 TL
-Merkez / 1800 Evler,1+1,23.000 TL
 Merkez / Nailbey,3+1,8.500 TL
 Merkez / İzzetpaşa,2+1,14.000 TL
 Merkez / Yurtbaşı,3+1,23.000 TL
@@ -904,6 +911,7 @@ Merkez / İzzetpaşa,1+1,23.000 TL
 Merkez / Sürsürü,3+1,20.000 TL
 Merkez / 1800 Evler,2+1,22.000 TL
 Merkez / Sürsürü,3+1,16.000 TL
+Merkez,3+1,10.999 TL
 Merkez / Sürsürü,3+1,22.500 TL
 Merkez / Sürsürü,3+1,25.500 TL
 Merkez,3+1,7.500 TL
