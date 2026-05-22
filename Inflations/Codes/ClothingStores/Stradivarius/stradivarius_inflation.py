@@ -35,7 +35,7 @@ import pandas as pd
 # Veri:     InflationItems/Datas/ClothingStores/Stradivarius/
 # Çıktı:    Inflations/Datas/ClothingStores/Stradivarius/
 _THIS_DIR = Path(__file__).resolve().parent
-REPO_ROOT  = _THIS_DIR.parents[4]
+REPO_ROOT  = _THIS_DIR.parents[3]
 sys.path.insert(0, str(_THIS_DIR))
 from stradivarius_tuik_config import stradivarius_category_to_tuik, normalised_weights
 

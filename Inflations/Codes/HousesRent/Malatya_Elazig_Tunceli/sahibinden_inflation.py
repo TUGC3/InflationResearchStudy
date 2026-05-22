@@ -36,7 +36,7 @@ import pandas as pd
 # Veri:     InflationItems/Datas/HousesRent/Malatya_Elazig_Tunceli/<Şehir>/
 # Çıktı:    Inflations/Datas/HousesRent/Malatya_Elazig_Tunceli/
 _THIS_DIR = Path(__file__).resolve().parent
-REPO_ROOT  = _THIS_DIR.parents[4]
+REPO_ROOT  = _THIS_DIR.parents[3]
 sys.path.insert(0, str(_THIS_DIR))
 from sahibinden_tuik_config import sahibinden_city_to_tuik, normalised_weights
 

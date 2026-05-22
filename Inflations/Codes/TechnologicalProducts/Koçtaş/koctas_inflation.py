@@ -21,7 +21,7 @@ _THIS_DIR = Path(__file__).resolve().parent
 # Bu dosya: Inflations/Codes/TechnologicalProducts/Koçtaş/koctas_inflation.py
 # Veri:     InflationItems/Datas/TechnologicalProducts/Koçtaş/
 # Çıktı:    Inflations/Datas/TechnologicalProducts/Koçtaş/
-REPO_ROOT  = _THIS_DIR.parents[4]
+REPO_ROOT  = _THIS_DIR.parents[3]
 sys.path.insert(0, str(_THIS_DIR))
 from koctas_tuik_config import koctas_category_to_tuik, normalised_weights
 
