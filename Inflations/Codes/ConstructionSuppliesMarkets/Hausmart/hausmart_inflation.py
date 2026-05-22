@@ -29,14 +29,18 @@ from pathlib import Path
 import pandas as pd
 
 # ── Path setup ────────────────────────────────────────────────────────────────
+# Bu dosya: Inflations/Codes/ConstructionSuppliesMarkets/Hausmart/hausmart_inflation.py
+# Veri:     InflationItems/Datas/ConstructionSuppliesMarkets/Hausmart/
+# Çıktı:    Inflations/Datas/ConstructionSuppliesMarkets/Hausmart/
 _THIS_DIR = Path(__file__).resolve().parent
+REPO_ROOT  = _THIS_DIR.parents[4]
 sys.path.insert(0, str(_THIS_DIR))
 from hausmart_tuik_config import hausmart_category_to_tuik, normalised_weights
 
 logger = logging.getLogger(__name__)
 
-DATA_DIR   = _THIS_DIR
-OUTPUT_DIR = _THIS_DIR
+DATA_DIR   = REPO_ROOT / "InflationItems" / "Datas" / "ConstructionSuppliesMarkets" / "Hausmart"
+OUTPUT_DIR = REPO_ROOT / "Inflations"     / "Datas" / "ConstructionSuppliesMarkets" / "Hausmart"
 
 
 # ── Data loading ──────────────────────────────────────────────────────────────
