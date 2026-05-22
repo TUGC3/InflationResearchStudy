@@ -18,13 +18,13 @@ REPO_ROOT = Path(__file__).resolve().parent
 
 # ── Scraper'lar (sırayla çalışır) ────────────────────────────────────────────
 SCRAPERS = [
+    REPO_ROOT / "InflationItems/Codes/HousesRent/Malatya_Elazig_Tunceli/sahibinden_scraper.py",  # ilk sırada — Chrome + Cloudflare manual geçiş gerekir
     REPO_ROOT / "InflationItems/Codes/Markets/Marketzade/scraper_claude.py",
     REPO_ROOT / "InflationItems/Codes/Cosmetics/Dermomarket/dermomarket_scraper.py",
     REPO_ROOT / "InflationItems/Codes/HomeGoods/EnglishHome/englishhome_scraper.py",
     REPO_ROOT / "InflationItems/Codes/ConstructionSuppliesMarkets/Hausmart/hausmart_scraper.py",
     REPO_ROOT / "InflationItems/Codes/TechnologicalProducts/Koçtaş/koctas_scraper.py",
     REPO_ROOT / "InflationItems/Codes/ClothingStores/Stradivarius/StradivariusScraper.py",
-    # REPO_ROOT / "InflationItems/Codes/HousesRent/Malatya_Elazig_Tunceli/sahibinden_scraper.py",  # bot detection - temporarily disabled
 ]
 
 # ── Inflation scriptleri (sırayla çalışır) ───────────────────────────────────
@@ -35,7 +35,7 @@ INFLATION_SCRIPTS = [
     REPO_ROOT / "Inflations/Codes/ConstructionSuppliesMarkets/Hausmart/hausmart_inflation.py",
     REPO_ROOT / "Inflations/Codes/TechnologicalProducts/Koçtaş/koctas_inflation.py",
     REPO_ROOT / "Inflations/Codes/ClothingStores/Stradivarius/stradivarius_inflation.py",
-    # REPO_ROOT / "Inflations/Codes/HousesRent/Malatya_Elazig_Tunceli/sahibinden_inflation.py",  # bot detection - temporarily disabled
+    REPO_ROOT / "Inflations/Codes/HousesRent/Malatya_Elazig_Tunceli/sahibinden_inflation.py",
 ]
 
 
