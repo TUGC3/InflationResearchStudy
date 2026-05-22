@@ -39,8 +39,21 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 # ── Sabitler ───────────────────────────────────────────────────────────────────
-SCRIPT_DIR = Path(__file__).resolve().parent   # CSV ve checkpoint'ler buraya yazılır
+SCRIPT_DIR = Path(__file__).resolve().parent   # Checkpoint ve SeleniumProfile buraya yazılır
 TODAY      = datetime.date.today().strftime("%Y.%m.%d")
+
+# ── Repo-relative output paths ────────────────────────────────────────────────
+# Bu dosya: InflationItems/Codes/HousesRent/Malatya_Elazig_Tunceli/sahibinden_scraper.py
+# Veri:     InflationItems/Datas/HousesRent/Malatya_Elazig_Tunceli/<Şehir>/
+REPO_ROOT = Path(__file__).resolve().parents[4]
+_BASE_DATA = REPO_ROOT / "InflationItems" / "Datas" / "HousesRent" / "Malatya_Elazig_Tunceli"
+CITY_OUT_DIRS = {
+    "malatya": _BASE_DATA / "Malatya",
+    "elazig":  _BASE_DATA / "Elazig",
+    "tunceli": _BASE_DATA / "Tunceli",
+}
+for _d in CITY_OUT_DIRS.values():
+    _d.mkdir(parents=True, exist_ok=True)
 
 CITIES = {
     "malatya": {"url_slug": "malatya", "label": "Malatya"},
@@ -83,7 +96,7 @@ class SahibindenScraper:
     def _setup_driver(self) -> uc.Chrome:
         options = uc.ChromeOptions()
         options.add_argument(f"--user-data-dir={SELENIUM_PROFILE_DIR}")
-        return uc.Chrome(options=options, version_main=145)
+        return uc.Chrome(options=options, version_main=147)
 
     def quit(self):
         self.driver.quit()
@@ -185,7 +198,7 @@ class SahibindenScraper:
     # ── CSV Output ─────────────────────────────────────────────────────────────
 
     def _csv_path(self, city_key: str) -> Path:
-        return SCRIPT_DIR / f"{city_key}_rentals_{TODAY}.csv"
+        return CITY_OUT_DIRS[city_key] / f"{city_key}_rentals_{TODAY}.csv"
 
     def _save_to_csv(self, records: list[dict], city_key: str) -> None:
         path = self._csv_path(city_key)
@@ -353,10 +366,10 @@ class SahibindenScraper:
         logger.info("")
         logger.info("=" * 60)
         logger.info("  🎉  Tüm şehirler tamamlandı!")
-        logger.info("  📁  CSV'ler burada: %s", SCRIPT_DIR)
+        logger.info("  📁  CSV'ler repo'ya yazıldı:")
         for city_key in targets:
             p = self._csv_path(city_key)
-            logger.info("  %s  %s", "✓" if p.exists() else "✗", p.name)
+            logger.info("  %s  %s", "✓" if p.exists() else "✗", p)
         logger.info("=" * 60)
 
 
