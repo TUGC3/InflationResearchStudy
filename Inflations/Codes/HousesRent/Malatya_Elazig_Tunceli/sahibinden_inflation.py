@@ -32,14 +32,23 @@ from pathlib import Path
 import pandas as pd
 
 # ── Path setup ────────────────────────────────────────────────────────────────
+# Bu dosya: Inflations/Codes/HousesRent/Malatya_Elazig_Tunceli/sahibinden_inflation.py
+# Veri:     InflationItems/Datas/HousesRent/Malatya_Elazig_Tunceli/<Şehir>/
+# Çıktı:    Inflations/Datas/HousesRent/Malatya_Elazig_Tunceli/
 _THIS_DIR = Path(__file__).resolve().parent
+REPO_ROOT  = _THIS_DIR.parents[4]
 sys.path.insert(0, str(_THIS_DIR))
 from sahibinden_tuik_config import sahibinden_city_to_tuik, normalised_weights
 
 logger = logging.getLogger(__name__)
 
-DATA_DIR   = _THIS_DIR
-OUTPUT_DIR = _THIS_DIR
+_BASE_DATA = REPO_ROOT / "InflationItems" / "Datas" / "HousesRent" / "Malatya_Elazig_Tunceli"
+CITY_DATA_DIRS = {
+    "malatya": _BASE_DATA / "Malatya",
+    "elazig":  _BASE_DATA / "Elazig",
+    "tunceli": _BASE_DATA / "Tunceli",
+}
+OUTPUT_DIR = REPO_ROOT / "Inflations" / "Datas" / "HousesRent" / "Malatya_Elazig_Tunceli"
 
 CITIES = ["malatya", "elazig", "tunceli"]
 
@@ -70,7 +79,7 @@ def _load_csv(city: str, date_str: str) -> pd.DataFrame | None:
     date_str format: 'YYYY-MM-DD'  →  file: {city}_rentals_YYYY_MM_DD.csv
     """
     file_date = date_str.replace("-", ".")
-    fpath = DATA_DIR / f"{city}_rentals_{file_date}.csv"
+    fpath = CITY_DATA_DIRS[city] / f"{city}_rentals_{file_date}.csv"
     if not fpath.exists():
         logger.info(f"Veri dosyası bulunamadı: {fpath}")
         return None
