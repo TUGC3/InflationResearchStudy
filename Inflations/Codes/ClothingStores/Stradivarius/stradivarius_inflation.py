@@ -31,14 +31,18 @@ from pathlib import Path
 import pandas as pd
 
 # ── Path setup ────────────────────────────────────────────────────────────────
+# Bu dosya: Inflations/Codes/ClothingStores/Stradivarius/stradivarius_inflation.py
+# Veri:     InflationItems/Datas/ClothingStores/Stradivarius/
+# Çıktı:    Inflations/Datas/ClothingStores/Stradivarius/
 _THIS_DIR = Path(__file__).resolve().parent
+REPO_ROOT  = _THIS_DIR.parents[4]
 sys.path.insert(0, str(_THIS_DIR))
 from stradivarius_tuik_config import stradivarius_category_to_tuik, normalised_weights
 
 logger = logging.getLogger(__name__)
 
-DATA_DIR   = _THIS_DIR
-OUTPUT_DIR = _THIS_DIR
+DATA_DIR   = REPO_ROOT / "InflationItems" / "Datas" / "ClothingStores" / "Stradivarius"
+OUTPUT_DIR = REPO_ROOT / "Inflations"     / "Datas" / "ClothingStores" / "Stradivarius"
 
 KEY = ["category", "product_name", "color"]
 
