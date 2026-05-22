@@ -22,6 +22,14 @@ import sys
 import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import date
+from pathlib import Path
+
+# ── Repo-relative output path ─────────────────────────────────────────────────
+# Bu dosya: InflationItems/Codes/Cosmetics/Dermomarket/dermomarket_scraper.py
+# Veri:     InflationItems/Datas/Cosmetics/Dermomarket/
+REPO_ROOT = Path(__file__).resolve().parents[4]
+OUT_DIR   = REPO_ROOT / "InflationItems" / "Datas" / "Cosmetics" / "Dermomarket"
+OUT_DIR.mkdir(parents=True, exist_ok=True)
 
 from bs4 import BeautifulSoup
 from selenium import webdriver
@@ -288,7 +296,7 @@ DEFAULT_WORKERS = 3
 
 def main():
     today_str = str(date.today())
-    csv_path = f"dermomarket_{today_str}.csv"
+    csv_path = OUT_DIR / f"dermomarket_{today_str}.csv"
 
     _check_existing(csv_path)
 
