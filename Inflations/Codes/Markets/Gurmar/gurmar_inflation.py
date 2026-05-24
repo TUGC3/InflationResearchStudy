@@ -6,12 +6,12 @@ import argparse
 import logging
 import re
 import sys
+import os
 from datetime import datetime, timedelta
 from pathlib import Path
 
 import pandas as pd
 
-# gurmar_tuik_config.py'nin aynı dizinde olduğunu varsayıyoruz
 try:
     from gurmar_tuik_config import gurmar_category_to_tuik as migros_category_to_tuik, normalised_weights
 except ImportError:
@@ -19,6 +19,14 @@ except ImportError:
     sys.exit(1)
 
 logger = logging.getLogger(__name__)
+
+# ── STRICT RELATIVE PATH SETUP ──────────────────────────────────────────────
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+# Up 4 levels from Inflations/Codes/Markets/Gurmar to repo root
+PROJECT_ROOT = os.path.abspath(os.path.join(SCRIPT_DIR, "..", "..", "..", ".."))
+
+DEFAULT_RAW_DIR = os.path.join(PROJECT_ROOT, "Datas", "Markets", "Gurmar")
+DEFAULT_OUT_DIR = os.path.join(PROJECT_ROOT, "Inflations", "Datas", "Markets", "Gurmar")
 
 
 def load_and_clean_csv(file_path):
@@ -29,16 +37,34 @@ def load_and_clean_csv(file_path):
     try:
         df = pd.read_csv(file_path)
 
-        # Gürmar kolonlarını standart altyapıya uygun hale getiriyoruz
-        df = df.rename(columns={
-            'kategori': 'category',
-            'product_name': 'id',  # ID olmadığı için ürün ismini ID olarak kullanıyoruz
-            'product_price': 'shown_price'
-        })
+        # Handle flexible column names
+        name_col = next((c for c in ['product-name', 'product_name', 'product_id', 'id'] if c in df.columns), None)
+        price_col = next((c for c in ['product-price', 'product_price', 'price', 'shown_price'] if c in df.columns),
+                         None)
+        cat_col = next((c for c in ['kategori', 'category'] if c in df.columns), None)
 
-        # Fiyatlardaki virgülü noktaya çevir ve float yap (örn: "64,95" -> 64.95)
-        df['shown_price'] = df['shown_price'].astype(str).str.replace('"', '', regex=False).str.replace(',', '.',
-                                                                                                        regex=False)
+        rename_dict = {}
+        if name_col: rename_dict[name_col] = 'id'
+        if price_col: rename_dict[price_col] = 'shown_price'
+        if cat_col: rename_dict[cat_col] = 'category'
+
+        df = df.rename(columns=rename_dict)
+
+        # Drop rows missing an ID entirely
+        if 'id' in df.columns:
+            df = df.dropna(subset=['id'])
+            # CRITICAL FIX: Deduplicate product names to prevent Cartesian RAM explosion
+            df = df.drop_duplicates(subset=['id'], keep='first')
+
+        # Cast entire series to string to eliminate float attribute errors safely
+        s = df['shown_price'].astype(str).str.replace('"', '', regex=False).str.replace('₺', '',
+                                                                                        regex=False).str.strip()
+
+        # Remove trailing python float artifacts before managing separators
+        s = s.str.replace(r'\.0$', '', regex=True)
+
+        # Standardize formatting: Turkish format contains commas
+        df['shown_price'] = s.apply(lambda x: x.replace('.', '').replace(',', '.') if ',' in x else x)
         df['shown_price'] = pd.to_numeric(df['shown_price'], errors='coerce')
 
         return df
@@ -80,7 +106,6 @@ def calculate_inflation(input_file, output_dir=None, compare_file=None):
         logger.error(f"Girdi dosyası bulunamadı: {input_path}")
         return
 
-    # Dosya isminden YYYY-MM-DD formatındaki tarihi çek
     date_match = re.search(r'(\d{4}-\d{2}-\d{2})', input_path.name)
     if date_match:
         today_str = date_match.group(1)
@@ -89,8 +114,7 @@ def calculate_inflation(input_file, output_dir=None, compare_file=None):
         logger.error("Girdi dosyasının isminde 'YYYY-MM-DD' formatında bir tarih bulunamadı!")
         return
 
-    # Çıktı dizinini ayarla
-    out_dir_path = Path(output_dir).resolve() if output_dir else Path.cwd()
+    out_dir_path = Path(output_dir).resolve() if output_dir else Path(DEFAULT_OUT_DIR)
     out_dir_path.mkdir(parents=True, exist_ok=True)
 
     df_today = load_and_clean_csv(input_path)
@@ -98,7 +122,6 @@ def calculate_inflation(input_file, output_dir=None, compare_file=None):
         logger.warning(f"Enflasyon hesaplanamıyor – {today_str} için veri yok veya bozuk.")
         return
 
-    # Geçmiş dosyaların aranacağı klasör (input dosyasının bulunduğu klasör)
     data_dir = input_path.parent
 
     if compare_file:
@@ -108,9 +131,8 @@ def calculate_inflation(input_file, output_dir=None, compare_file=None):
         intervals = {comp_label: comp_path}
     else:
         intervals = {}
-        # 1, 7, 15, 30 günlük geçmiş dosyalarını aynı formatta arayacağız
-        prefix = input_path.name.split(today_str)[0]  # Örn: "gurmar_"
-        suffix = input_path.name.split(today_str)[1]  # Örn: ".csv"
+        prefix = input_path.name.split(today_str)[0]
+        suffix = input_path.name.split(today_str)[1]
 
         for days in [1, 7, 15, 30]:
             past_date_str = (base_date - timedelta(days=days)).strftime("%Y-%m-%d")
@@ -125,8 +147,8 @@ def calculate_inflation(input_file, output_dir=None, compare_file=None):
         df_past = load_and_clean_csv(past_path)
 
         if df_past is None:
-            logger.info(f"Atlanıyor: {label} aralığı için veri bulunamadı ({past_path.name}).")
             detail_base[f'basic_inflation_{label}'] = None
+            summary_row[f'basket_inflation_{label}'] = None
             summary_row[f'avg_inflation_{label}'] = None
             summary_row[f'tuik_weighted_{label}'] = None
             continue
@@ -138,15 +160,16 @@ def calculate_inflation(input_file, output_dir=None, compare_file=None):
             on='id', how='left'
         )
 
+        summary_row[f'basket_inflation_{label}'] = basic_idx
         summary_row[f'avg_inflation_{label}'] = avg_inf
         summary_row[f'tuik_weighted_{label}'] = tuik_w
 
-    # Detaylı veriyi kaydet
+    # Save detailed files
     detail_file = out_dir_path / f"gurmar_inflation_{today_str}.csv"
     detail_base.to_csv(detail_file, index=False, encoding='utf-8')
     logger.info(f"Detaylı enflasyon verisi kaydedildi: {detail_file}")
 
-    # Summary dosyasını güncelle
+    # Save summary logs
     summary_file = out_dir_path / "inflation_summary.csv"
     df_summary = pd.DataFrame([summary_row])
 
@@ -156,55 +179,22 @@ def calculate_inflation(input_file, output_dir=None, compare_file=None):
             df_existing = df_existing[df_existing['date'] != today_str]
             df_final = pd.concat([df_existing, df_summary], ignore_index=True)
             df_final.to_csv(summary_file, index=False, encoding='utf-8')
-            logger.info(f"Özet (summary) verisi güncellendi: {summary_file}")
         else:
             df_summary.to_csv(summary_file, index=False, encoding='utf-8')
-            logger.info(f"Özet (summary) dosyası oluşturuldu: {summary_file}")
     except Exception as e:
         logger.error(f"Summary dosyası yazılamadı: {e}")
 
 
 if __name__ == "__main__":
-    epilog_text = """
-NASIL KULLANILIR:
------------------
-1. Standart Kullanım (Otomatik olarak 1, 7, 15 ve 30 günlük geçmişi arar):
-   python gurmar_inflation.py -i gurmar_2026-02-24.csv
+    parser = argparse.ArgumentParser(description="Gürmar Enflasyon Hesaplayıcı CLI Aracı")
+    parser.add_argument("-i", "--input", help="Bugünün fiyatlarını içeren CSV dosyasının yolu")
+    parser.add_argument("-o", "--out-dir", help="Çıktıların kaydedileceği klasör", default=None)
+    parser.add_argument("-c", "--compare", help="Özel bir karşılaştırma için geçmiş tarihli CSV dosyasının yolu.", default=None)
 
-2. Çıktıları Farklı Bir Klasöre Kaydetmek İçin (-o):
-   python gurmar_inflation.py -i veri/gurmar_2026-02-24.csv -o sonuclar/
-
-3. Sadece Belirli İki Dosyayı Karşılaştırmak İçin (-c):
-   python gurmar_inflation.py -i gurmar_2026-02-24.csv -c gurmar_2026-02-10.csv
-"""
-
-    parser = argparse.ArgumentParser(
-        description="Gürmar Enflasyon Hesaplayıcı CLI Aracı\nGürmar fiyat verilerini alıp TUIK ağırlıklarına göre enflasyon hesaplar.",
-        formatter_class=argparse.RawTextHelpFormatter,
-        epilog=epilog_text
-    )
-
-    parser.add_argument("-i", "--input",
-                        help="Bugünün fiyatlarını içeren CSV dosyasının yolu (Örn: gurmar_2026-02-24.csv)")
-    parser.add_argument("-o", "--out-dir", help="Çıktıların kaydedileceği klasör (Varsayılan: bulunduğun dizin)",
-                        default=None)
-    parser.add_argument("-c", "--compare",
-                        help="(Opsiyonel) Özel bir karşılaştırma için geçmiş tarihli CSV dosyasının yolu.",
-                        default=None)
-
-    # Eğer hiçbir argüman verilmeden çalıştırılırsa, direkt yardım menüsünü göster ve çık
     if len(sys.argv) == 1:
         parser.print_help(sys.stderr)
         sys.exit(1)
 
     args = parser.parse_args()
-
-    # Eğer input argümanı verilmediyse uyar (argparse'da required yapmadık ki menü temiz gözüksün)
-    if not args.input:
-        print("\nHATA: Lütfen işlenecek CSV dosyasını '-i' parametresi ile belirtin.\n")
-        parser.print_help(sys.stderr)
-        sys.exit(1)
-
     logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
-
     calculate_inflation(args.input, args.out_dir, args.compare)

@@ -3,33 +3,39 @@ vakko_inflation.py — Vakko Enflasyon Hesaplayıcı
 """
 
 import logging
+import os
 from datetime import datetime, timedelta
-from pathlib import Path
-
 import pandas as pd
 
 # Dosya ismini vakko_tuik_config olarak güncelledik
 from vakko_tuik_config import vakko_category_to_tuik, normalised_weights
 
-# ── DOSYA YOLLARI (Senin verdiğin mutlak yollar) ─────────────────────────────
-DATA_DIR = Path(r"C:\Users\arhan\PycharmProjects\inflationstudymirror\Datas\ClothingStores\Vakko")
-INFLATION_OUT_DIR = Path(r"C:\Users\arhan\PycharmProjects\inflationstudymirror\Inflations\Datas\Markets\ClothingStores\Vakko")
+# ── RELATIVE PATH SETUP ─────────────────────────────────────────────────────
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+# Target: inflationstudymirror root (Up 3 levels from Codes/ClothingStores/Vakko)
+PROJECT_ROOT = os.path.abspath(os.path.join(SCRIPT_DIR, "..", "..", ".."))
+
+DATA_DIR = os.path.join(PROJECT_ROOT, "Datas", "ClothingStores", "Vakko")
+INFLATION_OUT_DIR = os.path.join(PROJECT_ROOT, "Inflations", "Datas", "ClothingStores", "Vakko")
+
+# Ensure output directory exists
+os.makedirs(INFLATION_OUT_DIR, exist_ok=True)
 
 logger = logging.getLogger(__name__)
 
 def _load_csv(date_str):
     """Vakko CSV'sini yükler ve fiyatları float formatına temizler."""
-    fpath = DATA_DIR / f"vakko_{date_str}.csv"
-    if not fpath.exists():
+    fpath = os.path.join(DATA_DIR, f"vakko_{date_str}.csv")
+    if not os.path.exists(fpath):
         logger.info(f"Dosya bulunamadı, bu tarih atlanıyor: {fpath}")
         return None
     try:
         df = pd.read_csv(fpath)
 
-        if 'Fiyat' in df.columns:
+        if 'product-price' in df.columns:
             # Fiyat temizleme: ₺ ve binlik noktalarını kaldır, kuruş virgülünü noktaya çevir
             cleaned_price = (
-                df['Fiyat']
+                df['product-price']
                 .astype(str)
                 .str.replace('₺', '', regex=False)
                 .str.replace('.', '', regex=False)
@@ -44,8 +50,8 @@ def _load_csv(date_str):
 def _compute_metrics(df_current, df_past):
     df_current = df_current.copy()
 
-    # Kategori tespitini ürün adından yap
-    df_current['tuik_category'] = df_current['Ürün Adı'].apply(vakko_category_to_tuik)
+    # Kategori tespitini ürün adından yap (product-name sütunu kullanılıyor)
+    df_current['tuik_category'] = df_current['product-name'].apply(vakko_category_to_tuik)
 
     past_subset = df_past[['Stok Kodu', 'Fiyat']].rename(columns={'Fiyat': 'past_price'})
     merged = df_current.merge(past_subset, on='Stok Kodu', how='left')
@@ -80,9 +86,6 @@ def calculate_inflation(target_date=None, compare_date=None):
         print(f"HATA: {today_str} tarihli güncel veri bulunamadı! İşlem iptal edildi.")
         return
 
-    # Çıktı klasörünü yoksa oluştur
-    INFLATION_OUT_DIR.mkdir(parents=True, exist_ok=True)
-
     # Hesaplanacak aralıkları belirle (Karşılaştırma tarihi varsa sadece onu, yoksa standart aralıkları kullan)
     if compare_date:
         intervals = {f"custom": compare_date}
@@ -91,7 +94,7 @@ def calculate_inflation(target_date=None, compare_date=None):
 
     summary_row = {'date': today_str}
     detail_base = df_today.copy()
-    detail_base['tuik_category'] = detail_base['Ürün Adı'].apply(vakko_category_to_tuik)
+    detail_base['tuik_category'] = detail_base['product-name'].apply(vakko_category_to_tuik)
 
     for label, val in intervals.items():
         if isinstance(val, int):
@@ -116,16 +119,16 @@ def calculate_inflation(target_date=None, compare_date=None):
         summary_row[f'tuik_weighted_{label}'] = tuik_w
 
     # Detaylı veriyi kaydet (vakko_inflation_YYYY-MM-DD.csv)
-    detail_file = INFLATION_OUT_DIR / f"vakko_inflation_{today_str}.csv"
+    detail_file = os.path.join(INFLATION_OUT_DIR, f"vakko_inflation_{today_str}.csv")
     detail_base.to_csv(detail_file, index=False, encoding='utf-8')
     logger.info(f"Detaylı enflasyon verisi kaydedildi: {detail_file}")
 
     # Özet tabloyu güncelle veya oluştur (inflation_summary.csv)
-    summary_file = INFLATION_OUT_DIR / "inflation_summary.csv"
+    summary_file = os.path.join(INFLATION_OUT_DIR, "inflation_summary.csv")
     df_summary = pd.DataFrame([summary_row])
 
     try:
-        if summary_file.exists():
+        if os.path.exists(summary_file):
             df_existing = pd.read_csv(summary_file)
             # Aynı tarihe ait eski bir kayıt varsa ez (tekrar çalıştırılma durumuna karşı)
             df_existing = df_existing[df_existing['date'] != today_str]

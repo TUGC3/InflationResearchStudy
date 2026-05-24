@@ -1,0 +1,276 @@
+id,category,product_id,shown_price,tuik_category,basic_inflation_1d,basic_inflation_7d,basic_inflation_15d,basic_inflation_30d
+Avokado İthal Adet,Meyve ve Sebze,6487,84.9,01,0.0,0.0,0.0,
+Bezelye - 500 Gr.,Meyve ve Sebze,704,42.45,01,0.0,,,
+Biber Dolmalık - 500 Gr.,Meyve ve Sebze,5029,19.95,01,0.0,-27.322404371584703,-50.06257822277848,-78.98894154818325
+Biber Kırmızı - 500 Gr.,Meyve ve Sebze,8087,129.95,01,0.0,15.56247220987104,40.56246619794482,8.33680700291787
+Biber Kırmızı Şili Acı - 500 Gr.,Meyve ve Sebze,9815,99.95,01,0.0,14.29388221841052,-13.049151805132666,-37.511722413254134
+Biber Köy - 500 Gr.,Meyve ve Sebze,7769,24.95,01,0.0,-9.107468123861567,-23.11248073959939,-69.73923590054578
+Biber Sivri - 500 Gr.,Meyve ve Sebze,9774,19.95,01,0.0,-20.04008016032064,-50.06257822277848,-76.23585467540202
+Biber Tatlı - 500 Gr.,Meyve ve Sebze,4120,14.95,01,0.0,-9.118541033434651,-62.57822277847309,-79.36507936507937
+Börülce - 500 Gr.,Meyve ve Sebze,7970,144.95,01,0.0,,,
+Deniz Börülcesi Adet,Meyve ve Sebze,8096,22.9,01,0.0,,,
+Dereotu Demet,Meyve ve Sebze,1498,11.9,01,0.0,0.0,0.0,0.0
+Domates - 500 Gr.,Meyve ve Sebze,9778,81.45,01,0.0,-1.2128562765312312,-4.120070629782225,-1.2128562765312312
+Domates Cherry - 500 Gr.,Meyve ve Sebze,8735,62.45,01,0.0,-0.7942811755361397,-39.043435822352365,-53.72360133382734
+Domates Pembe - 500 Gr.,Meyve ve Sebze,619,59.95,01,0.0,-6.254886630179827,-33.35186214563646,-33.35186214563646
+Domates Salkım - 500 Gr.,Meyve ve Sebze,4455,52.45,01,0.0,-13.945857260049218,-17.982799061767004,-22.23869532987398
+Elma Golden - 500 Gr.,Meyve ve Sebze,4138,67.45,01,0.0,0.0,0.0,12.51042535446205
+Elma Starking - 500 Gr.,Meyve ve Sebze,4125,62.45,01,0.0,-3.849114703618168,-7.412898443291327,4.170141784820683
+Enginar Adet,Meyve ve Sebze,6805,25.9,01,0.0,-21.27659574468085,-42.3162583518931,
+Erik - 500 Gr.,Meyve ve Sebze,1247,117.45,01,0.0,-29.859659599880555,-49.473004947300495,
+Fasulye Ayşe Kadın - 500 Gr.,Meyve ve Sebze,9703,72.45,01,0.0,-27.513756878439217,-21.633315305570576,-36.97259678120922
+Fasulye Çalı - 500 Gr.,Meyve ve Sebze,4355,61.45,01,0.0,,,-33.531638723634394
+Havuç - 500 Gr.,Meyve ve Sebze,9740,32.45,01,0.0,62.65664160401004,75.8807588075881,30.060120240480977
+Hindistan Cevizi,Meyve ve Sebze,8547,122.9,01,0.0,0.0,0.0,0.0
+Kabak - 500 Gr.,Meyve ve Sebze,9759,22.45,01,,0.0,-6.263048016701461,-10.02004008016032
+Kabak Girit - 500 Gr.,Meyve ve Sebze,766,52.45,01,,-17.982799061767004,,
+Akdeniz Toros Bütün Piliç (Donuk Olarak Satılır) - 2 Kg.,Et ve Tavuk,8066,539.8,01,0.0,0.0,0.0,0.0
+Akdeniz Toros Dana Burger 360 Gr,Et ve Tavuk,11066,569.9,01,0.0,0.0,0.0,0.0
+Akdeniz Toros Dana kangal Sucuk (Acısız) 200 Gr,Et ve Tavuk,11067,349.9,01,0.0,0.0,0.0,0.0
+Akdeniz Toros Dana Sosis 5'li 250 Gr,Et ve Tavuk,11068,329.9,01,0.0,0.0,0.0,0.0
+Akdeniz Toros Gezen Tavuk Bütün (Donuk Olarak Satılır) - 2 Kg.,Et ve Tavuk,7303,599.8,01,0.0,0.0,0.0,0.0
+Akdeniz Toros Kıyma Döner (Pişmiş) 250 Gr (Donuk Olarak Satılır),Et ve Tavuk,9367,429.9,01,0.0,0.0,0.0,0.0
+Akdeniz Toros Piliç Baget (Donuk Olarak Satılır) - 1 Kg.,Et ve Tavuk,2907,299.9,01,0.0,0.0,0.0,0.0
+Akdeniz Toros Piliç But (Donuk Olarak Satılır) - 1 Kg.,Et ve Tavuk,7394,259.9,01,0.0,0.0,0.0,0.0
+Akdeniz Toros Piliç Izgara Tava (Donuk Olarak Satılır) - 1 Kg.,Et ve Tavuk,9360,359.9,01,0.0,0.0,0.0,0.0
+Akdeniz Toros Piliç Kanat (Donuk Olarak Satılır) - 1 Kg.,Et ve Tavuk,9359,529.9,01,0.0,0.0,0.0,0.0
+Akdeniz Toros Piliç Kangal Sucuk 250 Gr,Et ve Tavuk,11069,189.9,01,0.0,0.0,0.0,0.0
+Akdeniz Toros Piliç Nuggut 500 Gr,Et ve Tavuk,11064,279.9,01,0.0,0.0,0.0,0.0
+Akdeniz Toros Tavuk Döner (Pişmiş) 250 Gr (Donuk Olarak Satılır),Et ve Tavuk,9368,189.9,01,0.0,0.0,0.0,0.0
+Apikoğlu Dana Çemeni Sıyrılmış Pastırma 90 GR,Et ve Tavuk,12301,519.0,01,0.0,0.0,0.0,0.0
+Apikoğlu Dana Kangal Sucuk 280 Gr,Et ve Tavuk,12297,749.9,01,0.0,0.0,0.0,0.0
+Apikoğlu Dana Parmak Sucuk - 500 Gr.,Et ve Tavuk,12299,1199.5,01,0.0,0.0,0.0,0.0
+Apikoğlu Dana Yarım Kangal Sucuk 180 Gr,Et ve Tavuk,12904,299.9,01,0.0,0.0,0.0,
+Apikoğlu Kurutulmuş Dana Füme Et 100 GR,Et ve Tavuk,12303,569.0,01,0.0,0.0,0.0,0.0
+Bolca Hindi Bonfile - 1 Kg.,Et ve Tavuk,1968,539.9,01,0.0,22.732439190725167,22.732439190725167,3.8468936333910366
+Bolca Tabaklı Alt But Kemiksiz Hindi - 1 Kg.,Et ve Tavuk,1969,559.9,01,0.0,27.278927028870196,27.278927028870196,3.7043897017966296
+Çapanoğlu Çemeni Sıyrılmış Pastırma 80 Gr,Et ve Tavuk,6603,199.9,01,0.0,-44.456793553764925,0.0,-44.456793553764925
+Çapanoğlu Dana Füme Et 60 Gr,Et ve Tavuk,12890,159.9,01,0.0,-20.01000500250125,-20.01000500250125,-5.885815185403178
+Çapanoğlu Dana Kurutulmuş Füme Et 60 Gr,Et ve Tavuk,6519,259.9,01,0.0,-13.337779259753251,-13.337779259753251,0.0
+Çapanoğlu Fümechef Dana Füme Antrikot 100 Gr,Et ve Tavuk,6522,399.9,01,0.0,,33.34444814938313,0.0
+Çapanoğlu Fümechef Karabiberli Dana Rosatbeef 100 Gr,Et ve Tavuk,12406,399.9,01,0.0,,33.34444814938313,0.0
+Activia Ananas&Yulaf&Hindistan Cevizli Probiyotikli Blow,"Süt, Kahvaltılık, Sark.",12602,49.5,01,0.0,,,-13.91304347826087
+Activia Doğal Probiyotikli Ananaslı Yoğurt 4*100 Gr,"Süt, Kahvaltılık, Sark.",1797,114.9,01,0.0,15.477386934673373,15.477386934673373,15.477386934673373
+Activia Doğal Probiyotikli Çilekli Yoğurt 4*100 Gr,"Süt, Kahvaltılık, Sark.",7647,114.9,01,0.0,15.477386934673373,,15.477386934673373
+Activia Doğal Probiyotikli İncir&Cevizli Yoğurt 4*100 Gr,"Süt, Kahvaltılık, Sark.",7558,114.9,01,0.0,15.477386934673373,15.477386934673373,15.477386934673373
+Activia Doğal Probiyotikli Kuru Kayısılı Yoğurt 4*100 Gr,"Süt, Kahvaltılık, Sark.",7646,114.9,01,0.0,15.477386934673373,15.477386934673373,15.477386934673373
+Activia Doğal Probiyotikli Orman Meyveli Yoğurt 4*100 Gr,"Süt, Kahvaltılık, Sark.",7968,114.9,01,0.0,15.477386934673373,15.477386934673373,15.477386934673373
+Activia Doğal Probiyotikli Sade Yoğurt 4*100 Gr,"Süt, Kahvaltılık, Sark.",7333,114.9,01,0.0,15.477386934673373,,15.477386934673373
+Activia Laktozsuz Probiyotik Sade Yoğurt 4'lü 100 Gr,"Süt, Kahvaltılık, Sark.",9583,114.9,01,0.0,15.477386934673373,,
+Activia Probiyotikli Bowl Ahududu&Yulaf&Ceviz,"Süt, Kahvaltılık, Sark.",12089,49.5,01,0.0,0.0,-13.91304347826087,-13.91304347826087
+Activia Probiyotikli Bowl Muz&Yulaf&Fındık,"Süt, Kahvaltılık, Sark.",12090,49.5,01,0.0,0.0,-13.91304347826087,-13.91304347826087
+Activia x2 Probiyotik Ahududu&Hibisküs Shot 80 Ml,"Süt, Kahvaltılık, Sark.",8941,32.5,01,0.0,0.0,0.0,0.0
+Akdeniz Toros Mantı 500 Gr,"Süt, Kahvaltılık, Sark.",11070,179.9,01,0.0,0.0,0.0,0.0
+Alan Kuru Sele Zeytin - 500 Gr.,"Süt, Kahvaltılık, Sark.",9002,199.95,01,0.0,0.0,0.0,0.0
+Alan Yağlı Sele Zeytin - 500 Gr.,"Süt, Kahvaltılık, Sark.",8986,249.95,01,0.0,0.0,0.0,0.0
+Alpella Çikolatalı Süt 200 Ml,"Süt, Kahvaltılık, Sark.",4465,21.9,01,0.0,0.0,0.0,
+Alpro Şekersiz Badem Sütü 1 Lt,"Süt, Kahvaltılık, Sark.",6347,149.95,01,0.0,0.0,-33.35555555555556,-33.35555555555556
+Anavarza Çam Balı 325 Gr,"Süt, Kahvaltılık, Sark.",12614,349.9,01,0.0,0.0,0.0,16.672224074691567
+Anavarza Çam Balı 450 Gr,"Süt, Kahvaltılık, Sark.",7135,399.9,01,0.0,0.0,0.0,0.0
+Anavarza Çam Balı 850 Gr,"Süt, Kahvaltılık, Sark.",8406,699.9,01,0.0,0.0,0.0,0.0
+Anavarza Çiçek Balı 450 Gr,"Süt, Kahvaltılık, Sark.",7129,299.95,01,0.0,-11.12592592592593,-11.12592592592593,-11.12592592592593
+Anavarza Çiçek Balı 850 Gr,"Süt, Kahvaltılık, Sark.",8410,499.9,01,0.0,-16.669444907484582,-16.669444907484582,-16.669444907484582
+Anavarza Çiçek Balı Akıllı Kapak 325 Gr,"Süt, Kahvaltılık, Sark.",614,317.5,01,0.0,22.16237014236246,0.0,17.63616154131161
+Anavarza Keven Kekik Balı 450 Gr,"Süt, Kahvaltılık, Sark.",9848,499.9,01,0.0,0.0,0.0,0.0
+Anavarza Keven Kekik Balı 850 Gr,"Süt, Kahvaltılık, Sark.",1757,845.9,01,0.0,0.0,0.0,0.0
+Anavarza Kral Şakir Bal Tüpü 40 Gr,"Süt, Kahvaltılık, Sark.",1419,54.9,01,,0.0,0.0,0.0
+Abalı Yağ  Pet Şişe Ayçiçek Yağı 1LT,Temel Gıda,6548,128.9,01,0.0,28.964482241120564,,
+Abalı Yağ  Pet Şişe Ayçiçek Yağı 2LT,Temel Gıda,4192,239.9,01,0.0,0.0,,
+Abalı Yağ  Pet Şişe Ayçiçek Yağı 4LT,Temel Gıda,4193,399.9,01,0.0,0.0,,
+Agora Kapari Cam 185 Cc,Temel Gıda,4489,84.9,01,0.0,0.0,0.0,0.0
+AKTAT TURŞU ÇUBUK NO:1  ( - 500 Gr.,Temel Gıda,11685,113.95,01,0.0,,,
+Aktat Turşu Karışık - 500 Gr.,Temel Gıda,10870,64.95,01,0.0,,,
+Ala Çiftçi Baldo Pirinç 1 kg,Temel Gıda,10861,94.9,01,0.0,0.0,0.0,0.0
+Ala Çiftçi Dermasyon Fasulye 1 Kg,Temel Gıda,6589,79.9,01,0.0,0.0,0.0,0.0
+Ala Çiftçi Kırmızı Mercimek 1 kg,Temel Gıda,10857,59.95,01,0.0,0.0,0.0,0.0
+Ala Çiftçi Koçbaşı Nohut 1 kg,Temel Gıda,10858,74.9,01,0.0,0.0,0.0,0.0
+Ala Çiftçi Köftelik Bulgur 1 kg,Temel Gıda,10860,43.75,01,0.0,0.0,0.0,0.0
+Ala Çiftçi Osmancık Pirinç 1 kg,Temel Gıda,10854,79.9,01,0.0,0.0,0.0,0.0
+Ala Çiftçi Pilavlık Bulgur 1 kg,Temel Gıda,10859,43.75,01,0.0,0.0,0.0,0.0
+Ala Çiftçi Uzun Tane Pirinç 1 kg,Temel Gıda,10855,52.9,01,0.0,0.0,0.0,0.0
+Alaçatı Tahinli Kurabiye 250 Gr,Temel Gıda,772,209.95,01,0.0,0.0,0.0,0.0
+Alaçatı Tarçınlı Kurabiye 250 Gr,Temel Gıda,808,209.95,01,0.0,0.0,0.0,0.0
+Alaçatı Üzümlü Kurabiye 250 Gr,Temel Gıda,1489,209.95,01,0.0,0.0,0.0,0.0
+Ally Tortilla 15 Cm Lavaş 10 Lu Vegan 300 Gr,Temel Gıda,9888,79.95,01,0.0,0.0,0.0,0.0
+Aly Izgara Tortilla Lavaş 25 cm 8'li 520 gr,Temel Gıda,9889,114.5,01,0.0,0.0,0.0,0.0
+Aly Vegan Tortilla 6'lı 390 Gr,Temel Gıda,12526,89.95,01,0.0,0.0,28.591851322373124,0.0
+Ankara Arpa Şehriye 500 Gr,Temel Gıda,800,34.95,01,0.0,0.0,,12.924071082390965
+Ankara Boncuk Makarna 500 Gr,Temel Gıda,794,34.95,01,0.0,,0.0,12.924071082390965
+Ankara Burgu Makarna 500 Gr,Temel Gıda,798,34.95,01,0.0,0.0,0.0,12.924071082390965
+Ankara Fiyonk Makarna 500 Gr,Temel Gıda,790,34.95,01,0.0,,0.0,12.924071082390965
+Ankara İnce Uzun Makarna 500 Gr,Temel Gıda,8150,34.95,01,0.0,,0.0,12.924071082390965
+"Abant Su 0,5 LT",İçecekler,11468,5.75,01,0.0,0.0,0.0,0.0
+"Abant Su 1,5 LT",İçecekler,11469,11.5,01,0.0,0.0,0.0,0.0
+Abant Su 5 Lt,İçecekler,11470,36.0,01,0.0,0.0,0.0,0.0
+Ancora Böğürtlen Suyu 1000 Ml,İçecekler,3456,119.95,01,0.0,9.095043201455207,9.095043201455207,9.095043201455207
+Ancora Karadut Suyu 1000 Ml,İçecekler,3455,119.95,01,0.0,9.095043201455207,9.095043201455207,9.095043201455207
+Ancora Vişne Suyu 1000 Ml,İçecekler,3457,119.95,01,0.0,0.0,0.0,0.0
+Bağdat Pratik Salep 100 Gr,İçecekler,6507,59.9,01,0.0,0.0,0.0,0.0
+Benorganic Organic Kırmızı Meyveler Karışık Meyve Suyu 946 Ml,İçecekler,12425,159.95,01,0.0,-15.793629902605948,-15.793629902605948,-15.793629902605948
+Benorganic Organic Şeftali & Kayısı & Elma Meyve Suyu 946ml,İçecekler,12424,159.95,01,0.0,-15.793629902605948,-15.793629902605948,-15.793629902605948
+Benorganic Organik Portakal Suyu 946 Ml,İçecekler,12426,189.95,01,0.0,0.0,0.0,0.0
+Benorganic Organik Yeşil Sebze Suyu 946 Ml,İçecekler,12423,189.95,01,0.0,0.0,0.0,0.0
+Beypazarı Maden Suyu 6*200 Ml,İçecekler,12432,65.0,01,0.0,4.0,4.0,13.043478260869565
+Burn Enerji İçeceği 250 Ml,İçecekler,168,60.0,01,0.0,0.0,0.0,0.0
+"Cafe Crown 3'ü 1 Arada 17,5 Gr",İçecekler,7322,11.5,01,0.0,0.0,0.0,0.0
+Cafe Crown 3ü 1 Arada Action 18 Gr,İçecekler,215,11.5,01,0.0,0.0,0.0,0.0
+Cafe Crown 3ü 1 Arada Fındıklı 13 Gr,İçecekler,2074,11.5,01,0.0,0.0,0.0,0.0
+Cafe Crown Beyaz Çikolatalı Mocha 22 Gr,İçecekler,7184,12.0,01,0.0,0.0,0.0,0.0
+Cafe Crown Choco Latte 17 Gr,İçecekler,2397,12.0,01,0.0,0.0,0.0,0.0
+Cafe Crown Gold Kahve 100 gr,İçecekler,3754,214.95,01,0.0,0.0,0.0,0.0
+Cafe Crown Latte Kahve 17 Gr,İçecekler,5374,12.0,01,0.0,0.0,0.0,0.0
+Can Kardeşler Chia Tohumu 150 Gr,İçecekler,2674,74.0,01,0.0,0.0,0.0,0.0
+Cappy Ananas Aromalı Meyve Suyu 1 Lt,İçecekler,7516,70.0,01,0.0,0.0,0.0,0.0
+Cappy Atom 330 Ml,İçecekler,2646,45.0,01,0.0,0.0,0.0,0.0
+Cappy Atom Ballı Karışık Meyve Nektarı 1 Lt,İçecekler,5381,70.0,01,0.0,0.0,0.0,0.0
+Cappy Atom Ballı Karışık Meyve Nektarı 200 Ml,İçecekler,8296,17.5,01,0.0,0.0,0.0,0.0
+8 Kek Mini Orman Meyveli 162 Gr,Atıştırmalıklar,12484,55.0,01,0.0,0.0,31.108462455303926,0.0
+8 Kek Orman Meyveli Kek 55 gr,Atıştırmalıklar,3863,13.0,01,0.0,0.0,0.0,0.0
+9 Kat Tat İnce İnce Portakallı Gofret 114 Gr,Atıştırmalıklar,12321,40.0,01,0.0,0.0,0.0,14.285714285714285
+Aktürk Kakaolu Gofret 200Gr,Atıştırmalıklar,6658,36.5,01,0.0,0.0,0.0,0.0
+Aktürk Vanilyalı Gofret 200Gr,Atıştırmalıklar,6657,36.5,01,0.0,,0.0,0.0
+Alaska Frigo Bitter Çikolata Kaplı Dondurma,Atıştırmalıklar,4234,48.5,01,0.0,-10.185185185185185,-10.185185185185185,-10.185185185185185
+Alaska Frigo Sütlü Çikolata Kaplı Dondurma,Atıştırmalıklar,7805,48.5,01,0.0,-10.185185185185185,-10.185185185185185,-10.185185185185185
+Albeni Atıştırmalık Bisküvi Parçacıklı&Karamelli&Bisküvili Sütlü Çikolata 72 Gr,Atıştırmalıklar,8670,35.0,01,0.0,0.0,0.0,0.0
+Albeni Tane Tane Kutu Çikolata 29 Gr,Atıştırmalıklar,7495,28.0,01,0.0,0.0,0.0,0.0
+Algida Boom Boom Vanilya Aromalı Dondurma,Atıştırmalıklar,6903,50.0,01,0.0,0.0,0.0,0.0
+Algida Carte d'Or Classic İsviçre Çikolatası Karamel&Muz,Atıştırmalıklar,6035,192.5,01,0.0,-30.0,-30.0,-30.0
+Algida Carte D'or Petite Bar Chocoberry 276 Gr,Atıştırmalıklar,12870,250.0,01,0.0,0.0,0.0,0.0
+Algida Carte D'Or Selection Aşkın Büyüsü Kap Dondurma 800 Ml,Atıştırmalıklar,11775,295.0,01,0.0,0.0,0.0,0.0
+Algida Carte D'Or Selection Patisserie Kap Dondurma 800 Ml,Atıştırmalıklar,11776,295.0,01,0.0,0.0,0.0,20.408163265306122
+Algida Cartedor Petite Bar Caramella 276 Gr,Atıştırmalıklar,12869,250.0,01,0.0,0.0,0.0,
+Algida Classics Antep Fıstıklı Dondurma 73 ML,Atıştırmalıklar,7097,20.0,01,0.0,0.0,0.0,0.0
+Algida Classics Kakaolu Dondurma 73 Ml,Atıştırmalıklar,1833,20.0,01,0.0,0.0,0.0,0.0
+Algida Classics Vanilyalı Dondurma 73 Ml,Atıştırmalıklar,1834,20.0,01,0.0,0.0,0.0,0.0
+Algida Conboo Çilek Vanilya 60 Ml,Atıştırmalıklar,2513,15.0,01,0.0,0.0,0.0,0.0
+Algida Conboo Kakaolu Dondurma 60 Ml,Atıştırmalıklar,2512,15.0,01,0.0,0.0,0.0,0.0
+Algida Cornetto Classico Çilek&Kaymak Dondurma 120 Ml,Atıştırmalıklar,6102,50.0,01,0.0,0.0,0.0,0.0
+Algida Dövme Sade Dondurma 1400 Ml,Atıştırmalıklar,2525,75.0,01,0.0,0.0,-50.0,-50.0
+Algida Frigola Bar Dondurma 60 Ml,Atıştırmalıklar,11777,35.0,01,0.0,0.0,0.0,0.0
+Algida Frigola Fındıklı&Çikolatalı Dondurma,Atıştırmalıklar,4835,40.0,01,0.0,0.0,0.0,0.0
+Algida Kaymaklı Dondurma 1000 Ml,Atıştırmalıklar,6491,150.0,01,0.0,0.0,0.0,0.0
+Aptamil 1 Bebek Sütü 350 g 0-6 Ay Akıllı Kutu,Bebek Ürünleri,8714,539.9,12,0.0,0.0,0.0,0.0
+Aptamil 1 Bebek Sütü 800 Gr,Bebek Ürünleri,8402,1109.9,12,0.0,16.843878302979274,16.843878302979274,0.0
+Aptamil 2 Akıllı Kutu Devam Sütü 6-9 Ay 350 Gr,Bebek Ürünleri,8433,539.9,12,0.0,0.0,0.0,0.0
+Aptamil 2 Devam Sütü 800 Gr,Bebek Ürünleri,4547,1109.9,12,0.0,16.843878302979274,16.843878302979274,0.0
+Aptamil 3 Devam Sütü 350 Gr,Bebek Ürünleri,8457,539.9,12,0.0,0.0,0.0,0.0
+Aptamil 3 Devam Sütü 800 Gr,Bebek Ürünleri,6920,1109.9,12,0.0,16.843878302979274,16.843878302979274,0.0
+Aptamil 4 Çocuk Devam Sütü 350 Gr,Bebek Ürünleri,11288,539.9,12,0.0,0.0,0.0,0.0
+Aptamil 4 Çocuk Devam Sütü 800 Gr,Bebek Ürünleri,7901,1109.9,12,0.0,16.843878302979274,16.843878302979274,0.0
+Aptamil 5 Çocuk Devam Sütü 350 Gr,Bebek Ürünleri,6926,539.9,12,0.0,0.0,0.0,0.0
+Aptamil 5 Çocuk Devam Sütü 800 Gr,Bebek Ürünleri,7914,1109.9,12,0.0,16.843878302979274,16.843878302979274,0.0
+Bebelac 1 Bebek Sütü 400 Gr,Bebek Ürünleri,5915,379.9,12,0.0,0.0,0.0,0.0
+Bebelac 1 Bebek Sütü 800 Gr,Bebek Ürünleri,5918,679.9,12,0.0,13.335555925987666,13.335555925987666,0.0
+Bebelac 2 Bebek Sütü 400 Gr,Bebek Ürünleri,5916,379.9,12,0.0,0.0,0.0,0.0
+Bebelac 3 Bebek Sütü 400 Gr,Bebek Ürünleri,5917,379.9,12,0.0,0.0,0.0,0.0
+Bebelac 3 Bebek Sütü 800 Gr,Bebek Ürünleri,5920,679.9,12,0.0,13.335555925987666,13.335555925987666,0.0
+Bebelac 4 Bebek Sütü 400 Gr,Bebek Ürünleri,5921,379.9,12,0.0,0.0,0.0,0.0
+Bebelac 4 Bebek Sütü 800 Gr,Bebek Ürünleri,5922,679.9,12,0.0,13.335555925987666,13.335555925987666,0.0
+Bebelac Elma Armut Püresi Kavanoz Maması 125 Gr,Bebek Ürünleri,10322,49.9,12,0.0,0.0,0.0,0.0
+Bebelac Elma Şeftali Püresi Kavanoz Maması 125 Gr,Bebek Ürünleri,8445,49.9,12,0.0,0.0,0.0,0.0
+Bebelac Gold 1 Bebek Sütü 800 Gr,Bebek Ürünleri,5923,819.9,12,0.0,17.145306472353194,17.145306472353194,0.0
+Bebelac Gold 2 Bebek Sütü 800 Gr,Bebek Ürünleri,5924,819.9,12,0.0,17.145306472353194,17.145306472353194,0.0
+Bebelac Gold 2 Devam Sütü 350 Gr,Bebek Ürünleri,7903,409.9,12,0.0,0.0,0.0,0.0
+Bebelac Gold 3 Devam Sütü 350 Gr,Bebek Ürünleri,2311,409.9,12,0.0,0.0,0.0,
+Bebelac Gold Kavanoz Sütlaç 125 Gr,Bebek Ürünleri,8405,49.9,12,0.0,0.0,0.0,0.0
+Eti Cicibebe Bebek Bisküvisi 400 Gr,Bebek Ürünleri,7783,96.5,12,0.0,0.0,0.0,0.0
+ABC Bahar Tutkusu Yüzey Temizleyicisi 2500 Ml,Deterjan ve Temizlik,3184,109.9,05,0.0,0.0,57.22460658082975,0.0
+ABC Beyaz İnci Yüzey Temizleyici 2500 Ml,Deterjan ve Temizlik,12212,109.9,05,0.0,0.0,57.22460658082975,0.0
+ABC Cam Temizleyici 750 Ml,Deterjan ve Temizlik,3949,59.9,05,0.0,0.0,0.0,0.0
+ABC Dağ Rüzgarı Ultra Çamaşır Suyu 3250 Ml,Deterjan ve Temizlik,3181,169.9,05,0.0,,0.0,0.0
+ABC Dağ Rüzgarı Ultra Çamaşır Suyu 750 Ml,Deterjan ve Temizlik,3179,64.9,05,0.0,0.0,0.0,0.0
+ABC İpeksi Yumuşaklık Aşk Çamaşır Yumuşatıcısı 5 Lt,Deterjan ve Temizlik,3173,199.9,05,0.0,0.0,53.88760585065435,0.0
+ABC İpeksi Yumuşaklık Huzur Çamaşır Yumuşatıcısı 5 Lt,Deterjan ve Temizlik,3172,199.9,05,0.0,0.0,53.88760585065435,0.0
+ABC İpeksi Yumuşaklık Tutku Çamaşır Yumuşatıcısı 5 Lt,Deterjan ve Temizlik,3170,199.9,05,0.0,0.0,53.88760585065435,0.0
+ABC Jel Power Renkliler İçin Sıvı Çamaşır Deterjanı 2145 Ml,Deterjan ve Temizlik,12211,199.9,05,0.0,0.0,0.0,
+ABC Karbonatlı Ultra Çamaşır Suyu 3250 Ml,Deterjan ve Temizlik,3182,169.9,05,0.0,0.0,0.0,0.0
+ABC Leke Karşıtı Sıvı Çamaşır Deterjanı 2700 Ml,Deterjan ve Temizlik,3947,219.9,05,0.0,0.0,57.18370264474625,0.0
+ABC Matik Gül Tutkusu Çamaşır Deterjanı 6 Kg,Deterjan ve Temizlik,3166,299.9,05,0.0,0.0,0.0,0.0
+ABC Matik Lavanta Tazeliği Çamaşır Deterjanı 6 Kg,Deterjan ve Temizlik,3165,299.9,05,,,,
+ABC Misket Limonlu Bulaşık Deterjanı 4 Lt,Deterjan ve Temizlik,3178,199.9,05,0.0,0.0,0.0,0.0
+Abc Narinler Sıvı Çamaşır Deterjanı 3 Lt,Deterjan ve Temizlik,12884,219.9,05,0.0,0.0,57.18370264474625,0.0
+ABC Parfumia Büyüleyici Yasemin Konsantre Yumuşatıcı 1440 Ml,Deterjan ve Temizlik,3175,149.9,05,0.0,0.0,0.0,0.0
+ABC Parfumia Gizemli Lotus Konsantre Yumuşatıcı 1440 Ml,Deterjan ve Temizlik,3176,149.9,05,0.0,0.0,0.0,0.0
+ABC Parfumia Romantik Gül Konsantre Yumuşatıcı 1440 Ml,Deterjan ve Temizlik,3174,149.9,05,0.0,0.0,0.0,0.0
+ABC Parfumia Tutkulu Dahlia Konsantre Yumuşatıcı 1440 Ml,Deterjan ve Temizlik,3177,149.9,05,0.0,0.0,0.0,0.0
+ABC Pembe Tutku Yüzey Tezmizleyicisi 2500 Ml,Deterjan ve Temizlik,3183,109.9,05,0.0,0.0,57.22460658082975,0.0
+ABC Renkliler İçin Sıvı Çamaşır Deterjanı 3000 Ml,Deterjan ve Temizlik,3167,219.9,05,0.0,0.0,57.18370264474625,0.0
+Abc Soda Etkili Toz Deterjan 600 Gr,Deterjan ve Temizlik,12875,59.9,05,0.0,0.0,0.0,0.0
+ABC Soft Yumuşatıcı Frezya 5 Lt,Deterjan ve Temizlik,3171,199.9,05,0.0,0.0,53.88760585065435,0.0
+ABC Ultra Çamaşır Suyu Bembeyaz 750 Ml,Deterjan ve Temizlik,11833,64.9,05,0.0,0.0,0.0,0.0
+Ace Bahar Çamaşır Suyu 1 Lt,Deterjan ve Temizlik,8805,74.9,05,0.0,50.10020040080162,50.10020040080162,0.0
+A.Lalin Disk Makyaj Pamuğu 70'li,Kişisel Bakım,6420,44.95,12,0.0,,0.0,0.0
+A.Lalin Hidrofil Pamuk 100 Gr,Kişisel Bakım,6419,49.95,12,0.0,0.0,0.0,0.0
+A.Lalin Hidrofil Pamuk 50 Gr,Kişisel Bakım,6418,29.95,12,0.0,0.0,0.0,0.0
+A.Lalin Pamuklu Kulak Çubuk 100'lü,Kişisel Bakım,6421,27.5,12,0.0,,,0.0
+A.Lalin Pamuklu Kulak Çubuk Kare 200'lü,Kişisel Bakım,6422,44.95,12,0.0,,,0.0
+"Activex Aktif Koruma Antibakteriyel Sıvı Sabun 1,5 Lt",Kişisel Bakım,9771,199.95,12,0.0,-33.32777592530844,33.38892595063374,-33.32777592530844
+Activex Antibakteriyel Aktif Koruma Sıvı Sabun 500 Ml,Kişisel Bakım,11578,119.9,12,0.0,20.02002002002002,20.02002002002002,0.0
+Activex Antibakteriyel Hassas Sıvı Sabun 500 Ml,Kişisel Bakım,11579,119.9,12,0.0,20.02002002002002,20.02002002002002,0.0
+"Activex Hassas Koruma Antibakteriyel Sıvı Sabun 1,5 Lt",Kişisel Bakım,320,199.95,12,0.0,-33.32777592530844,33.38892595063374,-33.32777592530844
+Alalin Bebek Kulak Çubuğu 60'lı,Kişisel Bakım,12704,45.0,12,0.0,0.0,,
+Arko Berber Tıraş Sabunu 75 Gr,Kişisel Bakım,9267,99.9,12,0.0,0.0,0.0,33.3244361403977
+Arko Black Edition Tıraş Kolonyası 225 Ml,Kişisel Bakım,6917,179.9,12,5.854663136216544,5.854663136216544,5.854663136216544,41.17554735933454
+Arko Gold Power Tıraş Kolonyası 225 Ml,Kişisel Bakım,1686,179.9,12,5.854663136216544,5.854663136216544,5.854663136216544,41.17554735933454
+Arko Mavi Cool Tıraş Kolonyası 225 Ml,Kişisel Bakım,677,179.9,12,5.854663136216544,5.854663136216544,5.854663136216544,41.17554735933454
+Arko Men Anti-Irritation Tıraş Jeli 200 Ml,Kişisel Bakım,7344,259.9,12,18.136363636363626,18.136363636363626,18.136363636363626,57.515151515151494
+Arko Men Anti-Irritation Tıraş Köpüğü 200 Ml,Kişisel Bakım,943,169.95,12,0.0,0.0,0.0,33.36733893117788
+Arko Men Black Tıraş Jeli 200 Ml,Kişisel Bakım,4960,259.9,12,18.136363636363626,18.136363636363626,18.136363636363626,57.515151515151494
+Arko Men Cool Tıraş Jeli 200 Ml,Kişisel Bakım,7529,259.9,12,18.136363636363626,18.136363636363626,18.136363636363626,57.515151515151494
+Arko Men Cool Tıraş Köpüğü 200 Ml,Kişisel Bakım,8409,169.95,12,0.0,0.0,0.0,33.36733893117788
+Arko Men Cool Tıraş Kremi 90 Gr,Kişisel Bakım,1152,99.9,12,25.03128911138923,25.03128911138923,25.03128911138923,
+Arko Men Extra Sensitive Tıraş Jeli 200 Ml,Kişisel Bakım,1995,259.9,12,18.136363636363626,18.136363636363626,18.136363636363626,57.515151515151494
+Arko Men Sensitive Tıraş Krem 90 Gr,Kişisel Bakım,2072,99.9,12,25.03128911138923,25.03128911138923,25.03128911138923,66.69447688970467
+Arko Nem  Klasik Nemlendirici Krem 250 ml,Kişisel Bakım,10875,159.9,12,6.671114076050701,6.671114076050701,,
+Arko Nem Değerli Yağlar Avokado Yağlı Nemlendirici 250 Ml,Kişisel Bakım,3070,169.9,12,0.0,0.0,0.0,0.0
+Arko Nem Değerli Yağlar Avokado Yağlı Nemlendirici 60 Ml,Kişisel Bakım,3073,99.9,12,11.123470522803114,11.123470522803114,11.123470522803114,11.123470522803114
+370 Cc Kavanoz Kapağı,Ev ve Yaşam,3556,1.75,05,0.0,0.0,0.0,0.0
+Bölmeli Saklama Kabı,Ev ve Yaşam,3566,255.0,05,0.0,,,
+Borcam Dikdörtgen Tepsi 270*400 mm,Ev ve Yaşam,6956,325.0,05,0.0,,0.0,0.0
+Borcam Set,Ev ve Yaşam,7675,395.0,05,0.0,0.0,0.0,0.0
+Borcam Yuvarlak Tepsi 260 mm,Ev ve Yaşam,3337,289.0,05,0.0,0.0,0.0,0.0
+Büyük Boy Borcam Tepsi,Ev ve Yaşam,3367,330.0,05,0.0,,,0.0
+Duracell Alkalin 9 Volt Tekli Pil,Ev ve Yaşam,8305,319.95,05,0.0,0.0,0.0,0.0
+Duracell Alkalin AA Kalem Pil 4'lü,Ev ve Yaşam,8747,259.95,05,0.0,0.0,0.0,0.0
+Duracell Alkalin AAA İnce Kalem Pil 4'lü,Ev ve Yaşam,6755,259.95,05,0.0,0.0,0.0,0.0
+Duracell Basic AAA İnce Kalem Pil 6'lı,Ev ve Yaşam,9498,374.95,05,0.0,0.0,0.0,0.0
+Duracell Basic Kalem Pil AA 6'lı,Ev ve Yaşam,9499,374.95,05,0.0,0.0,0.0,0.0
+Duracell C Beden Alkalin Orta Boy Pil 2'li,Ev ve Yaşam,7664,339.95,05,0.0,0.0,0.0,0.0
+Duracell D Beden Alkalin Büyük Boy Pil 2'li,Ev ve Yaşam,7665,399.95,05,0.0,0.0,0.0,0.0
+Duracell Düğme Pil 2016 2'li,Ev ve Yaşam,4439,199.95,05,0.0,0.0,0.0,0.0
+Duracell Düğme Pil 2025 2'li,Ev ve Yaşam,4407,199.95,05,0.0,0.0,0.0,0.0
+Duracell Düğme Pil 2032 2'li,Ev ve Yaşam,10114,199.95,05,0.0,0.0,0.0,0.0
+Duracell Optimum 4' lü AAA İnce Kalem Pil,Ev ve Yaşam,6092,334.95,05,0.0,0.0,0.0,0.0
+Duracell Optimum 4' lü AAA Kalın Kalem Pil,Ev ve Yaşam,6093,334.95,05,0.0,0.0,0.0,0.0
+Duracell Optimum 6' lı AAA İnce Kalem Pil,Ev ve Yaşam,6094,489.95,05,0.0,0.0,0.0,0.0
+Duracell Optimum 6'lı AA Kalın Kalem Pil,Ev ve Yaşam,6095,489.95,05,0.0,0.0,0.0,0.0
+Glade Flora Buket Hava Tazeleyici Oto Kokusu 70 Gr,Ev ve Yaşam,1426,94.95,05,0.0,0.0,0.0,0.0
+Glade Lavanta Ferahlığı Hava Tazeleyici Oto Kokusu 70 Gr,Ev ve Yaşam,7261,94.95,05,0.0,0.0,0.0,0.0
+Glade Mini Jel Temiz Çarşaf Ferahlığı 70 gr,Ev ve Yaşam,2639,94.95,05,0.0,0.0,0.0,0.0
+Glade Sport Lavanta Ferahlığı Oto Kokusu 7 Ml,Ev ve Yaşam,10779,249.95,05,0.0,0.0,0.0,0.0
+Koroplast Airfryr Pişirime Kağıdı Doğal,Ev ve Yaşam,11604,152.95,05,0.0,0.0,0.0,0.0
+ Wıskas Kuzulu-Tavşan Yaş Mama 85 Gr,Petshop,10961,38.95,09,0.0,0.0,,
+Dreamies İç Dolgulu Tavuklu Kedi Ödül Bisküvisi 60 Gr,Petshop,8462,79.95,09,0.0,0.0,0.0,33.33889259506338
+Dreamies Mix İç Dolgulu Biftekli ve Peynirli Kedi Ödül Bisküvisi 60 Gr,Petshop,4214,79.95,09,0.0,0.0,0.0,33.33889259506338
+Dreamies Mix İç Dolgulu Somonlu ve Peynirli Kedi Ödül Bisküvisi 60 Gr,Petshop,4213,79.95,09,0.0,0.0,0.0,33.33889259506338
+Dreamies Somonlu Yetişkin ve Yavru Kediler için Tamamlayıcı Ödül Bisküvisi 60 Gr,Petshop,7496,79.95,09,0.0,0.0,0.0,33.33889259506338
+Felix Çifte Lezzet Sığır&Tavuk Yaş Kedi Maması 85 Gr,Petshop,11136,29.21,09,0.0,-25.006418485237486,-25.006418485237486,
+Felix Kuzu Etli Yaş Kedi Maması 85 Gr,Petshop,11129,29.21,09,0.0,-25.006418485237486,-25.006418485237486,
+Felix Sensation Tavuk&havuç Yaş Kedi Maması 85 Gr,Petshop,11137,29.21,09,0.0,-25.006418485237486,-25.006418485237486,
+Felix Sığır Etli Avantajlı Paket Kedi Maması 4*85 Gr,Petshop,11131,93.71,09,0.0,-25.002000800320133,-25.002000800320133,
+Felix Sığır Etli Yaş Kedi Maması 85 Gr,Petshop,11135,29.21,09,0.0,-25.006418485237486,-25.006418485237486,
+Felix Tavuk Etki Yaş Kedi Maması 85 Gr,Petshop,11132,29.21,09,0.0,-25.006418485237486,-25.006418485237486,
+Felix Tonlu Yaş Kedi Maması 85 Gr,Petshop,11134,29.21,09,0.0,-25.006418485237486,-25.006418485237486,
+Felix Yaş Kedi Maması Somonlu 85 Gr,Petshop,11695,29.21,09,0.0,-25.006418485237486,-25.006418485237486,
+Friskies Kümes Hayvanlı Yetişkin Kedi Maması 300 Gr,Petshop,11828,72.67,09,0.0,-25.005159958720334,-25.005159958720334,0.0
+Gourmet Gold Kıyılmış Hindili Yaş Kedi Maması 85 Gr,Petshop,11123,48.71,09,0.0,-25.00384911470362,-25.00384911470362,0.0
+Gourmet Gold Kıyılmış Sığır Etli Yaş Kedi Maması 85 Gr,Petshop,11126,48.71,09,0.0,-25.00384911470362,-25.00384911470362,0.0
+Gourmet Gold Kıyılmış Tavuk Etli Yaş Kedi Maması 85 Gr,Petshop,11125,48.71,09,0.0,-25.00384911470362,-25.00384911470362,0.0
+Gourmet Gold Kıyılmış Tonlu Yaş Kedi Maması 85 Gr,Petshop,11124,48.71,09,0.0,-25.00384911470362,-25.00384911470362,0.0
+Jungle Bentonit İnce Naturel Kedi Kumu 5 Lt,Petshop,4668,101.58,09,0.0,-25.00553709856035,,0.0
+Jungle Biftekli Konserve Kedi Maması 415 Gr,Petshop,4656,66.75,09,0.0,-25.0,-25.0,0.0
+Jungle Biftekli-Sebzeli Konserve Köpek Maması 400 Gr,Petshop,3602,66.75,09,0.0,-25.0,-25.0,0.0
+Jungle Crunch Güçlü Kemikler Kedi Ödül Maması 60 gr,Petshop,3850,44.96,09,0.0,-25.00417014178482,-25.00417014178482,0.0
+Jungle Gurme Muhabbet Kuşu Yemi 400 Gr,Petshop,4635,70.12,09,0.0,-25.005347593582883,-25.005347593582883,0.0
+Jungle Pouch Tavuklu Yavru Kedi Maması 100 gr,Petshop,4660,25.87,09,0.0,-25.014492753623184,-25.014492753623184,0.0
+Jungle Quik Bentonit Ince Bebek Pudralı Kedi Kumu 5lt,Petshop,4667,101.58,09,0.0,,-25.00553709856035,0.0

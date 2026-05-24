@@ -1,16 +1,21 @@
+import argparse
+import os
 import pandas as pd
 import json
 import logging
 from datetime import datetime, timedelta
-from pathlib import Path
 
-# --- KONFİGÜRASYON VE YOLLAR ---
-DATA_DIR = Path(
-    r"C:\Users\arhan\PycharmProjects\inflationstudymirror\InflationItems\Datas\ConstructionSuppliesMarkets\Yapimaks")
-OUT_DIR = Path(
-    r"C:\Users\arhan\PycharmProjects\inflationstudymirror\Inflations\Datas\ConstructionSuppliesMarkets\Yapimaks")
-JSON_PATH = Path(
-    r"C:\Users\arhan\PycharmProjects\inflationstudymirror\Inflations\Codes\ConstructionMarkets\yapimaks\kategori_haritasi.json")
+# --- RELATIVE PATH SETUP ---
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+# Target: inflationstudymirror root (Up 4 levels from Inflations/Codes/ConstructionMarkets/yapimaks)
+PROJECT_ROOT = os.path.abspath(os.path.join(SCRIPT_DIR, "..", "..", "..", ".."))
+
+DATA_DIR = os.path.join(PROJECT_ROOT, "Datas", "yapimaks")
+OUT_DIR = os.path.join(PROJECT_ROOT, "Inflations", "Datas", "ConstructionSuppliesMarkets", "Yapimaks")
+JSON_PATH = os.path.join(PROJECT_ROOT, "Inflations", "Codes", "ConstructionMarkets", "yapimaks", "Category", "kategori_haritasi.json")
+
+# Ensure output directory exists
+os.makedirs(OUT_DIR, exist_ok=True)
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 logger = logging.getLogger(__name__)
@@ -27,16 +32,18 @@ def get_tuik_class(cat_name):
 
 
 def load_data(date_str, category_map):
-    fpath = DATA_DIR / f"yapimaks_{date_str}.csv"
-    if not fpath.exists():
+    fpath = os.path.join(DATA_DIR, f"{date_str}.csv")
+    if not os.path.exists(fpath):
         return None
 
     df = pd.read_csv(fpath)
-    # Fiyat temizleme: "276,00" -> 276.0
-    df['price'] = df['price'].astype(str).str.replace('.', '', regex=False).str.replace(',', '.', regex=False)
+
+    # Handle both column name patterns safely
+    price_col = 'product-price' if 'product-price' in df.columns else 'price'
+
+    df['price'] = df[price_col].astype(str).str.replace('.', '', regex=False).str.replace(',', '.', regex=False)
     df['price'] = pd.to_numeric(df['price'], errors='coerce')
 
-    # Kategori ve TÜİK sınıfı ekleme
     df['category'] = df['url'].map(category_map).fillna("Bilinmeyen")
     df['tuik_code'] = df['category'].apply(get_tuik_class)
 
@@ -74,7 +81,6 @@ def run_inflation_report(target_date_str):
         return
 
     base_date = datetime.strptime(target_date_str, "%Y-%m-%d")
-    OUT_DIR.mkdir(parents=True, exist_ok=True)
 
     summary = {"date": target_date_str}
     detailed_df = df_target.copy()
@@ -98,11 +104,12 @@ def run_inflation_report(target_date_str):
             logger.info(f"{days} gün öncesine ait veri ({old_date_str}) yok, atlanıyor.")
 
     # Kayıt işlemleri
-    detailed_df.to_csv(OUT_DIR / f"yapimaks_detailed_inf_{target_date_str}.csv", index=False, encoding='utf-8-sig')
+    detailed_output_file = os.path.join(OUT_DIR, f"yapimaks_detailed_inf_{target_date_str}.csv")
+    detailed_df.to_csv(detailed_output_file, index=False, encoding='utf-8-sig')
 
-    summary_file = OUT_DIR / "inflation_summary.csv"
+    summary_file = os.path.join(OUT_DIR, "inflation_summary.csv")
     summary_df = pd.DataFrame([summary])
-    if summary_file.exists():
+    if os.path.exists(summary_file):
         old_summary = pd.read_csv(summary_file)
         # Aynı tarihli kayıt varsa güncelle, yoksa ekle
         summary_df = pd.concat([old_summary[old_summary['date'] != target_date_str], summary_df], ignore_index=True)
@@ -112,5 +119,11 @@ def run_inflation_report(target_date_str):
 
 
 if __name__ == "__main__":
-    # Test etmek istediğin tarihi buraya yaz
-    run_inflation_report("2026-03-24")
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--date", type=str, help="Çalıştırılacak tarih (Örn: 2026-03-24)")
+    args = parser.parse_args()
+
+    if args.date:
+        run_inflation_report(args.date)
+    else:
+        run_inflation_report("2026-03-24")
