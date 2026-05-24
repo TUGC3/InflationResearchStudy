@@ -1,117 +1,117 @@
-﻿District,Rooms,price_numeric,city,tuik_category,per_item_inflation_1d,per_item_inflation_7d,per_item_inflation_15d,per_item_inflation_30d
-Akçadağ,2+1,11000.0,malatya,04,0.0,-11.11111111111111,-12.871287128712872,-12.871287128712872
-Akçadağ,3+1,8000.0,malatya,04,0.0,,,
-Akçadağ / Köyler,3+1,9250.0,malatya,04,2.7777777777777777,5.714285714285714,8.823529411764707,5.714285714285714
-Arapgir,3+1,30000.0,malatya,04,0.0,0.0,39.53488372093023,39.53488372093023
-Battalgazi,3+1,14000.0,malatya,04,12.0,12.0,7.6923076923076925,0.0
-Battalgazi,9+3,40000.0,malatya,04,0.0,,,
-Battalgazi / Merkez,1+1,18750.0,malatya,04,1.3513513513513513,2.73972602739726,1.3513513513513513,1.3513513513513513
-Battalgazi / Merkez,1.5+1,14500.0,malatya,04,0.0,-26.582278481012654,-26.582278481012654,-26.582278481012654
-Battalgazi / Merkez,2+0,18750.0,malatya,04,0.0,-1.3157894736842104,7.142857142857142,4.166666666666666
-Battalgazi / Merkez,2+1,16000.0,malatya,04,-5.88235294117647,-3.0303030303030303,-3.0303030303030303,5.785123966942149
-Battalgazi / Merkez,2.5+1,17500.0,malatya,04,0.0,-1.4084507042253522,-1.4084507042253522,0.0
-Battalgazi / Merkez,3+1,16500.0,malatya,04,0.0,-2.941176470588235,3.125,3.125
-Battalgazi / Merkez,3.5+1,15500.0,malatya,04,0.0,-18.421052631578945,-18.421052631578945,-18.421052631578945
-Battalgazi / Merkez,4+1,23750.0,malatya,04,-3.061224489795918,2.1505376344086025,-3.061224489795918,15.853658536585366
-Battalgazi / Merkez,5+1,22500.0,malatya,04,-17.431192660550458,-18.91891891891892,-18.91891891891892,-2.1739130434782608
-Battalgazi / Merkez,Stüdyo (1+0),14000.0,malatya,04,0.0,-12.5,-12.5,-12.5
-Darende,2+1,17000.0,malatya,04,0.0,0.0,0.0,0.0
-Darende,3+1,22500.0,malatya,04,12.5,28.57142857142857,28.57142857142857,28.57142857142857
-Darende,3.5+1,10000.0,malatya,04,0.0,0.0,0.0,
-Doğanşehir,2+1,20000.0,malatya,04,0.0,0.0,,0.0
-Doğanşehir,3+1,12000.0,malatya,04,0.0,0.0,,0.0
-Doğanşehir / Köyler,3+1,7500.0,malatya,04,0.0,15.384615384615385,15.384615384615385,15.384615384615385
-Hekimhan,2+1,13000.0,malatya,04,0.0,0.0,0.0,8.333333333333332
-Kale / Köyler,2+1,8000.0,malatya,04,0.0,-5.88235294117647,0.0,-11.11111111111111
-Yeşilyurt,1+1,13500.0,malatya,04,,,,-3.571428571428571
-Yeşilyurt,2+1,18000.0,malatya,04,0.0,0.0,0.0,0.0
-Yeşilyurt,3+1,18000.0,malatya,04,-2.7027027027027026,-4.0,-5.263157894736842,0.0
-Yeşilyurt,3.5+1,18000.0,malatya,04,0.0,0.0,0.0,0.0
-Yeşilyurt,4+1,22000.0,malatya,04,0.0,-3.296703296703297,-8.333333333333332,0.0
-Yeşilyurt,4.5+1,22000.0,malatya,04,0.0,-11.11111111111111,,
-Yeşilyurt,Stüdyo (1+0),24000.0,malatya,04,,,,
-Yeşilyurt / Köyler,1+1,12750.0,malatya,04,0.0,0.0,-17.741935483870968,50.0
-Yeşilyurt / Köyler,2+1,18000.0,malatya,04,-5.263157894736842,1.4084507042253522,0.0,-5.263157894736842
-Yeşilyurt / Köyler,3+1,16000.0,malatya,04,0.0,3.225806451612903,6.666666666666667,23.076923076923077
-Yeşilyurt / Köyler,3.5+1,19000.0,malatya,04,0.0,0.0,35.714285714285715,
-Yeşilyurt / Köyler,4+1,21000.0,malatya,04,0.0,5.0,-6.666666666666667,5.0
-Yeşilyurt / Köyler,5+1,25000.0,malatya,04,0.0,0.0,0.0,4.166666666666666
-Yeşilyurt / Merkez,1+1,18000.0,malatya,04,0.0,5.88235294117647,9.090909090909092,9.090909090909092
-Yeşilyurt / Merkez,2+0,19900.0,malatya,04,0.0,,47.95539033457249,
-Yeşilyurt / Merkez,2+1,15250.0,malatya,04,-7.575757575757576,-6.153846153846154,-5.426356589147287,-4.6875
-Yeşilyurt / Merkez,3+1,20000.0,malatya,04,0.0,0.0,0.0,0.0
-Yeşilyurt / Merkez,3.5+1,24100.0,malatya,04,0.0,0.0,9.297052154195011,32.054794520547944
-Yeşilyurt / Merkez,4+1,25000.0,malatya,04,-1.9607843137254901,-0.9900990099009901,-7.4074074074074066,0.0
-Yeşilyurt / Merkez,4.5+1,25500.0,malatya,04,-7.2727272727272725,10.869565217391305,10.869565217391305,18.6046511627907
-Yeşilyurt / Merkez,5+1,31500.0,malatya,04,0.0,12.5,31.25,12.5
-Yeşilyurt / Merkez,5+2,23000.0,malatya,04,0.0,,,
-Karakoçan,1+1,9000.0,elazig,04,0.0,-18.181818181818183,-30.76923076923077,-30.76923076923077
-Karakoçan,2+1,7000.0,elazig,04,0.0,-26.31578947368421,-22.22222222222222,-22.22222222222222
-Karakoçan,3+1,8000.0,elazig,04,0.0,0.0,0.0,-38.46153846153847
-Kovancılar,1+1,15000.0,elazig,04,0.0,0.0,0.0,0.0
-Kovancılar,3+1,12000.0,elazig,04,0.0,0.0,0.0,14.285714285714285
-Maden / Hazar,2+1,25000.0,elazig,04,0.0,0.0,,
-Merkez,1+1,20500.0,elazig,04,-1.2048192771084338,1.2345679012345678,2.5,17.142857142857142
-Merkez,2+0,14500.0,elazig,04,0.0,16.0,0.0,
-Merkez,2+1,10875.0,elazig,04,1.3986013986013985,2.5943396226415096,-1.1363636363636365,-1.1363636363636365
-Merkez,3+1,10950.0,elazig,04,-0.45454545454545453,-0.45454545454545453,4.285714285714286,9.5
-Merkez,4+1,12000.0,elazig,04,,,,
-Merkez,Stüdyo (1+0),13500.0,elazig,04,0.0,0.0,0.0,0.0
-Merkez / 1800 Evler,1+1,19750.0,elazig,04,-1.25,16.176470588235293,1.282051282051282,-5.952380952380952
-Merkez / 1800 Evler,2+1,18000.0,elazig,04,-6.493506493506493,-5.263157894736842,-8.860759493670885,-11.11111111111111
-Merkez / 1800 Evler,3+1,17250.0,elazig,04,1.4705882352941175,1.4705882352941175,6.153846153846154,11.29032258064516
-Merkez / 1800 Evler,4+1,22750.0,elazig,04,0.0,-6.185567010309279,5.813953488372093,1.1111111111111112
-Merkez / 1800 Evler,4+2,25000.0,elazig,04,0.0,0.0,0.0,0.0
-Merkez / 1800 Evler,5+1,26000.0,elazig,04,0.0,0.0,0.0,
-Merkez / Aksaray,3+1,17000.0,elazig,04,0.0,-8.108108108108109,,30.76923076923077
-Merkez / Aksaray,4+1,22000.0,elazig,04,0.0,0.0,0.0,
-Merkez / Doğukent,1+1,19000.0,elazig,04,0.0,0.0,-17.391304347826086,-11.627906976744185
-Merkez / Doğukent,2+0,23000.0,elazig,04,0.0,,,
-Merkez / Doğukent,2+1,23000.0,elazig,04,0.0,4.545454545454546,27.77777777777778,9.523809523809524
-Merkez / Doğukent,3+1,18000.0,elazig,04,0.0,1.694915254237288,-2.7027027027027026,-10.0
-Merkez / Köyler,2+1,11000.0,elazig,04,0.0,11.39240506329114,2.3255813953488373,2.3255813953488373
-Merkez / Köyler,3+1,10000.0,elazig,04,0.0,0.0,0.0,0.0
-Merkez / Mustafapaşa,2+1,12375.0,elazig,04,-8.333333333333332,12.5,12.5,15.11627906976744
-Merkez / Mustafapaşa,3+1,12500.0,elazig,04,0.0,-3.8461538461538463,-7.4074074074074066,-9.090909090909092
-Merkez / Mustafapaşa,3.5+1,9000.0,elazig,04,0.0,-10.0,-18.181818181818183,
-Merkez / Mustafapaşa,4+1,15500.0,elazig,04,0.0,,,
-Merkez / Mustafapaşa,4.5+1,12500.0,elazig,04,0.0,0.0,0.0,0.0
-Merkez / Nailbey,2+1,11500.0,elazig,04,0.0,-4.166666666666666,-8.0,-16.05839416058394
-Merkez / Nailbey,3+1,11500.0,elazig,04,0.0,4.545454545454546,4.545454545454546,0.0
-Merkez / Nailbey,4+1,16250.0,elazig,04,0.0,0.0,8.333333333333332,0.0
-Merkez / Nailbey,7+1,11000.0,elazig,04,0.0,0.0,,0.0
-Merkez / Sürsürü,1+1,20250.0,elazig,04,1.25,1.25,0.0,1.25
-Merkez / Sürsürü,2+0,17000.0,elazig,04,0.0,3.0303030303030303,-5.555555555555555,3.0303030303030303
-Merkez / Sürsürü,2+1,15000.0,elazig,04,0.0,0.0,7.142857142857142,0.0
-Merkez / Sürsürü,3+1,18950.0,elazig,04,-0.13175230566534915,5.277777777777778,5.277777777777778,11.470588235294118
-Merkez / Sürsürü,4+0,15500.0,elazig,04,0.0,0.0,0.0,
-Merkez / Sürsürü,4+1,25000.0,elazig,04,0.0,4.166666666666666,0.0,0.0
-Merkez / Sürsürü,5+1,26250.0,elazig,04,0.0,0.0,-7.894736842105263,
-Merkez / Sürsürü,5.5+1,20000.0,elazig,04,0.0,0.0,0.0,-4.761904761904762
-Merkez / Yurtbaşı,1+1,15500.0,elazig,04,-6.0606060606060606,6.896551724137931,,10.714285714285714
-Merkez / Yurtbaşı,2+0,20000.0,elazig,04,0.0,-2.4390243902439024,-2.4390243902439024,21.21212121212121
-Merkez / Yurtbaşı,2+1,9250.0,elazig,04,0.0,0.0,0.0,15.625
-Merkez / Yurtbaşı,2.5+1,22000.0,elazig,04,0.0,0.0,0.0,
-Merkez / Yurtbaşı,3+1,11000.0,elazig,04,0.0,2.3255813953488373,-12.0,-15.384615384615385
-Merkez / Yurtbaşı,3+2,18000.0,elazig,04,0.0,0.0,0.0,0.0
-Merkez / Yurtbaşı,4+1,17000.0,elazig,04,0.0,0.0,0.0,
-Merkez / İzzetpaşa,1+1,21000.0,elazig,04,0.0,-3.4482758620689653,0.0,5.0
-Merkez / İzzetpaşa,2+0,21250.0,elazig,04,0.0,6.25,6.25,-3.4090909090909087
-Merkez / İzzetpaşa,2+1,18000.0,elazig,04,0.0,4.3478260869565215,9.090909090909092,2.857142857142857
-Merkez / İzzetpaşa,3+1,13000.0,elazig,04,-1.8867924528301887,0.0,0.0,4.0
-Merkez / İzzetpaşa,4+1,17250.0,elazig,04,-4.166666666666666,9.523809523809524,-4.166666666666666,-4.166666666666666
-Merkez / İzzetpaşa,5+1,18500.0,elazig,04,0.0,0.0,0.0,
-Merkez / İzzetpaşa,Stüdyo (1+0),15000.0,elazig,04,0.0,0.0,27.659574468085108,50.0
-Merkez / İçme,2+1,10000.0,elazig,04,0.0,0.0,,
-Palu,2+1,6500.0,elazig,04,0.0,0.0,8.333333333333332,8.333333333333332
-Sivrice,2+1,7875.0,elazig,04,0.0,2.941176470588235,0.9615384615384616,-1.5625
-Sivrice,3+1,22500.0,elazig,04,0.0,,,
-Sivrice,4+1,40000.0,elazig,04,0.0,0.0,33.33333333333333,33.33333333333333
-Merkez,1+1,12000.0,tunceli,04,0.0,0.0,,
-Merkez,2+1,10000.0,tunceli,04,0.0,,,
-Merkez,3+1,10750.0,tunceli,04,0.0,-6.521739130434782,,
-Merkez / Tunceli,1+1,23000.0,tunceli,04,0.0,,,24.324324324324326
-Merkez / Tunceli,2+0,20000.0,tunceli,04,0.0,0.0,0.0,
-Merkez / Tunceli,2+1,21500.0,tunceli,04,0.0,7.5,34.375,0.0
-Merkez / Tunceli,3+1,20000.0,tunceli,04,-9.090909090909092,-9.090909090909092,-13.043478260869565,-11.11111111111111
-Pertek,3+1,15000.0,tunceli,04,0.0,0.0,0.0,0.0
+﻿item_name,price_numeric,city,tuik_category,per_item_inflation_2026-05-23
+Akçadağ - 2+1,110000.0,malatya,04,0.0
+Akçadağ - 3+1,80000.0,malatya,04,0.0
+Akçadağ / Köyler - 3+1,92500.0,malatya,04,2.7777777777777777
+Arapgir - 3+1,300000.0,malatya,04,0.0
+Battalgazi - 3+1,140000.0,malatya,04,12.0
+Battalgazi - 9+3,400000.0,malatya,04,0.0
+Battalgazi / Merkez - 1+1,187500.0,malatya,04,1.3513513513513513
+Battalgazi / Merkez - 1.5+1,145000.0,malatya,04,0.0
+Battalgazi / Merkez - 2+0,187500.0,malatya,04,0.0
+Battalgazi / Merkez - 2+1,160000.0,malatya,04,-5.88235294117647
+Battalgazi / Merkez - 2.5+1,175000.0,malatya,04,0.0
+Battalgazi / Merkez - 3+1,165000.0,malatya,04,0.0
+Battalgazi / Merkez - 3.5+1,155000.0,malatya,04,0.0
+Battalgazi / Merkez - 4+1,237500.0,malatya,04,-3.061224489795918
+Battalgazi / Merkez - 5+1,225000.0,malatya,04,-17.431192660550458
+Battalgazi / Merkez - Stüdyo (1+0),140000.0,malatya,04,0.0
+Darende - 2+1,170000.0,malatya,04,0.0
+Darende - 3+1,225000.0,malatya,04,12.5
+Darende - 3.5+1,100000.0,malatya,04,0.0
+Doğanşehir - 2+1,200000.0,malatya,04,0.0
+Doğanşehir - 3+1,120000.0,malatya,04,0.0
+Doğanşehir / Köyler - 3+1,75000.0,malatya,04,0.0
+Hekimhan - 2+1,130000.0,malatya,04,0.0
+Kale / Köyler - 2+1,80000.0,malatya,04,0.0
+Yeşilyurt - 1+1,135000.0,malatya,04,
+Yeşilyurt - 2+1,180000.0,malatya,04,0.0
+Yeşilyurt - 3+1,180000.0,malatya,04,-2.7027027027027026
+Yeşilyurt - 3.5+1,180000.0,malatya,04,0.0
+Yeşilyurt - 4+1,220000.0,malatya,04,0.0
+Yeşilyurt - 4.5+1,220000.0,malatya,04,0.0
+Yeşilyurt - Stüdyo (1+0),240000.0,malatya,04,
+Yeşilyurt / Köyler - 1+1,127500.0,malatya,04,0.0
+Yeşilyurt / Köyler - 2+1,180000.0,malatya,04,-5.263157894736842
+Yeşilyurt / Köyler - 3+1,160000.0,malatya,04,0.0
+Yeşilyurt / Köyler - 3.5+1,190000.0,malatya,04,0.0
+Yeşilyurt / Köyler - 4+1,210000.0,malatya,04,0.0
+Yeşilyurt / Köyler - 5+1,250000.0,malatya,04,0.0
+Yeşilyurt / Merkez - 1+1,180000.0,malatya,04,0.0
+Yeşilyurt / Merkez - 2+0,199000.0,malatya,04,0.0
+Yeşilyurt / Merkez - 2+1,152500.0,malatya,04,-7.575757575757576
+Yeşilyurt / Merkez - 3+1,200000.0,malatya,04,0.0
+Yeşilyurt / Merkez - 3.5+1,241000.0,malatya,04,0.0
+Yeşilyurt / Merkez - 4+1,250000.0,malatya,04,-1.9607843137254901
+Yeşilyurt / Merkez - 4.5+1,255000.0,malatya,04,-7.2727272727272725
+Yeşilyurt / Merkez - 5+1,315000.0,malatya,04,0.0
+Yeşilyurt / Merkez - 5+2,230000.0,malatya,04,0.0
+Karakoçan - 1+1,90000.0,elazig,04,0.0
+Karakoçan - 2+1,70000.0,elazig,04,0.0
+Karakoçan - 3+1,80000.0,elazig,04,0.0
+Kovancılar - 1+1,150000.0,elazig,04,0.0
+Kovancılar - 3+1,120000.0,elazig,04,0.0
+Maden / Hazar - 2+1,250000.0,elazig,04,0.0
+Merkez - 1+1,205000.0,elazig,04,-1.2048192771084338
+Merkez - 2+0,145000.0,elazig,04,0.0
+Merkez - 2+1,108750.0,elazig,04,1.3986013986013985
+Merkez - 3+1,109500.0,elazig,04,-0.45454545454545453
+Merkez - 4+1,120000.0,elazig,04,
+Merkez - Stüdyo (1+0),135000.0,elazig,04,0.0
+Merkez / 1800 Evler - 1+1,197500.0,elazig,04,-1.25
+Merkez / 1800 Evler - 2+1,180000.0,elazig,04,-6.493506493506493
+Merkez / 1800 Evler - 3+1,172500.0,elazig,04,1.4705882352941175
+Merkez / 1800 Evler - 4+1,227500.0,elazig,04,0.0
+Merkez / 1800 Evler - 4+2,250000.0,elazig,04,0.0
+Merkez / 1800 Evler - 5+1,260000.0,elazig,04,0.0
+Merkez / Aksaray - 3+1,170000.0,elazig,04,0.0
+Merkez / Aksaray - 4+1,220000.0,elazig,04,0.0
+Merkez / Doğukent - 1+1,190000.0,elazig,04,0.0
+Merkez / Doğukent - 2+0,230000.0,elazig,04,0.0
+Merkez / Doğukent - 2+1,230000.0,elazig,04,0.0
+Merkez / Doğukent - 3+1,180000.0,elazig,04,0.0
+Merkez / Köyler - 2+1,110000.0,elazig,04,0.0
+Merkez / Köyler - 3+1,100000.0,elazig,04,0.0
+Merkez / Mustafapaşa - 2+1,123750.0,elazig,04,-8.333333333333332
+Merkez / Mustafapaşa - 3+1,125000.0,elazig,04,0.0
+Merkez / Mustafapaşa - 3.5+1,90000.0,elazig,04,0.0
+Merkez / Mustafapaşa - 4+1,155000.0,elazig,04,0.0
+Merkez / Mustafapaşa - 4.5+1,125000.0,elazig,04,0.0
+Merkez / Nailbey - 2+1,115000.0,elazig,04,0.0
+Merkez / Nailbey - 3+1,115000.0,elazig,04,0.0
+Merkez / Nailbey - 4+1,162500.0,elazig,04,0.0
+Merkez / Nailbey - 7+1,110000.0,elazig,04,0.0
+Merkez / Sürsürü - 1+1,202500.0,elazig,04,1.25
+Merkez / Sürsürü - 2+0,170000.0,elazig,04,0.0
+Merkez / Sürsürü - 2+1,150000.0,elazig,04,0.0
+Merkez / Sürsürü - 3+1,189500.0,elazig,04,-0.13175230566534915
+Merkez / Sürsürü - 4+0,155000.0,elazig,04,0.0
+Merkez / Sürsürü - 4+1,250000.0,elazig,04,0.0
+Merkez / Sürsürü - 5+1,262500.0,elazig,04,0.0
+Merkez / Sürsürü - 5.5+1,200000.0,elazig,04,0.0
+Merkez / Yurtbaşı - 1+1,155000.0,elazig,04,-6.0606060606060606
+Merkez / Yurtbaşı - 2+0,200000.0,elazig,04,0.0
+Merkez / Yurtbaşı - 2+1,92500.0,elazig,04,0.0
+Merkez / Yurtbaşı - 2.5+1,220000.0,elazig,04,0.0
+Merkez / Yurtbaşı - 3+1,110000.0,elazig,04,0.0
+Merkez / Yurtbaşı - 3+2,180000.0,elazig,04,0.0
+Merkez / Yurtbaşı - 4+1,170000.0,elazig,04,0.0
+Merkez / İzzetpaşa - 1+1,210000.0,elazig,04,0.0
+Merkez / İzzetpaşa - 2+0,212500.0,elazig,04,0.0
+Merkez / İzzetpaşa - 2+1,180000.0,elazig,04,0.0
+Merkez / İzzetpaşa - 3+1,130000.0,elazig,04,-1.8867924528301887
+Merkez / İzzetpaşa - 4+1,172500.0,elazig,04,-4.166666666666666
+Merkez / İzzetpaşa - 5+1,185000.0,elazig,04,0.0
+Merkez / İzzetpaşa - Stüdyo (1+0),150000.0,elazig,04,0.0
+Merkez / İçme - 2+1,100000.0,elazig,04,0.0
+Palu - 2+1,65000.0,elazig,04,0.0
+Sivrice - 2+1,78750.0,elazig,04,0.0
+Sivrice - 3+1,225000.0,elazig,04,0.0
+Sivrice - 4+1,400000.0,elazig,04,0.0
+Merkez - 1+1,120000.0,tunceli,04,0.0
+Merkez - 2+1,100000.0,tunceli,04,0.0
+Merkez - 3+1,107500.0,tunceli,04,0.0
+Merkez / Tunceli - 1+1,230000.0,tunceli,04,0.0
+Merkez / Tunceli - 2+0,200000.0,tunceli,04,0.0
+Merkez / Tunceli - 2+1,215000.0,tunceli,04,0.0
+Merkez / Tunceli - 3+1,200000.0,tunceli,04,-9.090909090909092
+Pertek - 3+1,150000.0,tunceli,04,0.0

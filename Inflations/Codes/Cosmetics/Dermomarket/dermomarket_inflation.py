@@ -6,7 +6,7 @@ Computes three inflation metrics for Dermomarket products:
   2. Average Inflation     – arithmetic mean of all per-product inflation rates
   3. TUIK Weighted Average – weighted average using TUIK 2026 CPI basket weights
 
-Ürün anahtarı: category + product_name
+Ürün anahtarı: category + item_name
 (Aynı ürün adı farklı kategorilerde farklı ürün olabilir.)
 
 Intervals: 1d, 7d, 15d, 30d back from target date (skipped if data missing).
@@ -44,7 +44,7 @@ logger = logging.getLogger(__name__)
 DATA_DIR   = REPO_ROOT / "InflationItems" / "Datas" / "Cosmetics" / "Dermomarket"
 OUTPUT_DIR = REPO_ROOT / "Inflations"     / "Datas" / "Cosmetics" / "Dermomarket"
 
-KEY = ["category", "product_name"]
+KEY = ["category", "item_name"]
 
 
 # ── Data loading ──────────────────────────────────────────────────────────────

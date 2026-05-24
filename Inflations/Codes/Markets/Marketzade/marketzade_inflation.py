@@ -50,9 +50,9 @@ def _load_csv(date_str):
         return None
     try:
         df = pd.read_csv(fpath, encoding="utf-8-sig")
-        df["fiyat"] = pd.to_numeric(df["fiyat"], errors="coerce")
+        df["price"] = pd.to_numeric(df["price"], errors="coerce")
         # Drop site-level duplicates (same product rendered twice in DOM)
-        df = df.drop_duplicates(subset=["urun_adi"])
+        df = df.drop_duplicates(subset=["item_name"])
         return df
     except Exception as e:
         logger.error(f"Dosya okunamadı {fpath}: {e}")
@@ -73,12 +73,12 @@ def _compute_metrics(df_current, df_past):
     df_current["tuik_category"] = df_current["kategori"].apply(marketzade_category_to_tuik)
 
     # Merge past prices by product name (unique identifier for Marketzade)
-    past_subset = df_past[["urun_adi", "fiyat"]].rename(columns={"fiyat": "past_fiyat"})
-    merged = df_current.merge(past_subset, on="urun_adi", how="left")
+    past_subset = df_past[["item_name", "price"]].rename(columns={"price": "past_price"})
+    merged = df_current.merge(past_subset, on="item_name", how="left")
 
     # 1) Per-item inflation
     merged["per_item_inflation"] = (
-        (merged["fiyat"] - merged["past_fiyat"]) / merged["past_fiyat"]
+        (merged["price"] - merged["past_price"]) / merged["past_price"]
     ) * 100
     merged["per_item_inflation"] = merged["per_item_inflation"].replace(
         [float("inf"), float("-inf")], pd.NA
@@ -97,7 +97,7 @@ def _compute_metrics(df_current, df_past):
         if c in cat_avg.index and pd.notna(cat_avg[c])
     )
 
-    merged = merged.drop(columns=["past_fiyat"], errors="ignore")
+    merged = merged.drop(columns=["past_price"], errors="ignore")
     return merged, avg_inflation, tuik_weighted
 
 
@@ -148,10 +148,10 @@ def calculate_inflation(target_date=None, compare_date=None):
         merged, avg_inf, tuik_w = _compute_metrics(df_today, df_past)
 
         detail_base = detail_base.merge(
-            merged[["urun_adi", "per_item_inflation"]].rename(
+            merged[["item_name", "per_item_inflation"]].rename(
                 columns={"per_item_inflation": f"per_item_inflation_{label}"}
             ),
-            on="urun_adi",
+            on="item_name",
             how="left",
         )
 

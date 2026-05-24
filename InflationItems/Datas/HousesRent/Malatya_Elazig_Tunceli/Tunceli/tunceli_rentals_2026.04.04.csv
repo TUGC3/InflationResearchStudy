@@ -1,26 +1,26 @@
-District,Rooms,Price
-Merkez / Tunceli,1+1,18.000 TL
-Merkez,3+1,30.000 TL
-Merkez / Tunceli,3+1,17.500 TL
-Merkez / Tunceli,1+1,18.500 TL
-Merkez / Tunceli,1+1,20.000 TL
-Merkez / Tunceli,3+1,20.000 TL
-Merkez / Tunceli,1+1,19.000 TL
-Merkez / Tunceli,3+1,21.000 TL
-Merkez / Tunceli,3+1,20.000 TL
-Pertek,3+1,15.000 TL
-Merkez / Tunceli,3+1,23.000 TL
-Merkez / Tunceli,2+1,17.000 TL
-Pertek,2+1,23.000 TL
-Merkez / Tunceli,2+1,16.000 TL
-Merkez / Tunceli,2+1,20.000 TL
-Merkez / Tunceli,2+1,26.000 TL
-Merkez,2+1,18.000 TL
-Merkez / Tunceli,3+1,35.000 TL
-Mazgirt,2+1,13.500 TL
-Merkez / Tunceli,3+1,17.000 TL
-Merkez / Tunceli,3+1,29.000 TL
-Merkez / Tunceli,1+1,19.000 TL
-Merkez / Tunceli,2+0,20.000 TL
-Merkez / Tunceli,1.5+1,23.000 TL
-Merkez,1+1,15.000 TL
+item_name,price
+Merkez / Tunceli - 1+1,18000.0
+Merkez - 3+1,30000.0
+Merkez / Tunceli - 3+1,17500.0
+Merkez / Tunceli - 1+1,18500.0
+Merkez / Tunceli - 1+1,20000.0
+Merkez / Tunceli - 3+1,20000.0
+Merkez / Tunceli - 1+1,19000.0
+Merkez / Tunceli - 3+1,21000.0
+Merkez / Tunceli - 3+1,20000.0
+Pertek - 3+1,15000.0
+Merkez / Tunceli - 3+1,23000.0
+Merkez / Tunceli - 2+1,17000.0
+Pertek - 2+1,23000.0
+Merkez / Tunceli - 2+1,16000.0
+Merkez / Tunceli - 2+1,20000.0
+Merkez / Tunceli - 2+1,26000.0
+Merkez - 2+1,18000.0
+Merkez / Tunceli - 3+1,35000.0
+Mazgirt - 2+1,13500.0
+Merkez / Tunceli - 3+1,17000.0
+Merkez / Tunceli - 3+1,29000.0
+Merkez / Tunceli - 1+1,19000.0
+Merkez / Tunceli - 2+0,20000.0
+Merkez / Tunceli - 1.5+1,23000.0
+Merkez - 1+1,15000.0

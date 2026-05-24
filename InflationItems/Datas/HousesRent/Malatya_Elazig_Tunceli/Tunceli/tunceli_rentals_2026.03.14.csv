@@ -1,24 +1,24 @@
-District,Rooms,Price
-Merkez / Tunceli,2+1,25.000 TL
-Merkez,2+1,14.000 TL
-Merkez / Tunceli,3+1,20.000 TL
-Merkez / Tunceli,2+1,12.000 TL
-Merkez / Tunceli,3+1,29.000 TL
-Merkez / Tunceli,1+1,19.000 TL
-Merkez / Tunceli,1+1,16.000 TL
-Merkez / Tunceli,2+0,20.000 TL
-Merkez,2+1,12.000 TL
-Merkez / Çiçekli(Buğulu),3+1,25.000 TL
-Merkez / Tunceli,1+1,21.500 TL
-Merkez / Tunceli,3+1,20.000 TL
-Merkez / Tunceli,3+1,20.000 TL
-Merkez / Tunceli,1+1,19.000 TL
-Merkez / Tunceli,3+1,18.000 TL
-Merkez / Tunceli,3+1,21.000 TL
-Pertek,2+1,23.000 TL
-Merkez / Tunceli,2+1,26.000 TL
-Merkez / Tunceli,2+1,19.000 TL
-Merkez / Tunceli,3+1,30.000 TL
-Merkez / Tunceli,3+1,25.000 TL
-Merkez / Tunceli,2+1,20.000 TL
-Merkez / Tunceli,1+1,19.000 TL
+item_name,price
+Merkez / Tunceli - 2+1,25000.0
+Merkez - 2+1,14000.0
+Merkez / Tunceli - 3+1,20000.0
+Merkez / Tunceli - 2+1,12000.0
+Merkez / Tunceli - 3+1,29000.0
+Merkez / Tunceli - 1+1,19000.0
+Merkez / Tunceli - 1+1,16000.0
+Merkez / Tunceli - 2+0,20000.0
+Merkez - 2+1,12000.0
+Merkez / Çiçekli(Buğulu) - 3+1,25000.0
+Merkez / Tunceli - 1+1,21500.0
+Merkez / Tunceli - 3+1,20000.0
+Merkez / Tunceli - 3+1,20000.0
+Merkez / Tunceli - 1+1,19000.0
+Merkez / Tunceli - 3+1,18000.0
+Merkez / Tunceli - 3+1,21000.0
+Pertek - 2+1,23000.0
+Merkez / Tunceli - 2+1,26000.0
+Merkez / Tunceli - 2+1,19000.0
+Merkez / Tunceli - 3+1,30000.0
+Merkez / Tunceli - 3+1,25000.0
+Merkez / Tunceli - 2+1,20000.0
+Merkez / Tunceli - 1+1,19000.0

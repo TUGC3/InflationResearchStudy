@@ -42,8 +42,8 @@ def _load_csv(date_str):
         return None
     try:
         df = pd.read_csv(fpath, encoding="utf-8-sig")
-        df["Price"] = pd.to_numeric(df["Price"], errors="coerce")
-        df = df.drop_duplicates(subset=["Category", "Product Name"])
+        df["price"] = pd.to_numeric(df["price"], errors="coerce")
+        df = df.drop_duplicates(subset=["category", "item_name"])
         return df
     except Exception as e:
         logger.error(f"Dosya okunamadı {fpath}: {e}")
@@ -52,15 +52,15 @@ def _load_csv(date_str):
 
 def _compute_metrics(df_current, df_past):
     df_current = df_current.copy()
-    df_current["tuik_category"] = df_current["Category"].apply(koctas_category_to_tuik)
+    df_current["tuik_category"] = df_current["category"].apply(koctas_category_to_tuik)
 
-    past_subset = df_past[["Category", "Product Name", "Price"]].rename(
-        columns={"Price": "past_price"}
+    past_subset = df_past[["category", "item_name", "price"]].rename(
+        columns={"price": "past_price"}
     )
-    merged = df_current.merge(past_subset, on=["Category", "Product Name"], how="left")
+    merged = df_current.merge(past_subset, on=["category", "item_name"], how="left")
 
     merged["per_item_inflation"] = (
-        (merged["Price"] - merged["past_price"]) / merged["past_price"]
+        (merged["price"] - merged["past_price"]) / merged["past_price"]
     ) * 100
     merged["per_item_inflation"] = merged["per_item_inflation"].replace(
         [float("inf"), float("-inf")], pd.NA
@@ -105,7 +105,7 @@ def calculate_inflation(target_date=None, compare_date=None):
 
     summary_row = {"tarih": today_str}
     detail_base = df_today.copy()
-    detail_base["tuik_category"] = detail_base["Category"].apply(koctas_category_to_tuik)
+    detail_base["tuik_category"] = detail_base["category"].apply(koctas_category_to_tuik)
 
     for label, past_str in intervals.items():
         df_past = _load_csv(past_str)
@@ -120,10 +120,10 @@ def calculate_inflation(target_date=None, compare_date=None):
         merged, avg_inf, tuik_w = _compute_metrics(df_today, df_past)
 
         detail_base = detail_base.merge(
-            merged[["Category", "Product Name", "per_item_inflation"]].rename(
+            merged[["category", "item_name", "per_item_inflation"]].rename(
                 columns={"per_item_inflation": f"per_item_inflation_{label}"}
             ),
-            on=["Category", "Product Name"],
+            on=["category", "item_name"],
             how="left",
         )
 

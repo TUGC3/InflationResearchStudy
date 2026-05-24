@@ -109,8 +109,8 @@ def scrape_category(driver, cat_name, base_url, max_pages):
         print(f"[{elapsed()}]  [{cat_name}] Sayfa 1/{total_pages}: {len(prods)} ürün")
 
         for p in prods:
-            results.append({"Category": cat_name, "Product Name": p["name"],
-                            "Price": p["price"], "Date": DATE_STR})
+            results.append({"item_name": p["name"], "price": p["price"],
+                            "category": cat_name, "date": DATE_STR})
 
         for page in range(2, total_pages + 1):
             time.sleep(2)
@@ -121,8 +121,8 @@ def scrape_category(driver, cat_name, base_url, max_pages):
                 break
 
             for p in prods:
-                results.append({"Category": cat_name, "Product Name": p["name"],
-                                "Price": p["price"], "Date": DATE_STR})
+                results.append({"item_name": p["name"], "price": p["price"],
+                                "category": cat_name, "date": DATE_STR})
             print(f"[{elapsed()}]  [{cat_name}] Sayfa {page}/{total_pages}: {len(prods)} ürün")
 
     except Exception as e:
@@ -154,12 +154,12 @@ def main():
     seen = set()
     deduped = []
     for row in all_results:
-        key = (row["Category"], row["Product Name"])
+        key = (row["category"], row["item_name"])
         if key not in seen:
             seen.add(key)
             deduped.append(row)
 
-    fieldnames = ["Category", "Product Name", "Price", "Date"]
+    fieldnames = ["item_name", "price", "category", "date"]
     with open(OUT_FILE, "w", newline="", encoding="utf-8-sig") as f:
         writer = csv.DictWriter(f, fieldnames=fieldnames)
         writer.writeheader()
