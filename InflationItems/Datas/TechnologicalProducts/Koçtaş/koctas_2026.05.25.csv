@@ -1,7 +1,6 @@
 ﻿item_name,price,category,date
 B D Ld12ska-tr 12v Vidalama+30 Prç Aks,1999.0,Akülü Vidalamalar,2026.05.25
 "Te-cd 18/44 Li-i Darbeli Vidalama 1x2,5a",3999.0,Akülü Vidalamalar,2026.05.25
-LD12SP Akülü Vidalama,2799.0,Akülü Vidalamalar,2026.05.25
 Sds-plus 11&#039;li Alüminyum Çantalı Uç Ve Keski Seti - 2608578765,1350.0,Akülü Vidalamalar,2026.05.25
 10 Adet Vidalama Ucu ve 20 cm Uzatma Adaptörü,359.9,Akülü Vidalamalar,2026.05.25
 Promo Blister Akülü Vidalama + 24 Parça Aksesuar,599.9,Akülü Vidalamalar,2026.05.25
@@ -12,6 +11,7 @@ Dt7969-qz 32 Parça Vid Uç Seti,949.9,Akülü Vidalamalar,2026.05.25
 Bits Uç Takımı 7 Parça,519.9,Akülü Vidalamalar,2026.05.25
 DCD710D2 10.8 Li-Ion Çift Akülü Vidalama,8499.0,Akülü Vidalamalar,2026.05.25
 Mini X-Line 25 Parçalı Vidalama Seti,419.9,Akülü Vidalamalar,2026.05.25
+LD12SP Akülü Vidalama,2799.0,Akülü Vidalamalar,2026.05.25
 10 Adet Vidalama Ucu ve 30 cm Uzatma Adaptörü,379.9,Akülü Vidalamalar,2026.05.25
 Vidalama Ucu 50 mm PH/PZ/SL,107.9,Akülü Vidalamalar,2026.05.25
 10mm Çelik Mandren Vidalama Mkd5p,1663.0,Akülü Vidalamalar,2026.05.25
@@ -39,16 +39,15 @@ Impact Control Serisi Vidalama Ucu 8&#039;li T15/T20x2/T25x2/T30x2/T40 *25mm,589
 Pozidriv Bits Uç PZ1,139.9,Akülü Vidalamalar,2026.05.25
 Bits Uç PH2,99.99,Akülü Vidalamalar,2026.05.25
 Hex Allen Bits Uç Seti Sekizli 50 mm,119.9,Akülü Vidalamalar,2026.05.25
-Bits Ucu Seti 3 Parça PH Uç Seti,39.99,Akülü Vidalamalar,2026.05.25
 X-line 30 Parça Titanyum Karışık Aksesuar Seti 2607019324,982.49,Akülü Vidalamalar,2026.05.25
 Impact Control Serisi Vidalama Ucu 8&#039;li PH2/PZ2/T15/T20/T25/T30 *50mm + Hızlı Uç Değiştirme Mandrenli Universal Tutucu,871.0,Akülü Vidalamalar,2026.05.25
 "Go 3,6 Volt Akülü Vidalama Makinesi- 06019h2201",3245.64,Akülü Vidalamalar,2026.05.25
 MS18-20 Akülü Multi Set 18 Volt / 2 Ah Li-ion Çift Akülü Vidalama Multi Set,9000.0,Akülü Vidalamalar,2026.05.25
 Tp-cd 18/60 Li-i Bl Solo Akülü Darbeli Vidalama +2.5 Ah Starter Kit,5199.0,Akülü Vidalamalar,2026.05.25
 Bits Ucu Seti 20 Parça 50 mm,159.9,Akülü Vidalamalar,2026.05.25
+Bits Uç İkili PH2,139.9,Akülü Vidalamalar,2026.05.25
 Gsb 120-li 2 Ah Çift Akülü Darbeli Delme Vidalam Matkap Ve 23 Parça Uç Seti 06019g8102,6999.0,Akülü Vidalamalar,2026.05.25
 Vidalama Ucu Seti 43 Parça,1411.37,Akülü Vidalamalar,2026.05.25
-Bits Ucu Seti 3 Parça PZ Uç Seti,44.99,Akülü Vidalamalar,2026.05.25
 Karışık Bits Ucu Seti,159.9,Akülü Vidalamalar,2026.05.25
 12v Çift Akü Şarjlı Matkap Akülü Vidalama,1149.9,Akülü Vidalamalar,2026.05.25
 12v Çift Akülü Metal Şanzıman Şarjlı Matkap Akülü Vidalama,1399.9,Akülü Vidalamalar,2026.05.25
@@ -80,20 +79,23 @@ T9 49 Mm 1&#039;li Torx Bits Uç Extrahard 2607001630,270.0,Akülü Vidalamalar
 Bits Uç Ph1/2/3 25 Mm 3&#039;lü Set Extrahard 2607001752,294.0,Akülü Vidalamalar,2026.05.25
 Akülü Vidalama Şarjlı Tornavida Şarjlı Matkap Ixo 7 .nesil + Bosch 32 Parça Vidalama Ucu Seti,3299.0,Akülü Vidalamalar,2026.05.25
 Tomax Yıldız Bits Uç Ph2x100 Mm (10 Adet),893.99,Akülü Vidalamalar,2026.05.25
-Shockwave Bits Uç Seti Karışık 32 Parça,1200.0,Akülü Vidalamalar,2026.05.25
 Gsb 185 Lı Darbeli Kömürsüz Matkap Vidalama 16 Parça Uç Seti Hediye,8499.0,Akülü Vidalamalar,2026.05.25
 Haispro Rb-db2109 Profesyonel Darbeli Matkap 21 V 2x4.0 Ah Çift Akülü 150 Nm Yüksek Tork,14300.0,Akülü Vidalamalar,2026.05.25
-Gtb 185-li Akülü Alçıpan Vidalama (solo),7443.0,Akülü Vidalamalar,2026.05.25
 25 Parça Vidalama Seti (tornavida Fonksiyonlu Kutu),520.0,Akülü Vidalamalar,2026.05.25
+Gtb 185-li Akülü Alçıpan Vidalama (solo),7443.0,Akülü Vidalamalar,2026.05.25
 Ph2 X 127 Mm Ekstra Uzun Yıldız Bits Uç Cb/1272,272.0,Akülü Vidalamalar,2026.05.25
 Gsb 18V-90 C Solo Darb Delme/Vid,13574.99,Akülü Vidalamalar,2026.05.25
-Gsb 18V-150 C Akülü Darb Delme/Vid,42000.0,Akülü Vidalamalar,2026.05.25
+Vidalama Ucu Pz 1x25 mm,72.99,Akülü Vidalamalar,2026.05.25
 Vidalama Köşe Adaptörü Shockwave-4932471274,1729.99,Akülü Vidalamalar,2026.05.25
+Gsb 18V-150 C Akülü Darb Delme/Vid,42000.0,Akülü Vidalamalar,2026.05.25
+Shockwave Bits Uç Seti Karışık 32 Parça,1200.0,Akülü Vidalamalar,2026.05.25
 21v Çift Akülü 4 Başlıklı Kömürsüz Motor Şarjlı Akülü Vidalama,3799.9,Akülü Vidalamalar,2026.05.25
 Şarjlı Vidalama Gsr 120 Li Çift Akülü,6354.0,Akülü Vidalamalar,2026.05.25
 Impact Çift Taraflı Vidalama Uç Pz2 65mm 8li,459.0,Akülü Vidalamalar,2026.05.25
 12v Metal Şanzıman Çift Akülü Bakır Sargı Akülü Vidalama Şarjlı Matkap,1249.9,Akülü Vidalamalar,2026.05.25
 T Vidalama Ucu Üçlü 89 mm,359.9,Akülü Vidalamalar,2026.05.25
+Gtb 185-Lı Akülü Vidalama,13999.0,Akülü Vidalamalar,2026.05.25
+Gsr 18V-150 C Akülü Delme/Vid,29799.0,Akülü Vidalamalar,2026.05.25
 12v Çift Akülü Darbeli Şarjlı Matkap Dijital Göstergeli Akülü Vidalama,1399.9,Akülü Vidalamalar,2026.05.25
 Gsb Darbeli 120 Li 3 Ah Çift Akülü Vidalama +  Bosch Gas 12 Şarjlı Araç Süpürgesi̇ + Bosch V-line 103 Parça Uç Seti,10999.0,Akülü Vidalamalar,2026.05.25
 Plus 12v Usb Şarjlı Matkap Vidalama Dahili Batarya,1399.9,Akülü Vidalamalar,2026.05.25
@@ -120,54 +122,53 @@ Mclaren Dcf85mp2t-qw 18v 2x5ah Akülü Darbeli Vidalama,17048.0,Akülü Vidalama
 Gsb 18v-45 Çift Akülü 2.0 Ah Darbeli Vidalama + 63 Parça Aksesuar Seti,10267.0,Akülü Vidalamalar,2026.05.25
 21901 Köşe Delme Vidalama Aparatı 10 Mm,1234.0,Akülü Vidalamalar,2026.05.25
 Yedi̇li̇ Set (powerbank&amp;led+ Ş.hilti+ş.spral+s.sıkma+13mm Ç.mandren+ş.dekupaj+sunta Kesme),10780.0,Akülü Vidalamalar,2026.05.25
-Atbl 16 Id-202c 2x2.0 Ah Çift Akülü Kömürsüz Darbeli Vidalama 16v - A0104084,3216.8,Akülü Vidalamalar,2026.05.25
 Dörtlü Set Mw350r (10mm Ç.mandren+s.sıkma+ş.spral+ş.hilti),8197.0,Akülü Vidalamalar,2026.05.25
+Atbl 16 Id-202c 2x2.0 Ah Çift Akülü Kömürsüz Darbeli Vidalama 16v - A0104084,3216.8,Akülü Vidalamalar,2026.05.25
 Shockwave 56 Parça Bits Uç Seti-4932492006,1957.0,Akülü Vidalamalar,2026.05.25
 V-line 91 Parça Vidalama Ve Matkap Ucu Aksesuar Seti - 2607017195,2019.0,Akülü Vidalamalar,2026.05.25
 Bosch 35 Parça Ahşap Matkap Ucu Ve Bits Uç Seti 2607017725,1549.0,Akülü Vidalamalar,2026.05.25
 X-line Premium Delme Ve Vidalama Ucu Aksesuar Seti 49 Parça- 2608p00233,1253.0,Akülü Vidalamalar,2026.05.25
 Hex 6x49 Mm 3&#039;lü Allen Bits Uç Extrahard 2607001735,488.0,Akülü Vidalamalar,2026.05.25
 Tp-cd 18/60 Li-i Bl Solo Akülü Darbeli Vidalama + 2 X 4 Ah Starter Kit Akü,7549.0,Akülü Vidalamalar,2026.05.25
-1320 20 V 2.0 Ah Kömürsüz Li-ion Çift Akülü Darbeli Vidalama,3050.9,Akülü Vidalamalar,2026.05.25
 Impact Control Tornavida Ucu Takımı 31 Parça,2147.0,Akülü Vidalamalar,2026.05.25
 Pro Ultra Güçlendirilmiş Darbeli Lazer Kesim Bakır Sargılı 24 Parça Matkap Seti Kırmızı,1549.0,Akülü Vidalamalar,2026.05.25
 Vidalama Uç Seti 25 Parça,459.9,Akülü Vidalamalar,2026.05.25
-1020 20v 2x2.0ah Çift Akülü Kömürsüz Darbeli Matkap 10mm,2180.91,Akülü Vidalamalar,2026.05.25
-Gsr 18V-150 C Solo Delme/Vid,16091.0,Akülü Vidalamalar,2026.05.25
 Gdx 18v-285 2 X 2ah Akülü Darbeli Somun Sıkma - 06019n2122,13114.99,Akülü Vidalamalar,2026.05.25
+Wera 784 C/1 Bits Adaptör 1/2&#034; X 1/4&#034; 05042760001,1500.0,Akülü Vidalamalar,2026.05.25
+1320 20 V 2.0 Ah Kömürsüz Li-ion Çift Akülü Darbeli Vidalama,3050.9,Akülü Vidalamalar,2026.05.25
+1020 20v 2x2.0ah Çift Akülü Kömürsüz Darbeli Matkap 10mm,2180.91,Akülü Vidalamalar,2026.05.25
 21v Darbeli Çift Akülü Şarjlı Kırıcı Delici Hilti,3799.9,Akülü Vidalamalar,2026.05.25
 12v Type-c Usb Şarjlı Matkap Dahili Batarya Akülü Vidalama,1399.9,Akülü Vidalamalar,2026.05.25
 Profesyonel 12v Çift Akülü Vidalama 84 Parça &amp; 12 Köşe 360° Lazer Hizalama Set,2999.9,Akülü Vidalamalar,2026.05.25
 12v Dahili Batarya Şarjlı Matkap Akülü Vidalama,1399.9,Akülü Vidalamalar,2026.05.25
-Milwaukee Bits Yıldız Uç Vidalama Matkap Ucu Pz2 x 50mm -10 Adet,747.9,Akülü Vidalamalar,2026.05.25
-Tomax Ph2 Yıldız Bits Sıkma Vidalama Ucu 50 Mm X 5 Adet,269.95,Akülü Vidalamalar,2026.05.25
 Hd20x-60tt Akülü Darbeli Matkap Kömürsüz 60nm 1x2ah,7246.8,Akülü Vidalamalar,2026.05.25
-Rtl80180 Bordo 180 Nm Vi̇dalama,9650.0,Akülü Vidalamalar,2026.05.25
 "Iw20x-700 Darbeli Somun Sıkma Kömürsüz, 700nm Akü Ve Şarj Cihazı Hariç",8775.0,Akülü Vidalamalar,2026.05.25
 Hd20s‑50 Akülü Darbeli Matkap Akü Ve Şarj Cihazı Hariç,2940.0,Akülü Vidalamalar,2026.05.25
 Dd20s-40tt 20v Akülü Matkap 40nm 2 Vites Led 2.0ah + Şarj,5440.5,Akülü Vidalamalar,2026.05.25
 Hpa0416 Şarjlı Tornavida 4v 1.3ah 4nm 200 Dev/dk 1/4” Hex Lokmalı Set,1485.0,Akülü Vidalamalar,2026.05.25
+Milwaukee Bits Yıldız Uç Vidalama Matkap Ucu Pz2 x 50mm -10 Adet,747.9,Akülü Vidalamalar,2026.05.25
+Tomax Ph2 Yıldız Bits Sıkma Vidalama Ucu 50 Mm X 5 Adet,269.95,Akülü Vidalamalar,2026.05.25
+Rtl80180 Bordo 180 Nm Vi̇dalama,9650.0,Akülü Vidalamalar,2026.05.25
 Impact Çift Taraflı Vidalama Ucu Pz2150mm3lü,534.49,Akülü Vidalamalar,2026.05.25
+Gsb 18v-28 Akülü Darbeli Vidalama,3962.14,Akülü Vidalamalar,2026.05.25
 Klpro Klav60266 500watt Profesyonel Alçı Panel Tornavidası,2810.16,Akülü Vidalamalar,2026.05.25
 Te-cd 18/40 Li Bl-solo Akülü Vidalama,3048.0,Akülü Vidalamalar,2026.05.25
 Tp-cd 18 Li-i Bl - Solo Akülü Darbeli Vidalama - 4513860,4488.0,Akülü Vidalamalar,2026.05.25
 X-line 76 Parça Profesyonel Aksesuar Seti 2608p00234,4237.5,Akülü Vidalamalar,2026.05.25
 Pt-21905 Köşe Delme Vidalama Aparatı Mandren 10mm 3/8&#034;,665.46,Akülü Vidalamalar,2026.05.25
-Gsb 18v-28 Akülü Darbeli Vidalama,3962.14,Akülü Vidalamalar,2026.05.25
 "Cat Power 1350 Akülü Vidalama Makinesi 20 V 2,0 Ah",5852.62,Akülü Vidalamalar,2026.05.25
 Professional Gsh 500 Kırıcı,24747.0,Akülü Vidalamalar,2026.05.25
 4140 20v Lion Şarjlı Matkap/akülü Vidalama (2 Akülü),5454.15,Akülü Vidalamalar,2026.05.25
 Üçlü Set Mk800 2b1ş (ş.spral+s.sikma+ş.hi̇lti̇),6616.0,Akülü Vidalamalar,2026.05.25
 Impact Ctrl Vidalama Çifttaraf 8li Set 110mm,737.1,Akülü Vidalamalar,2026.05.25
-Voltz  60 Nm 20 Volt Çift Akülü 5 Amper Profesyonel Akülü Matkap Vidalama,9999.99,Akülü Vidalamalar,2026.05.25
-Changer 18650 Pil Şarj Cihazı,312.32,Akülü Vidalamalar,2026.05.25
-Tech  Akülü Vidalama Dt02d,8995.0,Akülü Vidalamalar,2026.05.25
-Kl Pro Klha403 1/2&#039;&#039; Profesyonel Havalı Darbeli Somun Sıkma/sökme,2010.95,Akülü Vidalamalar,2026.05.25
 1360 16 V Li-ion 2.0 Ah Kömürsüz Akülü Vidalama,4935.69,Akülü Vidalamalar,2026.05.25
 Gsb 18v-110 C 2x4.0ah Darbeli Vidalama,32375.0,Akülü Vidalamalar,2026.05.25
 Gdr 18v-220c + Gsr 18v-90c Vidalama + 2x4 Akü Kombi Seti,26370.0,Akülü Vidalamalar,2026.05.25
 13mm Bse Vidalama,1621.0,Akülü Vidalamalar,2026.05.25
 Alçıpan Vidalama Dwe,1867.0,Akülü Vidalamalar,2026.05.25
+Changer 18650 Pil Şarj Cihazı,312.32,Akülü Vidalamalar,2026.05.25
+Tech  Akülü Vidalama Dt02d,8995.0,Akülü Vidalamalar,2026.05.25
+Kl Pro Klha403 1/2&#039;&#039; Profesyonel Havalı Darbeli Somun Sıkma/sökme,2010.95,Akülü Vidalamalar,2026.05.25
 Cat Power 1410 Akülü Fayans Titreşim Makinası 20 Volt,5086.47,Akülü Vidalamalar,2026.05.25
 4150 Kömürsüz 20v 4.0ah Li-ion 3 Akülü 5&#039;li Set - Darbeli Vidalama - Kırıcı Delici - Avuç Taşlama - Somun Sıkma Ve Torklu,30917.22,Akülü Vidalamalar,2026.05.25
 "Tc-cd 18/35 Li Vidalama (1x1,5ah) (4513914) Kırmızı",5388.0,Akülü Vidalamalar,2026.05.25
@@ -210,6 +211,7 @@ Torklu Vidalama Ht,3452.0,Akülü Vidalamalar,2026.05.25
 Tech Akülü Vidalama Dt04d,15524.0,Akülü Vidalamalar,2026.05.25
 Tech Akülü Vidalama Dt03d,11715.0,Akülü Vidalamalar,2026.05.25
 Tech Akülü Vidalama Dt01d,6818.0,Akülü Vidalamalar,2026.05.25
+Voltz  60 Nm 20 Volt Çift Akülü 5 Amper Profesyonel Akülü Matkap Vidalama,9999.99,Akülü Vidalamalar,2026.05.25
 İzeltaş 3x60 T7 Elektroni̇kçi̇ Torx Uçlu Klemens Tornavi̇da,196.3,Akülü Vidalamalar,2026.05.25
 İzeltaş 4x150 Elektroni̇kçi̇ Düz Uçlu Klemens Tornavi̇da,271.2,Akülü Vidalamalar,2026.05.25
 İzeltaş 2.5x60 T6 Elektroni̇kçi̇ Torx Uçlu Klemens Tornavi̇da,191.9,Akülü Vidalamalar,2026.05.25
@@ -217,19 +219,19 @@ İzeltaş 3x40 Kraft Seri̇ Düz Uçlu Tornavi̇da,165.5,Akülü Vidalamalar,20
 İzeltaş 1.2x6.5 50mm Düz Bi̇ts Uç,91.8,Akülü Vidalamalar,2026.05.25
 İzeltaş 13mm T Kol Lokma Uçlu Tornavi̇da,471.1,Akülü Vidalamalar,2026.05.25
 Ennalbur M0 Çektirme ( 2 Adet ),223.37,Akülü Vidalamalar,2026.05.25
-İzeltaş Pz1 50mm Pozi̇dri̇v Bi̇ts Uç,102.8,Akülü Vidalamalar,2026.05.25
-16’li Set – Atbl 16 Id-202c Kömürsüz Darbeli Vidalama + Atbl 16 Pd-202c 16v Kömürsüz Darbeli Matkap 2x2.0ah Çift Akülü - A0,4847.93,Akülü Vidalamalar,2026.05.25
+X-line 40 Parça Titanyum Karışık Aksesuar Seti 2607019600,921.4,Akülü Vidalamalar,2026.05.25
 Professional Gsb 18v-150 C Akülü Darbeli Delme Vidalama 2x8 Ah - 06019j5105,36125.0,Akülü Vidalamalar,2026.05.25
 Cheli̇kbei̇ 13mm Çelik Mandren Vidalama Mk36,2786.0,Akülü Vidalamalar,2026.05.25
-X-line 40 Parça Titanyum Karışık Aksesuar Seti 2607019600,921.4,Akülü Vidalamalar,2026.05.25
+16’li Set – Atbl 16 Id-202c Kömürsüz Darbeli Vidalama + Atbl 16 Pd-202c 16v Kömürsüz Darbeli Matkap 2x2.0ah Çift Akülü - A0,4847.93,Akülü Vidalamalar,2026.05.25
+İzeltaş Pz1 50mm Pozi̇dri̇v Bi̇ts Uç,102.8,Akülü Vidalamalar,2026.05.25
 İzeltaş Ph2 25mm Yildiz Bi̇ts Uç,77.5,Akülü Vidalamalar,2026.05.25
 Rtrmax Alçıpan Vidalama Matkabı Rtm3110,2557.14,Akülü Vidalamalar,2026.05.25
 Rtrmax Rts5020b Akülü Torklu Vi̇dalama Kömürsüz 200nm S-lion *aküsüz Satilmaktadir*,2858.18,Akülü Vidalamalar,2026.05.25
 Rtrmax Rts5020 Akülü Torklu Vi̇dalama Kömürsüz 200nm 2x4 Ah Akü S-lion,7097.18,Akülü Vidalamalar,2026.05.25
 Rtrmax Rtx2026b 18v Kömürsüz Akülü Alçipan Vi̇dalama,4236.22,Akülü Vidalamalar,2026.05.25
-Rtrmax Rtm332,2160.74,Akülü Vidalamalar,2026.05.25
 "Rtrmax  10&#039;lü Combo Set (rtx2095b,rtx2028b,rtx3010b,rtx3050b,rtx1004,4 Ad Rtx1804p Yeni̇ Nesi̇l Akü ,2 Ad Rtx1808 Şarj Ci̇hazi)",29899.0,Akülü Vidalamalar,2026.05.25
 Rtrmax Rtm3516 Akülü Kömürsüz Darbesi̇z 16.8v 2 Ah. 50nm Çi̇ft Akü Vi̇dalama Matkap,4232.98,Akülü Vidalamalar,2026.05.25
+Rtx2022b Şarjlı Darbeli Vidalama Aküsüz,3775.55,Akülü Vidalamalar,2026.05.25
 Set 010  Şarjlı 4’lü Makine Seti S-lion Çantalı,17499.0,Akülü Vidalamalar,2026.05.25
 Rtrmax  Rtsset04  Şarjlı 4’lü Makine Seti S-lion Çantalı,17549.0,Akülü Vidalamalar,2026.05.25
 Set 01 Şarjlı 2’li Makine Seti S-lion Çantalı,8439.0,Akülü Vidalamalar,2026.05.25
@@ -242,15 +244,11 @@ SET055: Rtx3010b Akülü Kömürsüz 18v 70nm Darbeli̇ Matkap+ Rtx3060b Akülü
 Rtm332T 12v 1.3 Ah Li-ion Tek Akülü Vidalama Ve Şarjlı Matkap (PVC Çantalı),2646.31,Akülü Vidalamalar,2026.05.25
 "Rtx042 Xli̇on 3lü Set Rtx1820b,rtx2095b,rtx2055b,rtx1802,2x Rtx1804,rtx1808,rtx1019",15459.6,Akülü Vidalamalar,2026.05.25
 RTM332T Akülü Vi̇dalama 12v 1.3ah 22nm Tek Akü,1527.18,Akülü Vidalamalar,2026.05.25
-Ph1 89 Mm 3&#039;lü Yıldız Bits Uç Extrahard 2607001533,426.0,Akülü Vidalamalar,2026.05.25
 Pz1 49 Mm 3&#039;lü Yıldız Vidalama Ucu Extrahard 2607001575,331.0,Akülü Vidalamalar,2026.05.25
 Dw268k Elektrikli Torklu Matkap Vidalama 540 Watt,19110.0,Akülü Vidalamalar,2026.05.25
 Gtb 650 Vidalama Makinesi 650 Wat,5438.0,Akülü Vidalamalar,2026.05.25
 18v 2a Şarjlı Vidalama Dcd708d2t Kömürsüz,12435.0,Akülü Vidalamalar,2026.05.25
 "Einhell Tp-cd 18/60 Li-i Bl Akülü Vidalama 2x4,0 Ah Akülü",9141.0,Akülü Vidalamalar,2026.05.25
-Dck2200h2t 18v 2x5.0 Ah Akülü 2&#039;li Set,36480.0,Akülü Vidalamalar,2026.05.25
-Gdr 18v-220 C Çift Akülü 5 Ah Darbeli Somun Sıkma Makinesi,24400.0,Akülü Vidalamalar,2026.05.25
-Gsr 18v-45 Çift Akülü 2.0 Ah Vidalama + 63 Parça Aksesuar Seti,10990.0,Akülü Vidalamalar,2026.05.25
 İzeltaş Ph2 50mm Yildiz Bi̇ts Uç,193.0,Akülü Vidalamalar,2026.05.25
 Professional Gws 24-230 Jz Büyük Taşlama Makinesi,9369.0,Akülü Vidalamalar,2026.05.25
 İzeltaş Pz2 50mm Pozi̇dri̇v Bi̇ts Uç,196.0,Akülü Vidalamalar,2026.05.25
@@ -259,22 +257,28 @@ İzeltaş 6x150 Opak Seri̇ Düz Uçlu Tornavi̇da,354.0,Akülü Vidalamalar,20
 Bcf611sck-qw Silver Series Şarjlı Tornavida Hızlı Şarj 3.6v 1.6 Ah 5.5nm,1110.0,Akülü Vidalamalar,2026.05.25
 Pst 107 Kit Şarjlı Tornavida,1473.0,Akülü Vidalamalar,2026.05.25
 Professional Gsb 120-li 2.0ah Çift Akülü Delme Vidalama Makinesi - 06019g8100,6685.0,Akülü Vidalamalar,2026.05.25
-Grc 18v-60 Akülü Köşeli Somun Sıkma 2x2.0 Ah,15026.0,Akülü Vidalamalar,2026.05.25
+Gsr 18v-90 C Çift Akülü 5 Ah Vidalama Makinesi,21531.0,Akülü Vidalamalar,2026.05.25
+Dck2200h2t 18v 2x5.0 Ah Akülü 2&#039;li Set,36480.0,Akülü Vidalamalar,2026.05.25
+Gsr 18v-45 Çift Akülü 2.0 Ah Vidalama + 63 Parça Aksesuar Seti,10990.0,Akülü Vidalamalar,2026.05.25
 Dt7507-qz 9 Parça Lokma Anahtar Uç Seti,3695.0,Akülü Vidalamalar,2026.05.25
 Grc 18v-60 Akülü Darbeli Somun Sıkma,5846.0,Akülü Vidalamalar,2026.05.25
-Gsr 18v-90 C Çift Akülü 5 Ah Vidalama Makinesi,21531.0,Akülü Vidalamalar,2026.05.25
-Dcf961nt Aküsüz Somun Sıkma,18192.0,Akülü Vidalamalar,2026.05.25
 Sfmcf830d2k-qw 203nm Drbli Tornv,11210.0,Akülü Vidalamalar,2026.05.25
 Gsr 18v-45 Akülü Vidalama + Gws 18v-8 Akülü Taşlama 2x4.0ah Akülü Kombo Set - 0615a5007n,20649.0,Akülü Vidalamalar,2026.05.25
-Dt70818-qz 7 Adet 57mm Yildiz Karişim Çubuğu Flextorq,649.0,Akülü Vidalamalar,2026.05.25
 "Professional Tp-cd 18/70 Li-i Bl (2x2,0ah)  Akülü Darbeli Vidalama - 4514316",8051.0,Akülü Vidalamalar,2026.05.25
 Aeg Bsb 18c3bl-402c 18 V Çift Akülü 4 Ah Darbeli Matkap,19554.0,Akülü Vidalamalar,2026.05.25
-Sfmck217m1s Matkap + Somun Sıkma Seti,11360.0,Akülü Vidalamalar,2026.05.25
 Black+decker Revdd12altb Reviva 12 V Matkap,2438.0,Akülü Vidalamalar,2026.05.25
+Dcf961nt Aküsüz Somun Sıkma,18180.0,Akülü Vidalamalar,2026.05.25
+Ph1 89 Mm 3&#039;lü Yıldız Bits Uç Extrahard 2607001533,434.0,Akülü Vidalamalar,2026.05.25
+Dt70818-qz 7 Adet 57mm Yildiz Karişim Çubuğu Flextorq,650.0,Akülü Vidalamalar,2026.05.25
+Gdr 18v-220 C Çift Akülü 5 Ah Darbeli Somun Sıkma Makinesi,24194.0,Akülü Vidalamalar,2026.05.25
+Grc 18v-60 Akülü Köşeli Somun Sıkma 2x2.0 Ah,15037.0,Akülü Vidalamalar,2026.05.25
+Sfmck217m1s Matkap + Somun Sıkma Seti,11366.0,Akülü Vidalamalar,2026.05.25
 Dx71 Torklu  Vi̇dalama,11120.46,Akülü Vidalamalar,2026.05.25
 Wx252 4volt/1.5ah. Li-ion Şarjlı Tornavida + 10 Adet Bits Uç,2294.7,Akülü Vidalamalar,2026.05.25
 Kress Kuc30.91 20volt Kömürsüz Profesyonel Şarjlı Darbeli Matkap (akü Dahil Değildir),8298.74,Akülü Vidalamalar,2026.05.25
 Kress Kua72.91 20volt Kömürsüz Profesyonel Şarjlı Matkap (akü Dahil Değildir),8313.89,Akülü Vidalamalar,2026.05.25
+Kress Kuc30 20volt/4.0ah Li-ion Çift Akülü Kömürsüz Profesyonel Şarjlı Darbeli Matkap,13912.37,Akülü Vidalamalar,2026.05.25
+Çok Amaçlı Drill Bit Setleri,646.0,Akülü Vidalamalar,2026.05.25
 Ph3 X 90 Mm Ekstra Uzun Yıldız Bits Uç Cb/903,238.0,Akülü Vidalamalar,2026.05.25
 Pz1 X 50 Mm Yıldız Uçlu Bits  cb/591,195.0,Akülü Vidalamalar,2026.05.25
 T40 X 50 Mm Torx Bits Uç Cb/830,201.0,Akülü Vidalamalar,2026.05.25
@@ -321,8 +325,6 @@ Pz2 49 Mm 3&#039;lü Yıldız Vidalama Ucu Extrahard 2607001577,336.0,Akülü V
 Hex 4x49 Mm 3&#039;lü Allen Bits Uç Extrahard 2607001733,488.0,Akülü Vidalamalar,2026.05.25
 T30 25 Mm 3&#039;lü Torx Bits Uç Extrahard 2607001622,282.0,Akülü Vidalamalar,2026.05.25
 T40 49 Mm 1&#039;li Torx Bits Uçextrahard 2607001644,256.0,Akülü Vidalamalar,2026.05.25
-T15 H 25 Mm 2 Li Delikli Torx Bits Uç 2608522010,296.0,Akülü Vidalamalar,2026.05.25
-Pz1 152 Mm 1&#039;li Yıldız Vidalama Ucu Extrahard 2607001587,463.0,Akülü Vidalamalar,2026.05.25
 "Genpower Gbg 40 Model 4 Kva Benzinli ,i̇pli, Tekerleksiz Monofaze ( 220 Volt) Portatif Jeneratör",15555.0,Matkaplar,2026.05.25
 "Genpower Marka Gbg 30 Is Model 3 Kva, Benzinli, İpli, Tekerleksiz, Monofaze( 230 Volt) Inverter Jeneratör",22100.0,Matkaplar,2026.05.25
 "Genpower Marka Gbg 130 E Model 13 Kva Benzinli, Marşlı, Tekerlekli, Monofaze Portatif Jeneratör",50970.0,Matkaplar,2026.05.25
@@ -335,7 +337,7 @@ Genpower Gbg 50 Model 5 Kva Benzinli İpli Tekerleksiz Monofaze ( 220 Volt) Por
 Hhy3300e Benzinli Marşlı Jeneratör 2.8 Kw,17523.0,Matkaplar,2026.05.25
 Hhy960a Benzinli Çanta Jeneratör 1 Kva,7425.0,Matkaplar,2026.05.25
 G3600ie Benzinli İnvertör Jeneratör 3.5kw,50490.0,Matkaplar,2026.05.25
-"Hhy3500e Benzinli Marşlı Jeneratör 3,8kva",24578.4,Matkaplar,2026.05.25
+"Hhy3500e Benzinli Marşlı Jeneratör 3,8kva",24829.2,Matkaplar,2026.05.25
 "Genpower Gbg 4000 Model 4 Kva Benzinli ,i̇pli, Tekerleksiz Monofaze ( 220 Volt) Portatif Jeneratör",17000.0,Matkaplar,2026.05.25
 "Genpower Marka Gbg 110 Ie Model 11 Kva, Benzinli, Marşlı, Tekerlekli, Monofaze( 230 Volt) Inverter Jeneratör",54100.0,Matkaplar,2026.05.25
 Lc3000i̇ İnverter Jeneratör | 2.5 Kw Sessiz Benzinli,37422.0,Matkaplar,2026.05.25
@@ -347,25 +349,25 @@ Genpower Gbg 15i̇ 1.5 Kva İpli Açık Tip Dijital İnverter Monofaze ( 220 V
 "Gbg 40i̇ Model 4 Kva, Benzinli, İpli, Tekerleksiz Açık Tip, Dijital İnverter Monofaze ( 220 Volt) Portatif Jeneratör",19895.0,Matkaplar,2026.05.25
 "Genpower Gbg 15 Model 1.5 Kva Benzinli İpli, Tekerleksiz, Monofaze ( 220 Volt) Portatif Jeneratör",10335.0,Matkaplar,2026.05.25
 "Gbg 50ixe Model 5 Kva,start/stoplu,tekerleksiz Açık Tip, Dijital İnverter Monofaze (220 Volt) Portatif Jeneratör",26870.0,Matkaplar,2026.05.25
-Energy Km8000me Marşlı Benzinli Jeneratör,35880.81,Matkaplar,2026.05.25
+"Gh10000ie Benzinli İnverter Jeneratör – 8,5 Kw Marşlı",59400.0,Matkaplar,2026.05.25
+Hhy4000e Benzinli Jeneratör 4.4 Kva Monofaze 220v Marşlı 15l Bakır Sargı,29694.0,Matkaplar,2026.05.25
+Hhy12000ed Dual Power Jeneratör 10 Kw 220v/380v Marşlı 27l Bakır Sargı,78111.0,Matkaplar,2026.05.25
+Hhy12000e Benzinli Jeneratör 10 Kw Monofaze Marşlı 27l Bakır Sargı 2x32a,66825.0,Matkaplar,2026.05.25
+G3500i İnverter Jeneratör 3.5 Kw 230v 50hz 8l 12v 13.9a İpli 26.5kg,45337.5,Matkaplar,2026.05.25
+Dhy9500lek Dizel Marşlı Jeneratör 8kva,70200.0,Matkaplar,2026.05.25
+"Hhy7250eas 6500w Benzinli Marşlı Jeneratör Otomatik Voltaj Ayarlı, Sessiz Çalışma",52806.6,Matkaplar,2026.05.25
+"Hhy10000ed 8000w Benzinli Jeneratör 220v / 380v Çift Voltaj, Sessiz Ve Güçlü",59670.0,Matkaplar,2026.05.25
+Hhy3300 Benzinli Jeneratör 2.8 Kw İpli,14256.0,Matkaplar,2026.05.25
 "Hhy3500 Benzinli Jeneratör 3,5kva",20968.2,Matkaplar,2026.05.25
-"Hhy7250e-3 Benzinli Trifaze Marşlı Jeneratör 7,5 Kva",48847.5,Matkaplar,2026.05.25
 Hhy4000 Benzinli Jeneratör 3.5 Kw İpli,23463.0,Matkaplar,2026.05.25
 Hhy10000e-3 Benzinli Jeneratör Marşlı Trifaze,52650.0,Matkaplar,2026.05.25
 Hhy10000e Benzinli Jeneratör Marşlı Monofaze,54351.0,Matkaplar,2026.05.25
+"Hhy7250e-3 Benzinli Trifaze Marşlı Jeneratör 7,5 Kva",48847.5,Matkaplar,2026.05.25
+Energy Km8000me Marşlı Benzinli Jeneratör,36076.88,Matkaplar,2026.05.25
 Oj3500 Benzinli Jeneratör 2.8kw İpli,14625.0,Matkaplar,2026.05.25
-"Lc10000das Benzinli Monofaze Marşlı Jeneratör 8,5 Kw",52650.0,Matkaplar,2026.05.25
-"Gh10000ie Benzinli İnverter Jeneratör – 8,5 Kw Marşlı",59400.0,Matkaplar,2026.05.25
 Pezal Pgg2700x Benzinli Jeneratör İpli 3kw,17550.0,Matkaplar,2026.05.25
-Dhy9500lek Dizel Marşlı Jeneratör 8kva,70200.0,Matkaplar,2026.05.25
-"Hhy10000ed 8000w Benzinli Jeneratör 220v / 380v Çift Voltaj, Sessiz Ve Güçlü",59670.0,Matkaplar,2026.05.25
-"Hhy7250eas 6500w Benzinli Marşlı Jeneratör Otomatik Voltaj Ayarlı, Sessiz Çalışma",52806.6,Matkaplar,2026.05.25
+"Lc10000das Benzinli Monofaze Marşlı Jeneratör 8,5 Kw",52650.0,Matkaplar,2026.05.25
 "Lc3500i̇ Marşlı İnvertör Jeneratör 4,35 Kva – Sessiz, Taşınabilir, Güvenilir",51772.5,Matkaplar,2026.05.25
-Hhy12000e Benzinli Jeneratör 10 Kw Monofaze Marşlı 27l Bakır Sargı 2x32a,66825.0,Matkaplar,2026.05.25
-Hhy4000e Benzinli Jeneratör 4.4 Kva Monofaze 220v Marşlı 15l Bakır Sargı,29694.0,Matkaplar,2026.05.25
-Hhy12000ed Dual Power Jeneratör 10 Kw 220v/380v Marşlı 27l Bakır Sargı,78111.0,Matkaplar,2026.05.25
-G3500i İnverter Jeneratör 3.5 Kw 230v 50hz 8l 12v 13.9a İpli 26.5kg,45337.5,Matkaplar,2026.05.25
-Hhy3300 Benzinli Jeneratör 2.8 Kw İpli,14256.0,Matkaplar,2026.05.25
 Mp 3300 3 Kva İpli Benzinli Jeneratör 2750w 13 Lt,12899.0,Matkaplar,2026.05.25
 "Power Lt9000 En 9,75 Kva Benzinli Jeneratör Ipli Marşlı",31249.0,Matkaplar,2026.05.25
 "Amc Power Benzinli Jeneratör Marşlı Ipli 3,5 Kva Bt3800-le - 2627002",16837.0,Matkaplar,2026.05.25
@@ -384,8 +386,8 @@ Rtrmax Rtr3550 3.5kva / 2.8kw Benzi̇nli̇ Jeneratör,17070.57,Matkaplar,2026.05
 Rtrmax Rtr3550e 3.5kva / 2.8kw Benzi̇nli̇ Marşli Jeneratör,21567.52,Matkaplar,2026.05.25
 Rtrmax Rtr8000e3 8.1kva / 6.5kw Benzi̇nli̇ Marşli Tri̇faze Jeneratör,51152.86,Matkaplar,2026.05.25
 Rtrmax Rtr8000e 8.1kva/6.5kw Benzi̇nli̇ Marşli Monofaze Jeneratör,51152.86,Matkaplar,2026.05.25
-Rtrmax Rtr9000e 9.4kva / 7.5kw Benzi̇nli̇ Marşli Jeneratör,50193.09,Matkaplar,2026.05.25
 Rtrmax Rtr6500e 6.8kva / 5.5kw Benzi̇nli̇ Marşli Jeneratör,42177.39,Matkaplar,2026.05.25
+Rtrmax Rtr9000e 9.4kva / 7.5kw Benzi̇nli̇ Marşli Jeneratör,50193.09,Matkaplar,2026.05.25
 Km4000-me Marşlı Benzinli Jeneratör,14889.0,Matkaplar,2026.05.25
 Pa350je Benzinli Jeneratör - İpli - 2.8 Kw,15329.0,Matkaplar,2026.05.25
 "Rtrmax Rtr3500 Rother Benzinli Jeneratör 2,7 Kva",11619.99,Matkaplar,2026.05.25
@@ -394,15 +396,6 @@ Mp3600 E Benzinli Jeneratör Marşlı 2750 Kva,12468.0,Matkaplar,2026.05.25
 "Genpower Gbg 50 E Model 5 Kva Benzinli İpli/marşlı, Tekerlekli, Monofaze ( 220 Volt) Portatif Jeneratör",22200.0,Matkaplar,2026.05.25
 Tc-pg 55/e5 Benzinli Jeneratör,39500.0,Matkaplar,2026.05.25
 Tc-pg 10/e5 Jeneratör Benzinli,10469.99,Matkaplar,2026.05.25
-Tc-pg 65/e5 Benzinli Jeneratör,43500.0,Matkaplar,2026.05.25
-"Kama Kgl3500c Benzinli Jeneratör 3,5 Kva",12581.25,Matkaplar,2026.05.25
-Palmera Pa900jm Monofaze Marşlı Benzinli Jeneratör,40939.0,Matkaplar,2026.05.25
-"Gdg 7000 Ec  Oto Model 7 Kva Dizel Ses İzolasyon Kabinli,tekerlekli, Transfer Panolu,otomatik Monofaze ( 220 Volt) Portatif Jeneratör",73500.0,Matkaplar,2026.05.25
-11kW LiFePO4 Lityum Demir Fosfat Tek Faz Sessiz Jenaratör,258687.0,Matkaplar,2026.05.25
-6.2kw Lityum Sessiz Jenaratör,136173.0,Matkaplar,2026.05.25
-Hais Cb2500i Profesyonel 1 Kw Kaynak Jeneratörü,18150.0,Matkaplar,2026.05.25
-"Gbg 110 Te Model 10,5 Kva Benzinli ,i̇pli/marşlı Tekerlekli Trifaze ( 380 Volt) Portatif Jeneratör",44750.0,Matkaplar,2026.05.25
-"Gbg 110 E Oto Model 10,5 Kva, Benzinli, Tekerlekli, Otomatik Transfer Panolu ( 220 Volt) Portatif Jeneratör",50540.0,Matkaplar,2026.05.25
 Jeneratör 4 / 5 / 6.5 Kwa 6 Kablolu Yarim Ay Avr,1534.5,Matkaplar,2026.05.25
 Jeneratör Hava Fi̇ltresi̇ Alt Gövde 4 / 5 / 6.5 / 7 / 8 Kva,1043.46,Matkaplar,2026.05.25
 Tüm Jeneratörler İçi̇n 5 / 6.5 / 8 Kva 25 Lt Yakit Deposu,3069.0,Matkaplar,2026.05.25
@@ -417,40 +410,45 @@ Tüm Modeller 3 / 6.5 / 7 / 8 Kva Jeneratör Ji̇kle Terti̇bati,1227.6,Matkapla
 Jeneratör Hava Fi̇ltresi̇ Komple 2 / 2.5 / 3 / 3.5 Kva,1288.98,Matkaplar,2026.05.25
 Jeneratör 2 / 2.5 / 3 / 3.5 Kwa 6 Kablolu Monofaze Yarim Ay Avr,1227.6,Matkaplar,2026.05.25
 Tüm Modeller 3 / 5 / 5.5 / 6.5 / 8 Kva Yakit Musluğu Büyük Somun,797.94,Matkaplar,2026.05.25
+2hp / 2.5 / 3 / 3.5 Kva Jeneratör Karbüratörü,1288.98,Matkaplar,2026.05.25
 Çanta Ti̇pi̇ Jeneratör Benzi̇n Depo Kapaği Et950,736.56,Matkaplar,2026.05.25
 Jeneratör Hava Fi̇ltresi̇ Üst Gövde Kapak 4 / 5 / 6.5 / 7 / 8 Kva,1104.84,Matkaplar,2026.05.25
 Ef950 Çanta Ti̇pi̇ Jeneratör Karbüratörü,1288.98,Matkaplar,2026.05.25
 Jeneratör Hava Fi̇ltresi̇ Komple 4 / 5 / 6.5 / 7 / 8 Kva,1534.5,Matkaplar,2026.05.25
 Jeneratör Depo Kapaği 2 / 2.5 / 4 / 5 / 6.5 / 7 / 8 / Kva,736.56,Matkaplar,2026.05.25
+Palmera Pa900jm Monofaze Marşlı Benzinli Jeneratör,40939.0,Matkaplar,2026.05.25
+"Gdg 7000 Ec  Oto Model 7 Kva Dizel Ses İzolasyon Kabinli,tekerlekli, Transfer Panolu,otomatik Monofaze ( 220 Volt) Portatif Jeneratör",73500.0,Matkaplar,2026.05.25
+11kW LiFePO4 Lityum Demir Fosfat Tek Faz Sessiz Jenaratör,258687.0,Matkaplar,2026.05.25
+8kW LiFePO4 Lityum Demir Fosfat Tek Faz Sessiz Jenaratör,184384.0,Matkaplar,2026.05.25
+6.2kw Lityum Sessiz Jenaratör,136173.0,Matkaplar,2026.05.25
+"Gbg 110 Te Model 10,5 Kva Benzinli ,i̇pli/marşlı Tekerlekli Trifaze ( 380 Volt) Portatif Jeneratör",44750.0,Matkaplar,2026.05.25
+"Gbg 110 E Oto Model 10,5 Kva, Benzinli, Tekerlekli, Otomatik Transfer Panolu ( 220 Volt) Portatif Jeneratör",50540.0,Matkaplar,2026.05.25
 Pglg-9690 Benzinli Ve Lpg&#039;li Jeneratör,13299.0,Matkaplar,2026.05.25
+Gbg 130 İe Model 13 Kva Benzinli İpli/marşlı/uzaktan Kumandalı Monofaze ( 220 Volt)i̇nverter Jeneratör,73295.0,Matkaplar,2026.05.25
+Pa350jm Jeneratör 2.8 Kw Marşlı,18949.0,Matkaplar,2026.05.25
 "Sg7100x Benzinli Trifaze Jeneratör 5,5kw - 5906229903",43488.0,Matkaplar,2026.05.25
 Di̇zel Jeneratör 5 Hp / 6.5 Hp / 7 Hp / 8 Hp  Motor  Egzoz Kople,2025.54,Matkaplar,2026.05.25
 3.2 Kw İnverter Benzinli Jeneratör Tp535006,38799.0,Matkaplar,2026.05.25
 Sg3200x  Benzinli Jeneratör 3.5 Kva 2800 W - 5906226903,19539.9,Matkaplar,2026.05.25
 Sg2500i̇ İnvertörlü Portatif Benzinli Monofaze Mini Jeneratör 2 Kw - 5906226901,23925.6,Matkaplar,2026.05.25
-Gbg 130 İe Model 13 Kva Benzinli İpli/marşlı/uzaktan Kumandalı Monofaze ( 220 Volt)i̇nverter Jeneratör,73295.0,Matkaplar,2026.05.25
-Pa350jm Jeneratör 2.8 Kw Marşlı,18949.0,Matkaplar,2026.05.25
-2hp / 2.5 / 3 / 3.5 Kva Jeneratör Karbüratörü,1288.98,Matkaplar,2026.05.25
 Mb3500 2.5kw 3.1kva 6.5bg 168cc 35kg Tekerli İpli Monofaze Benzinli Jeneratör,15455.0,Matkaplar,2026.05.25
 "Gbg 130 Te Model 13 Kva Benzinli ,i̇pli/marşlı Tekerlekli Trifaze (380 Volt) Portatif Jeneratör",51890.0,Matkaplar,2026.05.25
 "Gdg 7000 Ec Model 7 Kva Dizel Ses İzolasyon Kabinli,tekerlekli, Monofaze ( 220 Volt) Portatif Jeneratör",64800.0,Matkaplar,2026.05.25
-8kW LiFePO4 Lityum Demir Fosfat Tek Faz Sessiz Jenaratör,184384.0,Matkaplar,2026.05.25
 Mb6000 5.5kw 6.5kva 13bg 340cc 75kg Tekerli İpli Monofaze Benzinli Jeneratör,36500.0,Matkaplar,2026.05.25
 Mb9000 7.5kw 9.5kva 17bg 458cc 90kg Tekerli Marşlı Monofaze Benzinli Jeneratör,45000.0,Matkaplar,2026.05.25
 Germany 24 Volt Dc Jeneratör Otomatik Akü Şarj Jeneratörü,34226.48,Matkaplar,2026.05.25
 Jeneratör TC-PG 1000,15598.7,Matkaplar,2026.05.25
 Benzi̇nli̇ Jenaratör  3 Kw Marşli İpli̇ Bakir Sargi Monofaze,15999.0,Matkaplar,2026.05.25
+"Kama Kgl3500c Benzinli Jeneratör 3,5 Kva",12650.0,Matkaplar,2026.05.25
 ROL-TIGER 3.5 KVA - 2.7 KWA Benzinli Jenaratör,7084.9,Matkaplar,2026.05.25
-Çelik Şanzıman Kırıcı Delici Darbeli Matkap 2-28mm Hilti-powerblack,1776.0,Kırıcılar ve Deliciler,2026.05.25
-German 58vf Brushless 6&#039;li Set Şarjlı Hilti Şarjlı Taşlama Şarjlı Darbeli Matkap Makas&amp;testere,7443.0,Kırıcılar ve Deliciler,2026.05.25
 Kırıcı Delici TC-RH 620 4 F,2899.0,Kırıcılar ve Deliciler,2026.05.25
-Kırıcı 1700W 45J,8499.0,Kırıcılar ve Deliciler,2026.05.25
 L Tipi Kırıcı Delici 1250 Watt,3299.0,Kırıcılar ve Deliciler,2026.05.25
 ERH1500 5J SDS Kırıcı Delici 1500W,4449.0,Kırıcılar ve Deliciler,2026.05.25
 MSRH1500 Kırıcı Delici 5J 1500 W SDS Plus,3899.0,Kırıcılar ve Deliciler,2026.05.25
 Gbh 2-26 Dre Sds+ Kırıcıdel,8399.0,Kırıcılar ve Deliciler,2026.05.25
 ERH750 3J SDS Kırıcı Delici 750W,3299.0,Kırıcılar ve Deliciler,2026.05.25
 Kırıcı Delici GBH 2-24 DRE 790 W,6990.0,Kırıcılar ve Deliciler,2026.05.25
+Kırıcı 1700W 45J,8499.0,Kırıcılar ve Deliciler,2026.05.25
 Kırıcı 1600 Watt,7999.0,Kırıcılar ve Deliciler,2026.05.25
 EBR1750 Kırıcı 45J 1750W,12999.0,Kırıcılar ve Deliciler,2026.05.25
 Hr2470 Kırıcı Delici Matkap 780 Watt,7059.0,Kırıcılar ve Deliciler,2026.05.25
@@ -461,12 +459,13 @@ Profesyonel Kırıcı GSH 11E 1500 W,32982.0,Kırıcılar ve Deliciler,2026.05.2
 "Bhd3203 Pnömatik Kırıcı Delici 1500w 25j 6,5kg",5940.0,Kırıcılar ve Deliciler,2026.05.25
 "Te-hd 18 Li - Solo, Akülü Pnömatik Matkap - 4513812",4377.23,Kırıcılar ve Deliciler,2026.05.25
 Te-dh 5 Kırıcı 750w 5j 3.9kg - 4139135 Kırmızı,5198.7,Kırıcılar ve Deliciler,2026.05.25
-Kırıcı Delici Matkap PBH 2100 RE,4322.0,Kırıcılar ve Deliciler,2026.05.25
+Kırıcı Delici Matkap PBH 2100 RE,4326.0,Kırıcılar ve Deliciler,2026.05.25
 Kırıcı Delici D25143K 900 W,6974.0,Kırıcılar ve Deliciler,2026.05.25
 DCH133NT 18 Volt Kömürsüz SDS-PLUS 2.6J Kırıcı/Delici (Aküsüz),11442.0,Kırıcılar ve Deliciler,2026.05.25
 Kırıcı Delici GBH 2-28 F 880 W,13734.0,Kırıcılar ve Deliciler,2026.05.25
 KLPM2601 Kırıcı Delici 3.2J 850W,4505.3,Kırıcılar ve Deliciler,2026.05.25
 D25133k Kırıcı Delici 800 Watt (2.6 Joule),5900.0,Kırıcılar ve Deliciler,2026.05.25
+Çelik Şanzıman Kırıcı Delici Darbeli Matkap 2-28mm Hilti-powerblack,1776.0,Kırıcılar ve Deliciler,2026.05.25
 RTM2760 SDS HEX KIRICI 1700W 60 JUL,10499.0,Kırıcılar ve Deliciler,2026.05.25
 Eisenn Esh-1100 Kırıcı Delici Hilti Matkap Taşıma Çantalı Uç Hediyeli,2899.9,Kırıcılar ve Deliciler,2026.05.25
 Eisenn Esh-2200 Kırıcı Professionel 18 Kg.çantalı Uç Hediyeli,7999.9,Kırıcılar ve Deliciler,2026.05.25
@@ -489,6 +488,7 @@ Ab1900 Elektrikli Kırıcı 1900w - 5908206901,14377.6,Kırıcılar ve Deliciler
 Hm1203c Elektropnömatik Kırıcı Delici 1510w,36500.0,Kırıcılar ve Deliciler,2026.05.25
 Gbh 2-26 Dre Profesyonel Kırıcı-delici Matkap 800w + Bosch Sds-plus Matkap Ucu Ve Keski Seti 11&#039;li,9750.0,Kırıcılar ve Deliciler,2026.05.25
 TC-DH 43 Kırıcı,12500.0,Kırıcılar ve Deliciler,2026.05.25
+Tc-rh 28 3f 950 W Kırıcı Delici-4258002,4374.99,Kırıcılar ve Deliciler,2026.05.25
 Pnömatik Matkap Kırıcı Delici 950 Watt,6420.37,Kırıcılar ve Deliciler,2026.05.25
 TC-RH 800 4F Kırıcı Delici,6752.62,Kırıcılar ve Deliciler,2026.05.25
 RTM226 SDS PLUS KIRICI DELİCİ 800W 3.0 JUL 26MM,2833.33,Kırıcılar ve Deliciler,2026.05.25
@@ -535,15 +535,17 @@ Kress Krks1 Kub30.2 + Ku390.4 + Kuh10.2 20volt/4ah. 6 Adet Akülü Profesyonel K
 Dx21bc 18volt 2.0ah 2.2j Li-ion Tek Akülü Şarjlı Kömürsüz Profesyonel Sds-plus Pnömatik Kırıcı/delici,8674.49,Kırıcılar ve Deliciler,2026.05.25
 Japan 4500w Çelik Şanzuman Bakir Sargılı 2-28 Kırıcı Delici Hilti Matkap 5 Adet Uç,1699.0,Kırıcılar ve Deliciler,2026.05.25
 1800w Darbeli 16 Kg Kırıcı Delici Hilti,5699.9,Kırıcılar ve Deliciler,2026.05.25
+Gbh 185-li 4.0 Ah Tek Akülü Kırıcı Delici,12535.0,Kırıcılar ve Deliciler,2026.05.25
+Sgs 5177 Kırıcı Delici Matkap Hilti 800 Watt,2700.0,Kırıcılar ve Deliciler,2026.05.25
 250w 2 Kademeli Bakır Sargılı Darbeli Kırıcı Delici Hilti,1399.9,Kırıcılar ve Deliciler,2026.05.25
 6&#039;lı Set 21v Matkap Somun Sıkma Makas Testere Taşlama Kırıcı Delici Hilti,8499.9,Kırıcılar ve Deliciler,2026.05.25
 Bhd2608 800w Kırıcı Delici 2.8j,4116.0,Kırıcılar ve Deliciler,2026.05.25
 Murcell Benzi̇nli̇ Kirici Deli̇ci̇ Hi̇lti̇  7.9 Hp 62cc Profesyonel,18999.0,Kırıcılar ve Deliciler,2026.05.25
 Elektropnömatik Kırıcı Delici (sds Plus) Rtm2290,3859.78,Kırıcılar ve Deliciler,2026.05.25
-Kırıcı Delici 1600 Watt D25733K,33379.0,Kırıcılar ve Deliciler,2026.05.25
-Makita M8701b Kırıcı Delici 26 Mm 800 Watt,5226.0,Kırıcılar ve Deliciler,2026.05.25
 D25133k Kırıcı Delici 800 Watt (2.6 Jul),5900.0,Kırıcılar ve Deliciler,2026.05.25
 Professional Gsh 11 E Kırıcı Matkap - 0611316703,32982.0,Kırıcılar ve Deliciler,2026.05.25
+Kırıcı Delici 1600 Watt D25733K,33379.0,Kırıcılar ve Deliciler,2026.05.25
+Makita M8701b Kırıcı Delici 26 Mm 800 Watt,5226.0,Kırıcılar ve Deliciler,2026.05.25
 Gbh 18v-22 X Professional Onechuck Kırıcı-delici Solo,11970.0,Kırıcılar ve Deliciler,2026.05.25
 Makita Hr2470 Elektropnömatik Kırıcı Delici Matkap 24 Mm 15/16,7059.0,Kırıcılar ve Deliciler,2026.05.25
 3 Lü Set Torklu Vidalama Somun Sıkma Şarjlı Matkap 2-26mm Şarjlı Taşlama 125mm,4999.0,Kırıcılar ve Deliciler,2026.05.25
@@ -553,18 +555,20 @@ Profesyonl 6 Lı Set Şarjlı Hilti Şarjlı Taşlama Şarjlı Darbeli Matkap Da
 Professional Gbh 2-28 Kırıcı Delici Matkap - 0611267500,9210.9,Kırıcılar ve Deliciler,2026.05.25
 Eisenn Şarjlı Akülü 4&#039;lü Set Kırıcı Delici - Avuç Taşlama - Darbeli Matkap 13mm - Somun Sıkma Ve Sökme,9999.9,Kırıcılar ve Deliciler,2026.05.25
 21v Darbeli Çift Akülü Şarjlı Kırıcı Delici Hilti,3799.9,Kırıcılar ve Deliciler,2026.05.25
-Gbh 2-26 Dre Sds Plus Kırıcı Delici Plastik Çantalı,11999.0,Kırıcılar ve Deliciler,2026.05.25
+"Bhd2810 Pnömatik Kırıcı Delici 1050w, 3j",5049.0,Kırıcılar ve Deliciler,2026.05.25
 "Bhd4203 Pnömatik Kırıcı Delici 1600w 9j 7,3kg",8910.0,Kırıcılar ve Deliciler,2026.05.25
 Rh20x-20 Akülü Kırıcı Delici Kömürsüz 2j Akü Ve Şarj Cihazı Hariç,7312.5,Kırıcılar ve Deliciler,2026.05.25
-"Bhd2810 Pnömatik Kırıcı Delici 1050w, 3j",5049.0,Kırıcılar ve Deliciler,2026.05.25
+Gbh 2-26 Dre Sds Plus Kırıcı Delici Plastik Çantalı,11999.0,Kırıcılar ve Deliciler,2026.05.25
+4139045 Tc-pc 45 Set Pnömatik Havalı Keski Çekiç Kırıcı Makinesi,3088.01,Kırıcılar ve Deliciler,2026.05.25
+Klpro Klpm18bh-20 18v/2.0ah. 2.8j Kömürsüz Çift Akülü Pnömatik Matkap Kırıcı/delici,9767.72,Kırıcılar ve Deliciler,2026.05.25
+"SDS Max Kırıcı 1500 Watt 10,5KG 25J KLKR1100M",20120.99,Kırıcılar ve Deliciler,2026.05.25
 Kırıcı 1700 Watt KLKR1800H 18.8 Kg,27531.62,Kırıcılar ve Deliciler,2026.05.25
 Kırıcı Delici 1100 Watt KLKD610M,13235.81,Kırıcılar ve Deliciler,2026.05.25
 Klpro Klpm18bh-50 18v/5.0ah. 2.8j Kömürsüz Çift Akülü Pnömatik Matkap Kırıcı/delici,13165.09,Kırıcılar ve Deliciler,2026.05.25
 Dh45ma 11.3j 1400w Profesyonel Kırıcı/delici,39000.0,Kırıcılar ve Deliciler,2026.05.25
 Klpro Klkr3200h 2200watt 78j 30kg Profesyonel Hex Kırıcı,44157.12,Kırıcılar ve Deliciler,2026.05.25
 Klpro Klkd580p 1100watt 6j Profesyonel Sds-plus Kırıcı/delici,11690.53,Kırıcılar ve Deliciler,2026.05.25
-4139045 Tc-pc 45 Set Pnömatik Havalı Keski Çekiç Kırıcı Makinesi,3088.01,Kırıcılar ve Deliciler,2026.05.25
-Klpro Klpm18bh-20 18v/2.0ah. 2.8j Kömürsüz Çift Akülü Pnömatik Matkap Kırıcı/delici,9767.72,Kırıcılar ve Deliciler,2026.05.25
+Gbh 2-26 Dre 800 W Kırıcı Delici,8999.0,Kırıcılar ve Deliciler,2026.05.25
 Cheli̇kbei̇ 16kg Bse Kirici,6366.0,Kırıcılar ve Deliciler,2026.05.25
 2-28 Bse Kırıcı Delici Hilti,2234.0,Kırıcılar ve Deliciler,2026.05.25
 Einhell Te Rh 32 4f Kırıcı Deilici 1250 Watt,10867.99,Kırıcılar ve Deliciler,2026.05.25
@@ -574,17 +578,12 @@ Einhell Tp Hd 18/26 Solo Kırıcı Delici,14800.3,Kırıcılar ve Deliciler,2026
 Cat Power 5930 Kırıcı Delici 3 Kg 850 Watt,5241.84,Kırıcılar ve Deliciler,2026.05.25
 Einhell Te Rh 40 3f Kırıcı Deilici 1050 Watt,14991.08,Kırıcılar ve Deliciler,2026.05.25
 11 Kg Kırıcı Matkap 1500 W,13676.8,Kırıcılar ve Deliciler,2026.05.25
-Şarjlı Hilti Dw36,4368.0,Kırıcılar ve Deliciler,2026.05.25
 16kg Bse Kırıcı Hilti,6366.0,Kırıcılar ve Deliciler,2026.05.25
-Te-dh 12 Kırıcı 1050w 12j,11688.0,Kırıcılar ve Deliciler,2026.05.25
-Dh28pcy2 28 Mm / 850 W Kırıcı Delici Hilti Matkap,16000.0,Kırıcılar ve Deliciler,2026.05.25
 Gsh 16 Profesyonel 16 Kg 1750 Watt Elektrikli Kırıcı,89000.0,Kırıcılar ve Deliciler,2026.05.25
 Gbh 2-26 Dre 800 W Kirici Deli̇ci̇,8999.0,Kırıcılar ve Deliciler,2026.05.25
-Einhell Te Rh 950 5f Sds Plus Kırıcı Delici,10137.23,Kırıcılar ve Deliciler,2026.05.25
-Einhellte Hd 18/12 Li̇ Solo Pnömatik Matkap,5041.85,Kırıcılar ve Deliciler,2026.05.25
-Einhellte Hd 18/20 Li̇ Solo Pnömatik Matkap,8083.38,Kırıcılar ve Deliciler,2026.05.25
+Te-dh 12 Kırıcı 1050w 12j,11688.0,Kırıcılar ve Deliciler,2026.05.25
+Dh28pcy2 28 Mm / 850 W Kırıcı Delici Hilti Matkap,16000.0,Kırıcılar ve Deliciler,2026.05.25
 Professional Gsb 18v-60 C Professional Solo Akülü Darbeli Delme/vidalama Makinesi (akü Ve Şarj Yok),15594.0,Kırıcılar ve Deliciler,2026.05.25
-Professional Gsh 14 C Kırıcı - 0611344020,61906.1,Kırıcılar ve Deliciler,2026.05.25
 Kömürsüz  6x4  6&#039;li Set Kırıcı Delici Somun Sıkma Taşlama Makinesi Matkap Dekupaj Sunta Kesme,12999.0,Kırıcılar ve Deliciler,2026.05.25
 Alman 4200 Turbo X-series 11 Kg Kırıcı Delici Hilti Sds Max 3 Fonksiyonlu,11999.0,Kırıcılar ve Deliciler,2026.05.25
 Alman 4200 Watt Kırıcı Delici 5.0 J- Metal Dişli Şanzuman Hilti Darbeli 10 Uç,2499.0,Kırıcılar ve Deliciler,2026.05.25
@@ -592,12 +591,15 @@ Profesyonel 16 Kg 70 Joule 65 Mm Büyük Tip Kırıcı Delici Sivri Ve Yassı Ke
 Alman 4 Lü Set Akülü Şarjlı Vidalama Somun Sökme Taşlama Kırıcı Delici Set 3 Akülü,6999.0,Kırıcılar ve Deliciler,2026.05.25
 Alman 4200 Watt Kırıcı Delici Hilti Matkap Metal Şanzumanlı 5 Adet Uç Yedek Mandren,2299.0,Kırıcılar ve Deliciler,2026.05.25
 Kleco Ke12kd 1250w 12j 7.6kg Sds-max Kırıcı/delici,11912.12,Kırıcılar ve Deliciler,2026.05.25
-Alman 4200 Watt Kırıcı Delici 5.0 J- Metal Dişli Şanzuman Hilti Darbeli 5 Uç 28 Mm,2299.0,Kırıcılar ve Deliciler,2026.05.25
-Alman Turbo 5800 Pro 17 Kg Büyük Tip Kırıcı Hilti 70 Joule Taşıma Çantalı,5999.0,Kırıcılar ve Deliciler,2026.05.25
-Alman Pro 4200 Çelik Şanzuman Bakir Sargili Kırıcı Delici Hilti Matkap + 5 Adet Uç Yedek Mandren,2299.0,Kırıcılar ve Deliciler,2026.05.25
+Einhell Te Rh 950 5f Sds Plus Kırıcı Delici,10137.23,Kırıcılar ve Deliciler,2026.05.25
+Einhellte Hd 18/12 Li̇ Solo Pnömatik Matkap,5041.85,Kırıcılar ve Deliciler,2026.05.25
+Einhellte Hd 18/20 Li̇ Solo Pnömatik Matkap,8083.38,Kırıcılar ve Deliciler,2026.05.25
 170-200 Bar Profesyonel Inverter Basınçlı Oto Yıkama Makinası,35362.0,Kırıcılar ve Deliciler,2026.05.25
 "Cat Power 5931 Kırıcı Delici 3,2 Kg 800 Watt",5475.69,Kırıcılar ve Deliciler,2026.05.25
 Kömürsüz 5x3  5&#039;li Set Kırıcı Delici Somun Sıkma Taşlama Makinesi Matkap Dal Budama 3 Akülü,6999.0,Kırıcılar ve Deliciler,2026.05.25
+Alman 4200 Watt Kırıcı Delici 5.0 J- Metal Dişli Şanzuman Hilti Darbeli 5 Uç 28 Mm,2299.0,Kırıcılar ve Deliciler,2026.05.25
+Alman Turbo 5800 Pro 17 Kg Büyük Tip Kırıcı Hilti 70 Joule Taşıma Çantalı,5999.0,Kırıcılar ve Deliciler,2026.05.25
+Alman Pro 4200 Çelik Şanzuman Bakir Sargili Kırıcı Delici Hilti Matkap + 5 Adet Uç Yedek Mandren,2299.0,Kırıcılar ve Deliciler,2026.05.25
 Einhell Herocco Solu Kırıcı Delici,10120.3,Kırıcılar ve Deliciler,2026.05.25
 Proter Ph 850 K Pnömatik Kırıcı Delici Matkap,5421.09,Kırıcılar ve Deliciler,2026.05.25
 Kırıcı Delici Matkap Dt01hd,4716.0,Kırıcılar ve Deliciler,2026.05.25
@@ -614,6 +616,12 @@ Dh26pc2 26mm 3.2j Sds Plus 830w Profesyonel Kırıcı Delici Matkap,9550.63,Kır
 Rtrmax  Rts5040b Akülü Pnömati̇k Kirici-deli̇ci̇ Kömürsüz 1.8j 20mm S-lion *aküsüzsatilmaktadir*,5679.89,Kırıcılar ve Deliciler,2026.05.25
 Rtrmax Rtm2765 Kirici 1700 Watt 55 Jul 17 Kg Sds Hex,9149.0,Kırıcılar ve Deliciler,2026.05.25
 Rtrmax Rtx2098b Kömürsüz 18 V 4.5 Jul Kirici Deli̇ci̇ *aküsüz Satilmaktadir*,4899.0,Kırıcılar ve Deliciler,2026.05.25
+Rtrmax Rtm2765 Pnömatik Kırıcı Delici 17 Kg-1700w,9129.0,Kırıcılar ve Deliciler,2026.05.25
+H90sg 32kg 28mm Hex 2000w Profesyonel Kırıcı,121566.27,Kırıcılar ve Deliciler,2026.05.25
+Dh18dpc-5.0 18v/5.0ah 26mm 3.2j Sds Plus Kömürsüz Şarjlı Kırıcı Delici Matkap,32561.61,Kırıcılar ve Deliciler,2026.05.25
+Dh45ma  45mm Sds Max 1400w Profesyonel Kırıcı Delici Matkap,42004.78,Kırıcılar ve Deliciler,2026.05.25
+Dh1826da-5.0 18v/5.0ah 26mm 3.2j Sds Plus Kömürsüz Şarjlı Kırıcı Delici Matkap,38531.43,Kırıcılar ve Deliciler,2026.05.25
+Dh40mc 40mm Sds Max 1000w Profesyonel Kırıcı Delici Matkap,31476.19,Kırıcılar ve Deliciler,2026.05.25
 Rtrmax Rts5045bhp Profesyonel Kömürsüz Çi̇ft Akü 20 V 4 Ah 1.8 Jul Kirici Deli̇ci̇ (aküsüz Ve Şarj Aletsi̇z Satilmaktadir),6665.49,Kırıcılar ve Deliciler,2026.05.25
 Rtrmax Rts5045hp Profesyonel Akülü Kömürsüz 20v 4ah ÇİFT AKÜ 1.8 Jul Kirici Deli̇ci̇,10446.49,Kırıcılar ve Deliciler,2026.05.25
 Rtrmax Rtm2725hp Profesyonel 1350 Watt 12 Jul 5.2 Kg Sds Max Kirici,8257.49,Kırıcılar ve Deliciler,2026.05.25
@@ -621,11 +629,7 @@ Rtrmax Rtm2450hp Profesyonel Hiz Ayarli 1450 Watt 12 Jul 6.2 Kg Sds Max Kirici D
 Rtrmax Rtm2770hp Profesyonel 1700 Watt 45 Jul 15 Kg Sds Hex Kirici,18207.47,Kırıcılar ve Deliciler,2026.05.25
 Rtrmax Rtm2350hp Profesyonel 1500 Watt 5.5 Jul 5.4 Kg Kirici Deli̇ci̇,7113.24,Kırıcılar ve Deliciler,2026.05.25
 Rtrmax Rtm2750 Sds Max 1700 Watt 45 Jul 11 Kg Kirici,10164.86,Kırıcılar ve Deliciler,2026.05.25
-H90sg 32kg 28mm Hex 2000w Profesyonel Kırıcı,121566.27,Kırıcılar ve Deliciler,2026.05.25
-Dh18dpc-5.0 18v/5.0ah 26mm 3.2j Sds Plus Kömürsüz Şarjlı Kırıcı Delici Matkap,32561.61,Kırıcılar ve Deliciler,2026.05.25
-Dh45ma  45mm Sds Max 1400w Profesyonel Kırıcı Delici Matkap,42004.78,Kırıcılar ve Deliciler,2026.05.25
-Dh1826da-5.0 18v/5.0ah 26mm 3.2j Sds Plus Kömürsüz Şarjlı Kırıcı Delici Matkap,38531.43,Kırıcılar ve Deliciler,2026.05.25
-Dh40mc 40mm Sds Max 1000w Profesyonel Kırıcı Delici Matkap,31476.19,Kırıcılar ve Deliciler,2026.05.25
+Rtrmax Sds Max Kirici 1300 W 15 Jul,6077.32,Kırıcılar ve Deliciler,2026.05.25
 Rtrmax Rtm2760 Elektropnömatik Kırıcı Delici,10169.0,Kırıcılar ve Deliciler,2026.05.25
 Rtrmax Rts5040 Akülü Pnömati̇k Kirici-deli̇ci̇ Kömürsüz 1.8j 20mm 2x4 Ah Akü S-lion,9727.53,Kırıcılar ve Deliciler,2026.05.25
 Klpro Klkd660m 1200w Kırıcı-delici,18320.59,Kırıcılar ve Deliciler,2026.05.25
@@ -635,38 +639,40 @@ Rtrmax Set050 : Rtx2095b Kömürsüz Akülü Kirici Deli̇ci̇+rtx2055b Kömürs
 Rtrmax Rtx2098 Akülü Kömürsüz Kirici Deli̇ci̇ 18v 4 Ah. 4.5jul 3.800 Darbe/dk,9529.48,Kırıcılar ve Deliciler,2026.05.25
 Rtrmax Set 053: Rtx2095b Akülü Kömürsüz 18v 2.2jul Kirici Deli̇ci̇+ Rtx3060b Akülü Kömürsüz Devi̇r Ayarli 18v 125mm Avuç Taşlama+ Rtx3050b Akülü Kömürsüz  18v  230nm Torklu Vi̇dalama,19299.91,Kırıcılar ve Deliciler,2026.05.25
 Gbh 8-45D Kırıcı-Delici 1500w,37158.0,Kırıcılar ve Deliciler,2026.05.25
-D25899K Kırıcı SDSMax,34655.0,Kırıcılar ve Deliciler,2026.05.25
 Gbh 12-52 D Kırıcı Delici 1700W,53646.0,Kırıcılar ve Deliciler,2026.05.25
 Professional Gbh 8-45 D Kırıcı Delici Matkap - 0611265100,37158.0,Kırıcılar ve Deliciler,2026.05.25
 Dch133nt Sds Plus Matkap Kırıcı Delici 18 Volt (aküsüz),11442.0,Kırıcılar ve Deliciler,2026.05.25
-D25899k 1500w 5-25j Sds Max Kırıcı,34655.0,Kırıcılar ve Deliciler,2026.05.25
-D25899k-qs Sds-max Kırıcı Sarı-siyah,34655.0,Kırıcılar ve Deliciler,2026.05.25
 Gbh 185-li Akülü Kırıcı Delici Solo (akü Ve Şarj Dahil Değildir),9925.0,Kırıcılar ve Deliciler,2026.05.25
-Gbh 2-28 Sds Plus Kırıcı Delici Plastik Çantalı,10600.0,Kırıcılar ve Deliciler,2026.05.25
 D25966 Kırıcı,59421.0,Kırıcılar ve Deliciler,2026.05.25
 Bosch Gsh 27 Vc Profesyonel Kırıcı 1900 Watt,90398.0,Kırıcılar ve Deliciler,2026.05.25
 Aeg Bbh18bl2-502c 18 V 5.0 Ah Akülü Kömürsüz Kırıcı Delici - 4935492343,25697.0,Kırıcılar ve Deliciler,2026.05.25
 Professional Gsh 7 Vc Kırıcı,36293.0,Kırıcılar ve Deliciler,2026.05.25
 Gbh 18v-26+1xpc 8.0 Ah+gal1880 In Carton,25666.0,Kırıcılar ve Deliciler,2026.05.25
-Gbh 8-45 Dv Kırıcı Delici Matkap,39671.0,Kırıcılar ve Deliciler,2026.05.25
-Gbh 187-li Çift Akülü 5 Ah Kırıcı-delici,25100.0,Kırıcılar ve Deliciler,2026.05.25
-Gbh 5-40 Dce Kırıcı Delici Matkap,30998.0,Kırıcılar ve Deliciler,2026.05.25
-D25872k Kırıcı-delici,35630.0,Kırıcılar ve Deliciler,2026.05.25
-D25911k Sds Max 13 Kg 1600w Kırıcı Delici,57609.0,Kırıcılar ve Deliciler,2026.05.25
 Aeg Kh28 Super Xe Pnömatik Kırıcı Delici 1010 W - 4935428190,17012.0,Kırıcılar ve Deliciler,2026.05.25
-Gbh 18v-18 Solo Kırıcı Delici,8894.0,Kırıcılar ve Deliciler,2026.05.25
 Gbh 6-42 C Kirici Delici,31989.0,Kırıcılar ve Deliciler,2026.05.25
 Aeg Bbh18bl2-602mb Akülü Kömürsüz Mtr. Kırıcı Delici 6.0 Ah- 4935500110,32962.0,Kırıcılar ve Deliciler,2026.05.25
 Rsds18x-0 Akülü Kırıcı Delici Matkap Kömürsüz Sds Plus 18v (akü Ve Şarj Cihazı Dahil Değildir) - 5133004620,11526.0,Kırıcılar ve Deliciler,2026.05.25
 Gsh 18v-5 Professional Solo (akü Ve Şarj Cihazı Dahil Değil) Akülü Kırıcı  0611918200,30580.0,Kırıcılar ve Deliciler,2026.05.25
 D25773k 1500w 15.5j Sds-max Kırıcı Delici,38385.0,Kırıcılar ve Deliciler,2026.05.25
-Kömürsüz SDS Plus 2j Kırıcı SFMCH900B V20,7899.0,Kırıcılar ve Deliciler,2026.05.25
-Exen Epm 900 V Elektrikli Kırıcı-delici Matkap 900 Watt,3889.0,Kırıcılar ve Deliciler,2026.05.25
+Gbh 187-li Çift Akülü 5 Ah Kırıcı-delici,25100.0,Kırıcılar ve Deliciler,2026.05.25
+D25911k Sds Max 13 Kg 1600w Kırıcı Delici,57609.0,Kırıcılar ve Deliciler,2026.05.25
+Gbh 5-40 Dce Kırıcı Delici Matkap,30998.0,Kırıcılar ve Deliciler,2026.05.25
+D25872k Kırıcı-delici,35630.0,Kırıcılar ve Deliciler,2026.05.25
+Gbh 18v-18 Solo Kırıcı Delici,8894.0,Kırıcılar ve Deliciler,2026.05.25
 Pst 950 Hd 20 V Pnömatik Kırıcı-delici,10558.0,Kırıcılar ve Deliciler,2026.05.25
 Gbh 18v-28 D Akülü Kırıcı Delici (akü Ve Şarj Yoktur) 0611919003,21750.0,Kırıcılar ve Deliciler,2026.05.25
-Gbh 18v-18x One Chuck Solo Akülü Kırıcı Delici,10398.0,Kırıcılar ve Deliciler,2026.05.25
 Gsh 11 Vc Kırıcı,53202.0,Kırıcılar ve Deliciler,2026.05.25
+Gbh 2-28 Sds Plus Kırıcı Delici Plastik Çantalı,10895.0,Kırıcılar ve Deliciler,2026.05.25
+Exen Epm 900 V Elektrikli Kırıcı-delici Matkap 900 Watt,3969.0,Kırıcılar ve Deliciler,2026.05.25
 D25143k 900watt 3 . 0j Profesyonel Sds-plus Kırıcı/delici,6974.0,Kırıcılar ve Deliciler,2026.05.25
+Kömürsüz SDS Plus 2j Kırıcı SFMCH900B V20,8040.0,Kırıcılar ve Deliciler,2026.05.25
+D25899k 1500w 5-25j Sds Max Kırıcı,35386.0,Kırıcılar ve Deliciler,2026.05.25
+D25899k-qs Sds-max Kırıcı Sarı-siyah,35386.0,Kırıcılar ve Deliciler,2026.05.25
+Gbh 8-45 Dv Kırıcı Delici Matkap,39768.0,Kırıcılar ve Deliciler,2026.05.25
+Gbh 18v-18x One Chuck Solo Akülü Kırıcı Delici,10371.0,Kırıcılar ve Deliciler,2026.05.25
+D25899K Kırıcı SDSMax,35386.0,Kırıcılar ve Deliciler,2026.05.25
+Wx339 800watt 2.5j Profesyonel Sds-plus Kırıcı/delici + 4 Adet Uç,6205.81,Kırıcılar ve Deliciler,2026.05.25
+Dx29 1750watt 50 Joule Profesyonel 30mm Hex Kırıcı,28271.47,Kırıcılar ve Deliciler,2026.05.25
 Dx25 1100w Pro Kirici Deli̇ci̇,15392.68,Kırıcılar ve Deliciler,2026.05.25
 Dx21b 18v Şarjli Kirici Deli̇ci̇ (aküsüz),8636.62,Kırıcılar ve Deliciler,2026.05.25
 Dx21 Sds Plus Kirici Deli̇ci̇,16853.79,Kırıcılar ve Deliciler,2026.05.25
@@ -678,16 +684,16 @@ Kress Kux21 1050watt 7.5 Joule 38mm Profesyonel Sds-max Kırıcı/delici,18918.9
 Kress Kux12p 850watt 3.0j 26mm Profesyonel Sds-plus Kırıcı/delici,7614.9,Kırıcılar ve Deliciler,2026.05.25
 Kress Kuc60.91 20volt 2.0j Kömürsüz Profesyonel Sds-plus Pnömatik Kırıcı/delici (akü Dahil Değildir),10207.83,Kırıcılar ve Deliciler,2026.05.25
 Kress Kux15p 1100watt 5.0j 28mm Profesyonel Sds-plus Kırıcı/delici,11328.54,Kırıcılar ve Deliciler,2026.05.25
-Dx27set 1500watt 5.0j 32mm Profesyonel Sds-plus Kırıcı/delici + Da03903 3 Parça Kırıcı Uç Seti,9459.85,Kırıcılar ve Deliciler,2026.05.25
 Dx2010 1200watt 15 Joule Profesyonel Sds Max 6kg Kırıcı,10235.61,Kırıcılar ve Deliciler,2026.05.25
+Dx27set 1500watt 5.0j 32mm Profesyonel Sds-plus Kırıcı/delici + Da03903 3 Parça Kırıcı Uç Seti,9459.85,Kırıcılar ve Deliciler,2026.05.25
 Kress Ku390.4 20volt 4.0ah. 2.0j Li-ion Çift Akülü Şarjlı Kömürsüz Profesyonel Sds-plus Pnömatik Kırıcı/delici,8925.51,Kırıcılar ve Deliciler,2026.05.25
-Kırıcı Delici 1500 Watt KLKD890M,29119.66,Kırıcılar ve Deliciler,2026.05.25
-Kırıcı-Delici 820 Watt KE8226PM,2779.7,Kırıcılar ve Deliciler,2026.05.25
 Te-dh 50 Kırıcı 1700w 50j - 4139130,24698.7,Kırıcılar ve Deliciler,2026.05.25
 Atp1510 Pnömatik Kırıcı Delici 1500 Watt,6462.0,Kırıcılar ve Deliciler,2026.05.25
 Rn1026 Kırıcı Delici Matkap 620w,1399.0,Kırıcılar ve Deliciler,2026.05.25
 Mx2603 Sds Plus Kırıcı Delici 2.6 Kg 800 W,3048.72,Kırıcılar ve Deliciler,2026.05.25
 DH-1050 Rbt Robustech Kırıcı Delici,3155.0,Kırıcılar ve Deliciler,2026.05.25
+Kırıcı Delici 1500 Watt KLKD890M,29119.66,Kırıcılar ve Deliciler,2026.05.25
+Kırıcı-Delici 820 Watt KE8226PM,2779.7,Kırıcılar ve Deliciler,2026.05.25
 Klpro Klpm18bh-80 18v/8.0ah. 2.8j Kömürsüz Çift Akülü Pnömatik Matkap Kırıcı/delici,18689.16,Kırıcılar ve Deliciler,2026.05.25
 Herocco 18/20 Kömürsüz Pnomatik Kırıcı Delici Solo,8999.0,Kırıcılar ve Deliciler,2026.05.25
 Universalhammer 18 V Tek Akülü Kırıcı Delici,7882.49,Kırıcılar ve Deliciler,2026.05.25
@@ -695,26 +701,36 @@ Sgs 5183 Sds Hilti Kırıcı Delici 1500 W,4900.0,Kırıcılar ve Deliciler,2026
 "Gbh 4-32 Dfr Kırıcı Delici 900w 4,2j 4,7kg",23510.9,Kırıcılar ve Deliciler,2026.05.25
 Gbh 18v-26f Akülü Toz Emmeli Sds Plus Kırıcı Delici 061191000g,57619.99,Kırıcılar ve Deliciler,2026.05.25
 Gbh 187-li Tek Akülü Kırıcı Delici,20589.99,Kırıcılar ve Deliciler,2026.05.25
+Gbh 187-li Professional (solo) Akülü Kırıcı-delici - (akü V,12999.99,Kırıcılar ve Deliciler,2026.05.25
+Professional Gbh 2-28 F Kırıcı Delici - İlave Mandren,20587.2,Kırıcılar ve Deliciler,2026.05.25
+Professional Gbh 187 Lı Akülü Kırıcı Delici 18 Volt Çift Akülü,41257.2,Kırıcılar ve Deliciler,2026.05.25
 Herocco Şarjlı Kırıcı Delici Hilti Ve 4.0ah Tek Akü Şarj Aleti,10999.0,Kırıcılar ve Deliciler,2026.05.25
 21-rh1050-e Sds-plus Kırıcı Delici - 1.050 W,5312.0,Kırıcılar ve Deliciler,2026.05.25
 Klpro Klha0101rk Profesyonel Havalı Çekiç Keski Makinesi,1212.06,Kırıcılar ve Deliciler,2026.05.25
-Atp 810 Pnömatik Kırıcı-delici 800 W,2289.15,Kırıcılar ve Deliciler,2026.05.25
+Dh28pcy2 28mm 3.4j Sds Plus 850w Profesyonel Kırıcı Delici Matkap,16462.02,Kırıcılar ve Deliciler,2026.05.25
+Dh18dpc-2.0 18v/2.0ah 26mm 3.2j Sds Plus Kömürsüz Şarjlı Kırıcı Delici Matkap,31335.83,Kırıcılar ve Deliciler,2026.05.25
+Te-dh 32 Kırıcı 1500w 32j - 4139099,10530.9,Kırıcılar ve Deliciler,2026.05.25
+D25133k 800watt 2.6j Profesyonel Sds-plus Kırıcı / Delici,6665.0,Kırıcılar ve Deliciler,2026.05.25
+18blrh Kömürsüz Kırıcı-delici + 18ag Taşlama + 18 V 4.0 Ah Çift Akülü Set,16609.0,Kırıcılar ve Deliciler,2026.05.25
+Akülü Kirici Deli̇ci̇ Matkap / 20 Volt / 4 Ah / Bl,7889.0,Kırıcılar ve Deliciler,2026.05.25
+Haispro Rb-bh26 Profesyonel Akülü Kırıcı-delici Matkap 21 V 4.0 Ah,17999.0,Kırıcılar ve Deliciler,2026.05.25
 Herocco 18 V 4 Ah Akülü Pnömati̇k Kirici-deli̇ci̇,10999.0,Kırıcılar ve Deliciler,2026.05.25
 Klpro Klkd660m 1200watt 10j 6kg Profesyonel Sds-max Kırıcı/delici,20731.2,Kırıcılar ve Deliciler,2026.05.25
 Herocco Pnömatik Kırıcı Delici + 18v 4ah Çift Akülü Set,12999.0,Kırıcılar ve Deliciler,2026.05.25
-Dh28pcy2 28mm 3.4j Sds Plus 850w Profesyonel Kırıcı Delici Matkap,16462.02,Kırıcılar ve Deliciler,2026.05.25
-Dh18dpc-2.0 18v/2.0ah 26mm 3.2j Sds Plus Kömürsüz Şarjlı Kırıcı Delici Matkap,31335.83,Kırıcılar ve Deliciler,2026.05.25
 Aeg Pm10e 1600w Pneomatik Kırıcı - 4935412418,50929.5,Kırıcılar ve Deliciler,2026.05.25
 Aeg Bbh18bl2-0 Akülü Kırıcı Delici(akü Hariç) - 4935480697,12732.0,Kırıcılar ve Deliciler,2026.05.25
 H65sb3 18kg 30mm Hex 1340w Profesyonel Kırıcı,88177.52,Kırıcılar ve Deliciler,2026.05.25
 Dh1826da-2.0 18v/2.0ah 26mm 3.2j Sds Plus Kömürsüz Şarjlı Kırıcı Delici Matkap,38773.19,Kırıcılar ve Deliciler,2026.05.25
+Dx2140 800watt 3.0j 26mm Sds-plus Profesyonel Kırıcı/delici + 1 Adet Delici Uç,4351.0,Kırıcılar ve Deliciler,2026.05.25
+Butools Çelik Şanzuman Bakir Sargili Kırıcı Delici Hilti Matkap,3000.0,Kırıcılar ve Deliciler,2026.05.25
+Pr1245 Wk Kanal Kazima Maki̇nasi,16882.8,Kırıcılar ve Deliciler,2026.05.25
+Pr 1540 Cl Kanal Açma Maki̇nesi̇,7526.4,Kırıcılar ve Deliciler,2026.05.25
 Sgs 5521 Şarjlı Kırıcı Delici Matkap Seti 20 Volt 4 Ah Kömürsüz Motor,7850.0,Kırıcılar ve Deliciler,2026.05.25
 Elektrikli Kırıcı 11 Kg Th215002,16059.0,Kırıcılar ve Deliciler,2026.05.25
 Haispro Profesyonel Akülü Darbeli Kırıcı Delici Matkap 21 V 4.0 Ah Çift Akü Za-ds-195,14500.0,Kırıcılar ve Deliciler,2026.05.25
 Big Power 800 W Kırıcı Delici + Aksesuar Ve Sırt Çantası Seti,3750.0,Kırıcılar ve Deliciler,2026.05.25
 Th1163855 Sds Max 1600w 7.5 Kg 10.0j Kırıcı Delici Hilti,9849.0,Kırıcılar ve Deliciler,2026.05.25
 Sgs Sgs5184 Elektropnomatik Kırıcı Sds Max 1300 Watt 23 Joules,6552.0,Kırıcılar ve Deliciler,2026.05.25
-Te-dh 32 Kırıcı 1500w 32j - 4139099,10530.9,Kırıcılar ve Deliciler,2026.05.25
 Aero2spade Pnömatik Havalı Kırıcı 27joules 6.3 Bar + 5 Parça - 5909601900,8750.0,Kırıcılar ve Deliciler,2026.05.25
 Sgs Akülü Elektro Pnömati̇k Kirici Deli̇ci̇ Seti̇ 20v 2*4.0ah (kömürsüz Motor) Sgs5521,7850.0,Kırıcılar ve Deliciler,2026.05.25
 Hr2600 800 W  Elektropnömatik Kırıcı Delici 2.8 Kg,14800.0,Kırıcılar ve Deliciler,2026.05.25
@@ -732,14 +748,6 @@ Hr5212c Avt&#039;li Kırıcı/delici 1510 Watt,63400.0,Kırıcılar ve Deliciler
 Kleco Ke10kd 1400w 10j 6.6kg Sds-max Kırıcı/delici,8741.75,Kırıcılar ve Deliciler,2026.05.25
 Dh1600max Elektrikli Kırıcı Delici 1600w - 5907903901,9603.6,Kırıcılar ve Deliciler,2026.05.25
 Li-ion Akülü Kirici Deli̇ci̇ 2x4.0ah Trhli202682e,10839.0,Kırıcılar ve Deliciler,2026.05.25
-"Sds Plus 800 W Kırıcı Delici Matkap 2,5 Kg Th308268",3905.0,Kırıcılar ve Deliciler,2026.05.25
-Rkl-9150 Bordo 3&#039;lü Set Kirici Deli̇ci̇ Matkap 2.26 Model,7650.0,Kırıcılar ve Deliciler,2026.05.25
-21v 2.0ah Kömürsüz Darbeli 5&#039;li Set Şarjlı Hilti Taşlama Somun Sıkma Akülü Vidalama,7478.9,Kırıcılar ve Deliciler,2026.05.25
-4500w Extra Güçlü Metal Şanzıman Profesyonel Kırıcı Delici Hilti Matkap 5 Uç,2998.0,Kırıcılar ve Deliciler,2026.05.25
-Dx2140 800watt 3.0j 26mm Sds-plus Profesyonel Kırıcı/delici + 1 Adet Delici Uç,4351.0,Kırıcılar ve Deliciler,2026.05.25
-Butools Çelik Şanzuman Bakir Sargili Kırıcı Delici Hilti Matkap,3000.0,Kırıcılar ve Deliciler,2026.05.25
-Pr1245 Wk Kanal Kazima Maki̇nasi,16882.8,Kırıcılar ve Deliciler,2026.05.25
-Pr 1540 Cl Kanal Açma Maki̇nesi̇,7526.4,Kırıcılar ve Deliciler,2026.05.25
 Sds Plus 950 W Kırıcı Delici Th309288,4449.0,Kırıcılar ve Deliciler,2026.05.25
 "Cat Power 4225 Akülü Kırıcı Delici 4,0 Ah Tek Akülü",5999.0,Kırıcılar ve Deliciler,2026.05.25
 Ab1700 Elektrikli Kırıcı - 1700w - 5908203901,13559.2,Kırıcılar ve Deliciler,2026.05.25
@@ -756,11 +764,10 @@ Gbh 18v-34 Cf En Güçlü Sds-plus Akülü Kırıcı Delici (solo) 0611914021,30
 Alman 6200 Watt Tam Profesyonel 3 Farklı Kullanım Özellikli 11 Kg Kırıcı Delici Hilti + Uç Seti̇,9999.0,Kırıcılar ve Deliciler,2026.05.25
 Murcell 2.26 800w Kirici Deli̇ci̇ Hi̇lti̇,2399.0,Kırıcılar ve Deliciler,2026.05.25
 11 Kg Kırıcı Delici Hilti,9999.0,Kırıcılar ve Deliciler,2026.05.25
+16 Kg Kirici Hi̇lti̇ Metal Çanta 1 Uç Hedi̇yeli̇,4599.0,Kırıcılar ve Deliciler,2026.05.25
 21v 6 Başlıklı Set Vidalama Testere Tilki Kuyruğu Taşlama Somun Sökme Hava Pompası,4399.9,Taşlamalar,2026.05.25
+Taşlama 2000 Watt,1759.0,Taşlamalar,2026.05.25
 18V Taşlama 115 2a+3Disk+Çanta Bcg6l8d1s,5199.0,Taşlamalar,2026.05.25
-Taşlama V20 125mm SFMCG400B-XJ,4449.0,Taşlamalar,2026.05.25
-Dcg407m2t-qw 18v 2x4ah Taşlama,15799.0,Taşlamalar,2026.05.25
-Taşlama 2000 Watt,2199.0,Taşlamalar,2026.05.25
 EAG1010-125 Taşlama Makinesi 1010W 125 mm,2499.0,Taşlamalar,2026.05.25
 BEG120 Avuç Taşlama 125 mm 800 W,2299.0,Taşlamalar,2026.05.25
 MBGP250WDB Sulu Taş Motoru 250 W,2599.0,Taşlamalar,2026.05.25
@@ -770,7 +777,9 @@ Kesme Bıçağı Çok Amaçlı Hss 85 mm,369.9,Taşlamalar,2026.05.25
 "TC-AG 115-750, Avuç Taşlama",2199.0,Taşlamalar,2026.05.25
 Taşlama Makinesi DWE4056,4399.0,Taşlamalar,2026.05.25
 115 mm Taşlama Diski 4&#039;lü Paket,609.9,Taşlamalar,2026.05.25
+Taşlama V20 125mm SFMCG400B-XJ,4449.0,Taşlamalar,2026.05.25
 G650 Avuç Taşlama 650W 115mm,1999.0,Taşlamalar,2026.05.25
+Dcg407m2t-qw 18v 2x4ah Taşlama,15799.0,Taşlamalar,2026.05.25
 Avuç Taşlama 115 mm 500 W,1099.0,Taşlamalar,2026.05.25
 Soketli Kanallı Elmas Kesme Diski 230 mm,999.9,Taşlamalar,2026.05.25
 "TC-AG 125-850 Kit, Avuç Taşlama",2899.0,Taşlamalar,2026.05.25
@@ -780,6 +789,7 @@ GWS 750-115 Avuç Taşlama Makinesi,3098.0,Taşlamalar,2026.05.25
 Aa 54r Paslanmaz İnox Kesici Taş 25 Adet 115x1x22.23mm,699.0,Taşlamalar,2026.05.25
 Bileme eğeleme parlatma için elektrikli matkap standı ve 3lü değirmen taşı polisaj diski ve braket Tabanı,784.0,Taşlamalar,2026.05.25
 115 X 3 X 22.23 Metal Kesme Taşı Düz 10&#039;lu,385.0,Taşlamalar,2026.05.25
+Düz Beton Kesme Diski Seti 5 Parça 115 mm,159.9,Taşlamalar,2026.05.25
 Düz Beton Kesme Diski,64.99,Taşlamalar,2026.05.25
 EZ SC Ahşap Kesme Diski (SC544),1374.0,Taşlamalar,2026.05.25
 125 mm Taşlama Diski 40 Kum,169.9,Taşlamalar,2026.05.25
@@ -803,12 +813,12 @@ Universalgrind 750-115 Taşlama Mak,2422.0,Taşlamalar,2026.05.25
 GWS 750-S Devir Ayarlı Taşlama,4080.0,Taşlamalar,2026.05.25
 "TE-AG 125 CE, Devir Ayarlı Avuç Taşlama",2890.0,Taşlamalar,2026.05.25
 6lı Taşlama Ve Kesme Disk Seti Elmas Seramik Ahşap Metal Zımpara,893.99,Taşlamalar,2026.05.25
-"TC-AG 18-115 Li - Solo, Akülü Avuç Taşlama",2736.9,Taşlamalar,2026.05.25
+Metal Alüminyum Pvc Beton Kesme Diski,129.9,Taşlamalar,2026.05.25
 Devir Ayarlı Avuç Taşlama 900 Watt KE90125AT,1830.92,Taşlamalar,2026.05.25
 Avuç Taşlama 750 Watt KLAT11502,2064.1,Taşlamalar,2026.05.25
 11&#039;li Taşlama Ve Kesme Disk Seti Ve Bağlantı Aparatları,1289.99,Taşlamalar,2026.05.25
-Professional Gws 750-115 Mm Avuç Taşlama Makinesi - 0601394000,3098.0,Taşlamalar,2026.05.25
 Te-tk 18/2 Li Kit (cd+ag) Akülü Kombo Set,8949.0,Taşlamalar,2026.05.25
+Professional Gws 750-115 Mm Avuç Taşlama Makinesi - 0601394000,3098.0,Taşlamalar,2026.05.25
 disk bağlama pim seti Dremel Hilti Sds Adaptörü Mini Daire Disk Testere Mandren Bağlantı Elemanı kaplin setii,474.0,Taşlamalar,2026.05.25
 Elmas Bıçak 115 mm,799.0,Taşlamalar,2026.05.25
 Taş Kesme Diski Düz,157.0,Taşlamalar,2026.05.25
@@ -821,8 +831,8 @@ Bıçak satır balta bileme diski 100mm elmaslı bileme eğeleme disk avuç taş
 Tomax Bi Metal Panç Takımı 13 Parça Buat Delik Açma Testeresi,5250.0,Taşlamalar,2026.05.25
 Tomax Bi Metal Panç Takımı 9 Parça Buat Delik Açma Testeresi,3999.0,Taşlamalar,2026.05.25
 8&#039;li Taşlama Ve Kesme Disk Seti Seramik Ahşap Metal Zımpara,1049.99,Taşlamalar,2026.05.25
-Gws 9-125 S 900 W Avuç Taşlama Makinesi,5648.0,Taşlamalar,2026.05.25
 Taşlama DWE4156-QS 115 mm 900 Watt,4854.0,Taşlamalar,2026.05.25
+Gws 9-125 S 900 W Avuç Taşlama Makinesi,5648.0,Taşlamalar,2026.05.25
 "Bay-tec 5li Taşlama Disk Seti Elmas, Sunta, Ahşap, Metal, Zımpara",884.99,Taşlamalar,2026.05.25
 Pro 115x1 Mm Paslanmaz Ve Metal Kesme Taşı 25 Li Paket 2608603169,678.0,Taşlamalar,2026.05.25
 Eisenn Edt-1000 Spiral Taşlama Profil Metal Kesme Makinası,3299.9,Taşlamalar,2026.05.25
@@ -850,7 +860,6 @@ Servis Tekeri - Frenli Tablalı Siyah Döner - Çap 80 Mm,600.02,Taşlamalar,202
 Servis Tekeri - Tablalı Frenli Siyah Döner - Çap 80 Mm,597.9,Taşlamalar,2026.05.25
 Hts 322 - 50x20 Mm Gri Vidalı Teker 4 Adet,563.9,Taşlamalar,2026.05.25
 Hts 411 - Büro Tipi Tablalı Tekerlek 4 Adet,546.9,Taşlamalar,2026.05.25
-Hts 324 - 50x20 Mm Gri Kısa U Tablalı Teker 4 Adet,614.9,Taşlamalar,2026.05.25
 Servis Tekeri - Tablalı Siyah Döner - Çap 100 Mm,529.28,Taşlamalar,2026.05.25
 Hts 412 - Büro Tipi Vidalı Tekerlek 4 Adet,546.9,Taşlamalar,2026.05.25
 Hts 414 - Büro Tipi U Tablalı Tekerlek 4 Adet,614.9,Taşlamalar,2026.05.25
@@ -898,7 +907,6 @@ Servis Tekeri - Tablalı Frenli Siyah Döner - Çap 125 Mm,776.85,Taşlamalar,20
 Bi-metal Panç Adaptörü Hex 14-30 Mm,837.8,Taşlamalar,2026.05.25
 Sds Bi-metal Panç Adaptörü 14-30 Mm,1109.1,Taşlamalar,2026.05.25
 Servis Tekeri - Tablalı Siyah Döner - Çap 150 Mm,847.11,Taşlamalar,2026.05.25
-Bi-metal Panç 29 Mm - Ahşap İçin,877.07,Taşlamalar,2026.05.25
 "S.d. Sk 6000 Kısa Sökü Demiri - 1200 Gr, 61cm",1013.47,Taşlamalar,2026.05.25
 Hts 302 - 50x20 Mm Şeffaf Makaralı Vidalı Teker,829.53,Taşlamalar,2026.05.25
 Tct Metal Delme Panç - 16 Mm,992.8,Taşlamalar,2026.05.25
@@ -945,6 +953,7 @@ Adaptörlü Elmaslı Beton Delme Panç 30 Mm,1725.58,Taşlamalar,2026.05.25
 Sds Bi-metal Panç Adaptörü 32-210 Mm,1778.54,Taşlamalar,2026.05.25
 Elmaslı Beton Delme Panç Adaptörü - 200 Mm Sds Plus,1366.27,Taşlamalar,2026.05.25
 Hts 355 - 75x25 Mm Pvc Makaralı Sabit Teker 4 Adet,1591.46,Taşlamalar,2026.05.25
+Tct Metal Delme Panç - 35 Mm,1758.92,Taşlamalar,2026.05.25
 Bi-metal Panç Adaptörü Hex 32-210 Mm,1464.79,Taşlamalar,2026.05.25
 Hts 351 - 75x25 Mm Pvc Tablalı Tekerlek - 4 Adet,1633.38,Taşlamalar,2026.05.25
 Bi-metal Panç 68 Mm - Ahşap İçin,1743.23,Taşlamalar,2026.05.25
@@ -997,8 +1006,8 @@ S.d. Sk 7000 Sökü Demiri 140cm,3661.83,Taşlamalar,2026.05.25
 S.d. K 6000 Küskü Manivela 160cm,3981.66,Taşlamalar,2026.05.25
 Te-mt 7.2 Li Akülü Mini Taşlama Ve Gravür Seti,4132.7,Taşlamalar,2026.05.25
 RTM1145 AVUÇ TAŞLAMA 125 MM 1400W DEVİR AYARLI,3225.0,Taşlamalar,2026.05.25
-Professional Gbg 60-20 Çift Çarklı Taşlama Motoru - 060127a400,10182.49,Taşlamalar,2026.05.25
 115mm Ahşap Metal Mermer Granit Seramik kesici disk Seti Kesme Zımparalama Daire Disk Bıcak ispirel,764.0,Taşlamalar,2026.05.25
+Professional Gbg 60-20 Çift Çarklı Taşlama Motoru - 060127a400,10182.49,Taşlamalar,2026.05.25
 2200w Metal Şanzıman 230mm Büyük Spiral Taşlama,3299.9,Taşlamalar,2026.05.25
 Büyük Taşlama 2200 Watt KLBT8318,4753.06,Taşlamalar,2026.05.25
 Topshop Th14432 Tas Menteşe Açma 60 Mm,379.52,Taşlamalar,2026.05.25
@@ -1010,8 +1019,8 @@ Eisenn Maxstar Et-900m Spiral Taşlama Profil Metal Kesme Makinası,3299.9,Taşl
 Hg751 Avuç Taşlama 750w 115mm,1900.8,Taşlamalar,2026.05.25
 Dwe4884 Kalıpçı Taşlama 450 Watt,9018.0,Taşlamalar,2026.05.25
 115x1.0x22 Mm Inox Kesici-10 Adet,249.85,Taşlamalar,2026.05.25
-Bosch Gws 7-115 Avuç Taşlama 115 Mm 720 Watt,4729.53,Taşlamalar,2026.05.25
 Axxio 18/115 Q Akülü Avuç Taşlama Solo,5014.15,Taşlamalar,2026.05.25
+Bosch Gws 7-115 Avuç Taşlama 115 Mm 720 Watt,4729.53,Taşlamalar,2026.05.25
 125mm Spral Dwe,1455.0,Taşlamalar,2026.05.25
 Dwe493 Taşlama Makinesi 2200 Watt 180mm,7300.0,Taşlamalar,2026.05.25
 RTM127 BÜYÜK TAŞLAMA MAKİNESİ 180 MM 2600W,5439.69,Taşlamalar,2026.05.25
@@ -1019,8 +1028,8 @@ RTM1180 BÜYÜK TAŞLAMA MAKİNESİ 180 MM 2300W,4399.0,Taşlamalar,2026.05.25
 RTM1095 AVUÇ TAŞLAMA 125 MM 950W DEVİR AYARLI,2465.27,Taşlamalar,2026.05.25
 RTM1140 AVUÇ TAŞLAMA 125 MM 1400W,3103.0,Taşlamalar,2026.05.25
 Gws 30-230 B Büyük Taşlama Makinesi,16764.0,Taşlamalar,2026.05.25
-"- 125*2,5 Mm Expert Serisi Düz Metal Kesme Diski (taş)",165.0,Taşlamalar,2026.05.25
 Avuç Taşlama 115 mm GA4530R,3432.0,Taşlamalar,2026.05.25
+"- 125*2,5 Mm Expert Serisi Düz Metal Kesme Diski (taş)",165.0,Taşlamalar,2026.05.25
 Avuç Taşlama 850 W KLAT11505,2500.02,Taşlamalar,2026.05.25
 Ahşap Taşlama Törpüleme Aşındırma Kesme Oyma Diski 115mm,594.0,Taşlamalar,2026.05.25
 Gws 17-125 Ps Taşlama Makinası,17250.0,Taşlamalar,2026.05.25
@@ -1039,11 +1048,11 @@ Eco Ke90125at 900 W 125 Mm Devir Ayarlı Avuç Taşlama Makinesi,1830.92,Taşlam
 -rtm102 Avuç Taşlama 750 Watt 115/125 Mm,1629.0,Taşlamalar,2026.05.25
 "- 230*3,0 Mm Expert Serisi Bombeli Taş Kesme Diski (taş) 2608600227",198.0,Taşlamalar,2026.05.25
 Gws 2200-180 H Büyük Taşlama,6075.0,Taşlamalar,2026.05.25
-Klpro Klat18bs-50 18v/5.0ah. 115mm Çift Akülü Devir Ayarlı Kömürsüz Şarjlı Avuç Taşlama,13603.71,Taşlamalar,2026.05.25
+Gws 19-125 Cıe Avuç Taşlama Makinesi 1900w,15850.8,Taşlamalar,2026.05.25
 Fiber Disk Karışık 12 li 115 mm,399.9,Taşlamalar,2026.05.25
-Gws 18v-8 Akülü Taşlama Solo,7199.0,Taşlamalar,2026.05.25
 TC-MT 150 E Mini  Gravür Seti,3299.0,Taşlamalar,2026.05.25
 Gws 18v-15 S Akülü Taşlama Solo,15299.0,Taşlamalar,2026.05.25
+Gws 18v-8 Akülü Taşlama Solo,7199.0,Taşlamalar,2026.05.25
 Düz Metal Kesme Diski 230 mm Beşli Set,379.9,Taşlamalar,2026.05.25
 Dwe4237-qs 1400w 125mm  Taşlama,7499.0,Taşlamalar,2026.05.25
 Univ.grind 18v-75 Taşlama (solo),5699.0,Taşlamalar,2026.05.25
@@ -1087,23 +1096,22 @@ Professional Gws 9-115 S Avuç Taşlama Makinesi - 0601396101,5041.0,Taşlamalar
 X-lock Metal Ve Inox İçin Kesici Taşlama Diski 125x1mm 2608619264,228.0,Taşlamalar,2026.05.25
 "- 355*25,40*3,1 Mm Eko Seri Düz Metal Kesme Diski (taş) Düz 2608602759",322.0,Taşlamalar,2026.05.25
 Gönye Kesme Makinesi 1400 W 210 mm,4199.0,Testereler,2026.05.25
-Kızaklı Gönye Kesme Makinesi 1500 W 210 mm,6199.0,Testereler,2026.05.25
 MTSP800B Tezgah Üstü Testere 800 W,3599.0,Testereler,2026.05.25
-MSTS1500 Tezgah Üstü Testere 1500 W 254 mm,7999.0,Testereler,2026.05.25
 Şerit Testere Tezgahı 230 mm 350 W,8999.0,Testereler,2026.05.25
 Mag Gönyeli Testere 350mm,629.9,Testereler,2026.05.25
 Gönyeli Testere 400 mm,329.9,Testereler,2026.05.25
 Elmas Kesme Bıçağı 85 mm,419.9,Testereler,2026.05.25
 EMIS254C Gönye Kesme Makinesi 1800W 254 mm,9999.0,Testereler,2026.05.25
+MSTS1500 Tezgah Üstü Testere 1500 W 254 mm,7999.0,Testereler,2026.05.25
 Mag Gönye Testere Seti 300 mm,959.9,Testereler,2026.05.25
 ETS2000 Ayaklı Tezgah Üstü Testere 2000 W,12129.0,Testereler,2026.05.25
 Gts 254 Tezgah Üstü Testere,16299.0,Testereler,2026.05.25
-ST SST1800W Tezgah Üstü Testere 1800 Watt,18427.0,Testereler,2026.05.25
 Dwe7492 2000watt 250mm Profesyonel Tezgâh Tipi Testere,36989.0,Testereler,2026.05.25
 Profesyonel Profil Kesme SSC22,10426.0,Testereler,2026.05.25
-SM18 Gönye Kesme Makinası 1800 W 254 mm,16550.0,Testereler,2026.05.25
+ST SST1800W Tezgah Üstü Testere 1800 Watt,18415.0,Testereler,2026.05.25
+SM18 Gönye Kesme Makinası 1800 W 254 mm,17298.0,Testereler,2026.05.25
 Gönye Kesme Makinesi 216 mm,22111.0,Testereler,2026.05.25
-Gcm 216 Gönye Kesme,14488.0,Testereler,2026.05.25
+Gcm 216 Gönye Kesme,14705.0,Testereler,2026.05.25
 Profil Kesme GCO 14-24 J,13147.0,Testereler,2026.05.25
 Gönye Kesme Makinesi 305 mm GTM12JL,39884.0,Testereler,2026.05.25
 Tezgah Tipi Testere GTS 635-216 + GTA 560,29999.0,Testereler,2026.05.25
@@ -1115,8 +1123,8 @@ Dm500t Ahşap Torna Tezgahı - 5902307901,15196.0,Testereler,2026.05.25
 RTM622 ÜSTTEN TABLALI GÖNYE TESTERE MAKİNESİ 1200W 210MM,9423.59,Testereler,2026.05.25
 Gcd 12 Jl Metal Kesme Testeresi,24664.0,Testereler,2026.05.25
 "TC-SM 216, Pistonlu Gönye Testere",10420.9,Testereler,2026.05.25
-Disk Altı,149.9,Testereler,2026.05.25
 Gtm 12 Jl Gönye Kesme Makinası 1800 W 305mm,38932.49,Testereler,2026.05.25
+Disk Altı,149.9,Testereler,2026.05.25
 Hm216 Gönye Kesme Makinesi 216 Mm 2000w - 5901215903,9330.8,Testereler,2026.05.25
 Beton Kesme Diski,1841.0,Testereler,2026.05.25
 Tezgah Testere TC-TS 200,14688.7,Testereler,2026.05.25
@@ -1136,9 +1144,9 @@ Klpro Klgk255 2000w 255mm Üstten Tablalı Gönye Kesme Makinesi,15884.76,Tester
 Gkt210 Üstten Tablalı Gönye Kesme 210 Mm 1200 W - A0701020,9740.0,Testereler,2026.05.25
 Klpro 2000w 305mm Tablali Gönye Kesme Maki̇nasi Klgk305,21249.0,Testereler,2026.05.25
 Klpro 2000w 254mm Tezgah Testere Klttg250,14402.08,Testereler,2026.05.25
-Rtrmax Rtm6230 Üstten Tablali 2000 Watt 5500d/dk Gönye Testere,13978.0,Testereler,2026.05.25
 Rtrmax Rtm624 Tablalı Gönye Kesme Mak. 2000w 305mm,18599.0,Testereler,2026.05.25
 Rtrmax Rtm6240 Üstten Tablali Yatarli 2000 Watt 4.200 Devi̇r 305x30x40t Gönye Testere,18599.0,Testereler,2026.05.25
+Rtrmax Rtm6230 Üstten Tablali 2000 Watt 5500d/dk Gönye Testere,13978.0,Testereler,2026.05.25
 Professional Gta 2600 Gönye Kesme Sehpası,12356.0,Testereler,2026.05.25
 Professional Gts 635-216 Tezgah Tipi Gönye Testere,27719.99,Testereler,2026.05.25
 Profil Kesme Kafa Koparma Gönye Demir Kesme 3000 W 355 Lık Bıçak Çapı,4500.0,Testereler,2026.05.25
@@ -1166,9 +1174,10 @@ Rtrmax Rtm6220 ÜSTTEN TABLALI 1200 WATT5300D/DK GÖNYE TESTERE,9487.14,Testerel
 Professional Gcm 12 Sde Gönye Kesme Makinesi - 0601b23100,53138.0,Testereler,2026.05.25
 Professional Gcm 12 Gdl Gönye Kesme Makinesi - 0601b23600,50963.0,Testereler,2026.05.25
 Te-sm 8 L Dual  Pistonlu Gönye Testere - 4300866,12777.0,Testereler,2026.05.25
-Profesyonel Gcm 18v-216 D Akülü Gönye Kesme Makinesi (akü Hariç) 0601b51000,22877.0,Testereler,2026.05.25
+Profesyonel Gcm 18v-216 D Akülü Gönye Kesme Makinesi (akü Hariç) 0601b51000,22766.0,Testereler,2026.05.25
 Kress Kh483.9 40volt 1400w 254mm Kömürsüz Kızaklı Bluetooth Bağlantılı Profesyonel Gönye Kesme (akü Dahil Değildir),31075.5,Testereler,2026.05.25
 Dx5180 2400watt 355mm Profesyonel Profil Kesme,11172.22,Testereler,2026.05.25
+Flex Sbg 4910 850w Elektronik Şerit Testere Metal Kesme,39448.19,Testereler,2026.05.25
 Tc-sm 2534 Dual Pistonlu Gönye Testere,25998.7,Testereler,2026.05.25
 Tc-ts 210 Tezgah Daire Testere,29118.7,Testereler,2026.05.25
 Tc-sm 2531/1 U Pistonlu Gönye Kesme,25998.7,Testereler,2026.05.25
@@ -1179,15 +1188,13 @@ Mss 1610 Gönye Kesme Ve Testere Çalışma Tezgah Stantı,15598.7,Testereler,20
 G6f250 Üstten Tablalı Gönye Kesme Makinası 1600 Watt 250mm,12468.0,Testereler,2026.05.25
 Te-ts 2025 Uf Tezgah Testere,51998.7,Testereler,2026.05.25
 Te-sm 36/210 Li Solo Akülü Kayar Pistonlu Gönye Kesme,23138.7,Testereler,2026.05.25
-Flex Sbg 4910 850w Elektronik Şerit Testere Metal Kesme,39448.19,Testereler,2026.05.25
 Gcm 18v 254 D Akülü Gönye Kesme Makinesi (akü Hariç) 0601b51100,35969.0,Testereler,2026.05.25
-Professional Gts 10 Xc Tezgah Tipi Daire Testere - 0601b30400,85000.0,Testereler,2026.05.25
-Mls100 Gönye Kesme Tezgahı,25695.24,Testereler,2026.05.25
 Aeg Ps 254 L 254 Mm Radyal Gönye Kesme Makinesi 1800 W,29232.0,Testereler,2026.05.25
 Professional Gta 60 W Gönye Kesme Sehpası,21995.0,Testereler,2026.05.25
 Hais Kızaklı Gönye Kesme Makinesi 255 Mm 2000 Watt,14520.0,Testereler,2026.05.25
 Professional Fsn Wan - Açılı Mesnet,8540.0,Testereler,2026.05.25
 Gönye Kesme Makinesi,6849.0,Testereler,2026.05.25
+Mls100 Gönye Kesme Tezgahı,25695.24,Testereler,2026.05.25
 Deco-xls Pedallı Tezgah Tipi Testere - 5901407901,11240.4,Testereler,2026.05.25
 Lh1201fl 1600 Watt 305 Mm Üstten Tablalı Lazer Hizalamalı Gönye Kesme Makinası,56900.0,Testereler,2026.05.25
 Lb1200f Şerit Testere Tezgahı,77998.7,Testereler,2026.05.25
@@ -1204,6 +1211,7 @@ Umf1600 Universal Gönye Kesme Sehpası - 5907103900,6310.75,Testereler,2026.05.
 Gönye Kesme Maki̇nasi 1.400 W- 200 Mm,7800.0,Testereler,2026.05.25
 Ge-lc 36/35 Li Solo Zincirli Ağaç Kesme,10499.0,Testereler,2026.05.25
 Gk305 Dbl Çift Yatarlı Gönye Kesme 305 Mm 1800 W - A0701023,18469.6,Testereler,2026.05.25
+Professional Gts 10 Xc Tezgah Tipi Daire Testere - 0601b30400,85000.0,Testereler,2026.05.25
 Kızaklı Gönye Kesme Makinesi 255 Mm 2000 Watt,14520.0,Testereler,2026.05.25
 TC-TS 254 U Tezgah Testere,25998.7,Testereler,2026.05.25
 Radyal Gönye Kesme Testeresi̇ 255mm Ts421825517,16969.0,Testereler,2026.05.25
@@ -1212,30 +1220,28 @@ Klpro Klttga Klttg250 Model Tezgah Testere Makinesinin Ayağı,1282.45,Testerele
 Flap Disk NK 40 Kum 115x22 mm,229.71,Testereler,2026.05.25
 Eco Tezgah Testere ETC-TS 254,25998.7,Testereler,2026.05.25
 Lh1201fl Gönye Kesme Makinesi 1650 W (üst Tablalılazerli),55999.0,Testereler,2026.05.25
-Elektrikli Araç Şarj İstasyonu Ayak Standı,7637.14,Testereler,2026.05.25
-Hais Mj14 Şerit Testere Makinası,65000.0,Testereler,2026.05.25
 Tc-sm 254 Pistonlu Gönye Kesme Makinesi Kırmızı,20798.7,Testereler,2026.05.25
 Tc-sm 2531/2 U Gönye Kesme Makinesi Kırmızı,20530.0,Testereler,2026.05.25
-Umf2000 Universal Gönye Kesme Sehpası - 5907102900,7056.0,Testereler,2026.05.25
+Elektrikli Araç Şarj İstasyonu Ayak Standı,7637.14,Testereler,2026.05.25
+Hais Mj14 Şerit Testere Makinası,65000.0,Testereler,2026.05.25
 Hm210l Gönye Kesme Makinesi 210 Mm 1500w - 5901226901,6057.2,Testereler,2026.05.25
+Umf2000 Universal Gönye Kesme Sehpası - 5907102900,7056.0,Testereler,2026.05.25
 Hf60 Tezgah Freze 1500w - 5902106901,23107.2,Testereler,2026.05.25
-5 li Fiber Disk,49.99,Testereler,2026.05.25
+Kızaklı Gönye Kesme Makinesi 1500 W 210 mm,6199.0,Testereler,2026.05.25
+5 li Fiber Disk,47.0,Testereler,2026.05.25
 Gönye Testere TC-MS-2513 L,11899.0,Testereler,2026.05.25
 Dw872-qs 355mm Profil Kesme Makinesi,31999.0,Testereler,2026.05.25
 Gcm 305-216 D Gönye Kesme,21899.0,Testereler,2026.05.25
 TE-MS 18/210 Li Solo Akülü Gönye Testere,8499.0,Testereler,2026.05.25
 "Tc-ts 2225 U, Tezgah Testere",14299.0,Testereler,2026.05.25
-Tilki Kuyruğu 850 watt,1599.0,Zımpara ve Polisaj,2026.05.25
-PCS1200C 1200W Daire Testere 160mm,1999.0,Zımpara ve Polisaj,2026.05.25
 Tilki Kuyruğu GSA 1300 PCE,11299.0,Zımpara ve Polisaj,2026.05.25
 MSMT300QC Çok Amaçlı Alet 300 W,2449.0,Zımpara ve Polisaj,2026.05.25
 PSA 700 E Tilki Kuyruğu Testere,4799.0,Zımpara ve Polisaj,2026.05.25
+Tilki Kuyruğu 850 watt,1599.0,Zımpara ve Polisaj,2026.05.25
 MSCS1500 Daire Testere 1500 w,2699.0,Zımpara ve Polisaj,2026.05.25
 600 W Çok Fonksiyonlu Pandullü Dekupaj Testere,1899.0,Zımpara ve Polisaj,2026.05.25
 Pandullü 350W Dekupaj Testere,849.9,Zımpara ve Polisaj,2026.05.25
 Tilki Kuyruğu GSA 12-30,6299.0,Zımpara ve Polisaj,2026.05.25
-Tilki Kuyruğu 900 W STPT0900,4913.0,Zımpara ve Polisaj,2026.05.25
-5&#039;li Paslanmaz Kemik Tilki Kuyruğu Bıçağı S 1211 K,1614.99,Zımpara ve Polisaj,2026.05.25
 Metal Panter Testere Ucu S1122BF,429.9,Zımpara ve Polisaj,2026.05.25
 Gop 30-28 Salinim Hareketli Makine,8499.0,Zımpara ve Polisaj,2026.05.25
 Üçlü Ahşap Seti,1259.0,Zımpara ve Polisaj,2026.05.25
@@ -1254,14 +1260,16 @@ MSMT300 Çok Amaçlı Alet 300 W,2299.0,Zımpara ve Polisaj,2026.05.25
 Çok Amaçlı Uç Seti 15 Parça,1679.0,Zımpara ve Polisaj,2026.05.25
 Tct Dekupaj Testere Bıçağı 210x25/30x48T,739.9,Zımpara ve Polisaj,2026.05.25
 Moto-Saw MS20-1/5 Dekupaj Testere,7299.0,Zımpara ve Polisaj,2026.05.25
+PCS1200C 1200W Daire Testere 160mm,1999.0,Zımpara ve Polisaj,2026.05.25
 "TC-JS 18 Li (1x2,5 Ah), Akülü Dekupaj Testere",5899.0,Zımpara ve Polisaj,2026.05.25
 Dekupaj Testere 550W KS801SE,3199.0,Zımpara ve Polisaj,2026.05.25
 "TC-CS 1250, Daire Testere",3599.0,Zımpara ve Polisaj,2026.05.25
 - Tilki Kuyruğu Bıçağı S 1211 K -1 Buz Ve Kemik Kesme 1&#039;li Paket,489.0,Zımpara ve Polisaj,2026.05.25
 "Expert Metal İçin Daire Testere Bıçağı – 305*25,4*2,6 Mm 60 Diş – 2608643060",3511.0,Zımpara ve Polisaj,2026.05.25
-GSA 1100 E Tilki Kuyruğu Testere 1100 W,7997.49,Zımpara ve Polisaj,2026.05.25
 - Tilki Kuyruğu Bıçağı S 1211 K -5 Buz Ve Kemik Kesme 5&#039;li Paket,1639.0,Zımpara ve Polisaj,2026.05.25
 Eisenn Tilki Kuyruğu Testere Pvc Metal Ytong Ahşap Ve Kemik Kesim Makinası 6 Kademe Devir Ayarlı 3 Adet Bıçak Hediyeli,4199.9,Zımpara ve Polisaj,2026.05.25
+Tilki Kuyruğu 900 W STPT0900,4913.0,Zımpara ve Polisaj,2026.05.25
+5&#039;li Paslanmaz Kemik Tilki Kuyruğu Bıçağı S 1211 K,1614.99,Zımpara ve Polisaj,2026.05.25
 Panter Testere Bıçağı S1111K,99.99,Zımpara ve Polisaj,2026.05.25
 Panter Testere Bıçağı S2345X,119.9,Zımpara ve Polisaj,2026.05.25
 Eco 190*30mm 24 Diş Ahşap Daire Testere Bıçağı 2608644376,622.0,Zımpara ve Polisaj,2026.05.25
@@ -1272,8 +1280,8 @@ Ahşap Dekupaj Testere Bıçağı T344D,72.99,Zımpara ve Polisaj,2026.05.25
 Optiline Ahşap Kesme Diski 24 Diş 160x16 mm,1150.0,Zımpara ve Polisaj,2026.05.25
 Panter Testere Bıçağı S922HF,129.9,Zımpara ve Polisaj,2026.05.25
 Eco 190*30mm 48 Diş Ahşap Daire Testere Bıçağı 2608644377,821.7,Zımpara ve Polisaj,2026.05.25
+GSA 1100 E Tilki Kuyruğu Testere 1100 W,7997.49,Zımpara ve Polisaj,2026.05.25
 Ahşap Dekupaj Testere Bıçağı T144D,64.99,Zımpara ve Polisaj,2026.05.25
-Dekupaj Testere Bıçağı Hcs,279.9,Zımpara ve Polisaj,2026.05.25
 RTM385 DAİRE TESTERE 210MM 1800W RTRMAX,4789.9,Zımpara ve Polisaj,2026.05.25
 Rtrmax Rtm3890 Sulu Serami̇k Kesme Maki̇nesi̇ Açili Kesi̇m 1400w 115mm,3070.67,Zımpara ve Polisaj,2026.05.25
 Pst 650 Dekupaj Testere,3084.0,Zımpara ve Polisaj,2026.05.25
@@ -1281,10 +1289,10 @@ Pst 650 Dekupaj Testere,3084.0,Zımpara ve Polisaj,2026.05.25
 Gks 190 Daire Testere Makinesi 1400 Watt 190mm,6536.0,Zımpara ve Polisaj,2026.05.25
 S 1531 L 190mm 2&#039;li Hızlı Kesim ahşap Panter Testere Ucu 2608650613,754.0,Zımpara ve Polisaj,2026.05.25
 Expert S 956 Xhm Çok Amaçlı 150 Mm Panter Testere 1&#039;li 2608900389,983.0,Zımpara ve Polisaj,2026.05.25
-Gsa 185-Lı Solo Panter Testere,9607.49,Zımpara ve Polisaj,2026.05.25
 Dekupaj Testere 400 Watt,1332.66,Zımpara ve Polisaj,2026.05.25
 "Te-cs 18/150 Li - Solo, Akülü Daire Testere - 4331220",5804.0,Zımpara ve Polisaj,2026.05.25
 Ahşap Dekupaj Testere Bıçağı T101 Br-Hcs,229.9,Zımpara ve Polisaj,2026.05.25
+Gsa 185-Lı Solo Panter Testere,9607.49,Zımpara ve Polisaj,2026.05.25
 Panter Testere Bıçağı S1542K,139.9,Zımpara ve Polisaj,2026.05.25
 Bi-Metal Kesme Bıçağı 32x30 mm,299.9,Zımpara ve Polisaj,2026.05.25
 Dekupaj Testere 710W GST8000E,5064.99,Zımpara ve Polisaj,2026.05.25
@@ -1304,8 +1312,8 @@ Optiline 305*30mm 100 Diş Ahşap Daire Testere Bıçağı 2608644386,2600.0,Z�
 Tilki kuyruğu testere seti Metal Ahşap Kemik Kesme 3lü Tilki Kuyruğu bıçakları Paslanmaz seri,394.0,Zımpara ve Polisaj,2026.05.25
 Compact Dekupaj Testere PST 650,3084.0,Zımpara ve Polisaj,2026.05.25
 Eisenn Alman Grey E-3645 Yağ Pompalı Dijital Göstergeli 32 Cm Pala Çift Akü 10 Pi̇lli̇ Dal Budama Ağaç Kesim,5999.9,Zımpara ve Polisaj,2026.05.25
-Ahşap Dekupaj Testere Bıçağı T101BR,69.99,Zımpara ve Polisaj,2026.05.25
 Matkap İçin Şarjlı Ve  Elektrikli Matkap Pistonlu Jig Testere Aparatı Ağaç Metal Işleme Adaptör,695.0,Zımpara ve Polisaj,2026.05.25
+Ahşap Dekupaj Testere Bıçağı T101BR,69.99,Zımpara ve Polisaj,2026.05.25
 "TC-JS 80/1 Kit, Dekupaj Testere",3566.46,Zımpara ve Polisaj,2026.05.25
 Gst 185-Lı (S) Solo Dekupaj Testre,11299.0,Zımpara ve Polisaj,2026.05.25
 "TC-JS 18 Li - Solo, Akülü Dekupaj Testere",2699.0,Zımpara ve Polisaj,2026.05.25
@@ -1347,11 +1355,11 @@ Kl Pro Kldat18b 18v Daire Testere(solo),5399.58,Zımpara ve Polisaj,2026.05.25
 Klpro Klbtk18-00 18v Tilki Kuyruğu Dal Kesme Aküsüz/solo Tek Makine,2063.89,Zımpara ve Polisaj,2026.05.25
 Dekupaj Dwe1,1371.0,Zımpara ve Polisaj,2026.05.25
 Tc-ap 690 E Kılıç Testere - 4326161 E,3712.62,Zımpara ve Polisaj,2026.05.25
-RTM3650 DEKUPAJ TESTERE 450W 55 MM 3000 RPM,1404.07,Zımpara ve Polisaj,2026.05.25
 RTX1844B AKÜLÜ DEKUPAJ TESTERE X-LION *AKÜSÜZ SATILMAKTADIR*,2316.89,Zımpara ve Polisaj,2026.05.25
+RTM3650 DEKUPAJ TESTERE 450W 55 MM 3000 RPM,1404.07,Zımpara ve Polisaj,2026.05.25
 T101D 5 li Ağaç Dekupaj Testere Bıçağı,428.0,Zımpara ve Polisaj,2026.05.25
 Dcs334nt-xj 18v Akülü Dekupaj Testere (akü Hariç),13842.0,Zımpara ve Polisaj,2026.05.25
-Bosch Pst 800 Pel Universal Dekupaj Testere,3610.0,Zımpara ve Polisaj,2026.05.25
+Bosch Pst 800 Pel Universal Dekupaj Testere,3611.0,Zımpara ve Polisaj,2026.05.25
 Wx479 750watt Profesyonel Devir Ayarlı Dekupaj Testere,5107.83,Zımpara ve Polisaj,2026.05.25
 Best Ext. Sert Laminant Testere 300*30 Mm 96 Diş 2608642110,5787.0,Zımpara ve Polisaj,2026.05.25
 Alüminyum Daire Testeresi 260*30 Mm 80 Diş Expert 2608644113,3994.0,Zımpara ve Polisaj,2026.05.25
@@ -1371,30 +1379,29 @@ Klpro Kldt18b-20 18volt/2.0 Ah Li-ion Çift Akülü Kömürsüz Profesyonel Deku
 S 1531 L 190 Mm 5&#039;li Hızlı Kesim Ahşap Panter Testere Ucu 2608650676,1543.0,Zımpara ve Polisaj,2026.05.25
 - Tilki Kuyruğu Bıçağı S 1211 K -2 Buz Ve Kemik Kesme 2&#039;li Paket,999.0,Zımpara ve Polisaj,2026.05.25
 Multi Material 254*30 Mm 96 Diş Elmas Daire Testere Bıçağı 2608640451,2680.0,Zımpara ve Polisaj,2026.05.25
-İnox Metal Çelik Kesme Taşı 115 Mm. - 3 Adet,161.5,Zımpara ve Polisaj,2026.05.25
 Universalmulti 18v-32 Solo Çok Fonksiyonlu Alet,4029.99,Zımpara ve Polisaj,2026.05.25
 Gst 18 V-155 Sc Dekupaj Testere Solo,18579.0,Zımpara ve Polisaj,2026.05.25
+İnox Metal Çelik Kesme Taşı 115 Mm. - 3 Adet,161.5,Zımpara ve Polisaj,2026.05.25
 Ahşap Daire Testere Diski 36 Diş 160x20/16 mm,1349.0,Zımpara ve Polisaj,2026.05.25
 Ahşap Dekupaj Testere Bıçağı T234X,79.99,Zımpara ve Polisaj,2026.05.25
 OPW Daire Testere Bıçağı 36 Diş 184x16 mm,1078.0,Zımpara ve Polisaj,2026.05.25
 Expert T 308 Bp 5&#039;li Çapaksız Ahşap Dekupaj Bıçağı 2608900558,711.0,Zımpara ve Polisaj,2026.05.25
+Ahşap Dekupaj Testere Bıçağı T144DP,64.99,Zımpara ve Polisaj,2026.05.25
 Ahşap Kavisli Dekupaj Testere Bıçağı T101AO,199.9,Zımpara ve Polisaj,2026.05.25
-Esnek Metal - Ahşap Kesme Tilki Kuyruğu Bıçağı 225 mm,813.0,Zımpara ve Polisaj,2026.05.25
 Metal Dekupaj Testere Bıçağı 118A HSS,179.9,Zımpara ve Polisaj,2026.05.25
 Ahşap Dekupaj Testere Bıçağı T101 B-Hcs,199.9,Zımpara ve Polisaj,2026.05.25
-Ahşap Dekupaj Testere Bıçağı T144DP,64.99,Zımpara ve Polisaj,2026.05.25
 Optiline Ahşap 254x2x30 Mm 60 Diş Daire Testere Bıçağı 2608640436,1672.49,Zımpara ve Polisaj,2026.05.25
 Eisenn Tilki Kuyruğu Testere Kemik Metal Pvc Ytong Ahşap Kesim Makinası 3 Adet Bıçak Hediyeli 6 Kademe Devir Ayarlı,4199.9,Zımpara ve Polisaj,2026.05.25
 TC-CS 1400 -1 Daire Testere,4029.99,Zımpara ve Polisaj,2026.05.25
 Klpro Kltkt18b-00 18v Solo Tilki Kuy,5133.79,Zımpara ve Polisaj,2026.05.25
 RTX2038B AKÜLÜ DAİRE TESTERE KÖMÜRSÜZ 165MM X-LION *AKÜSÜZ SATILMAKTADIR*,3794.2,Zımpara ve Polisaj,2026.05.25
+Metal Daldırmalı Testere Bıçağı AIZ20AB,531.0,Zımpara ve Polisaj,2026.05.25
 Çoklu Malzeme Kesimi İçin Daire Testeresi 216*30 Mm 64 Diş Expert Multi Material 2608642493,3082.0,Zımpara ve Polisaj,2026.05.25
 Prosaw 51218 Daire Sunta Testeresi 185x30/20mm 40 Diş,502.74,Zımpara ve Polisaj,2026.05.25
 Optiline Wood Daire Testere Bıçağı 254x30 mm,1953.0,Zımpara ve Polisaj,2026.05.25
-Metal Daldırmalı Testere Bıçağı AIZ20AB,531.0,Zımpara ve Polisaj,2026.05.25
 Beton Elmas Kesme Diski 115mm Adet,349.99,Zımpara ve Polisaj,2026.05.25
-"Te-js 100, Dekupaj Testere - 4321160 Kırmızı",4499.0,Zımpara ve Polisaj,2026.05.25
 Panter Testere Metal Kesme Bıçağı 5 Li Set Trsb922ef,429.0,Zımpara ve Polisaj,2026.05.25
+"Te-js 100, Dekupaj Testere - 4321160 Kırmızı",4499.0,Zımpara ve Polisaj,2026.05.25
 TE-AP 18/22 Li Solo Akülü Kılıç Testere,3799.0,Zımpara ve Polisaj,2026.05.25
 Ahşap Metal Panter Testere Ucu S 3456 XF,699.9,Zımpara ve Polisaj,2026.05.25
 Optiline Wood Daire Testere Bıçağı 184x30 mm,1099.0,Zımpara ve Polisaj,2026.05.25
@@ -1434,13 +1441,13 @@ Tomax Dekupaj Ağzı Deli̇kli̇ No:1 (5 Adet) İnce Saç Metal Kesi̇mi,615.0,
 Tomax Elmas Kesi̇ci̇ Elektroli̇ze Flanşlı 230 Mm,5299.0,Zımpara ve Polisaj,2026.05.25
 Tomax T144d Hss Ağaç Dekupaj Ağzı (5 Adet) Hızlı Kesi̇m,350.0,Zımpara ve Polisaj,2026.05.25
 Skil 4961da Elekti̇kli̇ Kiliç Testere 900w Çantali,6249.0,Zımpara ve Polisaj,2026.05.25
+4961aa Kılıç Testere 900w,5239.0,Zımpara ve Polisaj,2026.05.25
 Skil Xp 3480fa Akülü Kiliç Testere Çantali,11779.0,Zımpara ve Polisaj,2026.05.25
 Skil Compact 3475fa Akülü Kiliç Testere Çantali,9739.0,Zımpara ve Polisaj,2026.05.25
 Skil Powertools 3471ca Akülü Kiliç Testere,6159.0,Zımpara ve Polisaj,2026.05.25
 "Skil Set-32 (skil Compact 3475fa Akülü Kiliç Testere Çantali+4,ah Li Batarya+2,5ah Li + 2.4a Şarj Ci̇hazi)",13829.0,Zımpara ve Polisaj,2026.05.25
 Khrs-5120 Tilki Kuyruğu Testere Devir Ayarlı 3 Bıçaklı-kilit Düğmeli,2579.0,Zımpara ve Polisaj,2026.05.25
 "Skil Set-33 (skil Powertools 3471ca Akülü Kiliç Testere+4,ah Li Batarya+2,5ah Batarya + 2.4a Şarj Ci̇hazi)",11449.0,Zımpara ve Polisaj,2026.05.25
-4961aa Kılıç Testere 900w,5239.0,Zımpara ve Polisaj,2026.05.25
 Lion Akülü Dekopaj Testere Solo -tjsli1008,3725.0,Zımpara ve Polisaj,2026.05.25
 Dekupaj Mke,2037.0,Zımpara ve Polisaj,2026.05.25
 Professional Gst 185-li 2x4.0 Ah Li-on Akülü Dekupaj,21531.0,Zımpara ve Polisaj,2026.05.25
@@ -1451,11 +1458,11 @@ Pst 650 Compact 500 W Dekupaj Testere Makinası + 10 Parça Metal Ahşap Karış
 Rtrmax Rtm9070 Tilki Kuyruğu Testere 110mm 710w,2424.97,Zımpara ve Polisaj,2026.05.25
 Elmaslı Tırpan Daire Testere 40tx25.4x255mm Profesyonel Gold,816.75,Zımpara ve Polisaj,2026.05.25
 Klpro Kltlt300 Paslanmaz Kemi̇k Kesme Testere Ağzi,625.21,Zımpara ve Polisaj,2026.05.25
-Easycut 50 Nanoblade Dekupaj Testere,5235.0,Zımpara ve Polisaj,2026.05.25
+Easycut 50 Nanoblade Dekupaj Testere,5131.0,Zımpara ve Polisaj,2026.05.25
 Panter Testere Ahşap Kesme Bıçağı 5 Li Set Trsb611d,449.0,Zımpara ve Polisaj,2026.05.25
 Sgs S1211k Tilki Kuyruğu Testere Bıçağı 300 Mm Paslanmaz 3 Tpi 5’li Set,643.5,Zımpara ve Polisaj,2026.05.25
-"Standart 450x25,4x10mm Elmas Asfalt Daire Testere 2608602627",7990.0,Zımpara ve Polisaj,2026.05.25
 Rtrmax Tilki Kuyruğu Testere 1200w Rtm9075,4669.49,Zımpara ve Polisaj,2026.05.25
+"Standart 450x25,4x10mm Elmas Asfalt Daire Testere 2608602627",7990.0,Zımpara ve Polisaj,2026.05.25
 Tilki Kuyruğu Testere Ve Kemik Kesme Bıçağı Hediyeli X2ad Mx4539 710 W,2999.99,Zımpara ve Polisaj,2026.05.25
 Alman 6 Kademe Devir Ayarli Bakir Sargili Beton Tuğla Kemik Kesme Tilki Kuyruğu 10 Uç Greyy,2999.0,Zımpara ve Polisaj,2026.05.25
 Bosch T 118 A Basic Metal Dekupaj Testere Bıçağı 2 608 631 964 (adet),196.31,Zımpara ve Polisaj,2026.05.25
@@ -1471,7 +1478,7 @@ Gks 600 1200 W Daire Testere,6080.0,Zımpara ve Polisaj,2026.05.25
 Spt900 900w Tilki Kuyruğu Testere Makinesi,4913.0,Zımpara ve Polisaj,2026.05.25
 Einhell Te-cs 190/1 Daire Testere - 4331005,5464.0,Zımpara ve Polisaj,2026.05.25
 Ekonomik Seri 190*30 Mm 48 Diş Daire Testere Bıçağı,616.0,Zımpara ve Polisaj,2026.05.25
-Pks 66 Af Daire Testere,7332.0,Zımpara ve Polisaj,2026.05.25
+Pks 66 Af Daire Testere,7511.0,Zımpara ve Polisaj,2026.05.25
 Kress Kue11 20volt 4.0ah. Li-ion 140mm Çift Akülü Kömürsüz Profesyonel Çok Amaçlı Daire Testere,16716.16,Zımpara ve Polisaj,2026.05.25
 Alüminyum Daire Testeresi 250x30 Mm 80 Diş Expert 2608644111,3167.49,Zımpara ve Polisaj,2026.05.25
 Alüminyum Kesme Testeresi 165*20 Mm 52 Diş Expert 2608644095,2745.0,Zımpara ve Polisaj,2026.05.25
@@ -1489,17 +1496,17 @@ Eisenn Tilki Kuyruğu Testere 6 Kademe Devirli Pvc Metal Ytong Ahşap Ve Kemik K
 Rs20s-20 Akülü Tilki Kuyruğu Testere 3000rpm 20mm Akü Ve Şarj Cihazı Hariç,3822.0,Zımpara ve Polisaj,2026.05.25
 "Bay-tec Tuğla Ytong Tilki Kuyruğu Testere Bıçağı 305mm 12,7mm 1ad",999.75,Zımpara ve Polisaj,2026.05.25
 Bay-tec Mk2319  Tuğla - Ytong Tilki Kuyruğu Testere Ağzı 455 Mm,999.75,Zımpara ve Polisaj,2026.05.25
-Klpro Klbtk18-50 18v/5ah. Şarjlı Tilki Kuyruğu Dal Kesme,9810.76,Zımpara ve Polisaj,2026.05.25
-Pro Japan 4500 Xdrive 6 Kademe Devir Ayarli Bakir Sargili Kemik Kesme Tilki Kuyruğu Testere Makinesi,2989.0,Zımpara ve Polisaj,2026.05.25
-240 Watt Metal Şanzuman Tilki Kuyruğu Kemik Kesim Makinası Panter Testere,2199.0,Zımpara ve Polisaj,2026.05.25
-Alman 9000 Xdrive 6 Kademe Devir Ayarli Bakir Sargili Kemik Kesme Tilki Kuyruğu Testere Makinesi,2949.0,Zımpara ve Polisaj,2026.05.25
 78203 Dekupaj Testere 600w,2970.0,Zımpara ve Polisaj,2026.05.25
-Js20x-26 Akülü Dekupaj Testere 3500rpm 26mm Akü Ve Şarj Cihazı Hariç,7312.5,Zımpara ve Polisaj,2026.05.25
 Cs20s-165 Akülü Daire Testere 165mm Akü Ve Şarj Cihazı Hariç,5411.25,Zımpara ve Polisaj,2026.05.25
 Cs20x-190 Akülü Daire Testere Kömürsüz Motor 190mm Akü Ve Şarj Cihazı Hariç,9945.0,Zımpara ve Polisaj,2026.05.25
+Js20x-26 Akülü Dekupaj Testere 3500rpm 26mm Akü Ve Şarj Cihazı Hariç,7312.5,Zımpara ve Polisaj,2026.05.25
 Hcs190x Daire Testere 1500w 190mm,4380.6,Zımpara ve Polisaj,2026.05.25
-6 Devirli Dekupaj Testere,6500.0,Zımpara ve Polisaj,2026.05.25
 Js20s-24 Akülü Dekupaj Testere 20v 2500 Dev/dk 24mm Strok 80mm Kesim Akü Ve Şarj Cihazı Hariç,3439.8,Zımpara ve Polisaj,2026.05.25
+Klpro Klbtk18-50 18v/5ah. Şarjlı Tilki Kuyruğu Dal Kesme,9810.76,Zımpara ve Polisaj,2026.05.25
+Alman 9000 Xdrive 6 Kademe Devir Ayarli Bakir Sargili Kemik Kesme Tilki Kuyruğu Testere Makinesi,2949.0,Zımpara ve Polisaj,2026.05.25
+Pro Japan 4500 Xdrive 6 Kademe Devir Ayarli Bakir Sargili Kemik Kesme Tilki Kuyruğu Testere Makinesi,2989.0,Zımpara ve Polisaj,2026.05.25
+240 Watt Metal Şanzuman Tilki Kuyruğu Kemik Kesim Makinası Panter Testere,2199.0,Zımpara ve Polisaj,2026.05.25
+6 Devirli Dekupaj Testere,6500.0,Zımpara ve Polisaj,2026.05.25
 Hais Tilki Kuyruğu Testere Bıçağı Paslanmaz 300mm 1.25mm 8.5/3 Tpi Et Kemik 5’li Set,579.15,Zımpara ve Polisaj,2026.05.25
 Hais Tilki Kuyruğu Testere Bıçağı Paslanmaz 300mm 1.25mm 8.5/3 Tpi – Et Kemik,292.05,Zımpara ve Polisaj,2026.05.25
 T111c Ahşap Dekupaj Testere Bıçağı 5 Adet Sunta Kesme Ağzı,219.99,Zımpara ve Polisaj,2026.05.25
@@ -1513,16 +1520,14 @@ T 144 D Eko. Hızlı Kesim Ahşap Dekupaj Ucu 25&#039;li 2608633625,1999.0,Zım
 T 102 H Pvc İçin Temiz Kesim Dekupaj Ucu 5&#039;li 2608667446,528.28,Zımpara ve Polisaj,2026.05.25
 Tc-cs 89 Mini Daire Testere,5540.31,Zımpara ve Polisaj,2026.05.25
 Klpro Kldat18b-20 18volt/2.0ah Li-ion Kömürsüz Profesyonel Daire Testere,8682.32,Zımpara ve Polisaj,2026.05.25
-1500w 190mm Daire Testere,6900.0,Zımpara ve Polisaj,2026.05.25
-Hs6601 Daire Testere Makinesi 1010 Watt 165mm,7899.0,Zımpara ve Polisaj,2026.05.25
+Klpro Klmsdt85 85mm Daire Testere Klms18-20 Ile Uyumlu,1409.97,Zımpara ve Polisaj,2026.05.25
+Siyah 710watt Profesyonel Lazerli Dekupaj Testere Kldt1110,4552.42,Zımpara ve Polisaj,2026.05.25
+Kl Eco Daire Testere Ke14185dat 1400watt 185mm,3150.0,Zımpara ve Polisaj,2026.05.25
 Klpro Kldt18b-50 18volt/5.0 Ah Li-ion Çift Akülü Kömürsüz Profesyonel Dekupaj Testere,11224.92,Zımpara ve Polisaj,2026.05.25
 Klpro Profesyonel Daire Testere Kldat96235 2400watt,7040.96,Zımpara ve Polisaj,2026.05.25
 Kl Pro Kldat18501 1350 Watt Profesyonel Daire Testere,4725.0,Zımpara ve Polisaj,2026.05.25
 Klpro Kldat96235 235mm 2400watt Profesyonel Daire Testere,7146.85,Zımpara ve Polisaj,2026.05.25
 Klpro Klbtk18-20 18v/2ah. Şarjlı Tilki Kuyruğu Dal Kesme,5399.58,Zımpara ve Polisaj,2026.05.25
-Klpro Klmsdt85 85mm Daire Testere Klms18-20 Ile Uyumlu,1409.97,Zımpara ve Polisaj,2026.05.25
-Siyah 710watt Profesyonel Lazerli Dekupaj Testere Kldt1110,4552.42,Zımpara ve Polisaj,2026.05.25
-Kl Eco Daire Testere Ke14185dat 1400watt 185mm,3150.0,Zımpara ve Polisaj,2026.05.25
 Klpro Kltkt18b-50 18volt/5.0ah Li-ion Kömürsüz Profesyonel Tilki K,11859.17,Zımpara ve Polisaj,2026.05.25
 S 1141 Hm Gazbeton-ytong İçin Panter Testere 2&#039;li 2608650971,1580.87,Zımpara ve Polisaj,2026.05.25
 Klpro Kldat18b-50 18volt/5.0ah Li-ion Kömürsüz Profesyonel Daire Testere,12070.96,Zımpara ve Polisaj,2026.05.25
@@ -1538,12 +1543,14 @@ Catpower 3901 Elektrikli Planya 900 Watt,5240.31,Zımpara ve Polisaj,2026.05.25
 Profesyonel Lazerli Sunta Kesme Daire Testere Makinesi 21v 4.0ah,5500.0,Zımpara ve Polisaj,2026.05.25
 Cr13v2 300mm 1010w Profesyonel Tilki Kuyruğu Testere,14652.12,Zımpara ve Polisaj,2026.05.25
 Dekupaj Mke1,1371.0,Zımpara ve Polisaj,2026.05.25
+Rtx2067b Şarjlı Tilki Kuyruğu Testere,4191.77,Zımpara ve Polisaj,2026.05.25
 Daire Testere Aparatı,165.0,Zımpara ve Polisaj,2026.05.25
 Klpro Kldat18b-80 18volt/8.0ah Li-ion Kömürsüz Profesyonel Daire Testere,15036.02,Zımpara ve Polisaj,2026.05.25
 Devir Ayarlı Bakır Sargılı Şanzıman Prüzsüz Kemik Ve Buz Kesme Tilki Kuyruğu Makinesi 5 Bıçaklı,2939.99,Zımpara ve Polisaj,2026.05.25
 Dwe349 Dekupaj Testeresi 500 Watt,8153.29,Zımpara ve Polisaj,2026.05.25
+1500w 190mm Daire Testere,6900.0,Zımpara ve Polisaj,2026.05.25
 300 Mm 96 Diş Laminant Daire Testere Expert 2608642517,3672.5,Zımpara ve Polisaj,2026.05.25
-"Tc-js 18/70 Li (1x2,5ah), Akülü Dekupaj Testere",4857.23,Zımpara ve Polisaj,2026.05.25
+Hs6601 Daire Testere Makinesi 1010 Watt 165mm,7899.0,Zımpara ve Polisaj,2026.05.25
 Einhell Gc-ec 7520 T Elektrikli Yüksek Dal Budama,5688.0,Zımpara ve Polisaj,2026.05.25
 Kl Pro Kldt10265 450watt Profesyonel Dekupaj Testere,2858.1,Zımpara ve Polisaj,2026.05.25
 Kl Pro Kldat18b-50 18volt/5.0ah Li-ion Kömürsüz Profesyonel Daire Testere,12019.22,Zımpara ve Polisaj,2026.05.25
@@ -1551,6 +1558,7 @@ Kl Pro Kldat18501 1350watt Profesyonel Daire Testere,4764.22,Zımpara ve Polisaj
 Einhell  Tp Js 18/135 Li̇ Bl Solo Dekupaj Testere Kömürsüz,7280.31,Zımpara ve Polisaj,2026.05.25
 Kl Pro Kldt18b-50 18volt/5.0 Ah Li-ion Çift Akülü Kömürsüz Profesyonel Dekupaj Testere,11966.27,Zımpara ve Polisaj,2026.05.25
 Cmc Tilki Kuyruğu Makinası 710w - Cmc3943,3279.0,Zımpara ve Polisaj,2026.05.25
+"Tc-js 18/70 Li (1x2,5ah), Akülü Dekupaj Testere",4857.23,Zımpara ve Polisaj,2026.05.25
 "CE-CP 18/180 Li E - Solo, Akülü Polisaj ve Zımpara Makinesi",5499.0,Boya Tabancaları,2026.05.25
 MSDLS160 Mouse Zımpara 160 W,1199.0,Boya Tabancaları,2026.05.25
 MSHP900 Planya 900 W,2099.0,Boya Tabancaları,2026.05.25
@@ -1630,6 +1638,9 @@ C450 125 Mm 8 Delikli 60 Kum Zımpara Kağıdı 50&#039;li 2608621740,590.43,Boy
 Klha603v6 Profesyonel Havalı Eksantrik Dairesel Zımpara,2310.0,Boya Tabancaları,2026.05.25
 Alman Pro 4200 Wat Bakir Sargili 6 Kademe Devir Ayarlı Polisaj Makinasi Zımpara Pasta Cila Makinesi,2899.0,Boya Tabancaları,2026.05.25
 Rtrmax Rtm3730 Titreşimli Zımpara Makinesi 320 W,1860.47,Boya Tabancaları,2026.05.25
+"Bant Zımpara 6,4 mm 120 Kum (438)",229.9,Boya Tabancaları,2026.05.25
+Zımpara Kağıdı 115 mm,59.99,Boya Tabancaları,2026.05.25
+"CC-PO 1100-2E, Polisaj ve Zımpara Makinesi",7278.7,Boya Tabancaları,2026.05.25
 C450 125 Mm 8 Delikli 120 Kum Zımpara Kağıdı 50&#039;li 2608621743,782.0,Boya Tabancaları,2026.05.25
 C450 125 Mm 8 Delikli 40 Kum Zımpara Kağıdı 50&#039;li 2608621739,874.0,Boya Tabancaları,2026.05.25
 C450 125 Mm 8 Delikli 100 Kum Zımpara Kağıdı 50&#039;li 2608621742,782.0,Boya Tabancaları,2026.05.25
@@ -1639,9 +1650,6 @@ Expert S471 1&#039;li Sünger Zımpara 69x97x26 Mm Süper İnce 2608901180,200.
 C450 125 Mm Deliksiz 80 Kum Zımpara Kağıdı 50&#039;li 2608621750,814.0,Boya Tabancaları,2026.05.25
 Tc-pl 750 750 W Planya Makinesi - 4345310,2822.49,Boya Tabancaları,2026.05.25
 Taşlama Velcro Zımpara Arka Panel 125 mm,179.9,Boya Tabancaları,2026.05.25
-"Bant Zımpara 6,4 mm 120 Kum (438)",229.9,Boya Tabancaları,2026.05.25
-Zımpara Kağıdı 115 mm,59.99,Boya Tabancaları,2026.05.25
-"CC-PO 1100-2E, Polisaj ve Zımpara Makinesi",7278.7,Boya Tabancaları,2026.05.25
 Meridyen Sunta Vidası 3.5x13mm 1000 Adet,374.0,Boya Tabancaları,2026.05.25
 Bay Tec Bay-tec Su Zımparası - Kağıt Zımpara - Zımpara Kağıdı 100 Numara - 100 Kum,107.1,Boya Tabancaları,2026.05.25
 Einhell Tc Bg 150 B Taş Motoru 350 Watt,3454.99,Boya Tabancaları,2026.05.25
@@ -1702,14 +1710,18 @@ Expert S470 Sünger Zımpara 69x97x26 Mm Orta 1 Adet,220.0,Boya Tabancaları,202
 Katlı Flap Disk Zımpara Seti - 40-60-80-100-120 Kum,266.0,Boya Tabancaları,2026.05.25
 Di̇sk Zimpara Tabani Cirtli 125mm Koni̇k,249.0,Boya Tabancaları,2026.05.25
 Takoz Sünger Zımpara 100 Kum El Zımparası 1 Adet Tencere Metal Ahşap El Zımparası Mobilya Çelik Tava Hobi Islak Kuru,138.54,Boya Tabancaları,2026.05.25
-Taşlama Velcro Zımpara Arka Panel 115 mm,229.9,Boya Tabancaları,2026.05.25
+Tc-us 380 Tezgah Bant Zımpara Makinesi- 4419257 Kırmızı,6790.9,Boya Tabancaları,2026.05.25
 Pro 4400 Watt Motor Korumalı Otomatik Şanzıman Çift Bıçaklı Planya Rende Makinesi Garantili,1799.0,Boya Tabancaları,2026.05.25
 Sgs Akülü Multi-tools Kesi̇ci̇ Ve Raspalama Maki̇nesi̇ 20v 1*2.0 Ah Sgs5435,4699.0,Boya Tabancaları,2026.05.25
-Tc-us 380 Tezgah Bant Zımpara Makinesi- 4419257 Kırmızı,6790.9,Boya Tabancaları,2026.05.25
+Taşlama Velcro Zımpara Arka Panel 115 mm,229.9,Boya Tabancaları,2026.05.25
 Eisenn Bluer Led Işıklı Toz Emmeli Alçıpan Duvar Zımpara Makinası Devir Ayarlı,9999.9,Boya Tabancaları,2026.05.25
 Eisenn Red Led Işıklı Toz Emmeli Alçıpan Duvar Zımpara Makinası Devir Ayarlı,9999.9,Boya Tabancaları,2026.05.25
 360&#039;ledli 850w Pro Alçıpan Zımpara Makinası Toz Emmeli,2999.9,Boya Tabancaları,2026.05.25
 Bay-tec Mk0220 10lu Flap Disk 115x22mm Metal Ahşap Zımpara 40kum,619.0,Boya Tabancaları,2026.05.25
+Hso150 Titreşimli Zımpara 150w,1514.7,Boya Tabancaları,2026.05.25
+Hmlt260 Fonksiyonel Raspalama 260w,3422.25,Boya Tabancaları,2026.05.25
+Ps20s Akülü Polisaj 30000rpm 254mm Akü Ve Şarj Hariç,4265.62,Boya Tabancaları,2026.05.25
+H3504 300 Watt Titreşimli Zımpara,2866.5,Boya Tabancaları,2026.05.25
 Sia 1949 150 &#039;lik Hookıt 7 Delikli Cırtlı Zımpara 80 Kum 10 Adet,339.91,Boya Tabancaları,2026.05.25
 Sia 1949 150&#039;lik Hookıt 7 Delikli Cırtlı Zımpara 150 Kum 10 Adet,449.25,Boya Tabancaları,2026.05.25
 Atlas Zımpara A4 Boyutunda  3 Adet 80 Kum,369.25,Boya Tabancaları,2026.05.25
@@ -1719,10 +1731,6 @@ Atlas Zımpara A4 Boyutunda  3 Adet 180 Kum,369.25,Boya Tabancaları,2026.05.25
 Atlas Zımpara A4 Boyutunda  3 Adet 150 Kum,369.25,Boya Tabancaları,2026.05.25
 Atlas Zımpara A4 Boyutunda  3 Adet 120 Kum,369.25,Boya Tabancaları,2026.05.25
 Atlas Zımpara A4 Boyutunda  3 Adet 100 Kum,369.25,Boya Tabancaları,2026.05.25
-Hmlt260 Fonksiyonel Raspalama 260w,3422.25,Boya Tabancaları,2026.05.25
-H3504 300 Watt Titreşimli Zımpara,2866.5,Boya Tabancaları,2026.05.25
-Ps20s Akülü Polisaj 30000rpm 254mm Akü Ve Şarj Hariç,4265.62,Boya Tabancaları,2026.05.25
-Hso150 Titreşimli Zımpara 150w,1514.7,Boya Tabancaları,2026.05.25
 C450 150 Mm 6 Delikli 120 Kum Zımpara Kağıdı 50&#039;li 2608621725,640.15,Boya Tabancaları,2026.05.25
 C450 125 Mm Deliksiz 320 Kum Zımpara Kağıdı 50&#039;li 2608621756,534.49,Boya Tabancaları,2026.05.25
 C450 125 Mm Deliksiz 240 Kum Zımpara Kağıdı 50&#039;li 2608621755,534.49,Boya Tabancaları,2026.05.25
@@ -1742,20 +1750,20 @@ C450 150 Mm 15 Delikli 60 Kum Zımpara Kağıdı 50&#039;li 2608621731,744.56,Bo
 C450 150 Mm 6 Delikli 80 Kum Zımpara Kağıdı 50&#039;li 2608621723,807.95,Boya Tabancaları,2026.05.25
 C450 150 Mm 15 Delikli 320 Kum Zımpara Kağıdı 50&#039;li 2608621738,640.15,Boya Tabancaları,2026.05.25
 Flap Disk Zımpara 115mm - 80 Kum,89.99,Boya Tabancaları,2026.05.25
-Alçıpan Zımpara Makinesi KLDZ8821,9311.83,Boya Tabancaları,2026.05.25
-Kl Pro Klez35230 350 W Titreşimli Zımpara,2386.85,Boya Tabancaları,2026.05.25
-Klez43110 150watt Profesyonel Titreşimli Zımpara,2169.77,Boya Tabancaları,2026.05.25
-Klpro Klps18b-50 18volt/5.0ah Li-ion Çift Akülü Kömürsüz 125mm Profesyonel Polisaj Makinesi,10853.15,Boya Tabancaları,2026.05.25
 Klpro Klez18-20 18v/2.0ah. 125mm Çift Akülü Şarjlı Eksantrik Zımpara,4829.04,Boya Tabancaları,2026.05.25
 Tc-pe 150 Havalı Zımpara - 4133330,3401.85,Boya Tabancaları,2026.05.25
 Kleco 1200w Polisaj Makinesi (pasta Cila) Ke12180ps,2847.51,Boya Tabancaları,2026.05.25
+Kl Pro Klez35230 350 W Titreşimli Zımpara,2386.85,Boya Tabancaları,2026.05.25
+Klez43110 150watt Profesyonel Titreşimli Zımpara,2169.77,Boya Tabancaları,2026.05.25
+Klpro Klps18b-50 18volt/5.0ah Li-ion Çift Akülü Kömürsüz 125mm Profesyonel Polisaj Makinesi,10853.15,Boya Tabancaları,2026.05.25
+Pho 2000 680 W Planya Makinesi 06032a4100,6706.47,Boya Tabancaları,2026.05.25
+Nikon N32063 60 Kum 60x15 Saplı Fırfır Zımpara,186.69,Boya Tabancaları,2026.05.25
 Cat Power 3453 Titreşim Zımpara 350 Watt,4164.92,Boya Tabancaları,2026.05.25
 Havalı Kumlama Tabanacası Mtl,1038.0,Boya Tabancaları,2026.05.25
 Polisaj Mke,2537.0,Boya Tabancaları,2026.05.25
 Cat Power 1811 Havalı Orbital Zımpara 150 Mm,4934.16,Boya Tabancaları,2026.05.25
 Ka280k-qs 220 Watt Autoselect Çok Amaçlı Zımpara,5174.27,Boya Tabancaları,2026.05.25
 Klpj42180 1400w 180 Mm Profesyonel Polisaj Makinesi,3895.58,Boya Tabancaları,2026.05.25
-Nikon N32063 60 Kum 60x15 Saplı Fırfır Zımpara,186.69,Boya Tabancaları,2026.05.25
 Alman Pro 4000 Watt Bakır Sargılı Motor Korumalı Sistem Çift Bıçaklı Planya Rende Makinesi-mavi,1999.0,Boya Tabancaları,2026.05.25
 Alman Pro 4000 Watt Bakır Sargılı Motor Korumalı Sistem Çift Bıçaklı Planya Rende Makinesi-sarı,1999.0,Boya Tabancaları,2026.05.25
 Fixonic B.h.d Bhd00812 115mm Cırt Taban,140.0,Boya Tabancaları,2026.05.25
@@ -1765,7 +1773,6 @@ Kl Pro Klzc6030e Elektrikli Profesyonel 15mm Çivi Çakma Ve 8/16 Zımba Çakma 
 Kl Pro Kllzr232 Profesyonel Yatay Dikey Ve Nokta Otomatik Hizalamalı Lazer Distomatı,8259.57,Boya Tabancaları,2026.05.25
 Kl Pro Klez35230 Titreşimli Zımpara 350w,2434.52,Boya Tabancaları,2026.05.25
 Cc-po 1100/1e Çantalı Polisaj Ve Zımpara Makinesi-2093264 Kırmızı,5783.39,Boya Tabancaları,2026.05.25
-Pho 2000 680 W Planya Makinesi 06032a4100,6706.47,Boya Tabancaları,2026.05.25
 Klpro Kldz8821 880 W Profesyonel Alçıpan Zımpara Makinesi,9311.83,Boya Tabancaları,2026.05.25
 Klpj7171 720watt 150mm Profesyonel Orbital Polisaj Makinesi,6353.27,Boya Tabancaları,2026.05.25
 10&#039;&#039; Planya Ve Kalınlık Makinası,31232.16,Boya Tabancaları,2026.05.25
@@ -1799,33 +1806,35 @@ Rtrmax Rtm4730 Devi̇r Ayarli 260 W 13.000 D/dk Ti̇treşi̇mli̇ Zimpara,2220.7
 Rtrmax Rtm4750 Devi̇r Ayarli 380 Watt Zimpara Maki̇nesi̇,2602.33,Boya Tabancaları,2026.05.25
 Rtrmax Rtm4770 Devi̇r Ayarli 350 Watt Orbi̇tal Poli̇saj Maki̇nesi̇,8885.44,Boya Tabancaları,2026.05.25
 Rtrmax Rtm417a Zımpara Taş Motoru 350 W 175x20x16m,2810.51,Boya Tabancaları,2026.05.25
-Rtrmax Rtm1495 Devi̇r Ayarli 1200 Watt 180mm Poli̇saj Maki̇nesi̇,3620.55,Boya Tabancaları,2026.05.25
 Rtrmax Rtx2047 Akülü Kömürsüz Planya 18 Volt 4ah Çi̇ft Akü,8731.64,Boya Tabancaları,2026.05.25
 Rtrmax Rtx2045 Akülü Kömürsüz Devi̇r Ayarli 18v 4 Ah Çi̇ft Akü Tank Zimpara,9102.12,Boya Tabancaları,2026.05.25
 Rtrmax Rtx2047b Akülü Kömürsüz Planya 18v 4ah (aküsüz Ve Şarj Aletsi̇z Satilmaktadir),4762.23,Boya Tabancaları,2026.05.25
 Rtrmax Rtx2045b Kömürsüz Devi̇r Ayarli Akülü 18v 4 Ah Tank Zimpara (aküsüz Ve Şarj Aletsi̇z ),4467.54,Boya Tabancaları,2026.05.25
 Polisaj Makinası Rtm1490,3525.25,Boya Tabancaları,2026.05.25
-Cmc 180 Mm Polisaj Makinası 2000w - Cmc3905,3599.73,Boya Tabancaları,2026.05.25
-P20st 82mm 580w Profesyonel Planya Makinesi,8682.29,Boya Tabancaları,2026.05.25
 Rtrmax Rtm3990 Elektrikli Planya 900w 82*3mm,2889.88,Boya Tabancaları,2026.05.25
 Orbital Polisaj Makinesi Rtm1450,5294.21,Boya Tabancaları,2026.05.25
+Cmc 180 Mm Polisaj Makinası 2000w - Cmc3905,3599.73,Boya Tabancaları,2026.05.25
+Rtrmax Rtm1495 Devi̇r Ayarli 1200 Watt 180mm Poli̇saj Maki̇nesi̇,3620.55,Boya Tabancaları,2026.05.25
+P20st 82mm 580w Profesyonel Planya Makinesi,8682.29,Boya Tabancaları,2026.05.25
 Rtrmax Rtrmax Alipçi Taşlama Uzun 450 W,2275.69,Boya Tabancaları,2026.05.25
 Gtr 550 Alçipan Zimpara,16036.0,Boya Tabancaları,2026.05.25
 Sp137 Polisaj Makinesi 1300 Watt 180mm,5877.0,Boya Tabancaları,2026.05.25
+Gss 140-1 A Titreşimli Zımpara Makinası,4184.0,Boya Tabancaları,2026.05.25
 Dw733 1800watt 317mm Prof. Taşınılabilir Kalınlık Makinası,35774.0,Boya Tabancaları,2026.05.25
 "Tc-us 350, Tezgah Zımpara - 4466154",5930.0,Boya Tabancaları,2026.05.25
-Gss 140-1 A Titreşimli Zımpara Makinası,4184.0,Boya Tabancaları,2026.05.25
 Easysander 18v-8 (solo) Akülü Zımpara,2874.0,Boya Tabancaları,2026.05.25
 Psm 160 A Delta Zımpara - 0603377000,3328.0,Boya Tabancaları,2026.05.25
 Professional Gho 40-82 C Planya,16713.0,Boya Tabancaları,2026.05.25
 Pex 300 Ae Zımpara Makinesi,4430.0,Boya Tabancaları,2026.05.25
 X-lock 115mm R444 G 36 Expert For Metal Fiber Zımpara Disk - 2608619166,139.0,Boya Tabancaları,2026.05.25
 Epn6082chg El Planya Makinası 600 Watt,4225.0,Boya Tabancaları,2026.05.25
-Psm Primo Üçgen Zımpara 93mm 50w,2360.0,Boya Tabancaları,2026.05.25
-Aeg Bex18sbl-125-602tc 2x6.0ah Çift Akülü Kömürsüz Titreşim Zımpara - 4935500068,29438.0,Boya Tabancaları,2026.05.25
-Gex 12v-32 Eksantrik Zımpara Makinesi Solo,5632.0,Boya Tabancaları,2026.05.25
+Pbs 75 Ae Tank Zımpara,7138.0,Boya Tabancaları,2026.05.25
+Professional Gpo 14-180 S Polisaj Makinesi,7601.0,Boya Tabancaları,2026.05.25
 Gex 18v-150-3 Akülü Eksantrik Zımpara Makinesi,11311.0,Boya Tabancaları,2026.05.25
+Psm Primo Üçgen Zımpara 93mm 50w,2364.0,Boya Tabancaları,2026.05.25
+Aeg Bex18sbl-125-602tc 2x6.0ah Çift Akülü Kömürsüz Titreşim Zımpara - 4935500068,29544.0,Boya Tabancaları,2026.05.25
 Black&amp;decker Ka191ek-qs 480w 125mm Eksantrik Zımpara,3057.0,Boya Tabancaları,2026.05.25
+Tc-wd 200/150 Islak Kuru Taş Motoru - 4417242,4181.0,Boya Tabancaları,2026.05.25
 Wx822 20volt 2.0ah. Li-ion Şarjlı Profesyonel Üçgen Mouse Zımpara,5363.13,Boya Tabancaları,2026.05.25
 Wx615 750watt 82mm Çift Bıçaklı Profesyonel Planya,5444.95,Boya Tabancaları,2026.05.25
 Wx648 65watt Mouse Zımpara,2640.4,Boya Tabancaları,2026.05.25
@@ -1845,11 +1854,13 @@ Dx49.1 350watt Profesyonel Çok Amaçlı Devir Ayarlı Kesme Raspalama Ve Zımpa
 Wa5098 3 Parça Universal Harç Zımparası Ve Raspalama Aksesuar Seti,2167.42,Boya Tabancaları,2026.05.25
 "Wa5099 18 Parça Universal Metal, Ahşap Kesme Ve Zımpara Kâğıdı Aksesuar Seti",2282.58,Boya Tabancaları,2026.05.25
 "Wa5092 4 Parça Universal Metal, Ahşap Kesme Ve Raspalama Aksesuar Seti",2629.55,Boya Tabancaları,2026.05.25
-Dx48 950watt Profesyonel Devir Ayarlı Tank Zımpara,6688.38,Boya Tabancaları,2026.05.25
 Dx42b 18volt 125mm Profesyonel Devir Ayarlı Eksantrik Zımpara (akü Dahil Değildir),3928.28,Boya Tabancaları,2026.05.25
+Dx48 950watt Profesyonel Devir Ayarlı Tank Zımpara,6688.38,Boya Tabancaları,2026.05.25
 Dx41 18volt/4.0ah Li-ion Tek Akülü Kömürsüz Profesyonel Çok Amaçlı Devir Ayarlı Raspalama+14 Adet Aksesuar,13064.39,Boya Tabancaları,2026.05.25
 Kress Kud20.9 20volt 125mm Kömürsüz Profesyonel Devir Ayarlı Eksantrik Zımpara (akü Dahil Değildir),5708.59,Boya Tabancaları,2026.05.25
 Wx856.9 20volt 254mm Şarjlı Orbital Polisaj Makinesi (akü Dahil Değildir),5790.66,Boya Tabancaları,2026.05.25
+Metal Spral Zımpara 80 Kum 115 mm,179.9,Boya Tabancaları,2026.05.25
+Bant Zımpara 13 mm 60 Kumlu (408),279.9,Boya Tabancaları,2026.05.25
 115 Mm M14 Fiber Disk Zımpara Tabanı 2608601005,615.0,Boya Tabancaları,2026.05.25
 150 Mm Zımpara Tabanı Yumuşak Gex 2608601115,1782.0,Boya Tabancaları,2026.05.25
 Psm Zımpara Kağıdı 5&#039;li 95 X 135mm 40 Kum 2609256a68,433.0,Boya Tabancaları,2026.05.25
@@ -1868,8 +1879,6 @@ R782 Expert 115 Mm 60 Kum Inox Disk Zımpara 25&#039;li2608621821,3573.0,Boya Ta
 125 Mm Zımpara Tabanı Yumuşak 2608601118,1620.0,Boya Tabancaları,2026.05.25
 M480 Ağ Zımpara 150mm 220 Kum 5&#039;li Paket 2608621167,566.0,Boya Tabancaları,2026.05.25
 Psm Zımpara Kağıdı 6&#039;lı Set 95 X 135mm 2609256a72,433.0,Boya Tabancaları,2026.05.25
-Zımpara Kağıdı 10&#039;lu 93 X 230 Mm 120 Kum 8 Delik 2609256a97,466.0,Boya Tabancaları,2026.05.25
-Zımpara Kağıdı 10&#039;lu 93 X 230 Mm 60 Kum 8 Delik 2609256a95,459.0,Boya Tabancaları,2026.05.25
 Kraftixx Iw 225 Invertör Kaynak Makinesi,11899.0,Kaynak Makineleri,2026.05.25
 Ministick Inverter Elektrod Kaynak Makinesi,9250.0,Kaynak Makineleri,2026.05.25
 Alman Mma 250 Amper Profesyonel Dijital Göstergeli Invertör Kaynak Makinesi,5999.0,Kaynak Makineleri,2026.05.25
@@ -1880,6 +1889,7 @@ Wd200ic2 Kaynak Makinası 200a,13250.0,Kaynak Makineleri,2026.05.25
 200 Amper Elektrot Kaynak Makinesi Inverter Kaynak Cihazı Kaynak Maskesi Ve Tel Fırçalı,5750.0,Kaynak Makineleri,2026.05.25
 Japon Techno Special Seri 200 Amper Göstergeli Beraber Invertör Kaynak Makinası Demirkaynak,5200.0,Kaynak Makineleri,2026.05.25
 200 Amper Kaynak Makinası Taşıma Çantası Hediyeli,6500.0,Kaynak Makineleri,2026.05.25
+"Inventör Dijital Göstergeli Kaynak Makinası 250i Amper 2,5 3 Çubugu Sorunsuz Eritir",4299.0,Kaynak Makineleri,2026.05.25
 Klpro Klmma200x 200 Amper Mma/elektrod İnverter Kaynak Makinesi,12299.0,Kaynak Makineleri,2026.05.25
 Zenweld Arc 200s Inverter Kaynak Maki̇nesi̇ 200 Amper,11999.0,Kaynak Makineleri,2026.05.25
 Monostick 200i İnverter Kaynak Makinesi,15738.0,Kaynak Makineleri,2026.05.25
@@ -1915,7 +1925,6 @@ Klmma220 220 Amper Inverter Kaynak Makinesi,23825.29,Kaynak Makineleri,2026.05.2
 Inverter 255 Ultra Kaynak Maki̇nesi̇ 250 Amper,44999.0,Kaynak Makineleri,2026.05.25
 Ege Yıldız Pprc Boru Tamir Çubuğu,161.44,Kaynak Makineleri,2026.05.25
 Askaynak As Asp-308l Süper Krom Elektrod 2.50x250,1075.7,Kaynak Makineleri,2026.05.25
-Fastbond 10253 Sıcak Silikon Tabancası 40 Watt,570.13,Kaynak Makineleri,2026.05.25
 "Askaynak As Asp-308l Süper Krom Elektrod 3,20x300",1525.0,Kaynak Makineleri,2026.05.25
 Fastbond 27128 Kalem Havya 80 Watt,551.38,Kaynak Makineleri,2026.05.25
 Fastbond 10261 Sıcak Silikon Tabancası 100 Watt,648.26,Kaynak Makineleri,2026.05.25
@@ -1925,52 +1934,41 @@ Fastbond 27125 Kalem Havya 40 Watt,404.51,Kaynak Makineleri,2026.05.25
 Ayarlı Otomatik Kararan Kaynak Kafa Maskesi Colormatik+eldiven Hediyeli,1299.99,Kaynak Makineleri,2026.05.25
 250 Amper Inverter Kademeli Çanta Kaynak Makinesi + Lstct15-b Profesyonel Bez Alet Taşıma Çantası,7499.99,Kaynak Makineleri,2026.05.25
 Power Arc 200 Lt + 1 Paket 2.5mm Geka Elit Elektrot,14850.0,Kaynak Makineleri,2026.05.25
-250 Amper İnverter Dijital Ekran Fan Soğutma Kademeli Çanta Kaynak Makinesi Bakır Sargı,6499.99,Kaynak Makineleri,2026.05.25
-Kleco Ke200mma 200 Amper İnverter Kaynak Makinesi,11117.91,Kaynak Makineleri,2026.05.25
-4lü Eko Usta Set Invertör Kaynak Kırıcı Delici Şarjlı Matkap Spiral,8999.0,Kaynak Makineleri,2026.05.25
-Profesyonel Çift Kartlı 250 Amper Invertör Kaynak Makinası 3000 W Taşlama,6999.0,Kaynak Makineleri,2026.05.25
-Klpro Kemma160x 160 Amper Mma/elektrod İnverter Kaynak Makinesi,9423.59,Kaynak Makineleri,2026.05.25
 Rapid Eg Point Sıcak Silikon Tabancası 80 Watt 7 Mm İnce,1097.22,Kaynak Makineleri,2026.05.25
 Rapid Hobby Sıcak Silikon Tabancası 15 Watt,1254.15,Kaynak Makineleri,2026.05.25
 Rapid Eg212 Sıcak Silikon Tabancası 200 Watt,1544.92,Kaynak Makineleri,2026.05.25
 Sgs T13 Tetikli Şalümo 13 Cm,1264.93,Kaynak Makineleri,2026.05.25
 Soyberg Pro 160a İnverter Kaynak Makinası 160 Amper,9174.15,Kaynak Makineleri,2026.05.25
+250 Amper İnverter Dijital Ekran Fan Soğutma Kademeli Çanta Kaynak Makinesi Bakır Sargı,6499.99,Kaynak Makineleri,2026.05.25
+Kleco Ke200mma 200 Amper İnverter Kaynak Makinesi,11117.91,Kaynak Makineleri,2026.05.25
+4lü Eko Usta Set Invertör Kaynak Kırıcı Delici Şarjlı Matkap Spiral,8999.0,Kaynak Makineleri,2026.05.25
+Profesyonel Çift Kartlı 250 Amper Invertör Kaynak Makinası 3000 W Taşlama,6999.0,Kaynak Makineleri,2026.05.25
+Klpro Kemma160x 160 Amper Mma/elektrod İnverter Kaynak Makinesi,9423.59,Kaynak Makineleri,2026.05.25
 Alman 4lü Eko Usta Set Invertör Kaynak Kırıcı Delici Şarjlı Matkap Spiral,8999.0,Kaynak Makineleri,2026.05.25
 Soyberg Pro 205a İnverter Kaynak Makinası 205 Amper,12983.39,Kaynak Makineleri,2026.05.25
 "Soldex 337 Tüp Lehim Teli 25 Gr 1,2 Mm",1117.12,Kaynak Makineleri,2026.05.25
 "Powermaster 3221 Lehim Teli 200 Gr 0,80 Mm",1892.47,Kaynak Makineleri,2026.05.25
-Rtrmax Rtm5165 Inverter Kaynak Makinası 15-160a,12389.42,Kaynak Makineleri,2026.05.25
-Rtrmax Rtm5220 Inverter Kaynak Makinası 15-200a,13223.91,Kaynak Makineleri,2026.05.25
 RTM 5220 RTRMAX İNVERTER KAYNAK MAKİNESİ 200A ITALY,12656.97,Kaynak Makineleri,2026.05.25
 Rtrmax Rtm515 20-160 A Inverter Kaynak Makinası,9463.31,Kaynak Makineleri,2026.05.25
+Rtrmax Rtm5165 Inverter Kaynak Makinası 15-160a,12389.42,Kaynak Makineleri,2026.05.25
+Rtrmax Rtm5220 Inverter Kaynak Makinası 15-200a,13223.91,Kaynak Makineleri,2026.05.25
 Rtrmax Rtm520 200 Amp. Kaynak Mak. + Rtm102 Avuç Taşlama Set005,10599.0,Kaynak Makineleri,2026.05.25
 Rtrmax Rtm520 İnverter Kaynak Maki̇nesi̇ 200 Amper,10412.83,Kaynak Makineleri,2026.05.25
 Dz161 160 Amper Tig Lift/mma Çanta Tipi Profesyonel Dijital İnverter Kaynak Makinesi,12345.71,Kaynak Makineleri,2026.05.25
 Dz161t 160 Amper Tig Lift/mma Çanta Tipi Profesyonel Dijital İnverter Kaynak Makinesi + Cat Dx37 Avuç Taşlama,13875.51,Kaynak Makineleri,2026.05.25
+İnverter Kaynak Makinesi 160A KLMMA160,11184.81,Kaynak Makineleri,2026.05.25
 62275 Mega 220 Çantalı Elektrod İnverter Kaynak Makinası 200 Amp,10124.84,Kaynak Makineleri,2026.05.25
 Kl Eco 160a Inverter Kaynak Makinesi,8679.13,Kaynak Makineleri,2026.05.25
 Novax İnvertör Kaynak Makinası 200 A,7019.99,Kaynak Makineleri,2026.05.25
-İnverter Kaynak Makinesi 160A KLMMA160,11184.81,Kaynak Makineleri,2026.05.25
 58600 İnverter Kaynak Makinası 500 Amper,95481.38,Kaynak Makineleri,2026.05.25
 58550 İnverter Kaynak Makinesi 320 Amper,81391.67,Kaynak Makineleri,2026.05.25
 Yildiz Star Arc 180 Inverter Kaynak Makinesi,10950.0,Kaynak Makineleri,2026.05.25
 50075r Extra 200 İnverter Kaynak Makinası 200 Amper,8593.2,Kaynak Makineleri,2026.05.25
 Fastbond 10255 Sıcak Silikon Tabancası 60 Watt,479.89,Kaynak Makineleri,2026.05.25
-Cat202 2000 W Sıcak Hava Tabancası,1139.1,Kaynak Makineleri,2026.05.25
 Japon Techno Special Seri 200 Amper Göstergeli Beraber Invertör Kaynak Makinası,4999.0,Kaynak Makineleri,2026.05.25
 Sgs 5155 Invertör Kaynak Makinesi 125a,6100.0,Kaynak Makineleri,2026.05.25
 Plus Tig 200 Dc Pfc Tig/argon Kaynak Makinesi,38499.0,Kaynak Makineleri,2026.05.25
 Nuri̇ş MA200 E,8000.0,Kaynak Makineleri,2026.05.25
-89600 16 Mm Kaynak Kablosu 10 Metre - İtaly,5229.21,Kaynak Makineleri,2026.05.25
-İnvertör Kaynak Makinası 200 Amper - Ryn6155,9630.0,Kaynak Makineleri,2026.05.25
-İnvertör Kaynak Makinası 160 Amper - Ryn6154,8112.0,Kaynak Makineleri,2026.05.25
-Inverter Kaynak Makinası Pro 200,11483.25,Kaynak Makineleri,2026.05.25
-Ma200e İnverter Kaynak Makinesi 200a + Kaynak Maskesi Hediye,8850.0,Kaynak Makineleri,2026.05.25
-Arc 200s Mma Kaynak Makinası,12352.5,Kaynak Makineleri,2026.05.25
-Ma200e İnverter Kaynak Makinesi 200a,8450.0,Kaynak Makineleri,2026.05.25
-Ma200e İnverter Kaynak Makinesi 200a + 1 Paket 2.5mm Elektrot,8850.0,Kaynak Makineleri,2026.05.25
-51200 Antares 200 200 Amper İnverter Elektrod Kaynak Makinesi (mma),14279.57,Kaynak Makineleri,2026.05.25
-Power Arc 200 Pro Inverter Kaynak Makinası +kaynak Maskesi+elektrodu Fırçası Hediyeli,12999.0,Kaynak Makineleri,2026.05.25
 Pro Full Set İnvertır Kaynak Hilti Matkap Set Ve Uç Setleri...,4999.0,Kaynak Makineleri,2026.05.25
 Esab Savage A40 Colormatik Kaynak Baş Maskesi Siyah,17076.0,Kaynak Makineleri,2026.05.25
 Pro Full Set İnvertır Kaynak Ve Bakır Sargılı Taşlama Hediyeleri...,4999.0,Kaynak Makineleri,2026.05.25
@@ -1979,6 +1977,15 @@ Pro Alman 200 Amper Çift Kartlı Hava Soğutmalı Invertec Compact Kaynak Makin
 Megastick 200 Amper Kaynak Makinesi + Maske Hediyeli,13999.0,Kaynak Makineleri,2026.05.25
 Pro Full Set İnvertır Kaynak Hilti Matkap Taşlama Ve Tamamı Orjinal Full Hediyeli Ürün Takım Çantası,19999.0,Kaynak Makineleri,2026.05.25
 Pro Alman Seri 200 Amper Xçift Kartlı Göstergeli Beraber Invertör Kaynak Makinası Garantili.,4999.0,Kaynak Makineleri,2026.05.25
+Awelco 89700 25 Mm Kaynak Kablosu 10 Metre - İtaly,7365.45,Kaynak Makineleri,2026.05.25
+89600 16 Mm Kaynak Kablosu 10 Metre - İtaly,5229.21,Kaynak Makineleri,2026.05.25
+İnvertör Kaynak Makinası 200 Amper - Ryn6155,9630.0,Kaynak Makineleri,2026.05.25
+İnvertör Kaynak Makinası 160 Amper - Ryn6154,8112.0,Kaynak Makineleri,2026.05.25
+Ma200e İnverter Kaynak Makinesi 200a + Kaynak Maskesi Hediye,8850.0,Kaynak Makineleri,2026.05.25
+Ma200e İnverter Kaynak Makinesi 200a,8450.0,Kaynak Makineleri,2026.05.25
+Ma200e İnverter Kaynak Makinesi 200a + 1 Paket 2.5mm Elektrot,8850.0,Kaynak Makineleri,2026.05.25
+51200 Antares 200 200 Amper İnverter Elektrod Kaynak Makinesi (mma),14279.57,Kaynak Makineleri,2026.05.25
+Power Arc 200 Pro Inverter Kaynak Makinası +kaynak Maskesi+elektrodu Fırçası Hediyeli,12999.0,Kaynak Makineleri,2026.05.25
 90385 Helmet 2000-e  Din 11 Fıx Solarmatik Kaynak Maskesi,2544.07,Kaynak Makineleri,2026.05.25
 90390 Kaynak Maskesi Değişken Karartma,2788.03,Kaynak Makineleri,2026.05.25
 Mma 200 Amper Kaynak Makinası Dijital Ekran Yeni Nesil Kartlı,5000.0,Kaynak Makineleri,2026.05.25
@@ -1989,3 +1996,6 @@ Rdx50200 İnverter Dc Makinası 200A,15000.0,Kaynak Makineleri,2026.05.25
 Kaynak Makinası 250 Amper Yeşil,5000.0,Kaynak Makineleri,2026.05.25
 Büyük Kaynak Makas Eldiben Metre,17495.0,Kaynak Makineleri,2026.05.25
 Pro Full Alman İnvertır Kaynak Hilti Matkap Taşlama Taş Motoru Planya Dekupaj Hediyeli Set.,19999.0,Kaynak Makineleri,2026.05.25
+Cat202 2000 W Sıcak Hava Tabancası,1139.1,Kaynak Makineleri,2026.05.25
+Arc 200s Mma Kaynak Makinası,12420.0,Kaynak Makineleri,2026.05.25
+Inverter Kaynak Makinası Pro 200,11546.0,Kaynak Makineleri,2026.05.25
