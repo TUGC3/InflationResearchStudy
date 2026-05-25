@@ -45,7 +45,18 @@ IZMIR_SLUG_TO_DISTRICT = {
 }
 
 
-def human_like_scroll(driver: WebDriver, target_duration: float = 1.5):  # ⚡ Reduced from 2.0
+def _check_login_wall(driver: WebDriver):
+    """Helper to check if we hit the hard login block."""
+    page_source = driver.page_source.lower()
+    current_url = driver.current_url.lower()
+
+    if "sahibinden.com" in current_url:
+        if "giriş yapmanız gerekmektedir" in page_source or "secure.sahibinden.com/giris" in current_url:
+            logger.error("🚨 Hard login block detected!")
+            raise LoginRequiredException("Login wall hit.")
+
+
+def human_like_scroll(driver: WebDriver, target_duration: float = 1.5):
     """Simulates a natural scroll while collecting data on a strict time budget."""
     start_time = time.time()
     logger.info(f"      🖱️  Simulating human scroll behavior (~{target_duration}s)...")
@@ -61,7 +72,7 @@ def human_like_scroll(driver: WebDriver, target_duration: float = 1.5):  # ⚡ R
             new_pos = max(0, total_height - random.randint(100, 300))
 
         driver.execute_script(f"window.scrollTo({{top: {new_pos}, behavior: 'smooth'}});")
-        time.sleep(random.uniform(0.05, 0.2))  # ⚡ Faster micro-pauses
+        time.sleep(random.uniform(0.05, 0.2))
 
         if random.random() < 0.10:
             current_pos = driver.execute_script("return window.pageYOffset;")
@@ -70,31 +81,26 @@ def human_like_scroll(driver: WebDriver, target_duration: float = 1.5):  # ⚡ R
             time.sleep(random.uniform(0.05, 0.2))
 
     driver.execute_script(f"window.scrollTo({{top: {random.randint(100, 400)}, behavior: 'smooth'}});")
-    time.sleep(0.1)  # ⚡ Reduced from 0.3
+    time.sleep(0.1)
 
 
 def _wait_for_listings(driver: WebDriver) -> BeautifulSoup:
     """Manual intervention logic for CAPTCHAs and auto-restart for login blocks."""
-    time.sleep(random.uniform(0.5, 0.8))  # ⚡ Shorter initial wait
+    time.sleep(random.uniform(0.5, 0.8))
 
-    for _ in range(12):  # ⚡ Increased range because we are checking faster
-        page_source = driver.page_source.lower()
-        current_url = driver.current_url.lower()
-
-        # 1. DETECT THE LOGIN WALL (ONLY IF WE ARE ACTUALLY ON SAHIBINDEN)
-        if "sahibinden.com" in current_url:
-            if "giriş yapmanız gerekmektedir" in page_source or "secure.sahibinden.com/giris" in current_url:
-                logger.error("🚨 Hard login block detected!")
-                raise LoginRequiredException("Login wall hit.")
+    for _ in range(12):
+        # 1. DETECT THE LOGIN WALL
+        _check_login_wall(driver)
 
         # 2. CHECK IF LISTINGS LOADED
+        page_source = driver.page_source.lower()
         soup = BeautifulSoup(driver.page_source, "lxml")
         if soup.select("#searchResultsTable tbody tr.searchResultsItem") or "ilan bulunamadı" in page_source:
             return soup
 
-        time.sleep(0.5)  # ⚡ Poll the page every 0.5s instead of 2.0s
+        time.sleep(0.5)
 
-    # 3. MANUAL FALLBACK FOR STANDARD CAPTCHAS
+        # 3. MANUAL FALLBACK FOR STANDARD CAPTCHAS
     print("\n" + "=" * 60 + "\n🛑 CAPTCHA/BOT CHECK! Solve it manually.\n" + "=" * 60)
     input("   ▶ Press ENTER after listings are visible... ")
     return BeautifulSoup(driver.page_source, "lxml")
@@ -105,7 +111,8 @@ def warmup_session(driver: WebDriver) -> None:
     logger.info("🔥 Starting organic warmup flow...")
     try:
         driver.get("https://www.google.com")
-        time.sleep(2)
+        time.sleep(random.uniform(3.0, 5.0))  # 🐌 Slower
+
         try:
             consent_btn = driver.find_element("xpath", "//button[contains(., 'Accept') or contains(., 'Kabul')]")
             driver.execute_script("arguments[0].click();", consent_btn)
@@ -115,11 +122,14 @@ def warmup_session(driver: WebDriver) -> None:
         search_q = driver.find_element("name", "q")
         search_q.send_keys("sahibinden")
         search_q.send_keys(Keys.ENTER)
-        time.sleep(3)
+        time.sleep(random.uniform(3.0, 5.0))  # 🐌 Slower
 
         sahibinden_link = driver.find_element("xpath", "//a[contains(@href, 'sahibinden.com')]")
         driver.execute_script("arguments[0].click();", sahibinden_link)
-        time.sleep(4)
+        time.sleep(random.uniform(5.0, 7.0))  # 🐌 Slower
+
+        # 🚨 Check for login wall immediately after landing on the site
+        _check_login_wall(driver)
 
         try:
             cookie_btn = driver.find_element("xpath", "//button[text()='Kabul Et' or text()='Accept']")
@@ -131,25 +141,32 @@ def warmup_session(driver: WebDriver) -> None:
         search_bar = driver.find_element("id", "searchText")
         search_bar.send_keys("İzmir kiralık")
         search_bar.send_keys(Keys.ENTER)
-        time.sleep(5)
+        time.sleep(random.uniform(5.0, 8.0))  # 🐌 Slower
 
-        human_like_scroll(driver)
+        # 🚨 Check again after performing a search
+        _check_login_wall(driver)
+
+        # Override the fast scroll to be slower during warmup
+        human_like_scroll(driver, target_duration=4.0)
 
         logger.info("  → Expanding district filters...")
         ilce_filter = driver.find_elements("xpath",
                                            "//li[contains(@class, 'filter-item')]//*[contains(text(), 'İlçe')]")
         if ilce_filter:
             driver.execute_script("arguments[0].click();", ilce_filter[0])
-            time.sleep(3)
+            time.sleep(random.uniform(3.0, 5.0))  # 🐌 Slower
 
         logger.info("🚀 Warmup complete!")
+
+    except LoginRequiredException:
+        # Re-raise so the main loop catches it and restarts
+        raise
     except Exception as e:
         logger.warning(f"⚠️ Warmup failed: {e}. Moving to scraping.")
 
 
 def load_and_bypass(driver: WebDriver, url: str) -> BeautifulSoup:
     driver.execute_script(f"window.location.href = '{url}';")
-    # ⚡ Removed the 1-second sleep here
     return _wait_for_listings(driver)
 
 
