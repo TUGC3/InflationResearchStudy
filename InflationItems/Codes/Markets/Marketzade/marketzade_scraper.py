@@ -33,7 +33,7 @@ log = logging.getLogger(__name__)
 
 class MarketzadeScraper:
 
-    CSV_HEADERS = ["tarih", "kategori", "urun_adi", "fiyat", "para_birimi"]
+    CSV_HEADERS = ["item_name", "price", "tarih", "kategori", "para_birimi"]
 
     API_BASE = "https://marketzade.com/wp-json/wc/store/v1/products"
 
@@ -146,10 +146,10 @@ class MarketzadeScraper:
                     continue
 
                 products.append({
+                    "item_name":   name,
+                    "price":       price,
                     "tarih":       self.today,
                     "kategori":    category,
-                    "urun_adi":    name,
-                    "fiyat":       price,
                     "para_birimi": "TRY",
                 })
 

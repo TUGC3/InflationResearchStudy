@@ -11,7 +11,7 @@ Kullanım:
     python hausmart_scraper.py
 
 Çıktı:
-    hausmart_YYYY-MM-DD.csv  →  Category | Product Name | Price | Date
+    hausmart_YYYY-MM-DD.csv  →  item_name | price | category | date
 """
 
 import csv
@@ -217,10 +217,10 @@ def parse_products(html: str, category_name: str, date_str: str) -> list[dict]:
         seen.add(canonical)
         products.append({
             "canonical":    canonical,
-            "Category":     category_name,
-            "Product Name": title,
-            "Price":        price,
-            "Date":         date_str,
+            "item_name":    title,
+            "price":        price,
+            "category":     category_name,
+            "date":         date_str,
         })
 
     return products
@@ -298,8 +298,8 @@ def scrape_category(category: dict, driver: webdriver.Chrome, date_str: str) -> 
     # en düşük fiyatlı kaydı tut (= aktif satış fiyatı).
     name_best: dict[str, dict] = {}
     for p in results.values():
-        name = p["Product Name"]
-        if name not in name_best or p["Price"] < name_best[name]["Price"]:
+        name = p["item_name"]
+        if name not in name_best or p["price"] < name_best[name]["price"]:
             name_best[name] = p
 
     removed = len(results) - len(name_best)
@@ -356,10 +356,10 @@ def main():
 
     final = sorted(
         all_products,
-        key=lambda p: (p["Category"], p["Product Name"]),
+        key=lambda p: (p["category"], p["item_name"]),
     )
 
-    fieldnames = ["Category", "Product Name", "Price", "Date"]
+    fieldnames = ["item_name", "price", "category", "date"]
     with open(csv_path, "w", encoding="utf-8-sig", newline="") as f:
         writer = csv.DictWriter(f, fieldnames=fieldnames, extrasaction="ignore")
         writer.writeheader()

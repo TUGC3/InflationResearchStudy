@@ -1,13 +1,12 @@
 import time
 import csv
 import os
+import random
 import tempfile
 from datetime import date, datetime
 from pathlib import Path
 import undetected_chromedriver as uc
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
 
 # ── Repo-relative output path ─────────────────────────────────────────────────
 # Bu dosya: InflationItems/Codes/TechnologicalProducts/Koçtaş/koctas_scraper.py
@@ -50,7 +49,7 @@ def make_driver():
         "profile.managed_default_content_settings.images": 2,
         "profile.managed_default_content_settings.stylesheets": 2,
     })
-    return uc.Chrome(options=opts, use_subprocess=True, version_main=147)
+    return uc.Chrome(options=opts, use_subprocess=True, version_main=148)
 
 def get_total_pages(driver):
     try:
@@ -60,16 +59,32 @@ def get_total_pages(driver):
     except Exception:
         return 1
 
+def _wait_for_datalayer(driver, timeout=12, interval=0.5):
+    """dataLayer'da product-impressions verisi olana kadar bekle."""
+    end = time.time() + timeout
+    while time.time() < end:
+        try:
+            count = driver.execute_script("""
+                var dl = window.dataLayer || [];
+                var n = 0;
+                dl.forEach(function(d) {
+                    if (d.event === 'product-impressions' && d.ecommerce && d.ecommerce.impressions) {
+                        n += d.ecommerce.impressions.length;
+                    }
+                });
+                return n;
+            """)
+            if count and count > 0:
+                return True
+        except Exception:
+            pass
+        time.sleep(interval)
+    return False
+
 def parse_page(driver, url):
     driver.get(url)
-    try:
-        WebDriverWait(driver, 15).until(
-            EC.presence_of_element_located((By.CSS_SELECTOR,
-                ".product-item, .product__name, [class*='product-name'], [class*='productName']"))
-        )
-    except Exception:
-        pass
-    time.sleep(3)
+    _wait_for_datalayer(driver, timeout=12, interval=0.5)
+    time.sleep(random.uniform(0.3, 0.8))
 
     products = []
     try:
@@ -109,11 +124,11 @@ def scrape_category(driver, cat_name, base_url, max_pages):
         print(f"[{elapsed()}]  [{cat_name}] Sayfa 1/{total_pages}: {len(prods)} ürün")
 
         for p in prods:
-            results.append({"Category": cat_name, "Product Name": p["name"],
-                            "Price": p["price"], "Date": DATE_STR})
+            results.append({"item_name": p["name"], "price": p["price"],
+                            "category": cat_name, "date": DATE_STR})
 
         for page in range(2, total_pages + 1):
-            time.sleep(2)
+            time.sleep(random.uniform(1.0, 2.0))
             prods = parse_page(driver, f"{base_url}?page={page}")
 
             if len(prods) == 0:
@@ -121,8 +136,8 @@ def scrape_category(driver, cat_name, base_url, max_pages):
                 break
 
             for p in prods:
-                results.append({"Category": cat_name, "Product Name": p["name"],
-                                "Price": p["price"], "Date": DATE_STR})
+                results.append({"item_name": p["name"], "price": p["price"],
+                                "category": cat_name, "date": DATE_STR})
             print(f"[{elapsed()}]  [{cat_name}] Sayfa {page}/{total_pages}: {len(prods)} ürün")
 
     except Exception as e:
@@ -147,19 +162,19 @@ def main():
             data = scrape_category(driver, cat_name, url, max_pages)
             all_results.extend(data)
             print(f"[{elapsed()}]  ✓ {cat_name}: {len(data)} ürün")
-            time.sleep(5)
+            time.sleep(random.uniform(2.5, 4.0))
     finally:
         driver.quit()
 
     seen = set()
     deduped = []
     for row in all_results:
-        key = (row["Category"], row["Product Name"])
+        key = (row["category"], row["item_name"])
         if key not in seen:
             seen.add(key)
             deduped.append(row)
 
-    fieldnames = ["Category", "Product Name", "Price", "Date"]
+    fieldnames = ["item_name", "price", "category", "date"]
     with open(OUT_FILE, "w", newline="", encoding="utf-8-sig") as f:
         writer = csv.DictWriter(f, fieldnames=fieldnames)
         writer.writeheader()

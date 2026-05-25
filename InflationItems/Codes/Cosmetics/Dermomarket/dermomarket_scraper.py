@@ -11,7 +11,7 @@ Kullanım:
     python dermomarket_scraper.py
 
 Çıktı:
-    dermomarket_YYYY-MM-DD.csv  →  category | product_name | price | date
+    dermomarket_YYYY-MM-DD.csv  →  item_name | price | category | date
 """
 
 import csv
@@ -167,9 +167,9 @@ def parse_page(html: str, category_name: str, date_str: str) -> list[dict]:
 
         seen_names.add(name)
         products.append({
-            "category":     category_name,
-            "product_name": name,
+            "item_name":    name,
             "price":        price,
+            "category":     category_name,
             "date":         date_str,
         })
 
@@ -259,8 +259,8 @@ def scrape_category(driver: webdriver.Chrome, category: dict, date_str: str) -> 
         # Cross-page dedup
         new_products = []
         for p in page_products:
-            if p["product_name"] not in seen_names:
-                seen_names.add(p["product_name"])
+            if p["item_name"] not in seen_names:
+                seen_names.add(p["item_name"])
                 new_products.append(p)
 
         all_products.extend(new_products)
@@ -305,7 +305,7 @@ def main():
     logger.info(f"  Kategori: {len(CATEGORIES)} | Worker: {DEFAULT_WORKERS}")
     logger.info("=" * 55)
 
-    fieldnames = ["category", "product_name", "price", "date"]
+    fieldnames = ["item_name", "price", "category", "date"]
     all_products = []
 
     # Global dedup: aynı ürün birden fazla kategoride olabilir
@@ -324,7 +324,7 @@ def main():
 
                 new_count = 0
                 for p in cat_products:
-                    key = p["product_name"]
+                    key = p["item_name"]
                     if key not in global_seen:
                         global_seen.add(key)
                         all_products.append(p)
@@ -345,7 +345,7 @@ def main():
                 logger.error(f"  [{cat['name']}] Hata: {exc}")
 
     # CSV kaydet
-    all_products.sort(key=lambda p: (p["category"], p["product_name"]))
+    all_products.sort(key=lambda p: (p["category"], p["item_name"]))
 
     with open(csv_path, "w", newline="", encoding="utf-8-sig") as f:
         writer = csv.DictWriter(f, fieldnames=fieldnames)
