@@ -1,0 +1,751 @@
+Gıda	Food	22.1040
+Tahıllar ve tahıl ürünleri 	Cereals and cereal products 	4.4505
+Tahıllar 	Cereals 	0.4673
+Pirinç	Rice
+Bulgur 	Bulgur (cracked wheat)
+Tahıl unları 	Flour of cereals 	0.3604
+Buğday unu 	Wheat flour
+Ekmek ve unlu mamuller 	Bread and bakery products 	3.3873
+Ekmek	Bread
+Diğer pastane ürünleri	Other bakery and patisserie products
+Bisküvi	Biscuits
+Kraker	Crackers
+Gofret	Wafer
+Baklava	Baklava
+Simit, poğaça vb. (fırın, market vb. yerlerde satılan)	Simit, poğaça etc. (offered in bakeries, supermarkets, etc.)
+Kahvaltılık tahıl ürünleri 	Breakfast cereals 	0.0284
+Kahvaltılık tahıl gevreği	Breakfast cereal
+Makarna, erişte, kuskus ve benzeri makarna ürünleri 	Macaroni, noodles, couscous and similar pasta products 	0.2070
+Makarna 	Pasta (dried)
+Şehriye 	Vermicelli and soup pasta
+Canlı hayvanlar, kesilen kara hayvanlarının etleri ve diğer kısımları 	Live animals, and meat and other parts of slaughtered land animals 	4.6082
+Et, taze, soğutulmuş veya dondurulmuş 	Meat, fresh, chilled or frozen 	3.6716
+Dana eti 	Beef (veal) meat
+Kuzu eti	Lamb meat
+Tavuk eti	Chicken meat
+Et, kurutulmuş, tuzlanmış, salamura edilmiş veya tütsülenmiş 	Meat, dried, salted, in brine or smoked 	0.6113
+Sucuk (kangal, dana etinden)	Fermented sausage (sucuk)
+Dana salam	Beef salami
+Beyaz et salam	Poultry salami
+Kesilmiş hayvanların sakatat ve diğer parçaları (taze, soğutulmuş veya dondurulmuş, kurutulmuş, tuzlanmış, salamura edilmiş veya tütsülenmiş) 	Offal, blood and other parts of slaughtered animals, fresh, chilled or frozen, dried, salted, in brine or smoked 	0.0832
+Sakatat	Offal (organ meats)
+Kesilmiş hayvanların et, sakatat ve diğer parçalarından yemeye hazır hale getirilmiş ürünler	Preparations of meat, offal, blood and other parts of slaughtered animals 	0.2422
+Sosis	Sausage
+Hazır tavuk yemekleri	Prepared poultry dishes
+Hazır et yemekleri	Prepared meat dishes
+Balıklar ve diğer su ürünleri 	Fish and other seafood 	0.3777
+Balıklar, canlı, taze, soğutulmuş veya dondurulmuş 	Fish, live, fresh, chilled or frozen 	0.3408
+Somon balığı (ithal)	Salmon (imported)
+Palamut balığı (yerli)	Bonito (domestic)
+Diğer balıklar	Other fishes
+Konserve edilmiş veya işlenmiş balık ürünleri	Fish preparations 	0.0369
+Konserve balık	Canned fish
+Süt, diğer süt ürünleri ve yumurtalar 	Milk, other dairy products and eggs 	3.2758
+Çiğ ve tam yağlı süt 	Raw and whole milk 	0.5202
+Tam yağlı süt (günlük ve uzun ömürlü)	Whole milk (fresh and uht)
+Yağı alınmış süt 	Skimmed milk 	0.0557
+Yarım yağlı süt (uzun ömürlü)	Semi-skimmed milk (uht)
+Diğer sütler ve krema 	Other milk and cream 	0.0531
+Krema, kaymak ve benzeri süt ürünleri	Cream, clotted cream and similar dairy products
+Peynir 	Cheese 	1.4972
+Beyaz peynir 	White brined cheese (feta-type)
+Kaşar peyniri	Kashar cheese (semi-hard yellow)
+Tulum peyniri	Tulum cheese
+Sürülebilir peynirler	Spreadable cheeses
+Yöresel peynirler	Local cheeses
+Yoğurt ve benzeri ürünler 	Yoghurt and similar products 	0.4911
+Yoğurt	Yoghurt
+Ayran 	Ayran (yoghurt-based drink)
+Süt bazlı tatlı ve içecekler 	Milk-based dessert and beverages 	0.0579
+Hazır sütlü tatlılar	Ready-to-eat milk desserts
+Aromalı sütler	Flavoured milk drinks
+Yumurtalar 	Eggs 	0.6006
+Yumurta	Eggs
+Sıvı ve katı yağlar 	Oils and fats 	1.4020
+Bitkisel sıvı yağlar 	Vegetable oils 	0.9962
+Ayçiçek yağı	Sunflower oil
+Zeytinyağı	Olive oil
+Tereyağı ve sütten elde edilen diğer yağlar 	Butter and other oils and fats derived from milk 	0.3332
+Tereyağı 	Butter
+Margarin 	Margarine and similar preparations 	0.0726
+Margarin	Margarine
+Meyveler ve sert kabuklu meyveler 	Fruits and nuts 	2.2924
+Hurma, incir ve tropikal meyveler, taze 	Dates, figs and tropical fruits, fresh 	0.2413
+Muz	Bananas
+Turunçgiller, taze 	Citrus fruits, fresh 	0.2696
+Limon	Lemon
+Portakal	Orange
+Mandalina	Mandarin (tangerine)
+Sert çekirdekli ve yumuşak çekirdekli meyveler, taze 	Stone fruits and pome fruits, fresh 	0.5059
+Elma	Apple
+Armut, ayva	Pears, quinces
+Şeftali	Peach
+Üzümsü meyveler, taze 	Berries, fresh 	0.0561
+Çilek	Strawberries
+Diğer meyveler, taze 	Other fruits, fresh 	0.3618
+Üzüm	Grapes (fresh)
+Kivi	Kiwi fruit
+Kavun	Melon
+Karpuz	Watermelon
+Nar	Pomegranate
+Kurutulmuş ve dehidre meyveler 	Fruits, dried and dehydrated 	0.1112
+Kuru üzüm 	Raisins (dried grapes)
+Kuru hurma	Dried dates
+Kuru kayısı	Dried apricots
+Sert kabuklu meyveler, kabuklu veya kabuksuz 	Nuts, in shell or shelled 	0.7465
+Badem içi	Almond kernels
+Fındık içi	Hazelnut kernels
+Antep fıstığı	Pistachios
+Ceviz içi	Walnut kernels
+Yer fıstığı	Peanuts
+Kabak çekirdeği	Pumpkin seeds
+Leblebi 	Roasted chickpeas (leblebi)
+Ay çekirdeği	Sunflower seeds
+Sebzeler, yumrulu sebzeler, plantainler, yemeklik muzlar ve bakliyat 	Vegetables, tubers, plantains, cooking bananas and pulses 	3.4432
+Yeşil yapraklı veya saplı sebzeler, taze veya soğutulmuş 	Leafy or stem vegetables, fresh or chilled 	0.2157
+Lahana 	Cabbage
+Karnabahar	Cauliflower
+Marul çeşitleri	Leaf lettuce (curly)
+Ispanak	Spinach
+Meyvesi yenen sebzeler, taze veya soğutulmuş (domates, biber, salatalık, kabak vb.)	Fruit-bearing vegetables, fresh or chilled 	1.3306
+Çarliston biber	Long green pepper (çarliston)
+Diğer taze biber çeşitleri	Other peppers
+Salatalık	Cucumber
+Patlıcan	Eggplant (aubergine)
+Domates	Tomatoes
+Kabak	Zucchini (courgette)
+Yeşil baklagil sebzeleri, taze veya soğutulmuş 	Green leguminous vegetables, fresh or chilled 	0.1487
+Taze fasulye	Fresh green beans
+Diğer sebzeler, taze veya soğutulmuş (soğan, sarımsak, havuç, mantar, zeytin vb.)	Other vegetables, fresh or chilled 	0.7404
+Havuç	Carrots
+Turp	Radish
+Kuru sarımsak	Dried garlic (bulb)
+Kuru soğan	Onions (dry)
+Pırasa	Leek
+Kültür mantarı	Cultivated mushrooms
+Zeytin (sofralık)	Table olives
+Yumrulu sebzeler	Tubers, plantains and cooking bananas, fresh or chilled 	0.3519
+Patates	Potatoes
+Kuru baklagiller	Pulses 	0.2172
+Kuru fasulye	Dried beans
+Nohut	Chickpeas
+Mercimek	Lentils
+Konserve edilmiş veya işlenmiş sebze içerikli ürünler (salça, turşu, zeytin vb.)	Vegetables, tubers, plantains, cooking bananas and pulses, ground, and in other preparations 	0.4388
+Sebze konserveleri	Canned vegetables
+Turşu	Pickles
+Salça	Tomato paste
+Cipsler	Chips (crisps)
+Şeker, şekerlemeler ve tatlılar 	Sugar, confectionery and desserts 	1.5254
+Şeker	Cane sugar and beet sugar 	0.3545
+Toz şeker	Granulated sugar
+Kesme şeker	Sugar cubes
+Reçel, meyve jöleleri, marmelat, meyve püreleri ve ezmeleri, bal 	Jams, marmalades, fruit jellies, purées and pastes, and honey 	0.2877
+Bal 	Honey
+Reçel	Jam
+Pekmez 	Molasses (grape molasses)
+Sert kabuklu meyve püresi, meyve ezmesi ve macunu 	Nut purées, nut butters and nut pastes 	0.0642
+Fındık ezmesi	Hazelnut paste
+Tahin	Tahini (sesame paste)
+Çikolata, kakao, kakao bazlı gıda ürünleri 	Chocolate, cocoa and cocoa-based food products 	0.3508
+Çikolata 	Chocolate
+Sürülebilir krem çikolata 	Chocolate spread
+Buz, dondurma ve buzlu şerbet (sorbe) 	Ice, ice cream and sorbets 	0.2133
+Dondurma	Ice cream
+Başka yerde sınıflandırılmamış tatlılar ve diğer şekerlemeler 	Other sugar confectionery and desserts n.e.c. 	0.2549
+Tahin helvası 	Halva (tahini halva)
+Lokum	Turkish delight
+Sakız	Chewing gum
+Ambalajlı şeker 	Wrapped candy
+Yemeye hazır gıdalar ve başka yerde sınıflandırılmamış diğer gıda ürünleri 	Ready-made food and other food products 	0.7287
+Yemeye hazır gıdalar (hazır pizza, börek, çorba vb.)	Ready-made food 	0.2643
+Hazır pizzalar	Frozen and ready pizzas
+Hazır çorbalar	Instant soups
+Hazır börekler	Ready meals (su böreği)
+Diğer hazır yemekler	Other ready meals
+Bebek mamaları 	Baby food 	0.0877
+Bebek sütü (toz karışım)	Infant formula (powdered mix)
+Tuz, çeşniler ve soslar 	Salt, condiments and sauces 	0.1317
+Tuz	Salt
+Sirke	Vinegar
+Ketçap	Ketchup
+Mayonez	Mayonnaise
+Baharatlar, yemeklerde kullanılan otlar ve tohumlar 	Spices, culinary herbs and seeds 	0.1755
+Taze aromatik otlar	Fresh herbs
+Baharatlar	Spices
+Başka yerde sınıflandırılmamış diğer gıda ürünleri 	Other food products n.e.c. 	0.0694
+Kabartma maddeleri	Raising agents
+Hazır toz tatlı karışımları	Instant dessert powders
+Alkolsüz içecekler	Non-alcoholic beverages	2.3404
+Meyve ve sebze suları 	Fruit and vegetable juices 	0.1832
+Meyve ve sebze suları 	Fruit and vegetable juices 	0.1832
+Meyve suyu	Fruit juice
+Kahve ve kahve ikameleri 	Coffee and coffee substitutes 	0.3373
+Kahve	Coffee and coffee substitutes 	0.3373
+Kahve	Coffee
+Hazır kahve	Instant coffee
+Çay, mate çayı ve demlenerek hazırlanan diğer bitkisel ürünler 	Tea, maté and other plant-derived products for infusion 	0.7050
+Çay ve demlenerek hazırlanan diğer bitkisel ürünler 	Tea, maté and other plant-derived products for infusion 	0.7050
+Çay	Tea
+Soğuk çay	Iced tea
+Maden suları ve kaynak suları 	Water 	0.5954
+Maden suları ve kaynak suları 	Water 	0.5954
+Su	Bottled water
+Maden suyu ve sodası 	Mineral water and soda
+Meşrubatlar	Soft drinks 	0.5195
+Meşrubatlar	Soft drinks 	0.5195
+Gazoz	Soft drinks
+Kola	Cola drinks
+Alkollü içecekler, tütün ve tütün ürünleri	Alcoholic beverages, tobacco	2.7549
+Alkollü içecekler	Alcoholic beverages	0.5977
+İçkiler ve likörler 	Spirits and liquors 	0.2781
+İçkiler ve likörler 	Spirits and liquors 	0.2781
+Rakı	Raki
+Votka 	Vodka
+Viski 	Whisky
+Şaraplar 	Wine 	0.0478
+Şarap, üzümden 	Wine from grapes 	0.0478
+Şarap	Wine
+Biralar 	Beer 	0.2718
+Biralar 	Beer 	0.2718
+Bira 	Beer
+Tütün ve tütün ürünleri	Tobacco	2.1572
+Tütün ve tütün ürünleri 	Tobacco 	2.1572
+Sigaralar	Cigarettes 	2.1572
+Sigaralar	Cigarettes
+Giyim ve ayakkabı	Clothing and footwear	7.9038
+Giyim	Clothing	6.7958
+Giysiler 	Garments 	6.5103
+Erkek ve erkek çocuk giysileri 	Garments for men or boys 	3.0621
+Erkek kaban 	Men’s overcoat
+Erkek mont 	Men’s jacket
+Erkek takım elbise 	Men’s suit
+Erkek ceket 	Men’s blazer and jacket
+Erkek pantolon 	Men’s trousers
+Erkek kazak	Men’s sweater
+Erkek gömlek 	Men’s shirt
+Erkek sweatshirt	Men’s sweatshirt
+Erkek tişört 	Men’s t-shirt
+Erkek eşofman altı 	Men’s sweatpants
+Erkek pijama takımı 	Men’s pyjamas
+Erkek iç çamaşırı 	Men’s underwear
+Erkek çorap 	Men’s socks
+Erkek çocuk mont 	Boys’ jacket
+Erkek çocuk pantolon 	Boys’ trousers
+Erkek çocuk sweatshirt	Boys’ sweatshirt
+Erkek çocuk tişört 	Boys’ t-shirt
+Erkek çocuk eşofman altı 	Boys’ sweatpants
+Erkek çocuk pijama takımı 	Boys’ pyjamas
+Erkek çocuk iç çamaşırı 	Boys’ underwear
+Erkek çocuk çorap 	Boys’ socks
+Kadın ve kız çocuk giysileri 	Garments for women or girls 	3.1893
+Kadın kaban 	Women’s overcoat
+Kadın mont 	Women’s jacket
+Kadın elbise	Women’s dress
+Kadın ceket 	Women’s blazer and jacket
+Kadın etek 	Women’s skirt
+Kadın pantolon 	Women’s trousers
+Kadın hırka	Women’s cardigan
+Kadın kazak	Women’s sweater
+Kadın gömlek 	Women’s shirt
+Kadın sweatshirt	Women’s sweatshirt
+Kadın tişört 	Women’s t-shirt
+Kadın eşofman altı 	Women’s sweatpants
+Kadın pijama takımı 	Women’s pyjamas
+Kadın iç çamaşırı 	Women’s underwear
+Kadın çorap 	Women’s socks
+Kız çocuk mont 	Girls’ jacket
+Kız çocuk pantolon 	Girls’ trousers
+Kız çocuk sweatshirt	Girls’ sweatshirt
+Kız çocuk tişört 	Girls’ t-shirt
+Kız çocuk tayt	Girls’ leggings
+Kız çocuk eşofman altı 	Girls’ sweatpants
+Kız çocuk pijama takımı 	Girls’ pyjamas
+Kız çocuk çorap 	Girls’ socks
+Bebek giysileri (0-2 yaş) 	Garments for infants (under 2 years of age) 	0.1409
+Bebek tulumu 	Baby overall
+Bebek pijama takımı 	Baby pyjamas
+Bebek iç çamaşırı 	Baby underwear
+Bebek elbise 	Baby dress
+Okul üniformaları 	School uniforms 	0.1181
+Okul forması	School uniform
+Diğer giyim eşyaları ve giyim aksesuarları 	Other articles of clothing and clothing accessories 	0.1945
+Diğer giyim eşyaları 	Other articles of clothing 	0.1945
+Erkek kemer	Men's belt
+Kadın eşarp	Women's scarf
+Giyim eşyalarının temizlenmesi, onarımı, tadilatı, dikimi ve kiralanması 	Cleaning, repair, tailoring and hire of clothing 	0.0909
+Giyim eşyalarının temizlenmesi 	Cleaning of clothing 	0.0154
+Kuru temizleme ücreti	Dry cleaning fee
+Giyim eşyalarının onarımı, tadilatı, dikimi ve kiralanması 	Repair, tailoring and hire of clothing 	0.0755
+Giysi tamir ücreti	Clothing repair fee
+Ayakkabılar	Footwear	1.1080
+Ayakkabılar 	Shoes and other footwear 	1.1080
+Erkek ayakkabıları 	Footwear for men 	0.5265
+Erkek ayakkabı	Men’s shoes
+Erkek bot	Men’s boots
+Erkek spor ayakkabısı 	Men’s sneakers
+Kadın ayakkabıları 	Footwear for women 	0.4054
+Kadın ayakkabı 	Women’s shoes
+Kadın bot 	Women’s boots
+Kadın spor ayakkabısı 	Women’s sneakers
+Kadın terlik	Women’s slippers
+Bebek ve çocuk ayakkabıları 	Footwear for infants and children 	0.1761
+Çocuk bot 	Children’s boots
+Çocuk spor ayakkabısı 	Children’s sneakers
+Konut, su, elektrik, gaz ve diğer yakıtlar	Housing, water, electricity, gas and other fuels	11.4020
+Konut için yapılan gerçek kira ödemeleri	Actual rental payments made for housing	6.7638
+Ana ikametgah için kiracılar tarafından ödenen gerçek kiralar 	Actual rental payments made by tenants for main residence 	6.7638
+Kiracılar tarafından ödenen gerçek kira 	Actual rental payments made by tenants for main residence 	6.7638
+Kiracılar tarafından ödenen gerçek kira	Actual rentals paid by tenants
+Konutun bakımı, onarımı ve güvenliği	Maintenance, repair and security of the dwelling	0.7980
+Konutun bakım ve onarımı için malzemeler ve güvenlik ekipmanları 	Security equipment and materials for dwelling maintenance and repair	0.3482
+Konutun bakım ve onarımı için malzemeler 	Materials for the maintenance and repair of the dwelling 	0.3482
+Badana ve boya malzemeleri	Paint and coating materials
+Yer ve duvar döşeme malzemeleri	Floor and wall covering materials
+Pvc kapı ve pencere malzemeleri	PVC door and window materials
+Sıhhi tesisat malzemeleri 	Plumbing materials
+Konutun bakım ve onarımına yönelik diğer malzemeler	Other materials for maintenance and repair of household
+Konutun bakım, onarım ve güvenlik hizmetleri 	Services for the maintenance, repair and security of the dwelling 	0.4497
+Konutun bakım, onarım ve güvenlik hizmetleri 	Services for the maintenance, repair and security of the dwelling 	0.4497
+Konutun bakım ve onarımına yönelik işçilik ücretleri	Labour fee for maintenance and repair of household
+Konutla ilgili su temini ve çeşitli hizmetler	Water supply and miscellaneous services relating to the dwelling	0.6621
+Su temini 	Water supply 	0.6621
+Su (şebeke suyu)	Water supply delivered through network systems 	0.6621
+Su (belediye şebeke suyu)	Water supply (municipal)
+Elektrik, gaz ve diğer yakıtlar	Electricity, gas and other fuels	3.1781
+Elektrik 	Electricity 	1.2737
+Elektrik 	Electricity 	1.2737
+Elektrik 	Electricity
+Gaz 	Gas 	1.4045
+Doğalgaz ve ilgili abonelik ücretleri 	Natural gas through networks 	1.0818
+Doğalgaz 	Natural gas (pipeline)
+Doğalgaz abonelik ücreti	Natural gas connection fee
+Tüpgaz (ev tüpü)	Liquefied hydrocarbons 	0.3227
+Tüpgaz (ev tüpü)	LPG cylinders
+Katı yakıtlar 	Solid fuels 	0.4999
+Kömür, kömür briketi ve turba 	Coal, coal briquettes, peat and peat briquettes 	0.3455
+Kömür 	Coal
+Yakacak odun, peletler ve briketler dahil 	Wood fuel, including pellets and briquettes 	0.1545
+Odun	Firewood
+Mobilya, mefruşat ve evde kullanılan ekipmanlar ile rutin ev bakım ve onarımı	Furnishings, household equipment and routine household maintenance	7.9201
+Mobilya, mefruşat ve halılar	Furniture, furnishings, and loose carpets	2.9962
+Mobilya, mefruşat ve halılar 	Furniture, furnishings and loose carpets 	2.9962
+Ev mobilyaları 	Household furniture 	2.6236
+Mutfak masası	Kitchen table
+Mutfak sandalyesi	Kitchen chair
+Yatak odası takımı 	Bedroom set
+Yatak 	Bed
+Yatak bazası 	Bed base
+Genç odası takımı 	Youth room set
+Oturma odası takımı 	Living room set
+Yemek odası takımı 	Dining room set
+Mefruşat, halılar ve kilimler 	Furnishings, loose carpets and rugs 	0.3726
+Halı 	Carpet (rug)
+Ev tekstilleri	Household textiles	0.6850
+Ev tekstilleri 	Household textiles 	0.6850
+Döşemelik kumaşlar ve perdeler 	Furnishing fabrics and curtains 	0.2310
+Perde 	Curtains
+Stor perde	Roller blinds
+Tül perde	Sheer curtains
+Yatak takımları ve yatak olarak kullanılan eşyalar 	Bed linen and bedding 	0.2841
+Yatak örtüsü 	Bedspread
+Yorgan 	Duvet
+Battaniye 	Blanket
+Pike takımı 	Pique set
+Nevresim takımı 	Duvet cover set
+Yastık	Pillow
+Masa ve banyo tekstili 	Table linen and bathroom linen 	0.0539
+Havlu 	Towel
+Diğer ev tekstilleri 	Other household textiles 	0.1160
+Banyo paspası 	Bath mat
+Diğer ev tekstili	Other home textiles
+Ev aletleri	Household appliances	1.9417
+Elektrikli veya elektriksiz büyük ev aletleri 	Major electric and other household appliances 	1.5981
+Elektrikli büyük mutfak eşyaları	Major kitchen appliances 	0.6798
+Buzdolabı 	Refrigerator
+Derin dondurucu	Deep freezer
+Bulaşık makinesi	Dishwasher
+Fırın ve ocaklar	Ovens and cookers
+Çamaşır makineleri ve kurutma makineleri 	Major laundry appliances 	0.3793
+Çamaşır makinesi 	Washing machine
+Çamaşır kurutma makinesi	Dryer
+Isıtıcılar, klimalar 	Heaters and air conditioners 	0.3188
+Klima	Air conditioner
+Soba 	Stove heater
+Kombi 	Combi boiler
+Temizlik ekipmanları (elektrik süpürgesi vb.)	Cleaning equipment 	0.2202
+Elektrikli süpürgeler	Vacuum cleaner
+Küçük ev aletleri 	Small household appliances 	0.1911
+Yiyecek pişirme ve işlemede kullanılan küçük aletler 	Small appliances for the cooking and processing of food 	0.0875
+Elektrikli kesici aletler (blender)	Food processors and blenders
+Elektrikli küçük ev aletleri 	Small electric appliances
+İçecek hazırlamada kullanılan küçük aletler 	Small appliances for the preparation of beverages 	0.0502
+Elektrikli çay makinesi	Electric tea maker
+Diğer küçük ev aletleri 	Other small household appliances 	0.0534
+Ütü	Iron
+Ev aletlerinin onarımı, kurulumu ve kiralanması 	Repair, installation and hire of household appliances 	0.1525
+Ev aletlerinin onarımı, kurulumu ve kiralanması 	Repair, installation and hire of household appliances 	0.1525
+Ev aletlerinin bakım ve onarımı	Repair of household appliances
+Züccaciye, yemek takımı ve ev gereçleri	Glassware, tableware and household utensils	0.7805
+Züccaciye, yemek takımı ve ev gereçleri 	Glassware, tableware and household utensils 	0.7805
+Cam, kristal, seramik, porselen ve çin porseleni eşyalar 	Glassware, crystal ware, ceramic ware and china ware 	0.3239
+Cam ev eşyası	Glass household utensils
+Porselen ev eşyası	Porcelain household utensils
+Çatal bıçak takımları ve gümüş çatal bıçak takımları 	Cutlery, flatware and silverware 	0.0586
+Kaşık, çatal, bıçak takımı (çelik)	Steel cutlery set
+Mutfak gereçleri ve eşyaları 	Kitchen utensils and articles 	0.3980
+Çelik mutfak eşyaları	Steel kitchenware
+Yapışmaz malzemeden mutfak eşyaları	Non-stick kitchenware
+Termos	Thermos
+Ev ve bahçe alet ve ekipmanları	Tools and equipment for house and garden	0.1770
+Motorlu olmayan ev ve bahçe aletleri ve çeşitli aksesuarlar 	Non-motorized tools and miscellaneous accessories 	0.1770
+Çeşitli hırdavat malzemeleri ve aksesuarlar (pil, ampul vb.)	Miscellaneous accessories 	0.1770
+Pil	Battery
+Ampul	Light bulb
+Rutin ev bakımı için mal ve hizmetler	Goods and services for routine household maintenance	1.3397
+Dayanıklı olmayan ev eşyaları 	Non-durable household goods 	1.0389
+Ev temizlik ve bakım ürünleri 	Household cleaning and maintenance products 	0.8402
+Çamaşır için temizlik ve bakım ürünleri	Laundry cleaning and care products
+Bulaşık için temizlik ve bakım ürünleri	Dishwashing cleaning and care products
+Hijyenik zeminler için temizlik ve bakım ürünleri	Floor hygiene cleaning and care products
+Temizlik bezleri	Cleaning cloths
+Yüzey temizlik havlusu	Surface cleaning towel and wipes
+Diğer dayanıklı olmayan ev eşyaları 	Other non-durable household goods 	0.1986
+Saklama ve muhafaza malzemeleri (streç film, alüminyum folyo vb.)	Storage and preservation materials (cling film, aluminum foil etc.)
+Kağıt sofra malzemeleri (kağıt havlu, kağıt peçete vb.)	Paper tableware (paper towel, napkin etc.)
+Diğer dayanıklı olmayan ev eşyaları 	Other non-durable household goods
+Ev içi hizmetler ve hanehalkı hizmetleri 	Domestic services and household services 	0.3008
+Diğer hanehalkı hizmetleri 	Other household services 	0.3008
+Ev eşyalarının bakım ve onarımına yönelik hizmetler	Household maintenance and repair services
+Gündelikçi ücreti	Maid and cleaners' fee
+Sağlık	Health	2.7923
+İlaçlar ve sağlık ürünleri	Medicines and health products	1.0036
+İlaçlar 	Medicines 	0.6872
+İlaçlar, aşılar ve diğer eczacılık ürünleri	Medicines, vaccines and other pharmaceutical preparations 	0.6872
+İlaçlar	Medicines
+İlaç katılım payı	Medicine copayment
+Yardımcı ürünler 	Assistive products 	0.3165
+Görmeye yardımcı ürünler 	Assistive products for vision 	0.2232
+Numaralı gözlük cam ve çerçevesi	Prescription eyeglass lenses and frames
+Kontakt lens	Contact lenses
+Hareket ve günlük yaşam için yardımcı ürünler 	Assistive products for mobility and daily living 	0.0932
+Günlük yaşam için destekleyici ürünler	Assistive products for daily life
+Ayaktan tedavi hizmetleri	Outpatient care services	0.9965
+Ayaktan ağız ve diş tedavi hizmetleri 	Outpatient dental services 	0.5978
+Diğer ayaktan ağız ve diş tedavi hizmetleri 	Other outpatient dental services 	0.5978
+Diş dolgusu ücreti	Dental filling fee
+Diş implantı ücreti	Dental implant fee
+Diş kanal tedavisi ücreti	Dental root canal treatment fee
+Diş protez kaplama ücreti	Dental crown and prosthesis fee
+Diğer ayaktan tedavi hizmetleri 	Other outpatient care services 	0.3988
+Ayaktan tedavi edici ve rehabilite edici hizmetler 	Outpatient curative and rehabilitative services 	0.3988
+Doktor muayene ücreti 	Doctor consultation fee
+Muayene katılım payı	Patient share for doctor consultation
+Fizik tedavi ücreti	Physical therapy fee
+Yatarak tedavi hizmetleri	Inpatient care services	0.7222
+Yatarak tedavi edici ve rehabilite edici hizmetler 	Inpatient curative and rehabilitative services 	0.7222
+Yatarak tedavi edici ve rehabilite edici hizmetler 	Inpatient curative and rehabilitative services 	0.7222
+Ameliyat ücreti 	Surgery fee
+Normal doğum ücreti	Normal delivery fee
+Sezaryen doğum ücreti	Caesarean delivery fee
+Diğer sağlık hizmetleri	Other health services	0.0699
+Tanısal görüntüleme hizmetleri ve medikal (tıbbi) laboratuvar hizmetleri 	Diagnostic imaging services and medical laboratory services 	0.0699
+Tanısal görüntüleme hizmetleri ve medikal (tıbbi) laboratuvar hizmetleri 	Diagnostic imaging services and medical laboratory services 	0.0699
+Röntgen ücreti	X-ray fee
+Ultrason ücreti 	Ultrasound fee
+Mr (emar) ücreti	MRI (magnetic resonance imaging) fee
+Laboratuvar tahlil ücreti 	Laboratory test fee
+Ulaştırma	Transport	16.6169
+Araç satın alımı	Purchase of vehicles	5.1178
+Motorlu taşıtlar 	Motor cars 	4.5857
+Birinci el motorlu taşıtlar 	New motor cars 	4.5857
+Benzinli otomobil	Petrol (gasoline) car
+Hibrit otomobil	Hybrid car
+Elektrikli otomobil	Electric car
+Motosikletler 	Motorcycles 	0.4769
+Motosikletler 	Motorcycles 	0.4769
+Motosiklet	Motorcycle
+Bisikletler 	Bicycles 	0.0553
+Bisikletler 	Bicycles 	0.0553
+Bisiklet	Bicycle
+Kişisel ulaşım araçlarının kullanımı	Operation of personal transport equipment	4.8757
+Kişisel ulaşım araçlarının parça ve aksesuarları 	Parts and accessories for personal transport equipment 	0.3585
+Lastikler 	Tyres 	0.1836
+Otomobil lastikleri	Vehicle tyres
+Kişisel ulaşım araçlarının parçaları 	Parts for personal transport equipment 	0.1124
+Otomobil yedek parça ve ekipmanları	Vehicle spare parts and equipment
+Kişisel ulaşım araçlarının aksesuarları 	Accessories for personal transport equipment 	0.0624
+Otomobil aksesuarları	Vehicle accessories
+Kişisel ulaşım araçları için yakıtlar ve yağlar 	Fuels and lubricants for personal transport equipment 	3.2290
+Motorin (Mazot) 	Diesel 	1.3919
+Motorin (mazot) 	Diesel fuel
+Benzin 	Petrol 	1.2364
+Benzin 	Petrol (gasoline)
+Kişisel ulaşım araçları için diğer yakıtlar 	Other fuels for personal transport equipment 	0.5801
+LPG ücreti (taşıtlar için)	LPG (for cars)
+Elektrikli araç şarj ücreti	Electric vehicle charging fee
+Yağlar 	Lubricants 	0.0207
+Motor yağları	Motor oils
+Kişisel ulaşım araçlarının bakım ve onarımı 	Maintenance and repair of personal transport equipment 	0.9917
+Kişisel ulaşım araçlarının bakım ve onarımı 	Maintenance and repair of personal transport equipment 	0.9917
+Otomobil yedek parça ve aksesuar montaj hizmeti	Installation of vehicle parts and accessories
+Otomobil tamir ve bakım hizmeti	Repair and maintenance service of vehicles
+Kişisel ulaşım araçları ile ilgili diğer hizmetler 	Other services related to personal transport equipment 	0.2965
+Geçiş ücretleri 	Toll facilities 	0.0343
+Otoban geçiş ücreti 	Motorway toll
+Köprü geçiş ücreti	Bridge toll
+Sürücü kursları, araç muayene, emisyon ölçüm ücreti vb. hizmetler	Driving lessons, tests, licences and roadworthiness tests 	0.1900
+Sürücü kursu ücreti	Driving course fee
+Araç muayene ve emisyon ölçüm ücreti	Vehicle inspection and emission fee
+Kişisel ulaşım araçlarının sürücüsüz olarak kiralanması	Hire of personal transport equipment without driver 	0.0723
+Araç kiralama ücreti	Car rental fee
+Yolcu taşıma hizmetleri	Passenger transport services	6.1420
+Demir yolu ile yolcu taşımacılığı 	Passenger transport by railway 	0.1151
+Tren ile yolcu taşımacılığı 	Passenger transport by train 	0.0984
+Tren bileti ücreti (şehirlerarası)	Intercity train fare
+Metro ve tramvay ile yolcu taşımacılığı 	Passenger transport by rapid transit and tram 	0.0167
+Metro bileti ücreti	Metro fare
+Tramvay bileti ücreti	Tram fare
+Kara yolu ile yolcu taşımacılığı 	Passenger transport by road 	5.1049
+Otobüs ile yolcu taşımacılığı 	Passenger transport by bus and coach 	3.6534
+Belediye otobüs bileti ücreti	Urban bus fare
+Şehirlerarası otobüs bileti ücreti 	Intercity bus fare
+Dolmuş ücreti	Shared taxi and minibus fare
+Taksi ve sürücüsü ile birlikte kiralanmış taşıtlarla yolcu taşımacılığı 	Passenger transport by taxi and hired vehicle with driver 	0.6625
+Taksi ücreti	Taxi fare
+Okul servisleri	Passenger transport for students to and from school 	0.7890
+Okul servisi ücreti 	School transport fee
+Hava yolu ile yolcu taşımacılığı 	Passenger transport by air 	0.8737
+Hava yolu ile yurt içi yolcu taşımacılığı 	Passenger transport by air, domestic 	0.5863
+Uçak bileti ücreti (yurtiçi)	Domestic flight fare
+Hava yolu ile yurt dışı yolcu taşımacılığı 	Passenger transport by air, international 	0.2874
+Uçak bileti ücreti (yurt dışı)	International flight fare
+Deniz ve iç sularda yolcu taşımacılığı 	Passenger transport by sea and inland waterway 	0.0483
+Deniz ve iç sularda yolcu taşımacılığı 	Passenger transport by sea and inland waterway 	0.0483
+Vapur bileti ücreti	Ferry fare
+Posta ve mal taşımacılığı hizmetleri	Transport services for goods	0.4814
+Posta ve kurye hizmetleri 	Postal and courier services 	0.0412
+Kurye ve paket/koli dağıtım hizmetleri 	Courier and parcel delivery services 	0.0412
+Kargo gönderim ücreti	Cargo delivery cost
+Diğer mal taşımacılığı 	Other transport of goods 	0.4402
+Nakliye ve depolama hizmetleri 	Removal and storage services 	0.4338
+Nakliye ücreti 	Moving fee
+Malların dağıtım ücretleri (kurye, paket servis vb.)	Delivery of goods 	0.0064
+Malların dağıtım ücretleri (kurye, paket servis vb.)	Delivery fee for goods
+Bilgi ve iletişim	Information and communication	3.1035
+Bilgi ve iletişim ekipmanları	Information and communication equipment	1.4766
+Mobil telefon ekipmanları 	Mobile telephone equipment 	0.8738
+Mobil telefon ve ekipmanları 	Mobile telephone equipment 	0.8738
+Cep telefonu	Mobile phone
+Bilgi işleme ekipmanları 	Information processing equipment 	0.1984
+Bilgisayarlar, diz üstü bilsayarlar ve tablet bilgisayarlar 	Computers, laptops and tablets 	0.1808
+Bilgisayar	Computer
+Bilgisayar çevre birimleri ve sarf malzemeleri	Peripheral equipment and its consumable components 	0.0176
+Bilgisayar ekipmanları	Computer peripherals
+Ses ve görüntü alma, kaydetme ve çoğaltma ekipmanları 	Equipment for the reception, recording and reproduction of sound and vision 	0.2583
+Ses ve görüntü alma, kaydetme ve çoğaltma ekipmanları 	Equipment for the reception, recording and reproduction of sound and vision 	0.2583
+Ses ve görüntü ekipmanları	Audio-video equipment
+Televizyon	Television
+Diğer bilgi ve iletişim ekipmanları ve aksesuarları 	Other information and communication equipment and accessories 	0.1461
+Diğer bilgi ve iletişim ekipmanları 	Other information and communication equipment 	0.0372
+Diğer iletişim ekipmanları	Other communication devices
+Diğer bilgi ve iletişim aksesuarları 	Other information and communication accessories 	0.1089
+Diğer bilgi ve iletişim aksesuarları	Info-communication accessories
+Bilgi ve iletişim hizmetleri	Information and communication services	1.6269
+Mobil iletişim hizmetleri 	Mobile communication services 	1.1465
+Mobil iletişim hizmetleri 	Mobile communication services 	1.1465
+Cep telefonu görüşme ücreti	Mobile phone service fee
+İnternet erişimi sağlama hizmetleri ve ağ depolama hizmetleri 	Internet access provision services and online storage services 	0.3395
+İnternet erişim hizmetleri 	Internet access provision services and online storage services 	0.3395
+İnternet ücreti 	Internet service fee
+Bilgi ve iletişim ekipmanlarının onarımı ve kiralanması 	Repair and rental of information and communication equipment 	0.0479
+Bilgi ve iletişim ekipmanlarının onarımı ve kiralanması 	Repair and rental of information and communication equipment 	0.0479
+Bilgi ve iletişim ekipmanlarının tamir ve bakımı	Repair and maintenance of information and communication equipment
+Diğer bilgi ve iletişim hizmetleri 	Other information and communication services 	0.0930
+Görsel-işitsel içeriklerin aboneliği, kiralanması ve çevrim içi yayın hizmetleri 	Subscriptions to audiovisual streaming services and rental of audiovisual content 	0.0930
+Görsel ve işitsel platform aboneliği	Digital content platform subscription
+Eğlence, dinlence, spor ve kültür	Recreation, sport and culture	4.3382
+Diğer eğlence malları	Other recreational goods	0.3944
+Oyunlar, oyuncaklar ve hobiler 	Games, toys and hobby-related articles 	0.2347
+Video oyunu bilgisayarları, oyun konsolları, oyun uygulamaları ve yazılımları 	Video game computers, consoles, game applications and software 	0.0385
+Elektronik oyunlar (oyun konsolları vb.)	Electronic games (game consoles, etc.)
+Diğer oyunlar, oyuncaklar ve hobiler 	Other games, toys and hobby-related articles 	0.1962
+Diğer oyuncaklar	Other toys
+Tekerlekli sürülebilir oyuncaklar 	Ride-on wheeled toys
+Spor, kamp ve açık hava eğlence ekipmanları 	Sporting, camping and open-air recreation equipment 	0.1598
+Spor ekipmanları 	Sporting equipment 	0.1598
+Evde kullanılan spor aletleri	Home fitness equipment
+Spor ekipmanları	Sports equipment
+Sportif faaliyetler için özel amaçlı giysi ve aksesuarlar	Special clothing and accessories for sporting activities
+Bahçe ürünleri ve ev hayvanları	Garden products and pets	0.4846
+Ev hayvanları ve ev hayvanları için ürünler 	Pets and pet products 	0.4846
+Ev hayvanları ve diğer evcil hayvanlar için ürünler 	Products for pets and other household animals 	0.4846
+Evcil hayvan mamaları	Pet food
+Evcil hayvanlara yönelik diğer ürünler	Other pet products
+Eğlence ve dinlence hizmetleri	Recreational services	1.9297
+Veterinerlik ve ev hayvanları için diğer hizmetler 	Veterinary and other services for pets 	0.2784
+Veterinerlik ve ev hayvanları için diğer hizmetler 	Veterinary and other services for pets 	0.2784
+Veterinerlik hizmetleri	Veterinary services
+Eğlence, dinlence ve spor hizmetleri	Recreational and sporting services 	1.5798
+Eğlence ve dinlence hizmetleri 	Recreational and leisure services 	0.3765
+Hobi ve eğlence hizmetleri	Recreation and hobby services
+Spor faaliyetlerine katılım 	Services associated with the practice of sports 	1.2034
+Sportif tesislere yapılan ödemeler (üyelik, kiralama vb.)	Payments for sports facilities (membership, rental, etc.)
+Spor amaçlı kurs ücretleri	Sports training fee
+Şans oyunları 	Games of chance 	0.0715
+Şans oyunları 	Games of chance 	0.0715
+Şans oyunları	Games of chance
+Kültürel hizmetler	Cultural services	0.4268
+Sinema, tiyatro ve konser salonlarında verilen hizmetler 	Services provided by cinemas, theatres and concert venues 	0.1849
+Sinema, tiyatro ve konser salonlarında verilen hizmetler 	Services provided by cinemas, theatres and concert venues 	0.1849
+Sinema bileti	Cinema ticket
+Tiyatro bileti	Theatre ticket
+Diğer kültürel hizmetler 	Other cultural services 	0.2419
+Diğer kültürel hizmetler 	Other cultural services 	0.2419
+Düğün, nişan vb. toplantılar için salon kirası	Event hall rental for wedding, engagement, and other events
+Gazete, kitap ve kırtasiye malzemeleri	Newspapers, books and stationery	0.5114
+Kitaplar 	Books 	0.3400
+Eğitsel kitaplar ve ders kitapları 	Educational books and textbooks 	0.2436
+Test kitapları	Test books
+Ders kitapları	Textbooks
+Diğer kitaplar 	Other books 	0.0965
+Çocuk kitapları	Children's books
+Diğer kitaplar	Other books
+Kırtasiye ve çizim malzemeleri 	Stationery and drawing materials 	0.1713
+Kırtasiye ve çizim malzemeleri 	Stationery and drawing materials 	0.1713
+Okul defterleri	School notebooks
+Kalemler	Pens and pencils
+Resim boyaları	Paintings for paints
+Yazım ve çizim kağıtları	Writing and drawing paper
+Diğer kırtasiye malzemeleri	Other stationery items
+Paket turlar ve tatiller	Package holidays	0.5912
+Paket turlar ve tatiller 	Package holidays 	0.5912
+Paket turlar ve tatiller 	Package holidays 	0.5912
+Yurt içi hafta sonu turları	Domestic weekend package tours
+Yurt içi diğer turlar	Other domestic package tours
+Yurt dışı turlar	Package tours abroad
+Umre ücreti (Diyanet İşleri Başkanlığı)	Umrah package fee (Presidency of Religious Affairs of Türkiye)
+Umre ücreti (acente)	Umrah package fee (agency)
+Eğitim hizmetleri	Education services	2.0215
+Okul öncesi ve temel eğitim (ilkokul)	Early childhood and primary education	0.6984
+Okul öncesi ve temel eğitim (ilkokul) 	Early childhood and primary education 	0.6984
+Okul öncesi eğitim 	Early childhood education 	0.2398
+Anaokulu ücreti	Preschool fee
+İlkokul eğitimi (temel eğitim)	Primary education 	0.4586
+Özel ilkokul ücreti 	Private primary school fee
+Ortaöğretim eğitimi (ortaokul ve lise)	Secondary education	0.5479
+Ortaöğretim eğitimi (ortaokul ve lise) 	Secondary education 	0.5479
+Ortaöğretim eğitimi (ortaokul ve lise) 	Secondary education 	0.5479
+Özel ortaokul ücreti 	Private lower secondary school fee
+Özel lise ücreti 	Private upper secondary school fee
+Yükseköğretim eğitimi	Tertiary education	0.7752
+Yükseköğretim eğitimi 	Tertiary education 	0.7752
+Yükseköğretim eğitimi 	Tertiary education 	0.7752
+Özel üniversite ücreti	Private university fee
+Açıköğretim öğrenci katkı ücreti (ikinci üniversite)	Student contribution fee for open education (second degree program)
+Lokantalar ve konaklama hizmetleri	Restaurants and accommodation services	11.1349
+Yiyecek ve içecek sunum hizmetleri	Food and beverage serving services	8.4375
+Lokantalar, kafeler ve benzerleri 	Restaurants, cafés and the like 	7.9106
+Lokantalar, kafeler ve benzerleri, tam sunum hizmeti verenler 	Restaurants, cafés and the like – with full service 	7.5339
+Çorbalar (hizmet sunulan yerlerde tüketilen)	Soups (full-service restaurants)
+Sıcak yemekler (hizmet sunulan yerlerde tüketilen)	Hot meals (full-service restaurants)
+Kebaplar (hizmet sunulan yerlerde tüketilen)	Kebabs (full-service restaurants)
+Pideler (hizmet sunulan yerlerde tüketilen)	Pide (full-service restaurants)
+Ekmekarası yiyecekler (hizmet sunulan yerlerde tüketilen)	Sandwiches (full-service restaurants)
+Hamur tatlıları (hizmet sunulan yerlerde tüketilen)	Desserts (full-service restaurants)
+Kahvaltı (hizmet sunulan yerlerde tüketilen)	Breakfast (full-service restaurants)
+Sıcak içecekler (hizmet sunulan yerlerde tüketilen)	Hot beverages (full-service restaurants)
+Soğuk içecekler/meşrubat (hizmet sunulan yerlerde tüketilen)	Cold beverages (full-service restaurants)
+Ayran (hizmet sunulan yerlerde tüketilen)	Ayran (full-service restaurants)
+Alkollü içecekler (hizmet sunulan yerlerde tüketilen)	Alcoholic beverages (full-service restaurants)
+Lokantalar, kafeler ve benzerleri, sınırlı sunum hizmeti verenler 	Restaurants, cafés and the like – with limited service 	0.3766
+Çiğ köfte (hızlı hizmet sunulan yerlerde tüketilen)	Çiğ köfte (limited-service restaurants)
+Pizza (hızlı hizmet sunulan yerlerde tüketilen)	Pizza (limited-service restaurants)
+Hamburger (hızlı hizmet sunulan yerlerde tüketilen)	Hamburger (limited-service restaurants)
+Kantinler, kafeteryalar ve yemekhaneler 	Canteens, cafeterias and refectories 	0.5270
+Üniversitelerin, okulların ve kreşlerin kafeteryaları ve kantinleri 	Canteens and cafeterias of universities, schools and kindergartens 	0.5270
+Tost (kantinde satılan)	Toast (canteens)
+Simit (kantinde satılan)	Simit (canteens)
+Çay (kantinde satılan)	Tea (canteens)
+Konaklama hizmetleri	Accommodation services	2.6974
+Konaklama hizmetleri 	Accommodation services 	2.6974
+Otel, motel, pansiyon ve benzeri yerlerdeki konaklama hizmetleri 	Hotels, motels, inns and similar accommodation services 	2.5896
+Otel ücreti	Hotel accommodation fee
+Yatılı okullar, üniversiteler ve diğer eğitim kurumlarındaki konaklama hizmetleri 	Accommodation services of boarding schools, universities and other educational establishments 	0.1078
+Yurt ücreti (üniversite-özel)	Private dormitory fee (university)
+Yurt ücreti (üniversite-devlet)	Public dormitory fee (university)
+Sigorta ve finansal hizmetler	Insurance and financial services	1.0740
+Sigorta	Insurance	0.4282
+Sağlık sigortası 	Insurance connected with health 	0.0282
+Sağlık sigortası 	Insurance connected with health 	0.0282
+Sağlık sigortası	Health insurance
+Konut sigortası 	Insurance connected with dwellings 	0.0458
+Konut sigortası 	Insurance connected with dwellings 	0.0458
+Konut sigortası (yangın ve diğer afetler)	Home insurance (fire and hazards)
+Zorunlu deprem sigortası (dask)	Compulsory earthquake insurance
+Taşımacılık sigortası 	Insurance connected with transport 	0.3542
+Özel taşımacılık sigortası 	Personal transport insurance 	0.3542
+Kasko ve zorunlu trafik sigortası	Motor vehicle insurance
+Finansal hizmetler	Financial services	0.6458
+Mevduat kabul eden kuruluşlara yapılan doğrudan ödemeler 	Explicit charges by deposit-taking corporations 	0.4834
+Mevduat kabul eden kuruluşlara yapılan doğrudan ödemeler 	Explicit charges by deposit-taking corporations 	0.4834
+Diğer bankacılık hizmet ücretleri	Other banking service fees
+Kredi kartı yıllık aidatı	Credit card annual fee
+Diğer finansal hizmetler 	Other financial services 	0.1624
+Havale ücretleri 	Remittances fees 	0.1624
+Para transfer ücretleri	Money transfer fee
+Kişisel bakım, sosyal koruma ve çeşitli mal ve hizmetler	Personal care, social protection and miscellaneous goods and services	4.4935
+Kişisel bakım	Personal care	1.8720
+Kişisel bakıma yönelik elektrikli aletler 	Electric appliances for personal care 	0.0640
+Kişisel bakıma yönelik elektrikli aletler 	Purchase of electric appliances for personal care 	0.0640
+Elektrikli tıraş makinesi 	Electric shaver
+Elektrikli saç bakım aletleri	Electric hair care devices
+Diğer elektrikli kişisel bakım aletleri	Other personal care appliances
+Kişisel bakıma yönelik diğer aletler, malzemeler ve ürünler 	Other appliances, articles and products for personal care 	1.2227
+Kişisel bakıma yönelik diğer aletler, malzemeler ve ürünler 	Other appliances, articles and products for personal care 	1.2227
+Tıraş bıçağı 	Razor blade
+Diş fırçası	Toothbrush
+Diş macunu	Toothpaste
+El sabunu (katı ve sıvı)	Hand soap
+Banyo sabunu	Bath soap
+Parfüm	Perfume
+Deodorant	Deodorant
+Kolonya	Cologne
+Diğer kişisel bakım ürünleri	Other personal care products
+Makyaj malzemeleri	Cosmetics
+Güneş kremi	Sunscreen
+Saç bakım ürünleri	Hair care products
+Tuvalet kağıdı	Toilet paper
+Diğer kağıt ürünleri	Other paper products
+Hijyenik kadın bağı	Sanitary pads
+Kuaför salonları ve kişisel bakım merkezleri 	Hairdressing salons and personal grooming establishments 	0.5853
+Kuaförlük hizmetleri 	Hairdressing 	0.3928
+Erkek berberi hizmetleri	Men’s barber service
+Kadın kuaförü hizmetleri	Women’s hairdresser service
+Kişisel bakım hizmetleri 	Personal grooming treatments 	0.1925
+Kişisel bakım hizmetleri (kadın için)	Personal care services (for woman)
+Diğer kişisel eşyalar	Other personal effects	1.0940
+Mücevherat ve kol saatleri 	Jewellery and watches 	0.4489
+Mücevherat ve kol saatleri 	Purchase of jewellery and watches 	0.4489
+Mücevher (altın)	Jewellery (gold)
+Kol saati	Wristwatch
+Başka yerde sınıflandırılmamış diğer kişisel eşyalar 	Other personal effects n.e.c. 	0.6451
+Başka yerde sınıflandırılmamış seyahat eşyaları, bebekler için malzemeler ve diğer kişisel eşyalar 	Travel goods, baby articles and other personal effects n.e.c. 	0.6451
+Seyahat eşyaları 	Travel goods
+Kadın çantası	Women’s handbag
+Okul çantası	School bag
+Güneş gözlükleri	Sunglasses
+Bebek arabası	Baby stroller
+Bebek bezi 	Baby diapers
+Sosyal koruma	Social protection	0.3517
+Sosyal koruma 	Social protection 	0.3517
+Çocuk bakım hizmetleri 	Childcare services 	0.3517
+Kreş ve gündüz bakım hizmeti	Daycare and nursery services
+Diğer hizmetler	Other services	1.1758
+Diğer hizmetler 	Other services 	1.1758
+Dini hizmetler 	Religious services 	0.4022
+Hac ücreti (Diyanet İşleri Başkanlığı paket fiyatı)	Hajj package fee (Presidency of Religious Affairs of Türkiye)
+Başka yerde sınıflandırılmamış diğer hizmetler 	Other services n.e.c. 	0.7737
+Noter ücreti	Notary fee
+Otomobil ekspertiz ücreti	Vehicle inspection and expertise fee
+Hukuki hizmetler	Legal services
+Diğer hizmetler için ödemeler 	Other miscellaneous services
