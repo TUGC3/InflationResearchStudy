@@ -10,7 +10,7 @@ Computes three inflation metrics for Sahibinden rental listings:
 Intervals: 1d, 7d, 15d, 30d back from target date (skipped if data missing).
 
 Şehirler: malatya, elazig, tunceli
-Ürün anahtarı: item_name (District + Rooms birleşimi)
+Ürün anahtarı: product_name (District + Rooms birleşimi)
 
 Input files  : {city}_rentals_YYYY_MM_DD.csv  (same folder as this script)
 Output files :
@@ -97,9 +97,9 @@ def _load_csv(city: str, date_str: str) -> pd.DataFrame | None:
             (df["price_numeric"] <= q3 + 3.0 * iqr)
         ]
 
-        # Dedup: aynı item_name kombinasyonu → medyan fiyatı tut
+        # Dedup: aynı product_name kombinasyonu → medyan fiyatı tut
         df = (
-            df.groupby(["item_name"], as_index=False)["price_numeric"]
+            df.groupby(["product_name"], as_index=False)["price_numeric"]
             .median()
             .rename(columns={"price_numeric": "price_numeric"})
         )
@@ -124,11 +124,11 @@ def _compute_metrics(df_current: pd.DataFrame, df_past: pd.DataFrame, city: str)
     df_current["city"] = city
     df_current["tuik_category"] = sahibinden_city_to_tuik(city)
 
-    # Merge past prices by item_name
-    past_subset = df_past[["item_name", "price_numeric"]].rename(
+    # Merge past prices by product_name
+    past_subset = df_past[["product_name", "price_numeric"]].rename(
         columns={"price_numeric": "past_price"}
     )
-    merged = df_current.merge(past_subset, on=["item_name"], how="left")
+    merged = df_current.merge(past_subset, on=["product_name"], how="left")
 
     # 1) Per-item inflation
     merged["per_item_inflation"] = (
@@ -224,10 +224,10 @@ def calculate_inflation(target_date=None, compare_date=None):
             merged, avg_inf, tuik_w = _compute_metrics(df_today, df_past, city)
 
             city_detail = city_detail.merge(
-                merged[["item_name", "per_item_inflation"]].rename(
+                merged[["product_name", "per_item_inflation"]].rename(
                     columns={"per_item_inflation": f"per_item_inflation_{label}"}
                 ),
-                on=["item_name"],
+                on=["product_name"],
                 how="left",
             )
 

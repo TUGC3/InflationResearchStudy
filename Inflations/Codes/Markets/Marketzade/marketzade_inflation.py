@@ -31,7 +31,13 @@ import pandas as pd
 # ── Path setup ────────────────────────────────────────────────────────────────
 _THIS_DIR = Path(__file__).resolve().parent
 sys.path.insert(0, str(_THIS_DIR))
-from marketzade_tuik_config import marketzade_category_to_tuik, normalised_weights
+from marketzade_tuik_config import normalised_weights
+
+# Yeni CSV formatı sadece product_name,price içeriyor — kategori bilgisi yok.
+# Marketzade tüm ürünlerini tek TUIK koduna (01 — Gıda ve alkolsüz içecekler)
+# atıyoruz; tuik_weighted_avg arithmetic_avg ile aynı değere düşer ama summary
+# CSV şeması korunur.
+_STORE_TUIK_CODE = "01"
 
 logger = logging.getLogger(__name__)
 
@@ -52,7 +58,7 @@ def _load_csv(date_str):
         df = pd.read_csv(fpath, encoding="utf-8-sig")
         df["price"] = pd.to_numeric(df["price"], errors="coerce")
         # Drop site-level duplicates (same product rendered twice in DOM)
-        df = df.drop_duplicates(subset=["item_name"])
+        df = df.drop_duplicates(subset=["product_name"])
         return df
     except Exception as e:
         logger.error(f"Dosya okunamadı {fpath}: {e}")
@@ -70,11 +76,11 @@ def _compute_metrics(df_current, df_past):
     tuik_weighted      : float      — TUIK-weighted average inflation
     """
     df_current = df_current.copy()
-    df_current["tuik_category"] = df_current["kategori"].apply(marketzade_category_to_tuik)
+    df_current["tuik_category"] = _STORE_TUIK_CODE
 
     # Merge past prices by product name (unique identifier for Marketzade)
-    past_subset = df_past[["item_name", "price"]].rename(columns={"price": "past_price"})
-    merged = df_current.merge(past_subset, on="item_name", how="left")
+    past_subset = df_past[["product_name", "price"]].rename(columns={"price": "past_price"})
+    merged = df_current.merge(past_subset, on="product_name", how="left")
 
     # 1) Per-item inflation
     merged["per_item_inflation"] = (
@@ -133,7 +139,7 @@ def calculate_inflation(target_date=None, compare_date=None):
     # ── Per-interval computation ─────────────────────────────────────────────
     summary_row = {"tarih": today_str}
     detail_base = df_today.copy()
-    detail_base["tuik_category"] = detail_base["kategori"].apply(marketzade_category_to_tuik)
+    detail_base["tuik_category"] = _STORE_TUIK_CODE
 
     for label, past_str in intervals.items():
         df_past = _load_csv(past_str)
@@ -148,10 +154,10 @@ def calculate_inflation(target_date=None, compare_date=None):
         merged, avg_inf, tuik_w = _compute_metrics(df_today, df_past)
 
         detail_base = detail_base.merge(
-            merged[["item_name", "per_item_inflation"]].rename(
+            merged[["product_name", "per_item_inflation"]].rename(
                 columns={"per_item_inflation": f"per_item_inflation_{label}"}
             ),
-            on="item_name",
+            on="product_name",
             how="left",
         )
 

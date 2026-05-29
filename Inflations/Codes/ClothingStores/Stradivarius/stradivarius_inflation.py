@@ -6,8 +6,9 @@ Computes three inflation metrics for Stradivarius Turkey products:
   2. Average Inflation     – arithmetic mean of all per-product inflation rates
   3. TUIK Weighted Average – weighted average using TUIK 2026 CPI basket weights
 
-Ürün anahtarı: category + item_name + color
-(Aynı ürün farklı renklerde farklı fiyatlara sahip olabilir.)
+Ürün anahtarı: product_name
+(Yeni CSV formatı yalnızca product_name,price sütunlarını içerir; renk
+artık product_name'in içinde "Ürün Adı - Renk" şeklinde birleştirilmiştir.)
 
 Intervals: 1d, 7d, 15d, 30d back from target date (skipped if data missing).
 
@@ -37,14 +38,18 @@ import pandas as pd
 _THIS_DIR = Path(__file__).resolve().parent
 REPO_ROOT  = _THIS_DIR.parents[3]
 sys.path.insert(0, str(_THIS_DIR))
-from stradivarius_tuik_config import stradivarius_category_to_tuik, normalised_weights
+from stradivarius_tuik_config import normalised_weights
 
 logger = logging.getLogger(__name__)
 
 DATA_DIR   = REPO_ROOT / "InflationItems" / "Datas" / "ClothingStores" / "Stradivarius"
 OUTPUT_DIR = REPO_ROOT / "Inflations"     / "Datas" / "ClothingStores" / "Stradivarius"
 
-KEY = ["category", "item_name", "color"]
+KEY = ["product_name"]
+
+# Yeni CSV formatı sadece product_name,price içeriyor — kategori/renk yok.
+# Stradivarius giyim mağazası: tek TUIK kodu 03.
+_STORE_TUIK_CODE = "03"
 
 
 # ── Data loading ──────────────────────────────────────────────────────────────
@@ -75,7 +80,7 @@ def _compute_metrics(df_current: pd.DataFrame, df_past: pd.DataFrame):
     tuik_weighted : float     — TUIK-weighted average inflation
     """
     df_current = df_current.copy()
-    df_current["tuik_category"] = df_current["category"].apply(stradivarius_category_to_tuik)
+    df_current["tuik_category"] = _STORE_TUIK_CODE
 
     past_subset = df_past[KEY + ["price"]].rename(columns={"price": "past_price"})
     merged = df_current.merge(past_subset, on=KEY, how="left")
@@ -130,7 +135,7 @@ def calculate_inflation(target_date=None, compare_date=None):
     # ── Per-interval computation ──────────────────────────────────────────────
     summary_row = {"tarih": today_str}
     detail_base = df_today.copy()
-    detail_base["tuik_category"] = detail_base["category"].apply(stradivarius_category_to_tuik)
+    detail_base["tuik_category"] = _STORE_TUIK_CODE
 
     for label, past_str in intervals.items():
         df_past = _load_csv(past_str)

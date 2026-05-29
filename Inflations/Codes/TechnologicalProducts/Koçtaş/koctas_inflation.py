@@ -23,12 +23,16 @@ _THIS_DIR = Path(__file__).resolve().parent
 # Çıktı:    Inflations/Datas/TechnologicalProducts/Koçtaş/
 REPO_ROOT  = _THIS_DIR.parents[3]
 sys.path.insert(0, str(_THIS_DIR))
-from koctas_tuik_config import koctas_category_to_tuik, normalised_weights
+from koctas_tuik_config import normalised_weights
 
 logger = logging.getLogger(__name__)
 
 DATA_DIR   = REPO_ROOT / "InflationItems" / "Datas" / "TechnologicalProducts" / "Koçtaş"
 OUTPUT_DIR = REPO_ROOT / "Inflations"     / "Datas" / "TechnologicalProducts" / "Koçtaş"
+
+# Yeni CSV formatı sadece product_name,price içeriyor — kategori yok.
+# Koçtaş ürünleri ağırlıklı olarak ev aletleri / yapı: tek TUIK kodu 05.
+_STORE_TUIK_CODE = "05"
 
 
 def _date_to_str(dt):
@@ -43,7 +47,7 @@ def _load_csv(date_str):
     try:
         df = pd.read_csv(fpath, encoding="utf-8-sig")
         df["price"] = pd.to_numeric(df["price"], errors="coerce")
-        df = df.drop_duplicates(subset=["category", "item_name"])
+        df = df.drop_duplicates(subset=["product_name"])
         return df
     except Exception as e:
         logger.error(f"Dosya okunamadı {fpath}: {e}")
@@ -52,12 +56,12 @@ def _load_csv(date_str):
 
 def _compute_metrics(df_current, df_past):
     df_current = df_current.copy()
-    df_current["tuik_category"] = df_current["category"].apply(koctas_category_to_tuik)
+    df_current["tuik_category"] = _STORE_TUIK_CODE
 
-    past_subset = df_past[["category", "item_name", "price"]].rename(
+    past_subset = df_past[["product_name", "price"]].rename(
         columns={"price": "past_price"}
     )
-    merged = df_current.merge(past_subset, on=["category", "item_name"], how="left")
+    merged = df_current.merge(past_subset, on=["product_name"], how="left")
 
     merged["per_item_inflation"] = (
         (merged["price"] - merged["past_price"]) / merged["past_price"]
@@ -105,7 +109,7 @@ def calculate_inflation(target_date=None, compare_date=None):
 
     summary_row = {"tarih": today_str}
     detail_base = df_today.copy()
-    detail_base["tuik_category"] = detail_base["category"].apply(koctas_category_to_tuik)
+    detail_base["tuik_category"] = _STORE_TUIK_CODE
 
     for label, past_str in intervals.items():
         df_past = _load_csv(past_str)
@@ -120,10 +124,10 @@ def calculate_inflation(target_date=None, compare_date=None):
         merged, avg_inf, tuik_w = _compute_metrics(df_today, df_past)
 
         detail_base = detail_base.merge(
-            merged[["category", "item_name", "per_item_inflation"]].rename(
+            merged[["product_name", "per_item_inflation"]].rename(
                 columns={"per_item_inflation": f"per_item_inflation_{label}"}
             ),
-            on=["category", "item_name"],
+            on=["product_name"],
             how="left",
         )
 
