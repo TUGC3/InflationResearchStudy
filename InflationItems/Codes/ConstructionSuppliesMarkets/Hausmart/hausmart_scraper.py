@@ -217,10 +217,8 @@ def parse_products(html: str, category_name: str, date_str: str) -> list[dict]:
         seen.add(canonical)
         products.append({
             "canonical":    canonical,
-            "item_name":    title,
+            "product_name": title,
             "price":        price,
-            "category":     category_name,
-            "date":         date_str,
         })
 
     return products
@@ -298,7 +296,7 @@ def scrape_category(category: dict, driver: webdriver.Chrome, date_str: str) -> 
     # en düşük fiyatlı kaydı tut (= aktif satış fiyatı).
     name_best: dict[str, dict] = {}
     for p in results.values():
-        name = p["item_name"]
+        name = p["product_name"]
         if name not in name_best or p["price"] < name_best[name]["price"]:
             name_best[name] = p
 
@@ -356,10 +354,10 @@ def main():
 
     final = sorted(
         all_products,
-        key=lambda p: (p["category"], p["item_name"]),
+        key=lambda p: p["product_name"],
     )
 
-    fieldnames = ["item_name", "price", "category", "date"]
+    fieldnames = ["product_name", "price"]
     with open(csv_path, "w", encoding="utf-8-sig", newline="") as f:
         writer = csv.DictWriter(f, fieldnames=fieldnames, extrasaction="ignore")
         writer.writeheader()

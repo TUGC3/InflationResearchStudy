@@ -7,7 +7,7 @@ Kullanım:
     python stradivarius_scraper.py
 
 Çıktı: stradivarius_YYYY-MM-DD.csv
-Kolonlar: item_name, price, category, color
+Kolonlar: product_name, price
 
 Bağımlılıklar:
     pip install curl_cffi tqdm
@@ -332,9 +332,9 @@ class StradivariusScraper:
 
         Ornek cikti (tek urun, 3 renk):
             [
-                {"item_name": "Basic tişört", "price": 649.0, "category": "Tişört", "color": "Siyah"},
-                {"item_name": "Basic tişört", "price": 649.0, "category": "Tişört", "color": "Beyaz"},
-                {"item_name": "Basic tişört", "price": 649.0, "category": "Tişört", "color": "Krem"},
+                {"product_name": "Basic tişört - Siyah", "price": 649.0},
+                {"product_name": "Basic tişört - Beyaz", "price": 649.0},
+                {"product_name": "Basic tişört - Krem", "price": 649.0},
             ]
         """
         if not raw or not isinstance(raw, dict):
@@ -361,10 +361,8 @@ class StradivariusScraper:
                     price_cents = size.get("price")
                     if price_cents is not None:
                         records.append({
-                            "item_name":    name,
+                            "product_name": f"{name} - {color_name}",
                             "price":        round(int(price_cents) / 100, 2),
-                            "category":     category_path,
-                            "color":        color_name,
                         })
                         break  # bu renk icin ilk beden yeterli
 
@@ -386,7 +384,7 @@ class StradivariusScraper:
                      sonda ozet tablo basar. Tum urunlerin cekildigini dogrulamak icin kullan.
 
         Cikti: output_dir/stradivarius_YYYY-MM-DD.csv
-        Kolonlar: item_name, price, category, color
+        Kolonlar: product_name, price
 
         Dedup katmanlari (siraya gore):
             1. seen_ids       : Ayni product_id tekrar gelirse tum renkleriyle atla (cross-cat / cift ID)
@@ -404,7 +402,7 @@ class StradivariusScraper:
             logger.error("Hic kategori bulunamadi. Scraper durduruluyor.")
             return output_file
 
-        fieldnames = ["item_name", "price", "category", "color"]
+        fieldnames = ["product_name", "price"]
         self.output_dir.mkdir(parents=True, exist_ok=True)
 
         # ── Sayaçlar ────────────────────────────────────────────────────────
@@ -491,7 +489,7 @@ class StradivariusScraper:
                     # .upper() ile normalize edilerek ayni renk sayilir.
                     # CSV'ye yazilan deger: ilk gelen (orijinal) isim — tutarlilik icin.
                     for record in color_records:
-                        rkey = (record["item_name"], record["color"].upper())
+                        rkey = record["product_name"].upper()
                         if rkey in seen_records:
                             c_skip_dedup += 1
                             total_skip_dedup += 1

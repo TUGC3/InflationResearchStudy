@@ -385,8 +385,8 @@ def parse_listings(html: str, rooms_idx: int | None) -> list[dict]:
                 rooms = "N/A"
 
             if price:
-                # item_name = "İlçe - Oda Tipi", price = sayısal değer
-                item_name = f"{district} - {rooms}"
+                # product_name = "İlçe - Oda Tipi", price = sayısal değer
+                product_name = f"{district} - {rooms}"
                 price_numeric = (
                     price.replace("TL", "").replace(".", "").replace(",", ".").strip()
                 )
@@ -395,7 +395,7 @@ def parse_listings(html: str, rooms_idx: int | None) -> list[dict]:
                 except ValueError:
                     price_val = 0.0
                 if price_val > 0:
-                    records.append({"item_name": item_name, "price": price_val})
+                    records.append({"product_name": product_name, "price": price_val})
         except Exception as exc:
             logger.debug("Satir parse hatasi: %s", exc)
 
@@ -448,19 +448,19 @@ class SahibindenScraper:
                 reader = csv.DictReader(f)
                 for row in reader:
                     existing_keys.add(
-                        (row.get("item_name", ""), row.get("price", ""))
+                        (row.get("product_name", ""), row.get("price", ""))
                     )
 
         new_records = [
             r for r in records
-            if (r["item_name"], str(r["price"])) not in existing_keys
+            if (r["product_name"], str(r["price"])) not in existing_keys
         ]
         if not new_records:
             return
 
         file_exists = path.exists()
         with open(path, mode="a", newline="", encoding="utf-8") as f:
-            writer = csv.DictWriter(f, fieldnames=["item_name", "price"])
+            writer = csv.DictWriter(f, fieldnames=["product_name", "price"])
             if not file_exists:
                 writer.writeheader()
             writer.writerows(new_records)
