@@ -1,12 +1,4 @@
 """
-Hunger Threshold Calculator — Basdas Market
-============================================================
-Data source : Basdas Market online grocery prices
-Basket      : Presentation slide 8 (family of 4, monthly quantities)
-
-CSV structure:
-  isim;fiyat   (semicolon separator, fiyat already float)
-
 Note: Basdas has limited SKU range. Many basket items are not stocked
 (mince, bread, chickpeas, beans, olive oil, honey, semolina etc.) → NaN for those.
 """
