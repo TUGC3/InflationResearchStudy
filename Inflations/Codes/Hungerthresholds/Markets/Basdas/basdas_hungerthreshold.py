@@ -24,7 +24,7 @@ OUTPUT_DETAIL  = f"{BASE_DIR}/hunger_threshold_detail.csv"
 OUTPUT_SUMMARY = f"{BASE_DIR}/hunger_threshold_summary.csv"
 
 # ─────────────────────────────────────────────────────
-# 2.  FOOD BASKET  (slide 8, family of 4)
+# 2.  FOOD BASKET 
 # ─────────────────────────────────────────────────────
 FOOD_BASKET = [
     # ── Dairy Products ──────────────────────────
