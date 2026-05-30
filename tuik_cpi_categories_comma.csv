@@ -1,0 +1,753 @@
+﻿code,turkish_name,english_name,weight
+01,Gıda ve alkolsüz içecekler,Food and non-alcoholic beverages,"24,4444"
+011,Gıda,Food,"22,1040"
+0111,Tahıllar ve tahıl ürünleri,Cereals and cereal products,"4,4505"
+01111,Tahıllar,Cereals,"0,4673"
+0111121,Pirinç,Rice,
+0111192,Bulgur,Bulgur (cracked wheat),
+01112,Tahıl unları,Flour of cereals,"0,3604"
+0111211,Buğday unu,Wheat flour,
+01113,Ekmek ve unlu mamuller,Bread and bakery products,"3,3873"
+0111311,Ekmek,Bread,
+0111392,Diğer pastane ürünleri,Other bakery and patisserie products,
+0111393,Bisküvi,Biscuits,
+0111394,Kraker,Crackers,
+0111396,Gofret,Wafer,
+0111398,Baklava,Baklava,
+0111399,"Simit, poğaça vb. (fırın, market vb. yerlerde satılan)","Simit, poğaça etc. (offered in bakeries, supermarkets, etc.)",
+01114,Kahvaltılık tahıl ürünleri,Breakfast cereals,"0,0284"
+0111401,Kahvaltılık tahıl gevreği,Breakfast cereal,
+01115,"Makarna, erişte, kuskus ve benzeri makarna ürünleri","Macaroni, noodles, couscous and similar pasta products","0,2070"
+0111501,Makarna,Pasta (dried),
+0111502,Şehriye,Vermicelli and soup pasta,
+0112,"Canlı hayvanlar, kesilen kara hayvanlarının etleri ve diğer kısımları","Live animals, and meat and other parts of slaughtered land animals","4,6082"
+01122,"Et, taze, soğutulmuş veya dondurulmuş","Meat, fresh, chilled or frozen","3,6716"
+0112214,Dana eti,Beef (veal) meat,
+0112230,Kuzu eti,Lamb meat,
+0112246,Tavuk eti,Chicken meat,
+01123,"Et, kurutulmuş, tuzlanmış, salamura edilmiş veya tütsülenmiş","Meat, dried, salted, in brine or smoked","0,6113"
+0112311,"Sucuk (kangal, dana etinden)",Fermented sausage (sucuk),
+0112312,Dana salam,Beef salami,
+0112392,Beyaz et salam,Poultry salami,
+01124,"Kesilmiş hayvanların sakatat ve diğer parçaları (taze, soğutulmuş veya dondurulmuş, kurutulmuş, tuzlanmış, salamura edilmiş veya tütsülenmiş)","Offal, blood and other parts of slaughtered animals, fresh, chilled or frozen, dried, salted, in brine or smoked","0,0832"
+0112401,Sakatat,Offal (organ meats),
+01125,"Kesilmiş hayvanların et, sakatat ve diğer parçalarından yemeye hazır hale getirilmiş ürünler","Preparations of meat, offal, blood and other parts of slaughtered animals","0,2422"
+0112511,Sosis,Sausage,
+0112590,Hazır tavuk yemekleri,Prepared poultry dishes,
+0112593,Hazır et yemekleri,Prepared meat dishes,
+0113,Balıklar ve diğer su ürünleri,Fish and other seafood,"0,3777"
+01131,"Balıklar, canlı, taze, soğutulmuş veya dondurulmuş","Fish, live, fresh, chilled or frozen","0,3408"
+0113121,Somon balığı (ithal),Salmon (imported),
+0113151,Palamut balığı (yerli),Bonito (domestic),
+0113191,Diğer balıklar,Other fishes,
+01133,Konserve edilmiş veya işlenmiş balık ürünleri,Fish preparations,"0,0369"
+0113315,Konserve balık,Canned fish,
+0114,"Süt, diğer süt ürünleri ve yumurtalar","Milk, other dairy products and eggs","3,2758"
+01141,Çiğ ve tam yağlı süt,Raw and whole milk,"0,5202"
+0114111,Tam yağlı süt (günlük ve uzun ömürlü),Whole milk (fresh and uht),
+01142,Yağı alınmış süt,Skimmed milk,"0,0557"
+0114201,Yarım yağlı süt (uzun ömürlü),Semi-skimmed milk (uht),
+01143,Diğer sütler ve krema,Other milk and cream,"0,0531"
+0114331,"Krema, kaymak ve benzeri süt ürünleri","Cream, clotted cream and similar dairy products",
+01145,Peynir,Cheese,"1,4972"
+0114501,Beyaz peynir,White brined cheese (feta-type),
+0114502,Kaşar peyniri,Kashar cheese (semi-hard yellow),
+0114503,Tulum peyniri,Tulum cheese,
+0114504,Sürülebilir peynirler,Spreadable cheeses,
+0114505,Yöresel peynirler,Local cheeses,
+01146,Yoğurt ve benzeri ürünler,Yoghurt and similar products,"0,4911"
+0114601,Yoğurt,Yoghurt,
+0114605,Ayran,Ayran (yoghurt-based drink),
+01147,Süt bazlı tatlı ve içecekler,Milk-based dessert and beverages,"0,0579"
+0114701,Hazır sütlü tatlılar,Ready-to-eat milk desserts,
+0114703,Aromalı sütler,Flavoured milk drinks,
+01148,Yumurtalar,Eggs,"0,6006"
+0114811,Yumurta,Eggs,
+0115,Sıvı ve katı yağlar,Oils and fats,"1,4020"
+01151,Bitkisel sıvı yağlar,Vegetable oils,"0,9962"
+0115112,Ayçiçek yağı,Sunflower oil,
+0115131,Zeytinyağı,Olive oil,
+01152,Tereyağı ve sütten elde edilen diğer yağlar,Butter and other oils and fats derived from milk,"0,3332"
+0115211,Tereyağı,Butter,
+01153,Margarin,Margarine and similar preparations,"0,0726"
+0115301,Margarin,Margarine,
+0116,Meyveler ve sert kabuklu meyveler,Fruits and nuts,"2,2924"
+01161,"Hurma, incir ve tropikal meyveler, taze","Dates, figs and tropical fruits, fresh","0,2413"
+0116121,Muz,Bananas,
+01162,"Turunçgiller, taze","Citrus fruits, fresh","0,2696"
+0116221,Limon,Lemon,
+0116231,Portakal,Orange,
+0116241,Mandalina,Mandarin (tangerine),
+01163,"Sert çekirdekli ve yumuşak çekirdekli meyveler, taze","Stone fruits and pome fruits, fresh","0,5059"
+0116311,Elma,Apple,
+0116321,"Armut, ayva","Pears, quinces",
+0116351,Şeftali,Peach,
+01164,"Üzümsü meyveler, taze","Berries, fresh","0,0561"
+0116451,Çilek,Strawberries,
+01165,"Diğer meyveler, taze","Other fruits, fresh","0,3618"
+0116511,Üzüm,Grapes (fresh),
+0116521,Kivi,Kiwi fruit,
+0116531,Kavun,Melon,
+0116541,Karpuz,Watermelon,
+0116591,Nar,Pomegranate,
+01167,Kurutulmuş ve dehidre meyveler,"Fruits, dried and dehydrated","0,1112"
+0116711,Kuru üzüm,Raisins (dried grapes),
+0116791,Kuru hurma,Dried dates,
+0116793,Kuru kayısı,Dried apricots,
+01168,"Sert kabuklu meyveler, kabuklu veya kabuksuz","Nuts, in shell or shelled","0,7465"
+0116811,Badem içi,Almond kernels,
+0116843,Fındık içi,Hazelnut kernels,
+0116854,Antep fıstığı,Pistachios,
+0116862,Ceviz içi,Walnut kernels,
+0116886,Yer fıstığı,Peanuts,
+0116891,Kabak çekirdeği,Pumpkin seeds,
+0116897,Leblebi,Roasted chickpeas (leblebi),
+0116898,Ay çekirdeği,Sunflower seeds,
+0117,"Sebzeler, yumrulu sebzeler, plantainler, yemeklik muzlar ve bakliyat","Vegetables, tubers, plantains, cooking bananas and pulses","3,4432"
+01171,"Yeşil yapraklı veya saplı sebzeler, taze veya soğutulmuş","Leafy or stem vegetables, fresh or chilled","0,2157"
+0117123,Lahana,Cabbage,
+0117131,Karnabahar,Cauliflower,
+0117141,Marul çeşitleri,Leaf lettuce (curly),
+0117151,Ispanak,Spinach,
+01172,"Meyvesi yenen sebzeler, taze veya soğutulmuş (domates, biber, salatalık, kabak vb.)","Fruit-bearing vegetables, fresh or chilled","1,3306"
+0117211,Çarliston biber,Long green pepper (çarliston),
+0117215,Diğer taze biber çeşitleri,Other peppers,
+0117222,Salatalık,Cucumber,
+0117234,Patlıcan,Eggplant (aubergine),
+0117241,Domates,Tomatoes,
+0117253,Kabak,Zucchini (courgette),
+01173,"Yeşil baklagil sebzeleri, taze veya soğutulmuş","Green leguminous vegetables, fresh or chilled","0,1487"
+0117312,Taze fasulye,Fresh green beans,
+01174,"Diğer sebzeler, taze veya soğutulmuş (soğan, sarımsak, havuç, mantar, zeytin vb.)","Other vegetables, fresh or chilled","0,7404"
+0117410,Havuç,Carrots,
+0117416,Turp,Radish,
+0117421,Kuru sarımsak,Dried garlic (bulb),
+0117431,Kuru soğan,Onions (dry),
+0117445,Pırasa,Leek,
+0117452,Kültür mantarı,Cultivated mushrooms,
+0117476,Zeytin (sofralık),Table olives,
+01175,Yumrulu sebzeler,"Tubers, plantains and cooking bananas, fresh or chilled","0,3519"
+0117511,Patates,Potatoes,
+01176,Kuru baklagiller,Pulses,"0,2172"
+0117611,Kuru fasulye,Dried beans,
+0117632,Nohut,Chickpeas,
+0117643,Mercimek,Lentils,
+01179,"Konserve edilmiş veya işlenmiş sebze içerikli ürünler (salça, turşu, zeytin vb.)","Vegetables, tubers, plantains, cooking bananas and pulses, ground, and in other preparations","0,4388"
+0117923,Sebze konserveleri,Canned vegetables,
+0117992,Turşu,Pickles,
+0117995,Salça,Tomato paste,
+0117998,Cipsler,Chips (crisps),
+0118,"Şeker, şekerlemeler ve tatlılar","Sugar, confectionery and desserts","1,5254"
+01181,Şeker,Cane sugar and beet sugar,"0,3545"
+0118121,Toz şeker,Granulated sugar,
+0118122,Kesme şeker,Sugar cubes,
+01183,"Reçel, meyve jöleleri, marmelat, meyve püreleri ve ezmeleri, bal","Jams, marmalades, fruit jellies, purées and pastes, and honey","0,2877"
+0118313,Bal,Honey,
+0118391,Reçel,Jam,
+0118397,Pekmez,Molasses (grape molasses),
+01184,"Sert kabuklu meyve püresi, meyve ezmesi ve macunu","Nut purées, nut butters and nut pastes","0,0642"
+0118401,Fındık ezmesi,Hazelnut paste,
+0118408,Tahin,Tahini (sesame paste),
+01185,"Çikolata, kakao, kakao bazlı gıda ürünleri","Chocolate, cocoa and cocoa-based food products","0,3508"
+0118512,Çikolata,Chocolate,
+0118593,Sürülebilir krem çikolata,Chocolate spread,
+01186,"Buz, dondurma ve buzlu şerbet (sorbe)","Ice, ice cream and sorbets","0,2133"
+0118601,Dondurma,Ice cream,
+01189,Başka yerde sınıflandırılmamış tatlılar ve diğer şekerlemeler,Other sugar confectionery and desserts n.e.c.,"0,2549"
+0118916,Tahin helvası,Halva (tahini halva),
+0118991,Lokum,Turkish delight,
+0118994,Sakız,Chewing gum,
+0118995,Ambalajlı şeker,Wrapped candy,
+0119,Yemeye hazır gıdalar ve başka yerde sınıflandırılmamış diğer gıda ürünleri,Ready-made food and other food products,"0,7287"
+01191,"Yemeye hazır gıdalar (hazır pizza, börek, çorba vb.)",Ready-made food,"0,2643"
+0119145,Hazır pizzalar,Frozen and ready pizzas,
+0119161,Hazır çorbalar,Instant soups,
+0119192,Hazır börekler,Ready meals (su böreği),
+0119195,Diğer hazır yemekler,Other ready meals,
+01192,Bebek mamaları,Baby food,"0,0877"
+0119212,Bebek sütü (toz karışım),Infant formula (powdered mix),
+01193,"Tuz, çeşniler ve soslar","Salt, condiments and sauces","0,1317"
+0119311,Tuz,Salt,
+0119393,Sirke,Vinegar,
+0119396,Ketçap,Ketchup,
+0119397,Mayonez,Mayonnaise,
+01194,"Baharatlar, yemeklerde kullanılan otlar ve tohumlar","Spices, culinary herbs and seeds","0,1755"
+0119401,Taze aromatik otlar,Fresh herbs,
+0119402,Baharatlar,Spices,
+01199,Başka yerde sınıflandırılmamış diğer gıda ürünleri,Other food products n.e.c.,"0,0694"
+0119902,Kabartma maddeleri,Raising agents,
+0119904,Hazır toz tatlı karışımları,Instant dessert powders,
+012,Alkolsüz içecekler,Non-alcoholic beverages,"2,3404"
+0121,Meyve ve sebze suları,Fruit and vegetable juices,"0,1832"
+01210,Meyve ve sebze suları,Fruit and vegetable juices,"0,1832"
+0121001,Meyve suyu,Fruit juice,
+0122,Kahve ve kahve ikameleri,Coffee and coffee substitutes,"0,3373"
+01220,Kahve,Coffee and coffee substitutes,"0,3373"
+0122011,Kahve,Coffee,
+0122012,Hazır kahve,Instant coffee,
+0123,"Çay, mate çayı ve demlenerek hazırlanan diğer bitkisel ürünler","Tea, maté and other plant-derived products for infusion","0,7050"
+01230,Çay ve demlenerek hazırlanan diğer bitkisel ürünler,"Tea, maté and other plant-derived products for infusion","0,7050"
+0123021,Çay,Tea,
+0123034,Soğuk çay,Iced tea,
+0125,Maden suları ve kaynak suları,Water,"0,5954"
+01250,Maden suları ve kaynak suları,Water,"0,5954"
+0125001,Su,Bottled water,
+0125002,Maden suyu ve sodası,Mineral water and soda,
+0126,Meşrubatlar,Soft drinks,"0,5195"
+01260,Meşrubatlar,Soft drinks,"0,5195"
+0126002,Gazoz,Soft drinks,
+0126003,Kola,Cola drinks,
+02,"Alkollü içecekler, tütün ve tütün ürünleri","Alcoholic beverages, tobacco","2,7549"
+021,Alkollü içecekler,Alcoholic beverages,"0,5977"
+0211,İçkiler ve likörler,Spirits and liquors,"0,2781"
+02110,İçkiler ve likörler,Spirits and liquors,"0,2781"
+0211001,Rakı,Raki,
+0211002,Votka,Vodka,
+0211006,Viski,Whisky,
+0212,Şaraplar,Wine,"0,0478"
+02121,"Şarap, üzümden",Wine from grapes,"0,0478"
+0212101,Şarap,Wine,
+0213,Biralar,Beer,"0,2718"
+02130,Biralar,Beer,"0,2718"
+0213001,Bira,Beer,
+023,Tütün ve tütün ürünleri,Tobacco,"2,1572"
+0230,Tütün ve tütün ürünleri,Tobacco,"2,1572"
+02301,Sigaralar,Cigarettes,"2,1572"
+0230101,Sigaralar,Cigarettes,
+03,Giyim ve ayakkabı,Clothing and footwear,"7,9038"
+031,Giyim,Clothing,"6,7958"
+0312,Giysiler,Garments,"6,5103"
+03121,Erkek ve erkek çocuk giysileri,Garments for men or boys,"3,0621"
+0312104,Erkek kaban,Men’s overcoat,
+0312105,Erkek mont,Men’s jacket,
+0312108,Erkek takım elbise,Men’s suit,
+0312109,Erkek ceket,Men’s blazer and jacket,
+0312110,Erkek pantolon,Men’s trousers,
+0312112,Erkek kazak,Men’s sweater,
+0312115,Erkek gömlek,Men’s shirt,
+0312116,Erkek sweatshirt,Men’s sweatshirt,
+0312117,Erkek tişört,Men’s t-shirt,
+0312120,Erkek eşofman altı,Men’s sweatpants,
+0312122,Erkek pijama takımı,Men’s pyjamas,
+0312126,Erkek iç çamaşırı,Men’s underwear,
+0312131,Erkek çorap,Men’s socks,
+0312143,Erkek çocuk mont,Boys’ jacket,
+0312152,Erkek çocuk pantolon,Boys’ trousers,
+0312158,Erkek çocuk sweatshirt,Boys’ sweatshirt,
+0312159,Erkek çocuk tişört,Boys’ t-shirt,
+0312164,Erkek çocuk eşofman altı,Boys’ sweatpants,
+0312165,Erkek çocuk pijama takımı,Boys’ pyjamas,
+0312168,Erkek çocuk iç çamaşırı,Boys’ underwear,
+0312172,Erkek çocuk çorap,Boys’ socks,
+03122,Kadın ve kız çocuk giysileri,Garments for women or girls,"3,1893"
+0312204,Kadın kaban,Women’s overcoat,
+0312205,Kadın mont,Women’s jacket,
+0312213,Kadın elbise,Women’s dress,
+0312214,Kadın ceket,Women’s blazer and jacket,
+0312215,Kadın etek,Women’s skirt,
+0312216,Kadın pantolon,Women’s trousers,
+0312217,Kadın hırka,Women’s cardigan,
+0312219,Kadın kazak,Women’s sweater,
+0312222,Kadın gömlek,Women’s shirt,
+0312223,Kadın sweatshirt,Women’s sweatshirt,
+0312224,Kadın tişört,Women’s t-shirt,
+0312230,Kadın eşofman altı,Women’s sweatpants,
+0312235,Kadın pijama takımı,Women’s pyjamas,
+0312238,Kadın iç çamaşırı,Women’s underwear,
+0312243,Kadın çorap,Women’s socks,
+0312252,Kız çocuk mont,Girls’ jacket,
+0312262,Kız çocuk pantolon,Girls’ trousers,
+0312269,Kız çocuk sweatshirt,Girls’ sweatshirt,
+0312270,Kız çocuk tişört,Girls’ t-shirt,
+0312273,Kız çocuk tayt,Girls’ leggings,
+0312275,Kız çocuk eşofman altı,Girls’ sweatpants,
+0312276,Kız çocuk pijama takımı,Girls’ pyjamas,
+0312284,Kız çocuk çorap,Girls’ socks,
+03123,Bebek giysileri (0-2 yaş),Garments for infants (under 2 years of age),"0,1409"
+0312304,Bebek tulumu,Baby overall,
+0312309,Bebek pijama takımı,Baby pyjamas,
+0312310,Bebek iç çamaşırı,Baby underwear,
+0312316,Bebek elbise,Baby dress,
+03124,Okul üniformaları,School uniforms,"0,1181"
+0312401,Okul forması,School uniform,
+0313,Diğer giyim eşyaları ve giyim aksesuarları,Other articles of clothing and clothing accessories,"0,1945"
+03131,Diğer giyim eşyaları,Other articles of clothing,"0,1945"
+0313108,Erkek kemer,Men's belt,
+0313110,Kadın eşarp,Women's scarf,
+0314,"Giyim eşyalarının temizlenmesi, onarımı, tadilatı, dikimi ve kiralanması","Cleaning, repair, tailoring and hire of clothing","0,0909"
+03141,Giyim eşyalarının temizlenmesi,Cleaning of clothing,"0,0154"
+0314101,Kuru temizleme ücreti,Dry cleaning fee,
+03142,"Giyim eşyalarının onarımı, tadilatı, dikimi ve kiralanması","Repair, tailoring and hire of clothing","0,0755"
+0314205,Giysi tamir ücreti,Clothing repair fee,
+032,Ayakkabılar,Footwear,"1,1080"
+0321,Ayakkabılar,Shoes and other footwear,"1,1080"
+03211,Erkek ayakkabıları,Footwear for men,"0,5265"
+0321101,Erkek ayakkabı,Men’s shoes,
+0321102,Erkek bot,Men’s boots,
+0321104,Erkek spor ayakkabısı,Men’s sneakers,
+03212,Kadın ayakkabıları,Footwear for women,"0,4054"
+0321201,Kadın ayakkabı,Women’s shoes,
+0321202,Kadın bot,Women’s boots,
+0321204,Kadın spor ayakkabısı,Women’s sneakers,
+0321206,Kadın terlik,Women’s slippers,
+03213,Bebek ve çocuk ayakkabıları,Footwear for infants and children,"0,1761"
+0321302,Çocuk bot,Children’s boots,
+0321304,Çocuk spor ayakkabısı,Children’s sneakers,
+04,"Konut, su, elektrik, gaz ve diğer yakıtlar","Housing, water, electricity, gas and other fuels","11,4020"
+041,Konut için yapılan gerçek kira ödemeleri,Actual rental payments made for housing,"6,7638"
+0411,Ana ikametgah için kiracılar tarafından ödenen gerçek kiralar,Actual rental payments made by tenants for main residence,"6,7638"
+04110,Kiracılar tarafından ödenen gerçek kira,Actual rental payments made by tenants for main residence,"6,7638"
+0411001,Kiracılar tarafından ödenen gerçek kira,Actual rentals paid by tenants,
+043,"Konutun bakımı, onarımı ve güvenliği","Maintenance, repair and security of the dwelling","0,7980"
+0431,Konutun bakım ve onarımı için malzemeler ve güvenlik ekipmanları,Security equipment and materials for dwelling maintenance and repair,"0,3482"
+04311,Konutun bakım ve onarımı için malzemeler,Materials for the maintenance and repair of the dwelling,"0,3482"
+0431101,Badana ve boya malzemeleri,Paint and coating materials,
+0431102,Yer ve duvar döşeme malzemeleri,Floor and wall covering materials,
+0431106,Pvc kapı ve pencere malzemeleri,PVC door and window materials,
+0431108,Sıhhi tesisat malzemeleri,Plumbing materials,
+0431109,Konutun bakım ve onarımına yönelik diğer malzemeler,Other materials for maintenance and repair of household,
+0432,"Konutun bakım, onarım ve güvenlik hizmetleri","Services for the maintenance, repair and security of the dwelling","0,4497"
+04320,"Konutun bakım, onarım ve güvenlik hizmetleri","Services for the maintenance, repair and security of the dwelling","0,4497"
+0432015,Konutun bakım ve onarımına yönelik işçilik ücretleri,Labour fee for maintenance and repair of household,
+044,Konutla ilgili su temini ve çeşitli hizmetler,Water supply and miscellaneous services relating to the dwelling,"0,6621"
+0441,Su temini,Water supply,"0,6621"
+04411,Su (şebeke suyu),Water supply delivered through network systems,"0,6621"
+0441101,Su (belediye şebeke suyu),Water supply (municipal),
+045,"Elektrik, gaz ve diğer yakıtlar","Electricity, gas and other fuels","3,1781"
+0451,Elektrik,Electricity,"1,2737"
+04510,Elektrik,Electricity,"1,2737"
+0451001,Elektrik,Electricity,
+0452,Gaz,Gas,"1,4045"
+04521,Doğalgaz ve ilgili abonelik ücretleri,Natural gas through networks,"1,0818"
+0452101,Doğalgaz,Natural gas (pipeline),
+0452102,Doğalgaz abonelik ücreti,Natural gas connection fee,
+04522,Tüpgaz (ev tüpü),Liquefied hydrocarbons,"0,3227"
+0452201,Tüpgaz (ev tüpü),LPG cylinders,
+0454,Katı yakıtlar,Solid fuels,"0,4999"
+04541,"Kömür, kömür briketi ve turba","Coal, coal briquettes, peat and peat briquettes","0,3455"
+0454101,Kömür,Coal,
+04542,"Yakacak odun, peletler ve briketler dahil","Wood fuel, including pellets and briquettes","0,1545"
+0454201,Odun,Firewood,
+05,"Mobilya, mefruşat ve evde kullanılan ekipmanlar ile rutin ev bakım ve onarımı","Furnishings, household equipment and routine household maintenance","7,9201"
+051,"Mobilya, mefruşat ve halılar","Furniture, furnishings, and loose carpets","2,9962"
+0511,"Mobilya, mefruşat ve halılar","Furniture, furnishings and loose carpets","2,9962"
+05111,Ev mobilyaları,Household furniture,"2,6236"
+0511102,Mutfak masası,Kitchen table,
+0511105,Mutfak sandalyesi,Kitchen chair,
+0511108,Yatak odası takımı,Bedroom set,
+0511111,Yatak,Bed,
+0511114,Yatak bazası,Bed base,
+0511115,Genç odası takımı,Youth room set,
+0511116,Oturma odası takımı,Living room set,
+0511117,Yemek odası takımı,Dining room set,
+05114,"Mefruşat, halılar ve kilimler","Furnishings, loose carpets and rugs","0,3726"
+0511401,Halı,Carpet (rug),
+052,Ev tekstilleri,Household textiles,"0,6850"
+0521,Ev tekstilleri,Household textiles,"0,6850"
+05211,Döşemelik kumaşlar ve perdeler,Furnishing fabrics and curtains,"0,2310"
+0521101,Perde,Curtains,
+0521102,Stor perde,Roller blinds,
+0521103,Tül perde,Sheer curtains,
+05212,Yatak takımları ve yatak olarak kullanılan eşyalar,Bed linen and bedding,"0,2841"
+0521201,Yatak örtüsü,Bedspread,
+0521204,Yorgan,Duvet,
+0521206,Battaniye,Blanket,
+0521207,Pike takımı,Pique set,
+0521208,Nevresim takımı,Duvet cover set,
+0521209,Yastık,Pillow,
+05213,Masa ve banyo tekstili,Table linen and bathroom linen,"0,0539"
+0521307,Havlu,Towel,
+05219,Diğer ev tekstilleri,Other household textiles,"0,1160"
+0521904,Banyo paspası,Bath mat,
+0521905,Diğer ev tekstili,Other home textiles,
+053,Ev aletleri,Household appliances,"1,9417"
+0531,Elektrikli veya elektriksiz büyük ev aletleri,Major electric and other household appliances,"1,5981"
+05311,Elektrikli büyük mutfak eşyaları,Major kitchen appliances,"0,6798"
+0531101,Buzdolabı,Refrigerator,
+0531103,Derin dondurucu,Deep freezer,
+0531106,Bulaşık makinesi,Dishwasher,
+0531108,Fırın ve ocaklar,Ovens and cookers,
+05312,Çamaşır makineleri ve kurutma makineleri,Major laundry appliances,"0,3793"
+0531201,Çamaşır makinesi,Washing machine,
+0531202,Çamaşır kurutma makinesi,Dryer,
+05313,"Isıtıcılar, klimalar",Heaters and air conditioners,"0,3188"
+0531301,Klima,Air conditioner,
+0531303,Soba,Stove heater,
+0531306,Kombi,Combi boiler,
+05314,Temizlik ekipmanları (elektrik süpürgesi vb.),Cleaning equipment,"0,2202"
+0531401,Elektrikli süpürgeler,Vacuum cleaner,
+0532,Küçük ev aletleri,Small household appliances,"0,1911"
+05321,Yiyecek pişirme ve işlemede kullanılan küçük aletler,Small appliances for the cooking and processing of food,"0,0875"
+0532101,Elektrikli kesici aletler (blender),Food processors and blenders,
+0532102,Elektrikli küçük ev aletleri,Small electric appliances,
+05322,İçecek hazırlamada kullanılan küçük aletler,Small appliances for the preparation of beverages,"0,0502"
+0532201,Elektrikli çay makinesi,Electric tea maker,
+05329,Diğer küçük ev aletleri,Other small household appliances,"0,0534"
+0532901,Ütü,Iron,
+0533,"Ev aletlerinin onarımı, kurulumu ve kiralanması","Repair, installation and hire of household appliances","0,1525"
+05330,"Ev aletlerinin onarımı, kurulumu ve kiralanması","Repair, installation and hire of household appliances","0,1525"
+0533001,Ev aletlerinin bakım ve onarımı,Repair of household appliances,
+054,"Züccaciye, yemek takımı ve ev gereçleri","Glassware, tableware and household utensils","0,7805"
+0540,"Züccaciye, yemek takımı ve ev gereçleri","Glassware, tableware and household utensils","0,7805"
+05401,"Cam, kristal, seramik, porselen ve çin porseleni eşyalar","Glassware, crystal ware, ceramic ware and china ware","0,3239"
+0540102,Cam ev eşyası,Glass household utensils,
+0540104,Porselen ev eşyası,Porcelain household utensils,
+05402,Çatal bıçak takımları ve gümüş çatal bıçak takımları,"Cutlery, flatware and silverware","0,0586"
+0540201,"Kaşık, çatal, bıçak takımı (çelik)",Steel cutlery set,
+05403,Mutfak gereçleri ve eşyaları,Kitchen utensils and articles,"0,3980"
+0540301,Çelik mutfak eşyaları,Steel kitchenware,
+0540314,Yapışmaz malzemeden mutfak eşyaları,Non-stick kitchenware,
+0540316,Termos,Thermos,
+055,Ev ve bahçe alet ve ekipmanları,Tools and equipment for house and garden,"0,1770"
+0552,Motorlu olmayan ev ve bahçe aletleri ve çeşitli aksesuarlar,Non-motorized tools and miscellaneous accessories,"0,1770"
+05522,"Çeşitli hırdavat malzemeleri ve aksesuarlar (pil, ampul vb.)",Miscellaneous accessories,"0,1770"
+0552201,Pil,Battery,
+0552203,Ampul,Light bulb,
+056,Rutin ev bakımı için mal ve hizmetler,Goods and services for routine household maintenance,"1,3397"
+0561,Dayanıklı olmayan ev eşyaları,Non-durable household goods,"1,0389"
+05611,Ev temizlik ve bakım ürünleri,Household cleaning and maintenance products,"0,8402"
+0561101,Çamaşır için temizlik ve bakım ürünleri,Laundry cleaning and care products,
+0561102,Bulaşık için temizlik ve bakım ürünleri,Dishwashing cleaning and care products,
+0561103,Hijyenik zeminler için temizlik ve bakım ürünleri,Floor hygiene cleaning and care products,
+0561106,Temizlik bezleri,Cleaning cloths,
+0561198,Yüzey temizlik havlusu,Surface cleaning towel and wipes,
+05619,Diğer dayanıklı olmayan ev eşyaları,Other non-durable household goods,"0,1986"
+0561902,"Saklama ve muhafaza malzemeleri (streç film, alüminyum folyo vb.)","Storage and preservation materials (cling film, aluminum foil etc.)",
+0561903,"Kağıt sofra malzemeleri (kağıt havlu, kağıt peçete vb.)","Paper tableware (paper towel, napkin etc.)",
+0561915,Diğer dayanıklı olmayan ev eşyaları,Other non-durable household goods,
+0562,Ev içi hizmetler ve hanehalkı hizmetleri,Domestic services and household services,"0,3008"
+05629,Diğer hanehalkı hizmetleri,Other household services,"0,3008"
+0562901,Ev eşyalarının bakım ve onarımına yönelik hizmetler,Household maintenance and repair services,
+0562902,Gündelikçi ücreti,Maid and cleaners' fee,
+06,Sağlık,Health,"2,7923"
+061,İlaçlar ve sağlık ürünleri,Medicines and health products,"1,0036"
+0611,İlaçlar,Medicines,"0,6872"
+06111,"İlaçlar, aşılar ve diğer eczacılık ürünleri","Medicines, vaccines and other pharmaceutical preparations","0,6872"
+0611101,İlaçlar,Medicines,
+0611102,İlaç katılım payı,Medicine copayment,
+0613,Yardımcı ürünler,Assistive products,"0,3165"
+06131,Görmeye yardımcı ürünler,Assistive products for vision,"0,2232"
+0613101,Numaralı gözlük cam ve çerçevesi,Prescription eyeglass lenses and frames,
+0613102,Kontakt lens,Contact lenses,
+06133,Hareket ve günlük yaşam için yardımcı ürünler,Assistive products for mobility and daily living,"0,0932"
+0613318,Günlük yaşam için destekleyici ürünler,Assistive products for daily life,
+062,Ayaktan tedavi hizmetleri,Outpatient care services,"0,9965"
+0622,Ayaktan ağız ve diş tedavi hizmetleri,Outpatient dental services,"0,5978"
+06229,Diğer ayaktan ağız ve diş tedavi hizmetleri,Other outpatient dental services,"0,5978"
+0622902,Diş dolgusu ücreti,Dental filling fee,
+0622906,Diş implantı ücreti,Dental implant fee,
+0622907,Diş kanal tedavisi ücreti,Dental root canal treatment fee,
+0622908,Diş protez kaplama ücreti,Dental crown and prosthesis fee,
+0623,Diğer ayaktan tedavi hizmetleri,Other outpatient care services,"0,3988"
+06231,Ayaktan tedavi edici ve rehabilite edici hizmetler,Outpatient curative and rehabilitative services,"0,3988"
+0623101,Doktor muayene ücreti,Doctor consultation fee,
+0623102,Muayene katılım payı,Patient share for doctor consultation,
+0623103,Fizik tedavi ücreti,Physical therapy fee,
+063,Yatarak tedavi hizmetleri,Inpatient care services,"0,7222"
+0631,Yatarak tedavi edici ve rehabilite edici hizmetler,Inpatient curative and rehabilitative services,"0,7222"
+06310,Yatarak tedavi edici ve rehabilite edici hizmetler,Inpatient curative and rehabilitative services,"0,7222"
+0631002,Ameliyat ücreti,Surgery fee,
+0631003,Normal doğum ücreti,Normal delivery fee,
+0631004,Sezaryen doğum ücreti,Caesarean delivery fee,
+064,Diğer sağlık hizmetleri,Other health services,"0,0699"
+0641,Tanısal görüntüleme hizmetleri ve medikal (tıbbi) laboratuvar hizmetleri,Diagnostic imaging services and medical laboratory services,"0,0699"
+06410,Tanısal görüntüleme hizmetleri ve medikal (tıbbi) laboratuvar hizmetleri,Diagnostic imaging services and medical laboratory services,"0,0699"
+0641001,Röntgen ücreti,X-ray fee,
+0641002,Ultrason ücreti,Ultrasound fee,
+0641005,Mr (emar) ücreti,MRI (magnetic resonance imaging) fee,
+0641008,Laboratuvar tahlil ücreti,Laboratory test fee,
+07,Ulaştırma,Transport,"16,6169"
+071,Araç satın alımı,Purchase of vehicles,"5,1178"
+0711,Motorlu taşıtlar,Motor cars,"4,5857"
+07111,Birinci el motorlu taşıtlar,New motor cars,"4,5857"
+0711104,Benzinli otomobil,Petrol (gasoline) car,
+0711107,Hibrit otomobil,Hybrid car,
+0711109,Elektrikli otomobil,Electric car,
+0712,Motosikletler,Motorcycles,"0,4769"
+07120,Motosikletler,Motorcycles,"0,4769"
+0712001,Motosiklet,Motorcycle,
+0713,Bisikletler,Bicycles,"0,0553"
+07130,Bisikletler,Bicycles,"0,0553"
+0713001,Bisiklet,Bicycle,
+072,Kişisel ulaşım araçlarının kullanımı,Operation of personal transport equipment,"4,8757"
+0721,Kişisel ulaşım araçlarının parça ve aksesuarları,Parts and accessories for personal transport equipment,"0,3585"
+07211,Lastikler,Tyres,"0,1836"
+0721101,Otomobil lastikleri,Vehicle tyres,
+07212,Kişisel ulaşım araçlarının parçaları,Parts for personal transport equipment,"0,1124"
+0721201,Otomobil yedek parça ve ekipmanları,Vehicle spare parts and equipment,
+07213,Kişisel ulaşım araçlarının aksesuarları,Accessories for personal transport equipment,"0,0624"
+0721302,Otomobil aksesuarları,Vehicle accessories,
+0722,Kişisel ulaşım araçları için yakıtlar ve yağlar,Fuels and lubricants for personal transport equipment,"3,2290"
+07221,Motorin (Mazot),Diesel,"1,3919"
+0722101,Motorin (mazot),Diesel fuel,
+07222,Benzin,Petrol,"1,2364"
+0722201,Benzin,Petrol (gasoline),
+07223,Kişisel ulaşım araçları için diğer yakıtlar,Other fuels for personal transport equipment,"0,5801"
+0722301,LPG ücreti (taşıtlar için),LPG (for cars),
+0722398,Elektrikli araç şarj ücreti,Electric vehicle charging fee,
+07224,Yağlar,Lubricants,"0,0207"
+0722401,Motor yağları,Motor oils,
+0723,Kişisel ulaşım araçlarının bakım ve onarımı,Maintenance and repair of personal transport equipment,"0,9917"
+07230,Kişisel ulaşım araçlarının bakım ve onarımı,Maintenance and repair of personal transport equipment,"0,9917"
+0723001,Otomobil yedek parça ve aksesuar montaj hizmeti,Installation of vehicle parts and accessories,
+0723002,Otomobil tamir ve bakım hizmeti,Repair and maintenance service of vehicles,
+0724,Kişisel ulaşım araçları ile ilgili diğer hizmetler,Other services related to personal transport equipment,"0,2965"
+07242,Geçiş ücretleri,Toll facilities,"0,0343"
+0724201,Otoban geçiş ücreti,Motorway toll,
+0724202,Köprü geçiş ücreti,Bridge toll,
+07243,"Sürücü kursları, araç muayene, emisyon ölçüm ücreti vb. hizmetler","Driving lessons, tests, licences and roadworthiness tests","0,1900"
+0724302,Sürücü kursu ücreti,Driving course fee,
+0724304,Araç muayene ve emisyon ölçüm ücreti,Vehicle inspection and emission fee,
+07244,Kişisel ulaşım araçlarının sürücüsüz olarak kiralanması,Hire of personal transport equipment without driver,"0,0723"
+0724401,Araç kiralama ücreti,Car rental fee,
+073,Yolcu taşıma hizmetleri,Passenger transport services,"6,1420"
+0731,Demir yolu ile yolcu taşımacılığı,Passenger transport by railway,"0,1151"
+07311,Tren ile yolcu taşımacılığı,Passenger transport by train,"0,0984"
+0731102,Tren bileti ücreti (şehirlerarası),Intercity train fare,
+07312,Metro ve tramvay ile yolcu taşımacılığı,Passenger transport by rapid transit and tram,"0,0167"
+0731201,Metro bileti ücreti,Metro fare,
+0731203,Tramvay bileti ücreti,Tram fare,
+0732,Kara yolu ile yolcu taşımacılığı,Passenger transport by road,"5,1049"
+07321,Otobüs ile yolcu taşımacılığı,Passenger transport by bus and coach,"3,6534"
+0732101,Belediye otobüs bileti ücreti,Urban bus fare,
+0732104,Şehirlerarası otobüs bileti ücreti,Intercity bus fare,
+0732106,Dolmuş ücreti,Shared taxi and minibus fare,
+07322,Taksi ve sürücüsü ile birlikte kiralanmış taşıtlarla yolcu taşımacılığı,Passenger transport by taxi and hired vehicle with driver,"0,6625"
+0732201,Taksi ücreti,Taxi fare,
+07323,Okul servisleri,Passenger transport for students to and from school,"0,7890"
+0732301,Okul servisi ücreti,School transport fee,
+0733,Hava yolu ile yolcu taşımacılığı,Passenger transport by air,"0,8737"
+07331,Hava yolu ile yurt içi yolcu taşımacılığı,"Passenger transport by air, domestic","0,5863"
+0733101,Uçak bileti ücreti (yurtiçi),Domestic flight fare,
+07332,Hava yolu ile yurt dışı yolcu taşımacılığı,"Passenger transport by air, international","0,2874"
+0733201,Uçak bileti ücreti (yurt dışı),International flight fare,
+0734,Deniz ve iç sularda yolcu taşımacılığı,Passenger transport by sea and inland waterway,"0,0483"
+07340,Deniz ve iç sularda yolcu taşımacılığı,Passenger transport by sea and inland waterway,"0,0483"
+0734001,Vapur bileti ücreti,Ferry fare,
+074,Posta ve mal taşımacılığı hizmetleri,Transport services for goods,"0,4814"
+0741,Posta ve kurye hizmetleri,Postal and courier services,"0,0412"
+07412,Kurye ve paket/koli dağıtım hizmetleri,Courier and parcel delivery services,"0,0412"
+0741201,Kargo gönderim ücreti,Cargo delivery cost,
+0749,Diğer mal taşımacılığı,Other transport of goods,"0,4402"
+07491,Nakliye ve depolama hizmetleri,Removal and storage services,"0,4338"
+0749101,Nakliye ücreti,Moving fee,
+07492,"Malların dağıtım ücretleri (kurye, paket servis vb.)",Delivery of goods,"0,0064"
+0749201,"Malların dağıtım ücretleri (kurye, paket servis vb.)",Delivery fee for goods,
+08,Bilgi ve iletişim,Information and communication,"3,1035"
+081,Bilgi ve iletişim ekipmanları,Information and communication equipment,"1,4766"
+0812,Mobil telefon ekipmanları,Mobile telephone equipment,"0,8738"
+08120,Mobil telefon ve ekipmanları,Mobile telephone equipment,"0,8738"
+0812002,Cep telefonu,Mobile phone,
+0813,Bilgi işleme ekipmanları,Information processing equipment,"0,1984"
+08131,"Bilgisayarlar, diz üstü bilsayarlar ve tablet bilgisayarlar","Computers, laptops and tablets","0,1808"
+0813101,Bilgisayar,Computer,
+08132,Bilgisayar çevre birimleri ve sarf malzemeleri,Peripheral equipment and its consumable components,"0,0176"
+0813209,Bilgisayar ekipmanları,Computer peripherals,
+0814,"Ses ve görüntü alma, kaydetme ve çoğaltma ekipmanları","Equipment for the reception, recording and reproduction of sound and vision","0,2583"
+08140,"Ses ve görüntü alma, kaydetme ve çoğaltma ekipmanları","Equipment for the reception, recording and reproduction of sound and vision","0,2583"
+0814001,Ses ve görüntü ekipmanları,Audio-video equipment,
+0814007,Televizyon,Television,
+0819,Diğer bilgi ve iletişim ekipmanları ve aksesuarları,Other information and communication equipment and accessories,"0,1461"
+08191,Diğer bilgi ve iletişim ekipmanları,Other information and communication equipment,"0,0372"
+0819103,Diğer iletişim ekipmanları,Other communication devices,
+08192,Diğer bilgi ve iletişim aksesuarları,Other information and communication accessories,"0,1089"
+0819201,Diğer bilgi ve iletişim aksesuarları,Info-communication accessories,
+083,Bilgi ve iletişim hizmetleri,Information and communication services,"1,6269"
+0832,Mobil iletişim hizmetleri,Mobile communication services,"1,1465"
+08320,Mobil iletişim hizmetleri,Mobile communication services,"1,1465"
+0832001,Cep telefonu görüşme ücreti,Mobile phone service fee,
+0833,İnternet erişimi sağlama hizmetleri ve ağ depolama hizmetleri,Internet access provision services and online storage services,"0,3395"
+08330,İnternet erişim hizmetleri,Internet access provision services and online storage services,"0,3395"
+0833001,İnternet ücreti,Internet service fee,
+0835,Bilgi ve iletişim ekipmanlarının onarımı ve kiralanması,Repair and rental of information and communication equipment,"0,0479"
+08350,Bilgi ve iletişim ekipmanlarının onarımı ve kiralanması,Repair and rental of information and communication equipment,"0,0479"
+0835001,Bilgi ve iletişim ekipmanlarının tamir ve bakımı,Repair and maintenance of information and communication equipment,
+0839,Diğer bilgi ve iletişim hizmetleri,Other information and communication services,"0,0930"
+08392,"Görsel-işitsel içeriklerin aboneliği, kiralanması ve çevrim içi yayın hizmetleri",Subscriptions to audiovisual streaming services and rental of audiovisual content,"0,0930"
+0839201,Görsel ve işitsel platform aboneliği,Digital content platform subscription,
+09,"Eğlence, dinlence, spor ve kültür","Recreation, sport and culture","4,3382"
+092,Diğer eğlence malları,Other recreational goods,"0,3944"
+0921,"Oyunlar, oyuncaklar ve hobiler","Games, toys and hobby-related articles","0,2347"
+09211,"Video oyunu bilgisayarları, oyun konsolları, oyun uygulamaları ve yazılımları","Video game computers, consoles, game applications and software","0,0385"
+0921104,Elektronik oyunlar (oyun konsolları vb.),"Electronic games (game consoles, etc.)",
+09212,"Diğer oyunlar, oyuncaklar ve hobiler","Other games, toys and hobby-related articles","0,1962"
+0921204,Diğer oyuncaklar,Other toys,
+0921207,Tekerlekli sürülebilir oyuncaklar,Ride-on wheeled toys,
+0922,"Spor, kamp ve açık hava eğlence ekipmanları","Sporting, camping and open-air recreation equipment","0,1598"
+09221,Spor ekipmanları,Sporting equipment,"0,1598"
+0922102,Evde kullanılan spor aletleri,Home fitness equipment,
+0922103,Spor ekipmanları,Sports equipment,
+0922107,Sportif faaliyetler için özel amaçlı giysi ve aksesuarlar,Special clothing and accessories for sporting activities,
+093,Bahçe ürünleri ve ev hayvanları,Garden products and pets,"0,4846"
+0932,Ev hayvanları ve ev hayvanları için ürünler,Pets and pet products,"0,4846"
+09322,Ev hayvanları ve diğer evcil hayvanlar için ürünler,Products for pets and other household animals,"0,4846"
+0932201,Evcil hayvan mamaları,Pet food,
+0932204,Evcil hayvanlara yönelik diğer ürünler,Other pet products,
+094,Eğlence ve dinlence hizmetleri,Recreational services,"1,9297"
+0945,Veterinerlik ve ev hayvanları için diğer hizmetler,Veterinary and other services for pets,"0,2784"
+09450,Veterinerlik ve ev hayvanları için diğer hizmetler,Veterinary and other services for pets,"0,2784"
+0945001,Veterinerlik hizmetleri,Veterinary services,
+0946,"Eğlence, dinlence ve spor hizmetleri",Recreational and sporting services,"1,5798"
+09461,Eğlence ve dinlence hizmetleri,Recreational and leisure services,"0,3765"
+0946103,Hobi ve eğlence hizmetleri,Recreation and hobby services,
+09462,Spor faaliyetlerine katılım,Services associated with the practice of sports,"1,2034"
+0946201,"Sportif tesislere yapılan ödemeler (üyelik, kiralama vb.)","Payments for sports facilities (membership, rental, etc.)",
+0946203,Spor amaçlı kurs ücretleri,Sports training fee,
+0947,Şans oyunları,Games of chance,"0,0715"
+09470,Şans oyunları,Games of chance,"0,0715"
+0947001,Şans oyunları,Games of chance,
+096,Kültürel hizmetler,Cultural services,"0,4268"
+0961,"Sinema, tiyatro ve konser salonlarında verilen hizmetler","Services provided by cinemas, theatres and concert venues","0,1849"
+09610,"Sinema, tiyatro ve konser salonlarında verilen hizmetler","Services provided by cinemas, theatres and concert venues","0,1849"
+0961001,Sinema bileti,Cinema ticket,
+0961002,Tiyatro bileti,Theatre ticket,
+0969,Diğer kültürel hizmetler,Other cultural services,"0,2419"
+09690,Diğer kültürel hizmetler,Other cultural services,"0,2419"
+0969006,"Düğün, nişan vb. toplantılar için salon kirası","Event hall rental for wedding, engagement, and other events",
+097,"Gazete, kitap ve kırtasiye malzemeleri","Newspapers, books and stationery","0,5114"
+0971,Kitaplar,Books,"0,3400"
+09711,Eğitsel kitaplar ve ders kitapları,Educational books and textbooks,"0,2436"
+0971102,Test kitapları,Test books,
+0971103,Ders kitapları,Textbooks,
+09719,Diğer kitaplar,Other books,"0,0965"
+0971901,Çocuk kitapları,Children's books,
+0971902,Diğer kitaplar,Other books,
+0974,Kırtasiye ve çizim malzemeleri,Stationery and drawing materials,"0,1713"
+09740,Kırtasiye ve çizim malzemeleri,Stationery and drawing materials,"0,1713"
+0974001,Okul defterleri,School notebooks,
+0974003,Kalemler,Pens and pencils,
+0974004,Resim boyaları,Paintings for paints,
+0974005,Yazım ve çizim kağıtları,Writing and drawing paper,
+0974009,Diğer kırtasiye malzemeleri,Other stationery items,
+098,Paket turlar ve tatiller,Package holidays,"0,5912"
+0980,Paket turlar ve tatiller,Package holidays,"0,5912"
+09800,Paket turlar ve tatiller,Package holidays,"0,5912"
+0980002,Yurt içi hafta sonu turları,Domestic weekend package tours,
+0980003,Yurt içi diğer turlar,Other domestic package tours,
+0980006,Yurt dışı turlar,Package tours abroad,
+0980008,Umre ücreti (Diyanet İşleri Başkanlığı),Umrah package fee (Presidency of Religious Affairs of Türkiye),
+0980009,Umre ücreti (acente),Umrah package fee (agency),
+10,Eğitim hizmetleri,Education services,"2,0215"
+101,Okul öncesi ve temel eğitim (ilkokul),Early childhood and primary education,"0,6984"
+1010,Okul öncesi ve temel eğitim (ilkokul),Early childhood and primary education,"0,6984"
+10101,Okul öncesi eğitim,Early childhood education,"0,2398"
+1010101,Anaokulu ücreti,Preschool fee,
+10102,İlkokul eğitimi (temel eğitim),Primary education,"0,4586"
+1010201,Özel ilkokul ücreti,Private primary school fee,
+102,Ortaöğretim eğitimi (ortaokul ve lise),Secondary education,"0,5479"
+1020,Ortaöğretim eğitimi (ortaokul ve lise),Secondary education,"0,5479"
+10200,Ortaöğretim eğitimi (ortaokul ve lise),Secondary education,"0,5479"
+1020001,Özel ortaokul ücreti,Private lower secondary school fee,
+1020002,Özel lise ücreti,Private upper secondary school fee,
+104,Yükseköğretim eğitimi,Tertiary education,"0,7752"
+1040,Yükseköğretim eğitimi,Tertiary education,"0,7752"
+10400,Yükseköğretim eğitimi,Tertiary education,"0,7752"
+1040001,Özel üniversite ücreti,Private university fee,
+1040002,Açıköğretim öğrenci katkı ücreti (ikinci üniversite),Student contribution fee for open education (second degree program),
+11,Lokantalar ve konaklama hizmetleri,Restaurants and accommodation services,"11,1349"
+111,Yiyecek ve içecek sunum hizmetleri,Food and beverage serving services,"8,4375"
+1111,"Lokantalar, kafeler ve benzerleri","Restaurants, cafés and the like","7,9106"
+11111,"Lokantalar, kafeler ve benzerleri, tam sunum hizmeti verenler","Restaurants, cafés and the like – with full service","7,5339"
+1111130,Çorbalar (hizmet sunulan yerlerde tüketilen),Soups (full-service restaurants),
+1111131,Sıcak yemekler (hizmet sunulan yerlerde tüketilen),Hot meals (full-service restaurants),
+1111132,Kebaplar (hizmet sunulan yerlerde tüketilen),Kebabs (full-service restaurants),
+1111133,Pideler (hizmet sunulan yerlerde tüketilen),Pide (full-service restaurants),
+1111135,Ekmekarası yiyecekler (hizmet sunulan yerlerde tüketilen),Sandwiches (full-service restaurants),
+1111144,Hamur tatlıları (hizmet sunulan yerlerde tüketilen),Desserts (full-service restaurants),
+1111148,Kahvaltı (hizmet sunulan yerlerde tüketilen),Breakfast (full-service restaurants),
+1111152,Sıcak içecekler (hizmet sunulan yerlerde tüketilen),Hot beverages (full-service restaurants),
+1111153,Soğuk içecekler/meşrubat (hizmet sunulan yerlerde tüketilen),Cold beverages (full-service restaurants),
+1111155,Ayran (hizmet sunulan yerlerde tüketilen),Ayran (full-service restaurants),
+1111156,Alkollü içecekler (hizmet sunulan yerlerde tüketilen),Alcoholic beverages (full-service restaurants),
+11112,"Lokantalar, kafeler ve benzerleri, sınırlı sunum hizmeti verenler","Restaurants, cafés and the like – with limited service","0,3766"
+1111207,Çiğ köfte (hızlı hizmet sunulan yerlerde tüketilen),Çiğ köfte (limited-service restaurants),
+1111231,Pizza (hızlı hizmet sunulan yerlerde tüketilen),Pizza (limited-service restaurants),
+1111237,Hamburger (hızlı hizmet sunulan yerlerde tüketilen),Hamburger (limited-service restaurants),
+1112,"Kantinler, kafeteryalar ve yemekhaneler","Canteens, cafeterias and refectories","0,5270"
+11121,"Üniversitelerin, okulların ve kreşlerin kafeteryaları ve kantinleri","Canteens and cafeterias of universities, schools and kindergartens","0,5270"
+1112108,Tost (kantinde satılan),Toast (canteens),
+1112113,Simit (kantinde satılan),Simit (canteens),
+1112120,Çay (kantinde satılan),Tea (canteens),
+112,Konaklama hizmetleri,Accommodation services,"2,6974"
+1120,Konaklama hizmetleri,Accommodation services,"2,6974"
+11201,"Otel, motel, pansiyon ve benzeri yerlerdeki konaklama hizmetleri","Hotels, motels, inns and similar accommodation services","2,5896"
+1120101,Otel ücreti,Hotel accommodation fee,
+11203,"Yatılı okullar, üniversiteler ve diğer eğitim kurumlarındaki konaklama hizmetleri","Accommodation services of boarding schools, universities and other educational establishments","0,1078"
+1120301,Yurt ücreti (üniversite-özel),Private dormitory fee (university),
+1120398,Yurt ücreti (üniversite-devlet),Public dormitory fee (university),
+12,Sigorta ve finansal hizmetler,Insurance and financial services,"1,0740"
+121,Sigorta,Insurance,"0,4282"
+1212,Sağlık sigortası,Insurance connected with health,"0,0282"
+12120,Sağlık sigortası,Insurance connected with health,"0,0282"
+1212098,Sağlık sigortası,Health insurance,
+1213,Konut sigortası,Insurance connected with dwellings,"0,0458"
+12130,Konut sigortası,Insurance connected with dwellings,"0,0458"
+1213001,Konut sigortası (yangın ve diğer afetler),Home insurance (fire and hazards),
+1213002,Zorunlu deprem sigortası (dask),Compulsory earthquake insurance,
+1214,Taşımacılık sigortası,Insurance connected with transport,"0,3542"
+12141,Özel taşımacılık sigortası,Personal transport insurance,"0,3542"
+1214101,Kasko ve zorunlu trafik sigortası,Motor vehicle insurance,
+122,Finansal hizmetler,Financial services,"0,6458"
+1222,Mevduat kabul eden kuruluşlara yapılan doğrudan ödemeler,Explicit charges by deposit-taking corporations,"0,4834"
+12220,Mevduat kabul eden kuruluşlara yapılan doğrudan ödemeler,Explicit charges by deposit-taking corporations,"0,4834"
+1222001,Diğer bankacılık hizmet ücretleri,Other banking service fees,
+1222002,Kredi kartı yıllık aidatı,Credit card annual fee,
+1229,Diğer finansal hizmetler,Other financial services,"0,1624"
+12291,Havale ücretleri,Remittances fees,"0,1624"
+1229101,Para transfer ücretleri,Money transfer fee,
+13,"Kişisel bakım, sosyal koruma ve çeşitli mal ve hizmetler","Personal care, social protection and miscellaneous goods and services","4,4935"
+131,Kişisel bakım,Personal care,"1,8720"
+1311,Kişisel bakıma yönelik elektrikli aletler,Electric appliances for personal care,"0,0640"
+13111,Kişisel bakıma yönelik elektrikli aletler,Purchase of electric appliances for personal care,"0,0640"
+1311101,Elektrikli tıraş makinesi,Electric shaver,
+1311103,Elektrikli saç bakım aletleri,Electric hair care devices,
+1311104,Diğer elektrikli kişisel bakım aletleri,Other personal care appliances,
+1312,"Kişisel bakıma yönelik diğer aletler, malzemeler ve ürünler","Other appliances, articles and products for personal care","1,2227"
+13120,"Kişisel bakıma yönelik diğer aletler, malzemeler ve ürünler","Other appliances, articles and products for personal care","1,2227"
+1312001,Tıraş bıçağı,Razor blade,
+1312002,Diş fırçası,Toothbrush,
+1312016,Diş macunu,Toothpaste,
+1312017,El sabunu (katı ve sıvı),Hand soap,
+1312018,Banyo sabunu,Bath soap,
+1312019,Parfüm,Perfume,
+1312020,Deodorant,Deodorant,
+1312021,Kolonya,Cologne,
+1312022,Diğer kişisel bakım ürünleri,Other personal care products,
+1312023,Makyaj malzemeleri,Cosmetics,
+1312024,Güneş kremi,Sunscreen,
+1312025,Saç bakım ürünleri,Hair care products,
+1312026,Tuvalet kağıdı,Toilet paper,
+1312027,Diğer kağıt ürünleri,Other paper products,
+1312030,Hijyenik kadın bağı,Sanitary pads,
+1313,Kuaför salonları ve kişisel bakım merkezleri,Hairdressing salons and personal grooming establishments,"0,5853"
+13131,Kuaförlük hizmetleri,Hairdressing,"0,3928"
+1313101,Erkek berberi hizmetleri,Men’s barber service,
+1313102,Kadın kuaförü hizmetleri,Women’s hairdresser service,
+13132,Kişisel bakım hizmetleri,Personal grooming treatments,"0,1925"
+1313202,Kişisel bakım hizmetleri (kadın için),Personal care services (for woman),
+132,Diğer kişisel eşyalar,Other personal effects,"1,0940"
+1321,Mücevherat ve kol saatleri,Jewellery and watches,"0,4489"
+13211,Mücevherat ve kol saatleri,Purchase of jewellery and watches,"0,4489"
+1321101,Mücevher (altın),Jewellery (gold),
+1321105,Kol saati,Wristwatch,
+1329,Başka yerde sınıflandırılmamış diğer kişisel eşyalar,Other personal effects n.e.c.,"0,6451"
+13291,"Başka yerde sınıflandırılmamış seyahat eşyaları, bebekler için malzemeler ve diğer kişisel eşyalar","Travel goods, baby articles and other personal effects n.e.c.","0,6451"
+1329101,Seyahat eşyaları,Travel goods,
+1329104,Kadın çantası,Women’s handbag,
+1329106,Okul çantası,School bag,
+1329111,Güneş gözlükleri,Sunglasses,
+1329114,Bebek arabası,Baby stroller,
+1329129,Bebek bezi,Baby diapers,
+133,Sosyal koruma,Social protection,"0,3517"
+1330,Sosyal koruma,Social protection,"0,3517"
+13301,Çocuk bakım hizmetleri,Childcare services,"0,3517"
+1330101,Kreş ve gündüz bakım hizmeti,Daycare and nursery services,
+139,Diğer hizmetler,Other services,"1,1758"
+1390,Diğer hizmetler,Other services,"1,1758"
+13902,Dini hizmetler,Religious services,"0,4022"
+1390208,Hac ücreti (Diyanet İşleri Başkanlığı paket fiyatı),Hajj package fee (Presidency of Religious Affairs of Türkiye),
+13909,Başka yerde sınıflandırılmamış diğer hizmetler,Other services n.e.c.,"0,7737"
+1390901,Noter ücreti,Notary fee,
+1390902,Otomobil ekspertiz ücreti,Vehicle inspection and expertise fee,
+1390903,Hukuki hizmetler,Legal services,
+1390906,Diğer hizmetler için ödemeler,Other miscellaneous services,
