@@ -139,3 +139,40 @@ def fetch_titck_medicine_prices() -> pd.DataFrame:
             print(f"  ⚠ Skipping {href}: {exc}")
 
     return pd.concat(frames, ignore_index=True) if frames else pd.DataFrame()
+
+
+def fetch_sgk_optical_prices() -> pd.DataFrame:
+    try:
+        resp = requests.get(SGK_OPTICAL_URL, headers=HEADERS, timeout=20)
+        resp.raise_for_status()
+    except requests.RequestException as exc:
+        print(f"⚠ SGK page unreachable: {exc}")
+        return pd.DataFrame()
+
+    soup = BeautifulSoup(resp.text, "html.parser")
+    today = date.today().strftime("%Y-%m-%d")
+    rows = []
+
+    for table in soup.find_all("table"):
+        for tr in table.find_all("tr"):
+            cells = [td.get_text(" ", strip=True) for td in tr.find_all(["td", "th"])]
+            if len(cells) < 2:
+                continue
+            name = cells[0].strip()
+            price = _parse_price(cells[1])
+            if not name or price is None:
+                continue
+            rows.append({
+                "date": today,
+                "product-name": name,
+                "product-price": price,
+                "category": _classify_optical(name),
+                "source": "SGK",
+            })
+
+    if not rows:
+        print("⚠ No optical rows parsed from SGK page.")
+    else:
+        print(f"  ✓ {len(rows)} optical products from SGK")
+
+    return pd.DataFrame(rows)

@@ -154,3 +154,41 @@ def test_fetch_titck_returns_empty_when_no_excel_links():
     with patch("health_scraper.requests.get", return_value=html_mock):
         result = fetch_titck_medicine_prices()
     assert result.empty
+
+
+# ── fetch_sgk_optical_prices ──────────────────────────────────────────────
+
+from health_scraper import fetch_sgk_optical_prices
+
+
+SAMPLE_SGK_HTML = """
+<html><body>
+<table>
+  <tr><td>Tek Odaklı Cam (sferik ≤4 dioptri)</td><td>150,00 TL</td></tr>
+  <tr><td>Çerçeve (14 yaş altı)</td><td>200,00 TL</td></tr>
+  <tr><td>Progressif Cam</td><td>300,00 TL</td></tr>
+</table>
+</body></html>
+"""
+
+
+def test_fetch_sgk_optical_returns_dataframe():
+    mock_resp = MagicMock()
+    mock_resp.text = SAMPLE_SGK_HTML
+    mock_resp.raise_for_status = MagicMock()
+
+    with patch("health_scraper.requests.get", return_value=mock_resp):
+        result = fetch_sgk_optical_prices()
+
+    assert not result.empty
+    assert set(result["category"].unique()).issubset({"Gözlük Camı", "Gözlük Çerçevesi"})
+    assert (result["source"] == "SGK").all()
+    frame_rows = result[result["category"] == "Gözlük Çerçevesi"]
+    assert len(frame_rows) == 1
+    assert frame_rows["product-price"].iloc[0] == 200.0
+
+
+def test_fetch_sgk_optical_returns_empty_on_network_error():
+    with patch("health_scraper.requests.get", side_effect=req_lib.RequestException("timeout")):
+        result = fetch_sgk_optical_prices()
+    assert result.empty
