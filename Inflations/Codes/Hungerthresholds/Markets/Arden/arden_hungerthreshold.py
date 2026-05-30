@@ -1,11 +1,4 @@
 """
-Hunger Threshold Calculator — Arden Market
-==========================================================
-Data source : Arden Market online grocery prices
-Basket      : Presentation slide 8 (family of 4, monthly quantities)
-
-CSV structure:
-  kategori | isim | fiyat | link | resim
 
 Note: Fish is not available at Arden (no fresh fish section) → NaN for that item.
 """
@@ -29,7 +22,7 @@ OUTPUT_DETAIL  = f"{BASE_DIR}/hunger_threshold_detail.csv"
 OUTPUT_SUMMARY = f"{BASE_DIR}/hunger_threshold_summary.csv"
 
 # ─────────────────────────────────────────────────────
-# 2.  FOOD BASKET  (slide 8, family of 4)
+# 2.  FOOD BASKET 
 # ─────────────────────────────────────────────────────
 FOOD_BASKET = [
     # ── Dairy Products ──────────────────────────
