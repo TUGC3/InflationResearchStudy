@@ -16,12 +16,12 @@ For each folder that directly contains one or more source .csv files, this scrip
 After all folders have been traversed, this script writes:
   - InflationItems/Datas/broken_subfolders.csv
       Contains the names/paths of all broken folders.
-  - InflationItems/Datas/x/collected_first_column_strings.csv
+  - InflationItems/Datas/x/collected_first_column_strings.json
       Created inside each processed folder and contains that folder's distinct
-      first-column strings.
+      first-column strings as a JSON array.
 
-Generated output CSVs are ignored during scanning so re-running the script does
-not cause the output files to be read as input.
+Generated output files are ignored during scanning so re-running the script does
+not cause previous output files to be read as input.
 
 "String-like" means: non-empty and not parseable as a number.
 This avoids treating values such as 123, 45.6, or 1,234 as names.
@@ -36,14 +36,20 @@ from __future__ import annotations
 
 import argparse
 import csv
+import json
 from pathlib import Path
 from typing import Dict, Iterable, List, Set, Tuple
 
 
 DEFAULT_ROOT = Path("InflationItems") / "Datas"
-COLLECTED_STRINGS_FILENAME = "collected_first_column_strings.csv"
+COLLECTED_STRINGS_FILENAME = "collected_first_column_strings.json"
+OLD_COLLECTED_STRINGS_CSV_FILENAME = "collected_first_column_strings.csv"
 BROKEN_SUBFOLDERS_FILENAME = "broken_subfolders.csv"
-GENERATED_FILENAMES = {COLLECTED_STRINGS_FILENAME, BROKEN_SUBFOLDERS_FILENAME}
+GENERATED_FILENAMES = {
+    COLLECTED_STRINGS_FILENAME,
+    OLD_COLLECTED_STRINGS_CSV_FILENAME,
+    BROKEN_SUBFOLDERS_FILENAME,
+}
 
 
 def is_number(value: str) -> bool:
@@ -123,7 +129,7 @@ def iter_folders_with_csvs(root: Path) -> Iterable[Tuple[Path, List[Path]]]:
     Recursively yield each folder under root that directly contains source CSV files.
 
     CSV files in child folders are handled when that child folder is yielded.
-    Generated output CSVs are ignored.
+    Generated output files are ignored.
     """
     folders = [root, *[p for p in root.rglob("*") if p.is_dir()]]
 
@@ -171,15 +177,13 @@ def process_folder(folder: Path, csv_files: List[Path], skip_header: bool) -> Tu
     return all_checked_values_are_strings, unique_names
 
 
-def write_collected_strings_csv(folder: Path, unique_names: Set[str]) -> None:
-    """Write collected unique strings into a CSV inside the given folder."""
+def write_collected_strings_json(folder: Path, unique_names: Set[str]) -> None:
+    """Write collected unique strings into a JSON file inside the given folder."""
     output_path = folder / COLLECTED_STRINGS_FILENAME
 
-    with output_path.open("w", newline="", encoding="utf-8") as f:
-        writer = csv.writer(f)
-        writer.writerow(["name"])
-        for name in sorted(unique_names):
-            writer.writerow([name])
+    with output_path.open("w", encoding="utf-8") as f:
+        json.dump(sorted(unique_names), f, indent=2, ensure_ascii=False)
+        f.write("\n")
 
 
 def write_broken_subfolders_csv(root: Path, broken_folders: List[Path]) -> None:
@@ -219,7 +223,7 @@ def main() -> int:
     broken_folders: List[Path] = []
     found_any_csv = False
 
-    # First traverse and collect everything without writing per-folder output CSVs.
+    # First traverse and collect everything without writing per-folder output files.
     # This prevents generated files from affecting the current run.
     for folder, csv_files in iter_folders_with_csvs(root):
         found_any_csv = True
@@ -236,9 +240,9 @@ def main() -> int:
     write_broken_subfolders_csv(root, broken_folders)
     print(f"Saved broken subfolders to {relative_display_path(root / BROKEN_SUBFOLDERS_FILENAME)}")
 
-    # Then save each folder's collected strings into that same folder.
+    # Then save each folder's collected strings into that same folder as JSON.
     for folder, unique_names in collected_by_folder.items():
-        write_collected_strings_csv(folder, unique_names)
+        write_collected_strings_json(folder, unique_names)
         print(f"Saved collected strings to {relative_display_path(folder / COLLECTED_STRINGS_FILENAME)}")
 
     return 0
