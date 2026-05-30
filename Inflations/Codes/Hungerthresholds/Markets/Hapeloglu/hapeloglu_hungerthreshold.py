@@ -1,18 +1,3 @@
-"""
-Hunger Threshold Calculator — Hapeloglu Market
-==============================================================
-Basket: Presentation slide 8 — family of 4, monthly quantities.
-
-CSV format: consistent across all files
-  Columns: Product Name, Product Cost (float), category, ...
-  Price: already float, per-kg for items with "Kg/kg" in name,
-         per-piece for items with "Adet" or no unit,
-         pack price for items with weight in name (e.g. "500 g").
-  Categories: Produce (Meyve/Sebze) | Meat/Poultry/Fish | Dairy/Breakfast |
-              Staple Food | Bakery | Beverages | Snacks |
-              Bebek | Deterjan, Temizlik | Evcil Hayvan | ...
-"""
-
 import re
 import pandas as pd
 from pathlib import Path
