@@ -241,7 +241,7 @@ def save_consolidated(
         return
 
     combined = pd.concat(frames, ignore_index=True)
-    combined = combined[["date", "product-name", "product-price", "category", "source"]]
+    combined = combined[["product-name", "product-price"]]
     combined = combined.dropna(subset=["product-price"])
 
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)

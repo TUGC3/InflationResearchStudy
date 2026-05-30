@@ -310,8 +310,8 @@ def test_save_consolidated_writes_correct_csv(tmp_path):
     assert out.exists()
     result = pd.read_csv(out)
     assert len(result) == 2
-    assert list(result.columns) == ["date", "product-name", "product-price", "category", "source"]
-    assert set(result["category"]) == {"İlaç", "Gözlük Camı"}
+    assert list(result.columns) == ["product-name", "product-price"]
+    assert len(result) == 2
 
 
 def test_save_consolidated_column_order(tmp_path):
@@ -319,7 +319,7 @@ def test_save_consolidated_column_order(tmp_path):
     save_consolidated(_make_medicine_df(), pd.DataFrame(), output_path=out)
 
     result = pd.read_csv(out)
-    assert list(result.columns) == ["date", "product-name", "product-price", "category", "source"]
+    assert list(result.columns) == ["product-name", "product-price"]
 
 
 def test_save_consolidated_both_empty_does_not_write(tmp_path):
