@@ -1,0 +1,76 @@
+date,category,product,unit,monthly_qty,avg_unit_price_TRY,monthly_cost_TRY,n_matched,matched_products
+Feb-24 2026,Dairy Products,Yogurt,Kg,59.7,,,0,N/A
+Feb-24 2026,Dairy Products,White Cheese,Kg,5.3,,,0,N/A
+Feb-24 2026,Meat and Protein,Cubed Meat / Lamb Meat,Kg,3.3,,,0,N/A
+Feb-24 2026,Meat and Protein,Chicken,Kg,7.0,,,0,N/A
+Feb-24 2026,Meat and Protein,Fish,Kg,5.1,,,0,N/A
+Feb-24 2026,Meat and Protein,Eggs,Piece,60.0,,,0,N/A
+Feb-24 2026,Legumes,Chickpeas,Kg,5.6,61.25,343.0,2,DENİZLİ KOOP. NOHUT 1000 GR; POLATLI ZİRAAT ODASI NOHUT 2000 GR
+Feb-24 2026,Nuts and Seeds,Walnut / Hazelnut / Peanut,Kg,2.7,,,0,—
+Feb-24 2026,Grains,Bread,Kg,18.0,99.28,1787.04,12,KUTLUDÜĞÜN EKŞİ MAYALI EKMEK 800 GR; ROLL SİYEZ BUĞDAYLI EKMEK 50 GR; EKŞİ MAYALI KARIŞIK TAHIL UNLU EKMEK (400 G); EKŞİ MAYALI KARABUĞDAY UNLU EKMEK (500 G); EKŞİ MAYALI ÇAVDARLI EKMEK (400 G); EKŞİ MAYALI SİYEZ UNLU EKMEK (400G); ROLL TAM BUĞDAY UNLU EKMEK 50 Gr; ROLL NORMAL EKMEK 50 GR; ROLL TUZ İLAVESİZ EKMEK 50 GR; ROLL KEPEKLİ EKMEK 50 GR; GLUTENSİZ EKMEK 250 GR; ROLL ÇAVDARLI EKMEK 50 GR
+Feb-24 2026,Fruits,Banana,Kg,16.7,,,0,N/A
+Feb-24 2026,Fruits,Seasonal Fruit,Kg,12.9,,,0,N/A
+Feb-24 2026,Vegetables,Onion,Kg,18.0,,,0,N/A
+Feb-24 2026,Vegetables,Eggplant / Zucchini,Kg,34.7,,,0,N/A
+Feb-24 2026,Vegetables,Other Vegetables,Kg,14.8,,,0,N/A
+Feb-24 2026,Oils,Olive Oil,Liter,1.0,,,0,—
+Feb-28 2026,Dairy Products,Yogurt,Kg,59.7,,,0,N/A
+Feb-28 2026,Dairy Products,White Cheese,Kg,5.3,,,0,N/A
+Feb-28 2026,Meat and Protein,Cubed Meat / Lamb Meat,Kg,3.3,,,0,N/A
+Feb-28 2026,Meat and Protein,Chicken,Kg,7.0,,,0,N/A
+Feb-28 2026,Meat and Protein,Fish,Kg,5.1,,,0,N/A
+Feb-28 2026,Meat and Protein,Eggs,Piece,60.0,,,0,N/A
+Feb-28 2026,Legumes,Chickpeas,Kg,5.6,61.25,343.0,2,DENİZLİ KOOP. NOHUT 1000 GR; POLATLI ZİRAAT ODASI NOHUT 2000 GR
+Feb-28 2026,Nuts and Seeds,Walnut / Hazelnut / Peanut,Kg,2.7,,,0,—
+Feb-28 2026,Grains,Bread,Kg,18.0,99.28,1787.04,12,KUTLUDÜĞÜN EKŞİ MAYALI EKMEK 800 GR; ROLL SİYEZ BUĞDAYLI EKMEK 50 GR; EKŞİ MAYALI KARIŞIK TAHIL UNLU EKMEK (400 G); EKŞİ MAYALI KARABUĞDAY UNLU EKMEK (500 G); EKŞİ MAYALI ÇAVDARLI EKMEK (400 G); EKŞİ MAYALI SİYEZ UNLU EKMEK (400G); ROLL TAM BUĞDAY UNLU EKMEK 50 Gr; ROLL NORMAL EKMEK 50 GR; ROLL TUZ İLAVESİZ EKMEK 50 GR; ROLL KEPEKLİ EKMEK 50 GR; GLUTENSİZ EKMEK 250 GR; ROLL ÇAVDARLI EKMEK 50 GR
+Feb-28 2026,Fruits,Banana,Kg,16.7,,,0,N/A
+Feb-28 2026,Fruits,Seasonal Fruit,Kg,12.9,,,0,N/A
+Feb-28 2026,Vegetables,Onion,Kg,18.0,,,0,N/A
+Feb-28 2026,Vegetables,Eggplant / Zucchini,Kg,34.7,,,0,N/A
+Feb-28 2026,Vegetables,Other Vegetables,Kg,14.8,,,0,N/A
+Feb-28 2026,Oils,Olive Oil,Liter,1.0,,,0,—
+Mar 2026,Dairy Products,Yogurt,Kg,59.7,,,0,N/A
+Mar 2026,Dairy Products,White Cheese,Kg,5.3,,,0,N/A
+Mar 2026,Meat and Protein,Cubed Meat / Lamb Meat,Kg,3.3,,,0,N/A
+Mar 2026,Meat and Protein,Chicken,Kg,7.0,,,0,N/A
+Mar 2026,Meat and Protein,Fish,Kg,5.1,,,0,N/A
+Mar 2026,Meat and Protein,Eggs,Piece,60.0,,,0,N/A
+Mar 2026,Legumes,Chickpeas,Kg,5.6,,,0,—
+Mar 2026,Nuts and Seeds,Walnut / Hazelnut / Peanut,Kg,2.7,,,0,—
+Mar 2026,Grains,Bread,Kg,18.0,114.16,2054.88,12,KUTLUDÜĞÜN EKŞİ MAYALI EKMEK 800 GR; ROLL SİYEZ BUĞDAYLI EKMEK 50 GR; EKŞİ MAYALI KARIŞIK TAHIL UNLU EKMEK (400 G); EKŞİ MAYALI KARABUĞDAY UNLU EKMEK (500 G); EKŞİ MAYALI ÇAVDARLI EKMEK (400 G); EKŞİ MAYALI SİYEZ UNLU EKMEK (400G); ROLL TAM BUĞDAY UNLU EKMEK 50 Gr; ROLL NORMAL EKMEK 50 GR; ROLL TUZ İLAVESİZ EKMEK 50 GR; ROLL KEPEKLİ EKMEK 50 GR; GLUTENSİZ EKMEK 250 GR; ROLL ÇAVDARLI EKMEK 50 GR
+Mar 2026,Fruits,Banana,Kg,16.7,,,0,N/A
+Mar 2026,Fruits,Seasonal Fruit,Kg,12.9,,,0,N/A
+Mar 2026,Vegetables,Onion,Kg,18.0,,,0,N/A
+Mar 2026,Vegetables,Eggplant / Zucchini,Kg,34.7,,,0,N/A
+Mar 2026,Vegetables,Other Vegetables,Kg,14.8,,,0,N/A
+Mar 2026,Oils,Olive Oil,Liter,1.0,,,0,—
+Apr 2026,Dairy Products,Yogurt,Kg,59.7,,,0,N/A
+Apr 2026,Dairy Products,White Cheese,Kg,5.3,,,0,N/A
+Apr 2026,Meat and Protein,Cubed Meat / Lamb Meat,Kg,3.3,,,0,N/A
+Apr 2026,Meat and Protein,Chicken,Kg,7.0,,,0,N/A
+Apr 2026,Meat and Protein,Fish,Kg,5.1,,,0,N/A
+Apr 2026,Meat and Protein,Eggs,Piece,60.0,,,0,N/A
+Apr 2026,Legumes,Chickpeas,Kg,5.6,,,0,—
+Apr 2026,Nuts and Seeds,Walnut / Hazelnut / Peanut,Kg,2.7,,,0,—
+Apr 2026,Grains,Bread,Kg,18.0,114.16,2054.88,12,KUTLUDÜĞÜN EKŞİ MAYALI EKMEK 800 GR; ROLL SİYEZ BUĞDAYLI EKMEK 50 GR; EKŞİ MAYALI KARIŞIK TAHIL UNLU EKMEK (400 G); EKŞİ MAYALI KARABUĞDAY UNLU EKMEK (500 G); EKŞİ MAYALI ÇAVDARLI EKMEK (400 G); EKŞİ MAYALI SİYEZ UNLU EKMEK (400G); ROLL TAM BUĞDAY UNLU EKMEK 50 Gr; ROLL NORMAL EKMEK 50 GR; ROLL TUZ İLAVESİZ EKMEK 50 GR; ROLL KEPEKLİ EKMEK 50 GR; GLUTENSİZ EKMEK 250 GR; ROLL ÇAVDARLI EKMEK 50 GR
+Apr 2026,Fruits,Banana,Kg,16.7,,,0,N/A
+Apr 2026,Fruits,Seasonal Fruit,Kg,12.9,,,0,N/A
+Apr 2026,Vegetables,Onion,Kg,18.0,,,0,N/A
+Apr 2026,Vegetables,Eggplant / Zucchini,Kg,34.7,,,0,N/A
+Apr 2026,Vegetables,Other Vegetables,Kg,14.8,,,0,N/A
+Apr 2026,Oils,Olive Oil,Liter,1.0,,,0,—
+May 2026,Dairy Products,Yogurt,Kg,59.7,,,0,N/A
+May 2026,Dairy Products,White Cheese,Kg,5.3,,,0,N/A
+May 2026,Meat and Protein,Cubed Meat / Lamb Meat,Kg,3.3,,,0,N/A
+May 2026,Meat and Protein,Chicken,Kg,7.0,,,0,N/A
+May 2026,Meat and Protein,Fish,Kg,5.1,,,0,N/A
+May 2026,Meat and Protein,Eggs,Piece,60.0,,,0,N/A
+May 2026,Legumes,Chickpeas,Kg,5.6,,,0,—
+May 2026,Nuts and Seeds,Walnut / Hazelnut / Peanut,Kg,2.7,,,0,—
+May 2026,Grains,Bread,Kg,18.0,129.13,2324.34,12,KUTLUDÜĞÜN EKŞİ MAYALI EKMEK 800 GR; ROLL SİYEZ BUĞDAYLI EKMEK 50 GR; EKŞİ MAYALI KARIŞIK TAHIL UNLU EKMEK (400 G); EKŞİ MAYALI KARABUĞDAY UNLU EKMEK (500 G); EKŞİ MAYALI ÇAVDARLI EKMEK (400 G); EKŞİ MAYALI SİYEZ UNLU EKMEK (400G); ROLL TAM BUĞDAY UNLU EKMEK 50 Gr; ROLL NORMAL EKMEK 50 GR; ROLL TUZ İLAVESİZ EKMEK 50 GR; ROLL KEPEKLİ EKMEK 50 GR; GLUTENSİZ EKMEK 250 GR; ROLL ÇAVDARLI EKMEK 50 GR
+May 2026,Fruits,Banana,Kg,16.7,,,0,N/A
+May 2026,Fruits,Seasonal Fruit,Kg,12.9,,,0,N/A
+May 2026,Vegetables,Onion,Kg,18.0,,,0,N/A
+May 2026,Vegetables,Eggplant / Zucchini,Kg,34.7,,,0,N/A
+May 2026,Vegetables,Other Vegetables,Kg,14.8,,,0,N/A
+May 2026,Oils,Olive Oil,Liter,1.0,,,0,—
