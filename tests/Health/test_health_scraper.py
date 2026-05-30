@@ -33,6 +33,18 @@ def test_parse_price_non_numeric_returns_none():
 def test_parse_price_zero_returns_none():
     assert _parse_price("0") is None
 
+def test_parse_price_dot_only_thousands():
+    # Turkish: 1.400 means 1400 TL (3 digits after dot = thousands sep)
+    assert _parse_price("1.400") == 1400.0
+
+def test_parse_price_dot_decimal_not_thousands():
+    # 2 digits after dot → keep as decimal
+    assert _parse_price("14.50") == 14.50
+
+def test_parse_price_strips_parenthetical_qualifier():
+    # Real optikgazete.com format: 2.025 TL(KDV DÂHİL) → 2025.0
+    assert _parse_price("2.025 TL(KDV DÂHİL)") == 2025.0
+
 
 # ── _classify_optical ─────────────────────────────────────────────────────────
 
@@ -69,7 +81,7 @@ def test_extract_date_uuid_digits_rejected_falls_back_to_archive():
     url = "https://titck.gov.tr/storage/Archive/2026/dma/FILE_ede284aa-9979-4009-b573.xlsx"
     assert _extract_date_from_url(url) == date(2026, 12, 31)
 
-def test_extract_date_archive_old_year_excluded_by_cutoff():
+def test_extract_date_archive_old_year_returns_dec31():
     url = "https://titck.gov.tr/storage/Archive/2023/dynamicModulesAttachment/LISTE.xlsx"
     assert _extract_date_from_url(url) == date(2023, 12, 31)
 
@@ -169,6 +181,38 @@ def test_fetch_titck_returns_empty_when_no_excel_links():
     assert result.empty
 
 
+def test_fetch_titck_caps_downloads_at_max_titck_files():
+    excel_bytes = _make_excel_bytes({"İlaç Adı": ["Aspirin"], "Fiyat": ["45,50"]})
+    # Provide 5 links — only MAX_TITCK_FILES (3) should be downloaded
+    many_links_html = """<html><body>
+      <a href="/f/2026-02-01.xlsx">1</a>
+      <a href="/f/2026-03-01.xlsx">2</a>
+      <a href="/f/2026-04-01.xlsx">3</a>
+      <a href="/f/2026-05-01.xlsx">4</a>
+      <a href="/f/2026-05-15.xlsx">5</a>
+    </body></html>"""
+
+    html_mock = MagicMock()
+    html_mock.text = many_links_html
+    html_mock.raise_for_status = MagicMock()
+
+    excel_mock = MagicMock()
+    excel_mock.content = excel_bytes
+    excel_mock.raise_for_status = MagicMock()
+
+    call_count = 0
+    def mock_get(url, **kwargs):
+        nonlocal call_count
+        call_count += 1
+        return html_mock if call_count == 1 else excel_mock
+
+    with patch("health_scraper.requests.get", side_effect=mock_get):
+        fetch_titck_medicine_prices()
+
+    # 1 HTML fetch + 3 Excel fetches (capped at MAX_TITCK_FILES)
+    assert call_count == 4
+
+
 # ── fetch_sgk_optical_prices ──────────────────────────────────────────────
 
 from health_scraper import fetch_sgk_optical_prices
@@ -199,6 +243,28 @@ def test_fetch_sgk_optical_returns_dataframe():
     frame_rows = result[result["category"] == "Gözlük Çerçevesi"]
     assert len(frame_rows) == 2  # 2 institutions × 1 frame each
     assert frame_rows["product-price"].iloc[0] == 2025.0
+
+
+def test_fetch_sgk_optical_rejects_diopter_rows():
+    html_with_diopter = """<html><body>
+    <table>
+      <tr><th>KURUM VE KURULUŞLAR</th><th>ÇERÇEVE</th><th>CAM</th></tr>
+      <tr><td>GARANTİ BANKASI(2026)</td><td>2.025,00 TL</td><td>2.025,00 TL</td></tr>
+      <tr><td>0-4</td><td>500,00 TL</td><td>400,00 TL</td></tr>
+      <tr><td>6</td><td>600,00 TL</td><td>500,00 TL</td></tr>
+    </table>
+    </body></html>"""
+    mock_resp = MagicMock()
+    mock_resp.text = html_with_diopter
+    mock_resp.raise_for_status = MagicMock()
+
+    with patch("health_scraper.requests.get", return_value=mock_resp):
+        result = fetch_sgk_optical_prices()
+
+    # Only GARANTİ BANKASI should appear; diopter rows "0-4" and "6" must be rejected
+    institution_names = result["product-name"].tolist()
+    assert not any("0-4" in n or n.strip() in ("6", "6 — Cam", "6 — Çerçeve") for n in institution_names)
+    assert any("GARANTİ" in n for n in institution_names)
 
 
 def test_fetch_sgk_optical_returns_empty_on_network_error():

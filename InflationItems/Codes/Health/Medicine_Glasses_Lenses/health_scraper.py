@@ -35,10 +35,20 @@ def _parse_price(text: str) -> float | None:
     if not text:
         return None
     cleaned = str(text).replace("TL", "").replace("₺", "").replace("\xa0", "").replace(" ", "").strip()
+    cleaned = re.sub(r"\([^)]*\)", "", cleaned).strip()  # strip (KDV DÂHİL) etc.
     if "," in cleaned and "." in cleaned:
+        # Turkish format: 1.234,56 → 1234.56
         cleaned = cleaned.replace(".", "").replace(",", ".")
     elif "," in cleaned:
+        # Turkish decimal only: 45,50 → 45.50
         cleaned = cleaned.replace(",", ".")
+    elif "." in cleaned:
+        # Dot-only: treat as Turkish thousands separator when exactly 3 digits follow
+        # e.g. 1.400 → 1400, but 14.50 → 14.50 (2 digits after dot → decimal)
+        idx = cleaned.rfind(".")
+        after_dot = cleaned[idx + 1:]
+        if len(after_dot) == 3 and after_dot.isdigit() and cleaned[:idx].isdigit():
+            cleaned = cleaned.replace(".", "")
     try:
         val = float(cleaned)
         return val if val > 0 else None
@@ -130,7 +140,7 @@ def fetch_titck_medicine_prices() -> pd.DataFrame:
 
     if not dated:
         print("⚠ No files within 3-month window. Using latest available.")
-        dated = [(date.today(), excel_hrefs[0])]
+        dated = [(date.today(), h) for h in excel_hrefs[:MAX_TITCK_FILES]]
 
     dated = dated[:MAX_TITCK_FILES]  # cap to avoid downloading the entire archive
 
@@ -166,13 +176,21 @@ def fetch_sgk_optical_prices() -> pd.DataFrame:
     rows = []
     _HEADER_KEYWORDS = {"KURUM", "KURULUŞ", "ÇERÇEVE", "CAM", "INSTITUTION"}
 
-    for table in soup.find_all("table"):
+    # Use only the first table (institution/bank price list); later tables contain
+    # diopter-indexed sub-lists that share the same 3-column structure.
+    first_table = soup.find("table")
+    tables = [first_table] if first_table else []
+
+    for table in tables:
         for tr in table.find_all("tr"):
             cells = [td.get_text(" ", strip=True) for td in tr.find_all(["td", "th"])]
             if len(cells) < 3:
                 continue
             institution = cells[0].strip()
+            # Skip header rows and non-institution rows (diopter ranges like "0-4", "6")
             if not institution or institution.upper() in _HEADER_KEYWORDS:
+                continue
+            if not any(c.isalpha() for c in institution):
                 continue
 
             frame_price = _parse_price(cells[1])
