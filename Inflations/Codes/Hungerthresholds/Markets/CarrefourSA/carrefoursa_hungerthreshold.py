@@ -1,13 +1,3 @@
-"""
-Hunger Threshold Calculator — CarrefourSA
-=========================================================
-Data source : CarrefourSA online grocery prices
-Basket      : Presentation slide 8 (family of 4, monthly quantities)
-
-CSV structure:
-  product_name, price (TL)   (comma separator, price already float)
-"""
-
 import pandas as pd
 import re
 from pathlib import Path
@@ -29,7 +19,7 @@ OUTPUT_DETAIL  = f"{BASE_DIR}/hunger_threshold_detail.csv"
 OUTPUT_SUMMARY = f"{BASE_DIR}/hunger_threshold_summary.csv"
 
 # ─────────────────────────────────────────────────────
-# 2.  FOOD BASKET  (slide 8, family of 4)
+# 2.  FOOD BASKET
 # ─────────────────────────────────────────────────────
 FOOD_BASKET = [
     # ── Dairy Products ──────────────────────────
