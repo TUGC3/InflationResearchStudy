@@ -1,22 +1,3 @@
-"""
-Hunger Threshold Calculator — Kale Markets
-=============================================================
-Basket: Presentation slide 8 — family of 4, monthly quantities.
-
-CSV format: consistent across all files
-  Columns: kategori, product_name, product_price
-  Price format: "89,90" (comma = decimal) OR "1,200" (comma = thousands separator)
-  Rule: if exactly 2 digits after last comma → decimal; else → thousands
-  Categories: Produce | Meat/Poultry | Dairy/Breakfast | General Food |
-              Bakery | Beverages | Biscuits/Nuts | Baby Products |
-              Cleaning | Paper Products | Personal Care/Cosmetics |
-              Home & Living
-
-Naming convention: "Domates Kg", "Patates Kg" → price already per-kg.
-                   "Yumurta 30 lu" → pack price, normalise by piece count.
-                   "Torku Tam Yagli Sut 1 lt" → weight in name, normalise to per-litre.
-Fish: not stocked → N/A all months.
-"""
 
 import re
 import pandas as pd
@@ -119,7 +100,7 @@ MATCH_RULES = {
     },
     "Fish": {
         "kat":  ["Et, Tavuk"],
-        "kw":   [],  # Not stocked at Kale
+        "kw":   [], 
         "ex":   [],
         "unit": "kg",
     },
