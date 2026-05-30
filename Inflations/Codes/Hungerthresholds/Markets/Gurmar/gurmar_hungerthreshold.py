@@ -1,17 +1,3 @@
-"""
-Hunger Threshold Calculator — Gurmar Market
-============================================================
-Basket: Presentation slide 8 — family of 4, monthly quantities.
-
-CSV formats:
-  Feb-21 : product-name, product_price  (no kategori)
-           Price = "69,95" OR "(124,90 / Kg)" (already per-kg for fresh produce)
-           Products that have per-kg price carry "_1kg" suffix in the name.
-  Feb-28 / Mar-31 : product-name, kategori, product_price  (price = "69,95" or "1.199,50")
-  Apr-30 : empty file → skipped
-  May-22 : product-name;product-price;product-id  (semicolon; price = float; no kategori)
-"""
-
 import re
 import pandas as pd
 from pathlib import Path
