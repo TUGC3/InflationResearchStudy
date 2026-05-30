@@ -233,19 +233,8 @@ def _parse_product(wrapper, category_name: str) -> Optional[dict]:
     size  = insider.get("size", "")
 
     return {
-        "pk":             pk,
-        "sku":            sku,
-        "base_code":      base_code,
-        "name":           name,
-        "brand":          brand,
-        "category":       category,
-        "color":          color,
-        "size":           size,
-        "regular_price":  round(regular_price, 2),
-        "sale_price":     round(sale_price, 2),
-        "discount_pct":   discount_pct,
-        "currency":       insider.get("currency", "TRY"),
-        "stock":          stock,
+        "product_name": name,
+        "price":        round(sale_price, 2),
     }
 
 

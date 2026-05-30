@@ -202,7 +202,7 @@ def _dedup_csv() -> int:
         return 0
     df = pd.read_csv(config.CSV_OUTPUT_FILE, encoding="utf-8-sig")
     before = len(df)
-    df.drop_duplicates(subset=["id"], inplace=True)
+    df.drop_duplicates(subset=["product_name"], inplace=True)
     df.reset_index(drop=True, inplace=True)
     df.to_csv(config.CSV_OUTPUT_FILE, index=False, encoding="utf-8-sig")
     if len(df) < before:

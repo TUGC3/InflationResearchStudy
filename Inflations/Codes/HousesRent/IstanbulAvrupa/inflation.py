@@ -7,17 +7,7 @@ Computes three inflation metrics for IstanbulAvrupa rental listings:
   3. TUIK Weighted Avg – weighted average using TUIK 2026 CPI basket weights
                          (all segments map to group 04 – Konut)
 
-Features:
-- Calculates inflation for 1d, 7d, 15d, 30d intervals
-- Supports comparison between any two arbitrary dates
-- Uses District × Rooms segments (no stable product IDs)
-- Maps all segments to TUIK group 04 (Konut/housing)
-- Outputs segment-level data and store-level summaries
-- Handles missing historical data gracefully
-
-Methodology:
-Since rental listings have no stable product IDs, segments are formed by
-grouping on (District, Rooms) and comparing median prices between dates.
+Data format: product_name (District - Rooms), price (2 columns)
 
 Output Files:
 - IstanbulAvrupa_inflation_YYYY-MM-DD.csv – Segment-level data with basic_inflation columns
@@ -42,7 +32,7 @@ _CODES_DIR = _THIS_DIR.parent.parent               # .../Inflations/Codes
 _PROJECT_ROOT = _CODES_DIR.parent.parent            # .../InflationResearchStudy
 
 sys.path.insert(0, str(_THIS_DIR))
-from tuik_config import istanbul_avrupa_category_to_tuik, normalised_weights, TUIK_WEIGHTS
+from tuik_config import normalised_weights, TUIK_WEIGHTS
 
 # Scraper config for data paths
 _scraper_dir = _PROJECT_ROOT / "InflationItems" / "Codes" / "HousesRent" / "IstanbulAvrupa" / "scripts"
@@ -53,19 +43,17 @@ logger = logging.getLogger(__name__)
 
 # ── Directories ───────────────────────────────────────────────────────────────
 DATA_DIR = Path(config.BASE_OUTPUT_DIR)
-FOLDER_NAME = config.FOLDER_NAME                    # "IstanbulAvrupa"
+FOLDER_NAME = config.FOLDER_NAME
 INFLATION_OUT_DIR = _CODES_DIR.parent / "Datas" / "HousesRent" / "IstanbulAvrupa"
+
+TUIK_CATEGORY = "04"  # Konut
 
 
 def _parse_price(price_str):
-    """Convert a Turkish price string like '8.000 TL' to a float 8000.0.
-    
-    Turkish format uses '.' as thousand separator, not decimal point.
-    """
+    """Convert a Turkish price string like '8.000 TL' to a float 8000.0."""
     try:
         if pd.isna(price_str):
             return None
-        # Remove ' TL' suffix and thousand separators (.), then convert to float
         clean_str = str(price_str).replace(' TL', '').replace('.', '').strip()
         return float(clean_str)
     except Exception:
@@ -80,9 +68,9 @@ def _load_and_group(date_str):
         return None
     try:
         df = pd.read_csv(fpath)
-        df['Price_Num'] = df['Price'].apply(_parse_price)
-        grouped = df.groupby(['District', 'Rooms'])['Price_Num'].median().reset_index()
-        grouped.rename(columns={'Price_Num': 'median_price'}, inplace=True)
+        df['price_num'] = df['price'].apply(_parse_price)
+        grouped = df.groupby('product_name')['price_num'].median().reset_index()
+        grouped.rename(columns={'price_num': 'price'}, inplace=True)
         return grouped
     except Exception as e:
         logger.error(f"Failed to read {fpath}: {e}")
@@ -90,35 +78,27 @@ def _load_and_group(date_str):
 
 
 def _compute_metrics(df_current, df_past):
-    """Compute the three inflation metrics between two grouped DataFrames.
-
-    Returns
-    -------
-    df_detail : DataFrame  – per-segment rows with basic_inflation and tuik_category
-    basic_inflation_index : float – basket-level price index change (%)
-    avg_inflation         : float – arithmetic mean of per-segment inflation rates
-    tuik_weighted         : float – TUIK-weighted average inflation
-    """
+    """Compute the three inflation metrics between two grouped DataFrames."""
     df_current = df_current.copy()
-    df_current['tuik_category'] = df_current.apply(lambda _: istanbul_avrupa_category_to_tuik(), axis=1)
+    df_current['tuik_category'] = TUIK_CATEGORY
 
-    past_subset = df_past[['District', 'Rooms', 'median_price']].rename(columns={'median_price': 'past_price'})
-    merged = df_current.merge(past_subset, on=['District', 'Rooms'], how='left')
+    past_subset = df_past[['product_name', 'price']].rename(columns={'price': 'past_price'})
+    merged = df_current.merge(past_subset, on='product_name', how='left')
 
     # 1) Basic inflation per segment
-    merged['basic_inflation'] = ((merged['median_price'] - merged['past_price']) / merged['past_price']) * 100
+    merged['basic_inflation'] = ((merged['price'] - merged['past_price']) / merged['past_price']) * 100
     merged['basic_inflation'] = merged['basic_inflation'].replace([float('inf'), float('-inf')], pd.NA)
 
     # 2) Average inflation
     avg_inflation = merged['basic_inflation'].mean()
 
     # 3) Basic inflation at basket level
-    valid = merged.dropna(subset=['median_price', 'past_price'])
-    sum_current = valid['median_price'].sum()
+    valid = merged.dropna(subset=['price', 'past_price'])
+    sum_current = valid['price'].sum()
     sum_past = valid['past_price'].sum()
     basic_inflation_index = ((sum_current - sum_past) / sum_past) * 100 if sum_past else None
 
-    # 4) TUIK weighted average (all segments → 04, so this equals avg_inflation)
+    # 4) TUIK weighted average
     cat_avg = merged.groupby('tuik_category')['basic_inflation'].mean()
     present_codes = list(cat_avg.dropna().index)
     norm_w = normalised_weights(present_codes)
@@ -130,40 +110,7 @@ def _compute_metrics(df_current, df_past):
 
 
 def calculate_inflation(target_date=None, compare_date=None):
-    """Calculate inflation metrics for IstanbulAvrupa rental listings.
-
-    Parameters
-    ----------
-    target_date  : str (YYYY-MM-DD) – the "current" date.  Defaults to today.
-    compare_date : str (YYYY-MM-DD) – if given, compute metrics only between
-                   *compare_date* (past) and *target_date* (current).
-                   If omitted, compute for the four standard intervals
-                   (1d, 7d, 15d, 30d back from target_date).
-
-    Returns
-    -------
-    None
-        Results are saved to CSV files in the inflation output directory.
-
-    Notes
-    -----
-    - Uses District × Rooms segments for matching across dates
-    - Price column: 'Price' (rental price strings, parsed to numeric)
-    - All segments map to TUIK group 04 (Konut/housing)
-    - Missing historical data results in NaN values for affected intervals
-    - Median prices are used to reduce outlier impact
-
-    Examples
-    --------
-    >>> # Calculate today's inflation with standard intervals
-    >>> calculate_inflation()
-
-    >>> # Calculate inflation for a specific date
-    >>> calculate_inflation('2026-03-20')
-
-    >>> # Compare two arbitrary dates
-    >>> calculate_inflation('2026-03-20', '2026-03-10')
-    """
+    """Calculate inflation metrics for IstanbulAvrupa rental listings."""
     if target_date:
         base_date = datetime.strptime(target_date, "%Y-%m-%d")
     else:
@@ -177,7 +124,6 @@ def calculate_inflation(target_date=None, compare_date=None):
 
     INFLATION_OUT_DIR.mkdir(parents=True, exist_ok=True)
 
-    # ── Determine intervals ──────────────────────────────────────────────────
     if compare_date:
         intervals = {compare_date: compare_date}
     else:
@@ -186,10 +132,9 @@ def calculate_inflation(target_date=None, compare_date=None):
             past_str = (base_date - timedelta(days=days)).strftime("%Y-%m-%d")
             intervals[f"{days}d"] = past_str
 
-    # ── Per-interval computation ─────────────────────────────────────────────
     summary_row = {'date': today_str}
     detail_base = df_today.copy()
-    detail_base['tuik_category'] = detail_base.apply(lambda _: istanbul_avrupa_category_to_tuik(), axis=1)
+    detail_base['tuik_category'] = TUIK_CATEGORY
 
     for label, past_str in intervals.items():
         df_past = _load_and_group(past_str)
@@ -204,21 +149,19 @@ def calculate_inflation(target_date=None, compare_date=None):
         merged, basic_idx, avg_inf, tuik_w = _compute_metrics(df_today, df_past)
 
         detail_base = detail_base.merge(
-            merged[['District', 'Rooms', 'basic_inflation']].rename(
+            merged[['product_name', 'basic_inflation']].rename(
                 columns={'basic_inflation': f'basic_inflation_{label}'}
             ),
-            on=['District', 'Rooms'], how='left'
+            on='product_name', how='left'
         )
 
         summary_row[f'avg_inflation_{label}'] = avg_inf
         summary_row[f'tuik_weighted_{label}'] = tuik_w
 
-    # ── Save detailed data ───────────────────────────────────────────────────
     detail_file = INFLATION_OUT_DIR / f"{FOLDER_NAME}_inflation_{today_str}.csv"
     detail_base.to_csv(detail_file, index=False, encoding='utf-8')
     logger.info(f"Saved grouped inflation data to: {detail_file}")
 
-    # ── Save / update summary ────────────────────────────────────────────────
     summary_file = INFLATION_OUT_DIR / "inflation_summary.csv"
     df_summary = pd.DataFrame([summary_row])
 

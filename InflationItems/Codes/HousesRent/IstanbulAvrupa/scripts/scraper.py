@@ -391,7 +391,7 @@ def _parse_listings(tree: etree._Element, rooms_idx: int | None) -> list[dict]:
                 rooms = "N/A"
 
             if price:
-                records.append({"District": district, "Rooms": rooms, "Price": price})
+                records.append({"product_name": f"{district} - {rooms}", "price": price})
         except Exception as exc:
             logger.debug("Row parse error: %s", exc)
 
@@ -892,7 +892,7 @@ def save_incremental(data_batch: list[dict]) -> None:
     file_exists = os.path.isfile(config.CSV_OUTPUT_FILE)
 
     with open(config.CSV_OUTPUT_FILE, mode="a", newline="", encoding="utf-8") as f:
-        writer = csv.DictWriter(f, fieldnames=["District", "Rooms", "Price"])
+        writer = csv.DictWriter(f, fieldnames=["product_name", "price"])
         if not file_exists:
             writer.writeheader()
         writer.writerows(data_batch)

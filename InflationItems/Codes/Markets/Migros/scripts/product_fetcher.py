@@ -171,18 +171,8 @@ def _parse_product(raw: dict, category_name: str) -> dict:
     product_url = f"{config.BASE_URL}/{pretty_name}" if pretty_name else ""
 
     return {
-        "id":            str(product_id),
-        "sku":           str(raw.get("sku") or ""),
-        "name":          raw.get("name") or "",
-        "brand":         brand,
-        "category":      product_category or category_name,
-        "regular_price": to_tl(regular_price),
-        "shown_price":   to_tl(shown_price),
-        "discount_rate": raw.get("discountRate") or 0,
-        "unit":          raw.get("unit") or "",
-        "status":        raw.get("status") or raw.get("saleStatus") or "",
-        "image_url":     image_url or "",
-        "product_url":   product_url,
+        "product_name": raw.get("name") or "",
+        "price":        to_tl(shown_price),
     }
 
 

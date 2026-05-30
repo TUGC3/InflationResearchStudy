@@ -119,18 +119,8 @@ def _parse_product(raw: dict, category_name: str) -> dict:
         brand = (raw.get("name") or "").strip().split(" ", 1)[0]
 
     return {
-        "id":            str(raw.get("uid") or raw.get("sku") or ""),
-        "sku":           str(raw.get("sku") or ""),
-        "name":          raw.get("name") or "",
-        "brand":         brand,
-        "category":      category_name,
-        "regular_price": round(float(regular), 2) if regular else 0.0,
-        "shown_price":   round(float(final),   2) if final   else 0.0,
-        "discount_rate": round(float(discount_pct), 2) if discount_pct else 0,
-        "unit":          "",
-        "status":        raw.get("stock_status") or "",
-        "image_url":     image_url,
-        "product_url":   product_url,
+        "product_name": raw.get("name") or "",
+        "price":        round(float(final), 2) if final else 0.0,
     }
 
 

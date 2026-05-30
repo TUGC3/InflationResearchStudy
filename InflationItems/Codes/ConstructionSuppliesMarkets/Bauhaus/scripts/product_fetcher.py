@@ -383,16 +383,8 @@ def fetch_products_for_category(category_dict, session=None, limit_pages=0,
                  product_url = config.BASE_URL + href if href.startswith('/') else href
 
             products.append({
-                "id": sku,
-                "sku": sku,
-                "name": title,
-                "brand": brand,
-                "category": name,
-                "regular_price": price_val,
-                "shown_price": price_val,
-                "discount_rate": 0, # usually hidden inside specific banners on Bauhaus, simplifying here
-                "unit": "PIECE", # default assumption for Bauhaus
-                "status": "IN_SALE"
+                "product_name": title,
+                "price": price_val,
             })
             new_products_found = True
             

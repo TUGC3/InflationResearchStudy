@@ -207,20 +207,8 @@ def _parse_model(
     )
 
     return {
-        "id":            model_code,
-        "sku":           model_code,
-        "name":          display_name,
-        "brand":         "Samsung",
-        "category":      category_name,
-        "sub_category":  (family.get("categorySubTypeName") or "").strip(),
-        "family":        (family.get("fmyMarketingName") or "").strip(),
-        "regular_price": round(regular_price, 2),
-        "shown_price":   round(shown_price, 2),
-        "discount_rate": discount_rate,
-        "unit":          "PIECE",
-        "status":        _status_from_cta(model),
-        "image_url":     _absolute_image(model.get("thumbUrl") or ""),
-        "product_url":   _absolute_url(model.get("pdpUrl") or ""),
+        "product_name": display_name,
+        "price":        round(shown_price, 2),
     }
 
 

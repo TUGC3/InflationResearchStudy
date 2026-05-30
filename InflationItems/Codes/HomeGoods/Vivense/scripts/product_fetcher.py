@@ -327,19 +327,8 @@ def _parse_card(card, category_name: str) -> Optional[dict]:
     )
 
     return {
-        "id":            sku,
-        "sku":           sku,
-        "name":          name,
-        "brand":         brand,
-        "category":      category_name,
-        "sub_category":  sub_category,
-        "regular_price": round(regular_price, 2),
-        "shown_price":   round(shown_price, 2),
-        "discount_rate": discount_rate,
-        "unit":          "PIECE",
-        "status":        "IN_SALE",
-        "image_url":     image_url,
-        "product_url":   product_url,
+        "product_name": name,
+        "price":        round(shown_price, 2),
     }
 
 
