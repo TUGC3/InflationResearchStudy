@@ -1,32 +1,3 @@
-"""
-Hunger Threshold Calculator — v2
-================================================
-Data source : A101 Kapida online grocery prices
-Basket      : Presentation slide 8 (family of 4, monthly quantities)
-
-MATCHING STRATEGY
------------------
-Each basket item is matched against the CSV using:
-  • alt_kategori  – A101 sub-category column
-  • keywords      – Turkish words that must appear in the product name (any match)
-  • exclude       – words that disqualify a product
-
-Every matched product's price is normalised to TRY/kg (or TRY/litre, TRY/piece)
-by parsing the package size from the product name. The basket cost uses the
-simple average of all matched unit prices — outliers are intentionally kept
-because they reflect the real market spread a household faces.
-
-ITEM NOTES
-----------
-Yogurt          Only plain homogenised/bucket/tub yogurt; excluded: creamy,
-                strained, whisked, probiotic, lactose-free, flavoured, premium brands
-Minced Meat     Fresh beef mince preferred; Feb-2026 CSV has no fresh mince so beef
-                meatball variants used as proxy (filtered to beef-only, no chicken/burger)
-Tea             "30x15 G" style multi-sachet pack excluded to avoid /kg normalisation bug
-Greens          Sold per piece (Adet); 4 kg/month → 16 pieces (250 g/piece assumed)
-Seasonal Fruit  Average of all non-staple fruits available that month
-"""
-
 import pandas as pd
 import re
 
@@ -46,7 +17,7 @@ OUTPUT_DETAIL  = f"{BASE_DIR}/hunger_threshold_detail.csv"
 OUTPUT_SUMMARY = f"{BASE_DIR}/hunger_threshold_summary.csv"
 
 # ─────────────────────────────────────────────────────
-# 2.  FOOD BASKET  (slide 8)
+# 2.  FOOD BASKET  
 # ─────────────────────────────────────────────────────
 FOOD_BASKET = [
     # ── Dairy Products ──────────────────────────
