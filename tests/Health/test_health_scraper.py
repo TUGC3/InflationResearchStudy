@@ -96,3 +96,61 @@ def test_normalise_medicine_df_no_price_column_returns_empty():
     raw = pd.DataFrame({"İlaç Adı": ["X"], "Barkod": ["123"]})
     result = _normalise_medicine_df(raw, date(2026, 3, 1))
     assert result.empty
+
+
+# ── fetch_titck_medicine_prices ───────────────────────────────────────────────
+
+import io
+import requests as req_lib
+from unittest.mock import MagicMock, patch
+from health_scraper import fetch_titck_medicine_prices
+
+
+SAMPLE_TITCK_HTML = """
+<html><body>
+<a href="/files/liste-2026-03-01.xlsx">Mart 2026</a>
+<a href="/files/liste-2026-04-01.xlsx">Nisan 2026</a>
+</body></html>
+"""
+
+def _make_excel_bytes(data: dict) -> bytes:
+    buf = io.BytesIO()
+    pd.DataFrame(data).to_excel(buf, index=False)
+    return buf.getvalue()
+
+
+def test_fetch_titck_returns_dataframe_on_success():
+    excel_bytes = _make_excel_bytes({"İlaç Adı": ["Aspirin 100mg"], "Fiyat": ["45,50"]})
+
+    html_mock = MagicMock()
+    html_mock.text = SAMPLE_TITCK_HTML
+    html_mock.raise_for_status = MagicMock()
+
+    excel_mock = MagicMock()
+    excel_mock.content = excel_bytes
+    excel_mock.raise_for_status = MagicMock()
+
+    with patch("health_scraper.requests.get", side_effect=[html_mock, excel_mock, excel_mock]):
+        result = fetch_titck_medicine_prices()
+
+    assert not result.empty
+    assert "product-name" in result.columns
+    assert "product-price" in result.columns
+    assert (result["category"] == "İlaç").all()
+    assert (result["source"] == "TİTCK").all()
+
+
+def test_fetch_titck_returns_empty_on_network_error():
+    with patch("health_scraper.requests.get", side_effect=req_lib.RequestException("timeout")):
+        result = fetch_titck_medicine_prices()
+    assert result.empty
+
+
+def test_fetch_titck_returns_empty_when_no_excel_links():
+    html_mock = MagicMock()
+    html_mock.text = "<html><body><p>no links</p></body></html>"
+    html_mock.raise_for_status = MagicMock()
+
+    with patch("health_scraper.requests.get", return_value=html_mock):
+        result = fetch_titck_medicine_prices()
+    assert result.empty

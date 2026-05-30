@@ -91,3 +91,51 @@ def _normalise_medicine_df(df: pd.DataFrame, snapshot_date: date) -> pd.DataFram
         & (result["product-name"] != "")
         & (result["product-name"] != "nan")
     ].reset_index(drop=True)
+
+
+def fetch_titck_medicine_prices() -> pd.DataFrame:
+    cutoff = date.today() - timedelta(days=90)
+
+    try:
+        resp = requests.get(TITCK_URL, headers=HEADERS, timeout=20)
+        resp.raise_for_status()
+    except requests.RequestException as exc:
+        print(f"⚠ TİTCK unreachable: {exc}")
+        return pd.DataFrame()
+
+    soup = BeautifulSoup(resp.text, "html.parser")
+    excel_hrefs = [
+        a["href"] for a in soup.find_all("a", href=True)
+        if a["href"].lower().endswith((".xls", ".xlsx"))
+    ]
+
+    if not excel_hrefs:
+        print("⚠ No Excel links found on TİTCK page.")
+        return pd.DataFrame()
+
+    dated: list[tuple[date, str]] = []
+    for href in excel_hrefs:
+        d = _extract_date_from_url(href)
+        if d is None or d >= cutoff:
+            dated.append((d or date.today(), href))
+
+    if not dated:
+        print("⚠ No files within 3-month window. Using latest available.")
+        dated = [(date.today(), excel_hrefs[0])]
+
+    base = "https://www.titck.gov.tr"
+    frames = []
+    for snap_date, href in dated:
+        url = href if href.startswith("http") else base + href
+        try:
+            r = requests.get(url, headers=HEADERS, timeout=60)
+            r.raise_for_status()
+            df = pd.read_excel(io.BytesIO(r.content))
+            normed = _normalise_medicine_df(df, snap_date)
+            if not normed.empty:
+                frames.append(normed)
+                print(f"  ✓ {snap_date} — {len(normed):,} medicines")
+        except Exception as exc:
+            print(f"  ⚠ Skipping {href}: {exc}")
+
+    return pd.concat(frames, ignore_index=True) if frames else pd.DataFrame()
