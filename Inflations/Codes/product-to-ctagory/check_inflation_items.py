@@ -59,7 +59,7 @@ from pathlib import Path
 from typing import Dict, Iterable, List, Optional, Set, Tuple
 
 
-DEFAULT_ROOT = Path("InflationItems") / "Datas"
+DEFAULT_ROOT = Path("../../../InflationItems") / "Datas"
 DEFAULT_CATEGORY_CSV_FILENAME = "tuik_cpi_categories_comma.csv"
 COLLECTED_STRINGS_FILENAME = "collected_first_column_strings.json"
 OLD_COLLECTED_STRINGS_CSV_FILENAME = "collected_first_column_strings.csv"
