@@ -61,3 +61,33 @@ def _extract_date_from_url(url: str) -> date | None:
         except ValueError:
             return None
     return None
+
+
+def _normalise_medicine_df(df: pd.DataFrame, snapshot_date: date) -> pd.DataFrame:
+    df = df.copy()
+    df.columns = [str(c).strip() for c in df.columns]
+
+    name_col = next(
+        (c for c in df.columns if any(k in c.upper() for k in ["İLAÇ", "ILAC", "ÜRÜN", "URUN", "ADI", "NAME"])),
+        df.columns[0],
+    )
+    price_col = next(
+        (c for c in df.columns if any(k in c.upper() for k in ["FİYAT", "FIYAT", "PRICE", "PSF", "KDV", "SATIŞ"])),
+        None,
+    )
+    if price_col is None:
+        print(f"  ⚠ No price column detected. Columns: {list(df.columns)}")
+        return pd.DataFrame()
+
+    result = pd.DataFrame({
+        "date": snapshot_date.strftime("%Y-%m-%d"),
+        "product-name": df[name_col].astype(str).str.strip(),
+        "product-price": df[price_col].apply(lambda x: _parse_price(str(x))),
+        "category": "İlaç",
+        "source": "TİTCK",
+    })
+    return result[
+        result["product-price"].notna()
+        & (result["product-name"] != "")
+        & (result["product-name"] != "nan")
+    ].reset_index(drop=True)

@@ -59,3 +59,40 @@ def test_extract_date_underscored():
 
 def test_extract_date_no_date_returns_none():
     assert _extract_date_from_url("/files/guncel_liste.xlsx") is None
+
+
+# ── _normalise_medicine_df ────────────────────────────────────────────────────
+
+import pandas as pd
+from health_scraper import _normalise_medicine_df
+
+
+def test_normalise_medicine_df_standard_columns():
+    raw = pd.DataFrame({
+        "İlaç Adı": ["Aspirin 100mg", "Parol 500mg"],
+        "Fiyat":    ["45,50",          "32,00"],
+        "Barkod":   ["1234567890",      "0987654321"],
+    })
+    result = _normalise_medicine_df(raw, date(2026, 3, 1))
+    assert list(result.columns) == ["date", "product-name", "product-price", "category", "source"]
+    assert result["date"].iloc[0] == "2026-03-01"
+    assert result["product-name"].iloc[0] == "Aspirin 100mg"
+    assert result["product-price"].iloc[0] == 45.50
+    assert result["category"].iloc[0] == "İlaç"
+    assert result["source"].iloc[0] == "TİTCK"
+
+
+def test_normalise_medicine_df_drops_unparseable_prices():
+    raw = pd.DataFrame({
+        "İlaç Adı": ["Aspirin", "Bilinmiyor"],
+        "Fiyat":    ["45,50",   "N/A"],
+    })
+    result = _normalise_medicine_df(raw, date(2026, 3, 1))
+    assert len(result) == 1
+    assert result["product-name"].iloc[0] == "Aspirin"
+
+
+def test_normalise_medicine_df_no_price_column_returns_empty():
+    raw = pd.DataFrame({"İlaç Adı": ["X"], "Barkod": ["123"]})
+    result = _normalise_medicine_df(raw, date(2026, 3, 1))
+    assert result.empty
