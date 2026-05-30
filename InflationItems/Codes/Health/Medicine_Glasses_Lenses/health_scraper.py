@@ -29,3 +29,35 @@ _SCRIPT_DIR = Path(__file__).resolve().parent
 _INFLATION_ITEMS = _SCRIPT_DIR.parents[2]   # InflationItems/Codes/Health/MGL/ → [0]=Health [1]=Codes [2]=InflationItems
 OUTPUT_DIR = _INFLATION_ITEMS / "Datas" / "Health" / "Medicine_Glasses_Lenses"
 OUTPUT_PATH = OUTPUT_DIR / "health_prices_3months.csv"
+
+
+def _parse_price(text: str) -> float | None:
+    if not text:
+        return None
+    cleaned = str(text).replace("TL", "").replace("₺", "").replace("\xa0", "").replace(" ", "").strip()
+    if "," in cleaned and "." in cleaned:
+        cleaned = cleaned.replace(".", "").replace(",", ".")
+    elif "," in cleaned:
+        cleaned = cleaned.replace(",", ".")
+    try:
+        val = float(cleaned)
+        return val if val > 0 else None
+    except ValueError:
+        return None
+
+
+def _classify_optical(name: str) -> str:
+    upper = name.upper()
+    if any(k in upper for k in ["ÇERÇEVE", "CERCEVE", "FRAME"]):
+        return "Gözlük Çerçevesi"
+    return "Gözlük Camı"
+
+
+def _extract_date_from_url(url: str) -> date | None:
+    match = re.search(r"(\d{4})[-_.]?(\d{2})[-_.]?(\d{2})", url)
+    if match:
+        try:
+            return date(int(match.group(1)), int(match.group(2)), int(match.group(3)))
+        except ValueError:
+            return None
+    return None
