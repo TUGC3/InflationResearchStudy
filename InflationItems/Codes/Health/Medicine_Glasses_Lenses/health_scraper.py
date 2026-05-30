@@ -14,8 +14,10 @@ TITCK_URL = "https://www.titck.gov.tr/dinamikmodul/100"
 SGK_OPTICAL_URL = (
     "https://www.optikgazete.com/2026-yili-optik-cam-cerceve-banka-ve-kurum-odemeleri"
 )
-# How many of the most-recent TİTCK price lists to download (one per ~month)
+# Target number of successful TİTCK price-list snapshots to collect
 MAX_TITCK_FILES = 3
+# Max download attempts — some files on the page are not price lists; retry past them
+MAX_TITCK_ATTEMPTS = 10
 HEADERS = {
     "User-Agent": (
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
@@ -112,7 +114,8 @@ def _normalise_medicine_df(df: pd.DataFrame, snapshot_date: date) -> pd.DataFram
     ].reset_index(drop=True)
 
 
-def fetch_titck_medicine_prices() -> pd.DataFrame:
+def fetch_titck_medicine_prices() -> list[pd.DataFrame]:
+    """Return a list of DataFrames — one per downloaded TİTCK snapshot (up to MAX_TITCK_FILES)."""
     cutoff = date.today() - timedelta(days=90)
 
     try:
@@ -120,7 +123,7 @@ def fetch_titck_medicine_prices() -> pd.DataFrame:
         resp.raise_for_status()
     except requests.RequestException as exc:
         print(f"⚠ TİTCK unreachable: {exc}")
-        return pd.DataFrame()
+        return []
 
     soup = BeautifulSoup(resp.text, "html.parser")
     excel_hrefs = [
@@ -130,7 +133,7 @@ def fetch_titck_medicine_prices() -> pd.DataFrame:
 
     if not excel_hrefs:
         print("⚠ No Excel links found on TİTCK page.")
-        return pd.DataFrame()
+        return []
 
     dated: list[tuple[date, str]] = []
     for href in excel_hrefs:
@@ -142,11 +145,14 @@ def fetch_titck_medicine_prices() -> pd.DataFrame:
         print("⚠ No files within 3-month window. Using latest available.")
         dated = [(date.today(), h) for h in excel_hrefs[:MAX_TITCK_FILES]]
 
-    dated = dated[:MAX_TITCK_FILES]  # cap to avoid downloading the entire archive
+    # Cap attempts; stop early once we have MAX_TITCK_FILES successful frames
+    dated = dated[:MAX_TITCK_ATTEMPTS]
 
     base = "https://www.titck.gov.tr"
-    frames = []
+    frames: list[pd.DataFrame] = []
     for snap_date, href in dated:
+        if len(frames) >= MAX_TITCK_FILES:
+            break
         url = href if href.startswith("http") else base + href
         try:
             r = requests.get(url, headers=HEADERS, timeout=60)
@@ -159,7 +165,7 @@ def fetch_titck_medicine_prices() -> pd.DataFrame:
         except Exception as exc:
             print(f"  ⚠ Skipping {href}: {exc}")
 
-    return pd.concat(frames, ignore_index=True) if frames else pd.DataFrame()
+    return frames
 
 
 def fetch_sgk_optical_prices() -> pd.DataFrame:
@@ -221,7 +227,14 @@ def fetch_sgk_optical_prices() -> pd.DataFrame:
     return pd.DataFrame(rows)
 
 
-def save_consolidated(medicines_df: pd.DataFrame, optical_df: pd.DataFrame) -> None:
+def save_consolidated(
+    medicines_df: pd.DataFrame,
+    optical_df: pd.DataFrame,
+    output_path: Path | None = None,
+) -> None:
+    if output_path is None:
+        output_path = OUTPUT_PATH
+
     frames = [df for df in (medicines_df, optical_df) if not df.empty]
     if not frames:
         print("❌ No data collected — output file not written.")
@@ -232,8 +245,19 @@ def save_consolidated(medicines_df: pd.DataFrame, optical_df: pd.DataFrame) -> N
     combined = combined.dropna(subset=["product-price"])
 
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
-    combined.to_csv(OUTPUT_PATH, index=False, encoding="utf-8-sig")
-    print(f"\n✅ {len(combined):,} rows saved → {OUTPUT_PATH}")
+    combined.to_csv(output_path, index=False, encoding="utf-8-sig")
+    print(f"\n✅ {len(combined):,} rows saved → {output_path}")
+
+
+def _month_start(months_back: int) -> date:
+    """Return the first day of the month `months_back` months before today."""
+    today = date.today()
+    m = today.month - months_back
+    y = today.year
+    while m <= 0:
+        m += 12
+        y -= 1
+    return date(y, m, 1)
 
 
 def main() -> None:
@@ -242,12 +266,33 @@ def main() -> None:
     print("=" * 55)
 
     print("\n💊 Fetching medicine prices from TİTCK...")
-    medicines_df = fetch_titck_medicine_prices()
+    medicine_frames = fetch_titck_medicine_prices()
 
     print("\n👓 Fetching optical prices from SGK...")
     optical_df = fetch_sgk_optical_prices()
 
-    save_consolidated(medicines_df, optical_df)
+    n = len(medicine_frames)
+    if n == 0:
+        print("❌ No medicine data — cannot save monthly files.")
+        return
+
+    # Assign months oldest-first: frame[0] → n months ago, frame[n-1] → 1 month ago
+    for i, med_df in enumerate(medicine_frames):
+        months_back = n - 1 - i  # e.g. for n=3: 2, 1, 0 → oldest=2 months ago, newest=current
+        month_date = _month_start(months_back)
+        month_str = month_date.strftime("%Y-%m")     # e.g. "2026-03"
+        date_str = month_date.strftime("%Y-%m-%d")   # e.g. "2026-03-01"
+
+        med = med_df.copy()
+        med["date"] = date_str
+
+        opt = optical_df.copy() if not optical_df.empty else pd.DataFrame()
+        if not opt.empty:
+            opt["date"] = date_str
+
+        output_path = OUTPUT_DIR / f"health_prices_{month_str}.csv"
+        print(f"\n📅 {month_str}")
+        save_consolidated(med, opt, output_path)
 
 
 if __name__ == "__main__":

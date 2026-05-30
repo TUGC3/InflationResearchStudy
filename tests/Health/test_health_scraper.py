@@ -144,7 +144,7 @@ def _make_excel_bytes(data: dict) -> bytes:
     return buf.getvalue()
 
 
-def test_fetch_titck_returns_dataframe_on_success():
+def test_fetch_titck_returns_list_of_dataframes_on_success():
     excel_bytes = _make_excel_bytes({"İlaç Adı": ["Aspirin 100mg"], "Fiyat": ["45,50"]})
 
     html_mock = MagicMock()
@@ -158,38 +158,40 @@ def test_fetch_titck_returns_dataframe_on_success():
     with patch("health_scraper.requests.get", side_effect=[html_mock, excel_mock, excel_mock]):
         result = fetch_titck_medicine_prices()
 
-    assert not result.empty
-    assert "product-name" in result.columns
-    assert "product-price" in result.columns
-    assert (result["category"] == "İlaç").all()
-    assert (result["source"] == "TİTCK").all()
+    assert isinstance(result, list)
+    assert len(result) > 0
+    assert "product-name" in result[0].columns
+    assert "product-price" in result[0].columns
+    assert (result[0]["category"] == "İlaç").all()
+    assert (result[0]["source"] == "TİTCK").all()
 
 
-def test_fetch_titck_returns_empty_on_network_error():
+def test_fetch_titck_returns_empty_list_on_network_error():
     with patch("health_scraper.requests.get", side_effect=req_lib.RequestException("timeout")):
         result = fetch_titck_medicine_prices()
-    assert result.empty
+    assert result == []
 
 
-def test_fetch_titck_returns_empty_when_no_excel_links():
+def test_fetch_titck_returns_empty_list_when_no_excel_links():
     html_mock = MagicMock()
     html_mock.text = "<html><body><p>no links</p></body></html>"
     html_mock.raise_for_status = MagicMock()
 
     with patch("health_scraper.requests.get", return_value=html_mock):
         result = fetch_titck_medicine_prices()
-    assert result.empty
+    assert result == []
 
 
-def test_fetch_titck_caps_downloads_at_max_titck_files():
+def test_fetch_titck_caps_successful_frames_at_max_titck_files():
     excel_bytes = _make_excel_bytes({"İlaç Adı": ["Aspirin"], "Fiyat": ["45,50"]})
-    # Provide 5 links — only MAX_TITCK_FILES (3) should be downloaded
+    # Provide 6 links — should stop after MAX_TITCK_FILES (3) successful frames
     many_links_html = """<html><body>
       <a href="/f/2026-02-01.xlsx">1</a>
       <a href="/f/2026-03-01.xlsx">2</a>
       <a href="/f/2026-04-01.xlsx">3</a>
       <a href="/f/2026-05-01.xlsx">4</a>
       <a href="/f/2026-05-15.xlsx">5</a>
+      <a href="/f/2026-05-20.xlsx">6</a>
     </body></html>"""
 
     html_mock = MagicMock()
@@ -207,9 +209,11 @@ def test_fetch_titck_caps_downloads_at_max_titck_files():
         return html_mock if call_count == 1 else excel_mock
 
     with patch("health_scraper.requests.get", side_effect=mock_get):
-        fetch_titck_medicine_prices()
+        result = fetch_titck_medicine_prices()
 
-    # 1 HTML fetch + 3 Excel fetches (capped at MAX_TITCK_FILES)
+    # Stopped after 3 successful frames (MAX_TITCK_FILES)
+    assert len(result) == 3
+    # 1 HTML fetch + 3 Excel fetches
     assert call_count == 4
 
 
@@ -276,7 +280,7 @@ def test_fetch_sgk_optical_returns_empty_on_network_error():
 # ── save_consolidated ─────────────────────────────────────────────────────────
 
 import health_scraper
-from health_scraper import save_consolidated
+from health_scraper import save_consolidated, _month_start
 
 
 def _make_medicine_df() -> pd.DataFrame:
@@ -300,32 +304,44 @@ def _make_optical_df() -> pd.DataFrame:
 
 
 def test_save_consolidated_writes_correct_csv(tmp_path):
-    health_scraper.OUTPUT_DIR = tmp_path
-    health_scraper.OUTPUT_PATH = tmp_path / "health_prices_3months.csv"
+    out = tmp_path / "health_prices_2026-03.csv"
+    save_consolidated(_make_medicine_df(), _make_optical_df(), output_path=out)
 
-    save_consolidated(_make_medicine_df(), _make_optical_df())
-
-    assert health_scraper.OUTPUT_PATH.exists()
-    result = pd.read_csv(health_scraper.OUTPUT_PATH)
+    assert out.exists()
+    result = pd.read_csv(out)
     assert len(result) == 2
     assert list(result.columns) == ["date", "product-name", "product-price", "category", "source"]
     assert set(result["category"]) == {"İlaç", "Gözlük Camı"}
 
 
 def test_save_consolidated_column_order(tmp_path):
-    health_scraper.OUTPUT_DIR = tmp_path
-    health_scraper.OUTPUT_PATH = tmp_path / "health_prices_3months.csv"
+    out = tmp_path / "health_prices_2026-04.csv"
+    save_consolidated(_make_medicine_df(), pd.DataFrame(), output_path=out)
 
-    save_consolidated(_make_medicine_df(), pd.DataFrame())
-
-    result = pd.read_csv(health_scraper.OUTPUT_PATH)
+    result = pd.read_csv(out)
     assert list(result.columns) == ["date", "product-name", "product-price", "category", "source"]
 
 
 def test_save_consolidated_both_empty_does_not_write(tmp_path):
-    health_scraper.OUTPUT_DIR = tmp_path
-    health_scraper.OUTPUT_PATH = tmp_path / "health_prices_3months.csv"
+    out = tmp_path / "health_prices_2026-05.csv"
+    save_consolidated(pd.DataFrame(), pd.DataFrame(), output_path=out)
+    assert not out.exists()
 
-    save_consolidated(pd.DataFrame(), pd.DataFrame())
 
-    assert not health_scraper.OUTPUT_PATH.exists()
+# ── _month_start ───────────────────────────────────────────────────────────────
+
+def test_month_start_zero_returns_this_month():
+    result = _month_start(0)
+    today = date.today()
+    assert result == date(today.year, today.month, 1)
+
+def test_month_start_one_returns_previous_month():
+    result = _month_start(1)
+    today = date.today()
+    expected_month = today.month - 1 or 12
+    expected_year = today.year if today.month > 1 else today.year - 1
+    assert result == date(expected_year, expected_month, 1)
+
+def test_month_start_always_day_one():
+    for n in range(6):
+        assert _month_start(n).day == 1
