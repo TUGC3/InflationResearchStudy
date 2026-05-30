@@ -1,12 +1,4 @@
 """
-Hunger Threshold Calculator — Baskent Market
-=============================================================
-Data source : Baskent Market online grocery prices
-Basket      : Presentation slide 8 (family of 4, monthly quantities)
-
-CSV structure:
-  Product Name, Price   (comma separator, price format: "1.234,00 TL")
-
 NOT AVAILABLE AT BASKENT (N/A for all months):
   Milk, Yogurt, White Cheese, Kashar, Minced Meat, Cubed Meat,
   Chicken, Fish, Eggs, Bread, Flour (standard wheat), Semolina,
