@@ -192,3 +192,61 @@ def test_fetch_sgk_optical_returns_empty_on_network_error():
     with patch("health_scraper.requests.get", side_effect=req_lib.RequestException("timeout")):
         result = fetch_sgk_optical_prices()
     assert result.empty
+
+
+# ── save_consolidated ─────────────────────────────────────────────────────────
+
+import health_scraper
+from health_scraper import save_consolidated
+
+
+def _make_medicine_df() -> pd.DataFrame:
+    return pd.DataFrame({
+        "date": ["2026-03-01"],
+        "product-name": ["Aspirin 100mg"],
+        "product-price": [45.50],
+        "category": ["İlaç"],
+        "source": ["TİTCK"],
+    })
+
+
+def _make_optical_df() -> pd.DataFrame:
+    return pd.DataFrame({
+        "date": ["2026-05-30"],
+        "product-name": ["Tek Odaklı Cam"],
+        "product-price": [150.0],
+        "category": ["Gözlük Camı"],
+        "source": ["SGK"],
+    })
+
+
+def test_save_consolidated_writes_correct_csv(tmp_path):
+    health_scraper.OUTPUT_DIR = tmp_path
+    health_scraper.OUTPUT_PATH = tmp_path / "health_prices_3months.csv"
+
+    save_consolidated(_make_medicine_df(), _make_optical_df())
+
+    assert health_scraper.OUTPUT_PATH.exists()
+    result = pd.read_csv(health_scraper.OUTPUT_PATH)
+    assert len(result) == 2
+    assert list(result.columns) == ["date", "product-name", "product-price", "category", "source"]
+    assert set(result["category"]) == {"İlaç", "Gözlük Camı"}
+
+
+def test_save_consolidated_column_order(tmp_path):
+    health_scraper.OUTPUT_DIR = tmp_path
+    health_scraper.OUTPUT_PATH = tmp_path / "health_prices_3months.csv"
+
+    save_consolidated(_make_medicine_df(), pd.DataFrame())
+
+    result = pd.read_csv(health_scraper.OUTPUT_PATH)
+    assert list(result.columns) == ["date", "product-name", "product-price", "category", "source"]
+
+
+def test_save_consolidated_both_empty_does_not_write(tmp_path):
+    health_scraper.OUTPUT_DIR = tmp_path
+    health_scraper.OUTPUT_PATH = tmp_path / "health_prices_3months.csv"
+
+    save_consolidated(pd.DataFrame(), pd.DataFrame())
+
+    assert not health_scraper.OUTPUT_PATH.exists()

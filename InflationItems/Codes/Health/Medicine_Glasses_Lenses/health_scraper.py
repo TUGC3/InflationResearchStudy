@@ -176,3 +176,36 @@ def fetch_sgk_optical_prices() -> pd.DataFrame:
         print(f"  ✓ {len(rows)} optical products from SGK")
 
     return pd.DataFrame(rows)
+
+
+def save_consolidated(medicines_df: pd.DataFrame, optical_df: pd.DataFrame) -> None:
+    frames = [df for df in (medicines_df, optical_df) if not df.empty]
+    if not frames:
+        print("❌ No data collected — output file not written.")
+        return
+
+    combined = pd.concat(frames, ignore_index=True)
+    combined = combined[["date", "product-name", "product-price", "category", "source"]]
+    combined = combined.dropna(subset=["product-price"])
+
+    OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+    combined.to_csv(OUTPUT_PATH, index=False, encoding="utf-8-sig")
+    print(f"\n✅ {len(combined):,} rows saved → {OUTPUT_PATH}")
+
+
+def main() -> None:
+    print("=" * 55)
+    print("HEALTH PRICES SCRAPER")
+    print("=" * 55)
+
+    print("\n💊 Fetching medicine prices from TİTCK...")
+    medicines_df = fetch_titck_medicine_prices()
+
+    print("\n👓 Fetching optical prices from SGK...")
+    optical_df = fetch_sgk_optical_prices()
+
+    save_consolidated(medicines_df, optical_df)
+
+
+if __name__ == "__main__":
+    main()
