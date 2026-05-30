@@ -1,19 +1,3 @@
-"""
-Hunger Threshold Calculator — Kim Market
-=========================================================
-Basket: Presentation slide 8 — family of 4, monthly quantities.
-
-CSV format: consistent across all files
-  No header row — 2 columns: product_name, product_price
-  Price format: "34,99 ₺" — strip ₺, handle decimal comma
-  All product names in UPPERCASE
-  No category column — keyword-only matching
-
-Kim Market is primarily snack/confectionery focused. Several basket items
-are not stocked (fish, bread, tea, tomato paste, salt, spices, etc.)
-and will show as N/A.
-"""
-
 import re
 import pandas as pd
 from pathlib import Path
@@ -117,7 +101,7 @@ MATCH_RULES = {
         "unit": "kg",
     },
     "Fish": {
-        "kw":  [],  # Not stocked
+        "kw":  [],  
         "ex":  [],
         "unit": "kg",
     },
@@ -318,7 +302,7 @@ MATCH_RULES = {
         "unit": "kg",
     },
     "Tea": {
-        "kw":  [],  # No loose-leaf tea stocked
+        "kw":  [],  
         "ex":  [],
         "unit": "kg",
     },
@@ -511,8 +495,7 @@ def get_seasonal_fruit_price(df: pd.DataFrame) -> dict:
     for _, row in sub.iterrows():
         name  = str(row['product_name'])
         price = parse_price(row['product_price'])
-        # All Kim Market produce sold standalone = per-kg or per-adet
-        # Treat both as per-kg (reasonable approximation for seasonal avg)
+        
         prices.append(price)
 
     avg   = sum(prices) / len(prices) if prices else float('nan')
