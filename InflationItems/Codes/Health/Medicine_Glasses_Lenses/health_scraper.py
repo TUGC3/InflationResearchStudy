@@ -10,12 +10,12 @@ import requests
 from bs4 import BeautifulSoup
 
 TITCK_URL = "https://www.titck.gov.tr/dinamikmodul/100"
+# SGK optical prices published by the Turkish Opticians' Journal (official SGK rates)
 SGK_OPTICAL_URL = (
-    "https://www.sgk.gov.tr/Content/Post/"
-    "29aa9928-48df-47af-9fc6-03c74da9cc0a/"
-    "Optik-Gormeye-Yardimci-Malzeme-Nedir-Ne-Sekilde-Temin-Edilir-"
-    "2026-01-09-03-59-14"
+    "https://www.optikgazete.com/2026-yili-optik-cam-cerceve-banka-ve-kurum-odemeleri"
 )
+# How many of the most-recent TİTCK price lists to download (one per ~month)
+MAX_TITCK_FILES = 3
 HEADERS = {
     "User-Agent": (
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
@@ -56,8 +56,17 @@ def _classify_optical(name: str) -> str:
 def _extract_date_from_url(url: str) -> date | None:
     match = re.search(r"(\d{4})[-_.]?(\d{2})[-_.]?(\d{2})", url)
     if match:
+        yr = int(match.group(1))
+        if 2000 <= yr <= 2099:  # reject UUID-derived pseudo-years like 8496 or 9682
+            try:
+                return date(yr, int(match.group(2)), int(match.group(3)))
+            except ValueError:
+                pass  # fall through to archive-year pattern below
+    # Fallback: year from /Archive/YYYY/ path (TİTCK URL structure)
+    match = re.search(r"/[Aa]rchive/(\d{4})/", url)
+    if match:
         try:
-            return date(int(match.group(1)), int(match.group(2)), int(match.group(3)))
+            return date(int(match.group(1)), 12, 31)
         except ValueError:
             return None
     return None
@@ -123,6 +132,8 @@ def fetch_titck_medicine_prices() -> pd.DataFrame:
         print("⚠ No files within 3-month window. Using latest available.")
         dated = [(date.today(), excel_hrefs[0])]
 
+    dated = dated[:MAX_TITCK_FILES]  # cap to avoid downloading the entire archive
+
     base = "https://www.titck.gov.tr"
     frames = []
     for snap_date, href in dated:
@@ -142,38 +153,52 @@ def fetch_titck_medicine_prices() -> pd.DataFrame:
 
 
 def fetch_sgk_optical_prices() -> pd.DataFrame:
+    """Fetch SGK official optical reimbursement prices from Optik Gazete (static source)."""
     try:
         resp = requests.get(SGK_OPTICAL_URL, headers=HEADERS, timeout=20)
         resp.raise_for_status()
     except requests.RequestException as exc:
-        print(f"⚠ SGK page unreachable: {exc}")
+        print(f"⚠ Optik Gazete page unreachable: {exc}")
         return pd.DataFrame()
 
     soup = BeautifulSoup(resp.text, "html.parser")
     today = date.today().strftime("%Y-%m-%d")
     rows = []
+    _HEADER_KEYWORDS = {"KURUM", "KURULUŞ", "ÇERÇEVE", "CAM", "INSTITUTION"}
 
     for table in soup.find_all("table"):
         for tr in table.find_all("tr"):
             cells = [td.get_text(" ", strip=True) for td in tr.find_all(["td", "th"])]
-            if len(cells) < 2:
+            if len(cells) < 3:
                 continue
-            name = cells[0].strip()
-            price = _parse_price(cells[1])
-            if not name or price is None:
+            institution = cells[0].strip()
+            if not institution or institution.upper() in _HEADER_KEYWORDS:
                 continue
-            rows.append({
-                "date": today,
-                "product-name": name,
-                "product-price": price,
-                "category": _classify_optical(name),
-                "source": "SGK",
-            })
+
+            frame_price = _parse_price(cells[1])
+            lens_price = _parse_price(cells[2])
+
+            if frame_price is not None:
+                rows.append({
+                    "date": today,
+                    "product-name": f"{institution} — Çerçeve",
+                    "product-price": frame_price,
+                    "category": "Gözlük Çerçevesi",
+                    "source": "SGK",
+                })
+            if lens_price is not None:
+                rows.append({
+                    "date": today,
+                    "product-name": f"{institution} — Cam",
+                    "product-price": lens_price,
+                    "category": "Gözlük Camı",
+                    "source": "SGK",
+                })
 
     if not rows:
-        print("⚠ No optical rows parsed from SGK page.")
+        print("⚠ No optical rows parsed from Optik Gazete page.")
     else:
-        print(f"  ✓ {len(rows)} optical products from SGK")
+        print(f"  ✓ {len(rows)} optical products from SGK (via Optik Gazete)")
 
     return pd.DataFrame(rows)
 

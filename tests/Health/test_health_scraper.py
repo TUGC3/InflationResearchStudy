@@ -60,6 +60,19 @@ def test_extract_date_underscored():
 def test_extract_date_no_date_returns_none():
     assert _extract_date_from_url("/files/guncel_liste.xlsx") is None
 
+def test_extract_date_archive_year_path():
+    url = "https://titck.gov.tr/storage/Archive/2026/dynamicModulesAttachment/LISTE.xlsx"
+    assert _extract_date_from_url(url) == date(2026, 12, 31)
+
+def test_extract_date_uuid_digits_rejected_falls_back_to_archive():
+    # UUID like ede284aa-9979-4009-b573-... would produce year 9979 — rejected
+    url = "https://titck.gov.tr/storage/Archive/2026/dma/FILE_ede284aa-9979-4009-b573.xlsx"
+    assert _extract_date_from_url(url) == date(2026, 12, 31)
+
+def test_extract_date_archive_old_year_excluded_by_cutoff():
+    url = "https://titck.gov.tr/storage/Archive/2023/dynamicModulesAttachment/LISTE.xlsx"
+    assert _extract_date_from_url(url) == date(2023, 12, 31)
+
 
 # ── _normalise_medicine_df ────────────────────────────────────────────────────
 
@@ -164,9 +177,9 @@ from health_scraper import fetch_sgk_optical_prices
 SAMPLE_SGK_HTML = """
 <html><body>
 <table>
-  <tr><td>Tek Odaklı Cam (sferik ≤4 dioptri)</td><td>150,00 TL</td></tr>
-  <tr><td>Çerçeve (14 yaş altı)</td><td>200,00 TL</td></tr>
-  <tr><td>Progressif Cam</td><td>300,00 TL</td></tr>
+  <tr><th>KURUM VE KURULUŞLAR</th><th>ÇERÇEVE</th><th>CAM</th></tr>
+  <tr><td>GARANTİ BANKASI(2026)</td><td>2.025,00 TL</td><td>2.025,00 TL</td></tr>
+  <tr><td>İŞ BANKASI(2026)</td><td>2.750,00 TL</td><td>2.750,00 TL</td></tr>
 </table>
 </body></html>
 """
@@ -184,8 +197,8 @@ def test_fetch_sgk_optical_returns_dataframe():
     assert set(result["category"].unique()).issubset({"Gözlük Camı", "Gözlük Çerçevesi"})
     assert (result["source"] == "SGK").all()
     frame_rows = result[result["category"] == "Gözlük Çerçevesi"]
-    assert len(frame_rows) == 1
-    assert frame_rows["product-price"].iloc[0] == 200.0
+    assert len(frame_rows) == 2  # 2 institutions × 1 frame each
+    assert frame_rows["product-price"].iloc[0] == 2025.0
 
 
 def test_fetch_sgk_optical_returns_empty_on_network_error():
