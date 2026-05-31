@@ -873,6 +873,20 @@ def _rent_relative(current_str: str, past_str: str) -> float | None:
     return (mean_cur / mean_past - 1) * 100
 
 
+def _coverage_report(present_codes: list[str]) -> tuple[float, str]:
+    total_w = sum(d["weight"] for d in TUIK_WEIGHTS.values())
+    covered_w = sum(TUIK_WEIGHTS[c]["weight"] for c in present_codes if c in TUIK_WEIGHTS)
+    coverage_pct = covered_w / total_w * 100 if total_w else 0.0
+
+    lines = [f"Covered TUIK basket: {coverage_pct:.2f}%"]
+    for code in sorted(TUIK_WEIGHTS):
+        status = "✓" if code in present_codes else "✗"
+        name = TUIK_WEIGHTS[code]["name"][:35]
+        weight = TUIK_WEIGHTS[code]["weight"]
+        lines.append(f"  {code}  {name:<35}  {weight:>6.2f}%  {status}")
+    return coverage_pct, "\n".join(lines)
+
+
 # ── Core metric computation ───────────────────────────────────────────────────
 
 def _compute_metrics(

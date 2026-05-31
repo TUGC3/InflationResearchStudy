@@ -300,3 +300,34 @@ def test_rent_relative_no_common_cities_returns_none(tmp_path, monkeypatch):
     _make_rent_city(tmp_path, "Ankara",  "2026-05-01", [10000])
     _make_rent_city(tmp_path, "Istanbul","2026-04-01", [20000])
     assert _rent_relative("2026-05-01", "2026-04-01") is None
+
+
+from turkey_inflation import _coverage_report
+from tuik_config import TUIK_WEIGHTS
+
+
+def test_coverage_report_full_coverage():
+    all_codes = list(TUIK_WEIGHTS.keys())
+    pct, report = _coverage_report(all_codes)
+    assert abs(pct - 100.0) < 0.01
+    assert "100.00%" in report
+
+
+def test_coverage_report_partial():
+    total_w = sum(d["weight"] for d in TUIK_WEIGHTS.values())
+    expected_pct = (TUIK_WEIGHTS["01"]["weight"] + TUIK_WEIGHTS["03"]["weight"]) / total_w * 100
+    pct, report = _coverage_report(["01", "03"])
+    assert abs(pct - expected_pct) < 0.01
+    assert "✓" in report
+    assert "✗" in report
+
+
+def test_coverage_report_empty():
+    pct, _ = _coverage_report([])
+    assert pct == 0.0
+
+
+def test_coverage_report_unknown_code_ignored():
+    pct1, _ = _coverage_report(["01"])
+    pct2, _ = _coverage_report(["01", "99"])  # "99" doesn't exist
+    assert abs(pct1 - pct2) < 0.01
