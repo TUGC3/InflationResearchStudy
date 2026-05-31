@@ -1,9 +1,6 @@
-import sys
-import pandas as pd
 import pytest
 from pathlib import Path
 
-sys.path.insert(0, "Inflations/Codes")
 from turkey_inflation import _has_standard_header
 
 
