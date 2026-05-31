@@ -130,6 +130,20 @@ def _parse_price(x) -> float | None:
         return None
 
 
+# ── File header validation ────────────────────────────────────────────────────
+
+_SKIP_SUBDIRS = {"InflationData", "output", "reports", "archive"}
+
+
+def _has_standard_header(fpath: Path) -> bool:
+    try:
+        with fpath.open(encoding="utf-8", errors="ignore") as fh:
+            first = fh.readline().strip().lstrip("﻿")
+        return first == "product_name,price"
+    except Exception:
+        return False
+
+
 # ── TUIK category mappers (inlined from per-store configs) ────────────────────
 
 def _migros_to_tuik(cat: str) -> str:
