@@ -1,19 +1,19 @@
-District,Rooms,Price
-İdil,1+1,7.500 TL
-İdil,2+1,9.000 TL
-İdil,3+1,10.000 TL
-İdil,2+1,10.000 TL
-İdil,3+1,7.500 TL
-Cizre,2+1,12.750 TL
-Merkez / Şırnak,2+1,15.000 TL
-İdil,3+1,15.000 TL
-Uludere / Köyler,2+1,13.000 TL
-Cizre,2+1,14.000 TL
-İdil,2+1,13.000 TL
-İdil,3+1,13.000 TL
-İdil,3+1,13.500 TL
-Güçlükonak,1+1,17.000 TL
-Cizre,2+1,17.000 TL
-Silopi,2+1,16.500 TL
-Cizre,2+1,16.000 TL
-Cizre,1+1,20.000 TL
+product_name,price
+İdil - 1+1,7.500 TL
+İdil - 2+1,9.000 TL
+İdil - 3+1,10.000 TL
+İdil - 2+1,10.000 TL
+İdil - 3+1,7.500 TL
+Cizre - 2+1,12.750 TL
+Merkez / Şırnak - 2+1,15.000 TL
+İdil - 3+1,15.000 TL
+Uludere / Köyler - 2+1,13.000 TL
+Cizre - 2+1,14.000 TL
+İdil - 2+1,13.000 TL
+İdil - 3+1,13.000 TL
+İdil - 3+1,13.500 TL
+Güçlükonak - 1+1,17.000 TL
+Cizre - 2+1,17.000 TL
+Silopi - 2+1,16.500 TL
+Cizre - 2+1,16.000 TL
+Cizre - 1+1,20.000 TL
