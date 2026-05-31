@@ -4,6 +4,8 @@ from pathlib import Path
 
 from turkey_inflation import _has_standard_header, _find_date_csv, _load_store_csv
 from turkey_inflation import _load_sector, _load_all_stores, _SECTOR_CONFIG, _DATA_ROOT
+from turkey_inflation import _rent_city_prices, _rent_relative
+import turkey_inflation
 
 
 def test_has_standard_header_valid(tmp_path):
@@ -243,3 +245,58 @@ def test_compute_metrics_product_rel_has_one_row_per_product():
     )
     product_rel, _, _, _ = _compute_metrics(cur, past)
     assert len(product_rel) == 2  # elma and armut
+
+
+def _make_rent_city(base: Path, city: str, date: str, prices: list) -> None:
+    d = base / "HousesRent" / city
+    d.mkdir(parents=True, exist_ok=True)
+    lines = "\n".join(f"Daire {i+1},{p}" for i, p in enumerate(prices))
+    (d / f"rent_{date}.csv").write_text(f"product_name,price\n{lines}\n")
+
+
+def test_rent_city_prices_mean_per_city(tmp_path, monkeypatch):
+    monkeypatch.setattr(turkey_inflation, "_DATA_ROOT", tmp_path)
+    _make_rent_city(tmp_path, "Ankara", "2026-05-01", [10000, 20000])
+    _make_rent_city(tmp_path, "Istanbul", "2026-05-01", [30000, 40000])
+    result = _rent_city_prices("2026-05-01")
+    assert abs(result["Ankara"] - 15000.0) < 0.01
+    assert abs(result["Istanbul"] - 35000.0) < 0.01
+
+
+def test_rent_city_prices_skips_root_files(tmp_path, monkeypatch):
+    monkeypatch.setattr(turkey_inflation, "_DATA_ROOT", tmp_path)
+    rent_root = tmp_path / "HousesRent"
+    rent_root.mkdir()
+    (rent_root / "2026-05-01_all.csv").write_text("product_name,price\nDaire,15000\n")
+    result = _rent_city_prices("2026-05-01")
+    assert result == {}
+
+
+def test_rent_relative_computes_percentage_change(tmp_path, monkeypatch):
+    monkeypatch.setattr(turkey_inflation, "_DATA_ROOT", tmp_path)
+    _make_rent_city(tmp_path, "Ankara",   "2026-05-01", [11000, 16500])
+    _make_rent_city(tmp_path, "Istanbul", "2026-05-01", [11000, 16500])
+    _make_rent_city(tmp_path, "Ankara",   "2026-04-01", [10000, 15000])
+    _make_rent_city(tmp_path, "Istanbul", "2026-04-01", [10000, 15000])
+    result = _rent_relative("2026-05-01", "2026-04-01")
+    # mean_past=12500, mean_cur=13750 → 10% increase
+    assert result is not None
+    assert abs(result - 10.0) < 0.01
+
+
+def test_rent_relative_only_common_cities(tmp_path, monkeypatch):
+    monkeypatch.setattr(turkey_inflation, "_DATA_ROOT", tmp_path)
+    _make_rent_city(tmp_path, "Ankara",  "2026-05-01", [11000])
+    _make_rent_city(tmp_path, "Ankara",  "2026-04-01", [10000])
+    # Izmir only in current — excluded
+    _make_rent_city(tmp_path, "Izmir",   "2026-05-01", [50000])
+    result = _rent_relative("2026-05-01", "2026-04-01")
+    assert result is not None
+    assert abs(result - 10.0) < 0.01
+
+
+def test_rent_relative_no_common_cities_returns_none(tmp_path, monkeypatch):
+    monkeypatch.setattr(turkey_inflation, "_DATA_ROOT", tmp_path)
+    _make_rent_city(tmp_path, "Ankara",  "2026-05-01", [10000])
+    _make_rent_city(tmp_path, "Istanbul","2026-04-01", [20000])
+    assert _rent_relative("2026-05-01", "2026-04-01") is None

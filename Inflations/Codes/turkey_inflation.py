@@ -840,41 +840,27 @@ def _load_all_stores(date_str: str) -> tuple[pd.DataFrame, list[str], int]:
 # ── Rent inflation helper ─────────────────────────────────────────────────────
 
 def _rent_city_prices(date_str: str) -> dict[str, float]:
-    """
-    Return {city_dir_name: mean_price} for all cities that have rent data on date_str.
-    Only cities with at least one valid price are included.
-    """
     rent_root = _DATA_ROOT / "HousesRent"
-    result: dict[str, float] = {}
-    for city_dir in rent_root.iterdir():
-        if not city_dir.is_dir():
+    city_prices: dict[str, list[float]] = {}
+    for fpath in rent_root.rglob(f"*{date_str}*.csv"):
+        if fpath.parent == rent_root:  # skip root-level aggregate files
             continue
-        matches = list(city_dir.glob(f"*{date_str}*.csv"))
-        if not matches:
+        if not _has_standard_header(fpath):
             continue
+        city_key = fpath.parent.name
         try:
-            df = pd.read_csv(matches[0], dtype=str, on_bad_lines="skip")
+            df = pd.read_csv(fpath, dtype=str, on_bad_lines="skip")
             df.columns = [c.lstrip("﻿").strip() for c in df.columns]
-            price_col = next(
-                (c for c in df.columns if "price" in c.lower() or "fiyat" in c.lower()), None
-            )
-            if price_col is None:
-                continue
-            city_prices = df[price_col].apply(_parse_price).dropna()
-            city_prices = city_prices[city_prices > 0]
-            if not city_prices.empty:
-                result[city_dir.name] = city_prices.mean()
+            prices = df["price"].apply(_parse_price).dropna()
+            prices = prices[prices > 0]
+            if not prices.empty:
+                city_prices.setdefault(city_key, []).extend(prices.tolist())
         except Exception:
             continue
-    return result
+    return {k: sum(v) / len(v) for k, v in city_prices.items()}
 
 
-def _rent_inflation(current_str: str, past_str: str) -> float | None:
-    """
-    Return % change in mean rent price between two dates.
-    Only cities present on BOTH dates are included, preventing composition
-    bias from cities that join or leave the dataset between snapshots.
-    """
+def _rent_relative(current_str: str, past_str: str) -> float | None:
     cur_city = _rent_city_prices(current_str)
     past_city = _rent_city_prices(past_str)
     common = set(cur_city) & set(past_city)
@@ -884,11 +870,7 @@ def _rent_inflation(current_str: str, past_str: str) -> float | None:
     mean_past = sum(past_city[c] for c in common) / len(common)
     if mean_past == 0:
         return None
-    logger.debug(
-        "Rent: %d common cities, mean_cur=%.0f mean_past=%.0f",
-        len(common), mean_cur, mean_past,
-    )
-    return (mean_cur - mean_past) / mean_past * 100
+    return (mean_cur / mean_past - 1) * 100
 
 
 # ── Core metric computation ───────────────────────────────────────────────────
@@ -1033,7 +1015,7 @@ def calculate_turkey_inflation(
         summary_row[f"tuik_weighted_products_{label}"] = tuik_w_products
 
         # Rent (TUIK group 04) — injected into TUIK-weighted metric only
-        rent_inf = _rent_inflation(today_str, past_str)
+        rent_inf = _rent_relative(today_str, past_str)
         summary_row[f"rent_inflation_{label}"] = rent_inf
         if rent_inf is not None and tuik_w_products is not None:
             # Re-compute TUIK-weighted including rent
