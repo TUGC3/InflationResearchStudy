@@ -1,5 +1,5 @@
-month,hunger_threshold_TRY
-Feb 2026,35762.41
-Mar 2026,36382.81
-Apr 2026,35112.45
-May 2026,36885.99
+month,hunger_threshold_TRY,n_required_items,n_available_items,n_missing_items,missing_items,coverage_rate
+Feb 2026,35762.41,15,15,0,,100.0
+Mar 2026,36382.81,15,15,0,,100.0
+Apr 2026,35112.45,15,15,0,,100.0
+May 2026,36885.99,15,15,0,,100.0
