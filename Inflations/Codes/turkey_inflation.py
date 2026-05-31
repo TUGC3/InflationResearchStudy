@@ -154,6 +154,30 @@ def _find_date_csv(store_dir: Path, date_token: str) -> Path | None:
     return None
 
 
+def _load_store_csv(fpath: Path, store: str, sector: str, tuik_code: str) -> pd.DataFrame | None:
+    try:
+        df = pd.read_csv(fpath, dtype=str, on_bad_lines="skip")
+        df.columns = [c.lstrip("﻿").strip() for c in df.columns]
+        if "product_name" not in df.columns or "price" not in df.columns:
+            return None
+        out = pd.DataFrame()
+        out["product_key"] = df["product_name"].astype(str).str.strip()
+        out["canonical_key"] = out["product_key"].apply(_norm)
+        # Filter out prices that have a leading minus sign
+        out["price"] = df["price"].apply(
+            lambda x: _parse_price(x) if (x is None or not str(x).strip().startswith("-")) else None
+        )
+        out["store"] = store
+        out["sector"] = sector
+        out["tuik_category"] = tuik_code
+        out = out[out["canonical_key"] != ""].dropna(subset=["price"])
+        out = out[out["price"] > 0].reset_index(drop=True)
+        return out if not out.empty else None
+    except Exception as e:
+        logger.debug("%s: failed to load %s — %s", store, fpath.name, e)
+        return None
+
+
 # ── TUIK category mappers (inlined from per-store configs) ────────────────────
 
 def _migros_to_tuik(cat: str) -> str:
@@ -262,7 +286,7 @@ def _marketzade_to_tuik(cat: str) -> str:
 
 # ── Generic CSV loader ────────────────────────────────────────────────────────
 
-_STANDARD_COLS = ["product_key", "price", "tuik_category", "store", "sector"]
+_STANDARD_COLS = ["canonical_key", "product_key", "price", "store", "sector", "tuik_category"]
 
 
 def _load_csv(
