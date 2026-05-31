@@ -331,3 +331,36 @@ def test_coverage_report_unknown_code_ignored():
     pct1, _ = _coverage_report(["01"])
     pct2, _ = _coverage_report(["01", "99"])  # "99" doesn't exist
     assert abs(pct1 - pct2) < 0.01
+
+
+import shutil
+from turkey_inflation import calculate_turkey_inflation
+
+
+def test_calculate_turkey_inflation_runs_and_writes_outputs(tmp_path, monkeypatch):
+    # Point output dir to tmp_path so we don't pollute real data
+    out_dir = tmp_path / "Final_Reports"
+    monkeypatch.setattr("turkey_inflation._OUT_DIR", out_dir)
+
+    # Run against real data — 2026-05-26 vs 2026-05-01 (both dates have 50+ store files)
+    calculate_turkey_inflation(target_date="2026-05-26", compare_date="2026-05-01")
+
+    detail_file = out_dir / "turkey_inflation_2026-05-26.csv"
+    summary_file = out_dir / "turkey_inflation_summary.csv"
+
+    assert detail_file.exists(), "Detail CSV not written"
+    assert summary_file.exists(), "Summary CSV not written"
+
+    detail = pd.read_csv(detail_file)
+    summary = pd.read_csv(summary_file)
+
+    assert len(detail) > 0, "Detail CSV is empty"
+    assert "canonical_key" in detail.columns
+    assert "relative_2026-05-01" in detail.columns
+
+    assert len(summary) == 1
+    assert summary["date"].iloc[0] == "2026-05-26"
+    assert summary["n_stores"].iloc[0] > 0
+    assert "basket_coverage_pct" in summary.columns
+    coverage = summary["basket_coverage_pct"].iloc[0]
+    assert 0.0 < coverage < 100.0
