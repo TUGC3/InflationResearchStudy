@@ -3,6 +3,7 @@ import pandas as pd
 from pathlib import Path
 
 from turkey_inflation import _has_standard_header, _find_date_csv, _load_store_csv
+from turkey_inflation import _load_sector, _load_all_stores, _SECTOR_CONFIG, _DATA_ROOT
 
 
 def test_has_standard_header_valid(tmp_path):
@@ -117,3 +118,51 @@ def test_load_store_csv_empty_after_filtering_returns_none(tmp_path):
     f = tmp_path / "store_2026-05-01.csv"
     f.write_text("product_name,price\nElma,abc\nArmut,-1\n")
     assert _load_store_csv(f, "TestStore", "market", "01") is None
+
+
+def _make_store(base: Path, sector: str, store: str, date: str, rows: str) -> None:
+    d = base / sector / store
+    d.mkdir(parents=True)
+    (d / f"{store.lower()}_{date}.csv").write_text(f"product_name,price\n{rows}")
+
+
+def test_load_sector_discovers_two_stores(tmp_path):
+    _make_store(tmp_path, "Markets", "StoreA", "2026-05-01", "Elma,10\nArmut,15\n")
+    _make_store(tmp_path, "Markets", "StoreB", "2026-05-01", "Elma,11\nArmut,16\n")
+    frames = _load_sector(tmp_path / "Markets", "2026-05-01", "01", "market")
+    assert len(frames) == 2
+    stores = {df["store"].iloc[0] for df in frames}
+    assert stores == {"StoreA", "StoreB"}
+
+
+def test_load_sector_skips_store_missing_date(tmp_path):
+    _make_store(tmp_path, "Markets", "StoreA", "2026-04-01", "Elma,10\n")
+    frames = _load_sector(tmp_path / "Markets", "2026-05-01", "01", "market")
+    assert frames == []
+
+
+def test_load_sector_monthly_matches_yyyy_mm(tmp_path):
+    d = tmp_path / "Health" / "HealthStore"
+    d.mkdir(parents=True)
+    (d / "health_prices_2026-05.csv").write_text("product_name,price\nAspirin,5.0\n")
+    frames = _load_sector(tmp_path / "Health", "2026-05-15", "06", "health", date_granularity="monthly")
+    assert len(frames) == 1
+    assert frames[0]["store"].iloc[0] == "HealthStore"
+
+
+def test_load_all_stores_deduplicates_within_store(tmp_path, monkeypatch):
+    monkeypatch.setattr("turkey_inflation._DATA_ROOT", tmp_path)
+    monkeypatch.setattr("turkey_inflation._SECTOR_CONFIG", {
+        "Markets": ("01", "market", "daily"),
+    })
+    d = tmp_path / "Markets" / "StoreA"
+    d.mkdir(parents=True)
+    # Same product listed twice in one store
+    (d / "storea_2026-05-01.csv").write_text(
+        "product_name,price\nElma,10\nElma,12\nArmut,15\n"
+    )
+    df, stores, n_before = _load_all_stores("2026-05-01")
+    assert n_before == 3
+    elma_rows = df[(df["store"] == "StoreA") & (df["canonical_key"] == "elma")]
+    assert len(elma_rows) == 1
+    assert abs(elma_rows["price"].iloc[0] - 11.0) < 0.01  # averaged

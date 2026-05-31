@@ -762,35 +762,48 @@ def _load_afeks(date_str: str) -> pd.DataFrame | None:
                      "Afeks", "construction", "05")
 
 
-# ── All store loaders registry ────────────────────────────────────────────────
+# ── Sector-based auto-discovery registry ─────────────────────────────────────
 
-_STORE_LOADERS = [
-    # Grocery markets
-    _load_migros, _load_a101, _load_gurmar, _load_hapeloglu, _load_marketzade,
-    _load_arden, _load_baskent, _load_kale, _load_kim, _load_cagri, _load_basdas,
-    # Clothing
-    _load_civil, _load_koton, _load_lufian, _load_stradivarius, _load_vakko,
-    _load_adl, _load_altinyildiz, _load_lcwaikiki, _load_loft, _load_defacto,
-    # Tech
-    _load_samsung, _load_dr, _load_pozitif, _load_beymen_tech, _load_huawei,
-    # Cosmetics
-    _load_rossmann, _load_avon, _load_dermomarket, _load_goldenrose,
-    _load_loccitane, _load_watsons,
-    # HomeGoods
-    _load_vivense, _load_karaca, _load_englishhome, _load_bellona,
-    _load_madamecoco, _load_jysk, _load_istikbal, _load_chakra, _load_ikea,
-    # Construction
-    _load_bauhaus, _load_filtasyapi, _load_hausmart, _load_nalburadam,
-    _load_hancivata, _load_nalburcuk, _load_nalburdayim, _load_sanatyapi,
-    _load_tasciyapi, _load_yapimaks, _load_ereyon, _load_afeks,
-]
+# Maps sector directory name → (tuik_code, sector_label, date_granularity)
+# date_granularity: "daily" matches *YYYY-MM-DD*, "monthly" matches *YYYY-MM*
+_SECTOR_CONFIG: dict[str, tuple[str, str, str]] = {
+    "Markets":                     ("01", "market",       "daily"),
+    "ClothingStores":              ("03", "clothing",     "daily"),
+    "HomeGoods":                   ("05", "homegoods",    "daily"),
+    "ConstructionSuppliesMarkets": ("05", "construction", "daily"),
+    "Health":                      ("06", "health",       "monthly"),
+    "TechnologicalProducts":       ("08", "tech",         "daily"),
+    "TravelTourism":               ("11", "tourism",      "daily"),
+    "Cosmetics":                   ("13", "cosmetics",    "daily"),
+}
+
+
+def _load_sector(
+    sector_dir: Path,
+    date_str: str,
+    tuik_code: str,
+    sector_label: str,
+    date_granularity: str = "daily",
+) -> list[pd.DataFrame]:
+    date_token = date_str[:7] if date_granularity == "monthly" else date_str
+    frames = []
+    for store_dir in sorted(sector_dir.iterdir()):
+        if not store_dir.is_dir():
+            continue
+        fpath = _find_date_csv(store_dir, date_token)
+        if fpath is None:
+            continue
+        df = _load_store_csv(fpath, store_dir.name, sector_label, tuik_code)
+        if df is not None and not df.empty:
+            frames.append(df)
+    return frames
 
 
 # ── Pool loading and deduplication ────────────────────────────────────────────
 
 def _load_all_stores(date_str: str) -> tuple[pd.DataFrame, list[str], int]:
     """
-    Load all stores for a given date.
+    Load all stores for a given date via sector auto-discovery.
 
     Returns
     -------
@@ -798,39 +811,29 @@ def _load_all_stores(date_str: str) -> tuple[pd.DataFrame, list[str], int]:
     stores_ok   : list of store names that had data
     n_before    : total product count before deduplication
     """
-    frames = []
-    stores_ok = []
-    for loader in _STORE_LOADERS:
-        df = loader(date_str)
-        if df is not None and not df.empty:
-            frames.append(df)
-            stores_ok.append(df["store"].iloc[0])
+    frames: list[pd.DataFrame] = []
+    for sector_name, (tuik_code, sector_label, date_gran) in _SECTOR_CONFIG.items():
+        sector_dir = _DATA_ROOT / sector_name
+        if not sector_dir.exists():
+            continue
+        frames.extend(_load_sector(sector_dir, date_str, tuik_code, sector_label, date_gran))
 
     if not frames:
         return pd.DataFrame(columns=_STANDARD_COLS), [], 0
 
     combined = pd.concat(frames, ignore_index=True)
     n_before = len(combined)
+    stores_ok = list(combined["store"].unique())
 
-    # Normalise product keys for cross-store deduplication
-    combined["_norm_key"] = combined["product_key"].apply(_norm)
-
-    # Drop empty-name rows
-    combined = combined[combined["_norm_key"] != ""]
-
-    # Average prices for (normalised_name, tuik_category) pairs that appear
-    # in more than one store (prevents excess basket weight)
+    # Deduplicate within each store (same product appearing twice in one CSV)
     deduped = (
         combined
-        .groupby(["_norm_key", "tuik_category", "sector"], as_index=False)
+        .groupby(["store", "canonical_key", "tuik_category", "sector"], as_index=False)
         .agg(
             product_key=("product_key", "first"),
             price=("price", "mean"),
-            store=("store", lambda s: ",".join(sorted(s.unique()))),
         )
     )
-    deduped = deduped.drop(columns=["_norm_key"])
-
     return deduped, stores_ok, n_before
 
 
