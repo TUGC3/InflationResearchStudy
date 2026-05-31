@@ -68,9 +68,24 @@ def _load_csv(date_str: str) -> pd.DataFrame | None:
         return None
 
 
+# ── Data-error guard ──────────────────────────────────────────────────────────
+# English Home's listing intermittently serves inflated / wrong-variant prices
+# (a product can read 5–10× its real price on some scrapes; observed 2026-05-31).
+# A single-period price relative outside [1/4, 4] is implausible for homeware and
+# is treated as a DATA ERROR — excluded from the store-level aggregates so a
+# corrupted minority cannot blow up the number. This is standard price-index
+# practice (extreme price relatives are trimmed before averaging). The per-item
+# detail still keeps every value; only the aggregates use the cleaned set.
+_PRICE_RELATIVE_MIN = 0.25   # price fell below 1/4  → data error
+_PRICE_RELATIVE_MAX = 4.0    # price more than 4×    → data error
+
+
 # ── Core metrics ──────────────────────────────────────────────────────────────
 def _compute_metrics(df_current: pd.DataFrame, df_past: pd.DataFrame):
-    """Compute the three inflation metrics between two DataFrames."""
+    """Compute the three inflation metrics between two DataFrames.
+
+    Returns (merged_detail, avg_inflation, tuik_weighted, n_excluded).
+    """
     df_current = df_current.copy()
     df_current["tuik_category"] = _STORE_TUIK_CODE
 
@@ -85,11 +100,19 @@ def _compute_metrics(df_current: pd.DataFrame, df_past: pd.DataFrame):
         [float("inf"), float("-inf")], pd.NA
     )
 
-    # 2) Average inflation
-    avg_inflation = merged["per_item_inflation"].mean()
+    # Data-error guard: keep only plausible price relatives for the aggregates.
+    ratio = merged["price"] / merged["past_price"]
+    is_valid = merged["per_item_inflation"].notna() & ratio.between(
+        _PRICE_RELATIVE_MIN, _PRICE_RELATIVE_MAX
+    )
+    n_excluded = int((merged["per_item_inflation"].notna() & ~is_valid).sum())
+    clean = merged.loc[is_valid]
 
-    # 3) TUIK weighted average
-    cat_avg = merged.groupby("tuik_category")["per_item_inflation"].mean()
+    # 2) Average inflation (cleaned set)
+    avg_inflation = clean["per_item_inflation"].mean()
+
+    # 3) TUIK weighted average (cleaned set)
+    cat_avg = clean.groupby("tuik_category")["per_item_inflation"].mean()
     present_codes = list(cat_avg.dropna().index)
     norm_w = normalised_weights(present_codes)
     tuik_weighted = sum(
@@ -99,7 +122,7 @@ def _compute_metrics(df_current: pd.DataFrame, df_past: pd.DataFrame):
     )
 
     merged = merged.drop(columns=["past_price"], errors="ignore")
-    return merged, avg_inflation, tuik_weighted
+    return merged, avg_inflation, tuik_weighted, n_excluded
 
 
 # ── Main calculator ───────────────────────────────────────────────────────────
@@ -139,7 +162,7 @@ def calculate_inflation(target_date=None, compare_date=None):
             summary_row[f"tuik_weighted_{label}"] = None
             continue
 
-        merged, avg_inf, tuik_w = _compute_metrics(df_today, df_past)
+        merged, avg_inf, tuik_w, n_excluded = _compute_metrics(df_today, df_past)
 
         detail_base = detail_base.merge(
             merged[KEY + ["per_item_inflation"]].rename(
@@ -151,7 +174,8 @@ def calculate_inflation(target_date=None, compare_date=None):
 
         summary_row[f"avg_inflation_{label}"] = round(avg_inf, 6)
         summary_row[f"tuik_weighted_{label}"] = round(tuik_w, 6)
-        logger.info(f"  [{label}] avg={avg_inf:.4f}%  tuik_weighted={tuik_w:.4f}%")
+        excl_note = f"  ({n_excluded} aykırı fiyat hariç tutuldu)" if n_excluded else ""
+        logger.info(f"  [{label}] avg={avg_inf:.4f}%  tuik_weighted={tuik_w:.4f}%{excl_note}")
 
     # ── Save detailed CSV ──────────────────────────────────────────────────────
     detail_file = OUTPUT_DIR / f"englishhome_inflation_{today_str}.csv"

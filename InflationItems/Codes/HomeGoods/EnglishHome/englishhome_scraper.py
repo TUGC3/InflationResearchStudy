@@ -21,7 +21,7 @@ import re
 import sys
 import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
-from datetime import date
+from datetime import date, timedelta
 from pathlib import Path
 
 # ── Repo-relative output path ─────────────────────────────────────────────────
@@ -119,16 +119,54 @@ def create_driver() -> webdriver.Chrome:
 # ── Fiyat parse ───────────────────────────────────────────────────────────────
 
 def parse_price(text: str) -> float | None:
-    """'₺1.199,99' veya '1.199,99' → 1199.99 float. Bulamazsa None."""
+    """'₺1.199,99' veya '1.199,99' → 1199.99 float. Bulamazsa None.
+
+    İLK eşleşmeyi alır. Ticimax kart metninde fiyatlar şu sırada listelenir:
+    önce indirimli (satış) fiyat, sonra üstü çizili 'regular' fiyat. Bu yüzden
+    SON token DEĞİL ilk token = gerçek satış fiyatıdır. (Eskiden son token
+    alınıyordu; indirim rozeti olan üründe regular/şişirilmiş fiyatı kaydedip
+    ×N hatalı sıçramalara yol açıyordu.)
+    """
     matches = _PRICE_RE.findall(text)
     if not matches:
         return None
     try:
-        # Son eşleşme = indirimli fiyat (varsa)
-        value = float(matches[-1].replace(".", "").replace(",", "."))
+        value = float(matches[0].replace(".", "").replace(",", "."))
         return value if value > 0 else None
     except ValueError:
         return None
+
+
+# Ticimax kartında MÜŞTERİNİN ÖDEDİĞİ fiyatı taşıyan elementler (öncelik sırası).
+# English Home kartı 3 katmanlı fiyat gösterir:
+#   .sptPrice / .KatSepetFiyat        = "sepette ek indirim" SEPET fiyatı (varsa EN DÜŞÜK = gerçek ödenen)
+#   .discountPriceSpan / .discountPrice = indirimli satış fiyatı
+#   .regularPriceSpan  / .regularPrice  = üstü çizili MSRP (asla istemeyiz)
+# Gerçek satış fiyatı = sepet fiyatı (varsa), yoksa indirimli fiyat. regularPrice
+# yalnızca hiçbiri yoksa son çare. (discountPriceSpan tek başına bazen şişirilmiş
+# MSRP'ye eşit oluyor; o yüzden önce sptPrice okunmalı.)
+_PRICE_SELECTORS = (
+    "span.sptPrice", "div.KatSepetFiyat",
+    "span.discountPriceSpan", "div.discountPrice",
+    "span.regularPriceSpan", "div.regularPrice",
+)
+
+
+def extract_card_price(card) -> float | None:
+    """Ürün kartından müşterinin ÖDEDİĞİ (sepet) fiyatı DOM elementinden çeker.
+
+    Önce 'sepette ek indirim' (sptPrice) fiyatını, yoksa indirimli satış fiyatını
+    alır. Kartın tüm metnine regex uygulamayız; böylece üstü çizili MSRP veya
+    kampanya yüzdesi gibi fazladan token'lar yanlışlıkla alınmaz. Hiçbir fiyat
+    elementi yoksa son çare olarak kart metnindeki İLK fiyatı kullanır.
+    """
+    for sel in _PRICE_SELECTORS:
+        el = card.select_one(sel)
+        if el:
+            price = parse_price(el.get_text(" ", strip=True))
+            if price:
+                return price
+    return parse_price(card.get_text(separator=" ", strip=True))
 
 # ── Sayfa parse ───────────────────────────────────────────────────────────────
 
@@ -158,9 +196,9 @@ def parse_page(html: str, category_name: str, date_str: str) -> list[dict]:
         if not name or name in seen_names:
             continue
 
-        # Fiyat: kart içindeki son fiyat değeri (indirimli fiyat)
-        card_text = card.get_text(separator=" ", strip=True)
-        price = parse_price(card_text)
+        # Fiyat: kart içindeki GÖRÜNEN satış fiyatı elementinden alınır
+        # (son token = üstü çizili regular fiyat olduğu için kullanılmaz).
+        price = extract_card_price(card)
 
         if price is None:
             continue
@@ -283,6 +321,70 @@ def worker(category: dict, date_str: str) -> list[dict]:
     finally:
         driver.quit()
 
+# ── Plausibility (data-error) filtresi ────────────────────────────────────────
+# English Home'un kendi sitesi zaman zaman bazı ürünlerde hatalı/şişik fiyat
+# servis ediyor (aynı ürün Trendyol/LCW'de ve bizim geçmiş verimizde ~5× düşük;
+# 2026-05-31'de doğrulandı). Bir ürünün fiyatı bir önceki güne göre bu faktör
+# bandı dışına çıkıyorsa, yanlış fiyatı CSV'ye yazmak yerine o ürünü ATLARIZ —
+# böylece günlük CSV temiz kalır (paylaşılan ulusal pipeline için de güvenli).
+PLAUSIBLE_MIN = 0.25   # fiyat 1/4'ün altına düştüyse → hatalı
+PLAUSIBLE_MAX = 4.0    # fiyat 4 katından fazla arttıysa → hatalı
+
+
+def _load_prev_prices(days_back: int = 7) -> dict:
+    """Son birkaç günün CSV'lerinden BİRLEŞİK {product_name: price} bazı döner.
+
+    En yeni günden geriye doğru gider, her ürün için ilk (en yeni) bulunan fiyatı
+    kullanır. Tek bir günün kısa/eksik scrape'i bazı zayıflatıp glitch ürünlerin
+    filtreden kaçmasına yol açmasın diye birden çok gün birleştirilir.
+    """
+    prices = {}
+    for back in range(1, days_back + 1):
+        d = date.today() - timedelta(days=back)
+        f = OUT_DIR / f"englishhome_{d}.csv"
+        if not f.exists():
+            continue
+        try:
+            with open(f, encoding="utf-8-sig", newline="") as fh:
+                for row in csv.DictReader(fh):
+                    name = row.get("product_name")
+                    if not name or name in prices:   # daha yeni gün zaten yazdı
+                        continue
+                    try:
+                        prices[name] = float(row["price"])
+                    except (ValueError, TypeError):
+                        continue
+        except Exception as e:
+            logger.warning(f"Önceki gün okunamadı ({f.name}): {e}")
+    if prices:
+        logger.info(f"Plausibility bazı: son {days_back} günden {len(prices)} ürün")
+    else:
+        logger.info("Plausibility bazı bulunamadı — filtre uygulanmadan devam.")
+    return prices
+
+
+def _apply_plausibility_filter(products: list) -> list:
+    """Fiyatı düne göre mantıksız değişen ürünleri (site hatası) eler."""
+    prev = _load_prev_prices()
+    if not prev:
+        return products
+    kept, dropped = [], 0
+    for p in products:
+        base = prev.get(p["product_name"])
+        if base and base > 0:
+            ratio = p["price"] / base
+            if not (PLAUSIBLE_MIN <= ratio <= PLAUSIBLE_MAX):
+                dropped += 1
+                continue
+        kept.append(p)
+    if dropped:
+        logger.warning(
+            f"⚠️ Plausibility filtresi: {dropped} ürün mantıksız fiyat (siteden "
+            f"gelen hatalı/aşırı değer) nedeniyle atlandı. Kalan: {len(kept)}"
+        )
+    return kept
+
+
 # ── Ana çalıştırıcı ───────────────────────────────────────────────────────────
 
 def main():
@@ -334,6 +436,10 @@ def main():
 
     # CSV kaydet
     all_products.sort(key=lambda p: p["product_name"])
+
+    # Site kaynaklı hatalı/şişik fiyatları yazmadan önce ele (düne göre mantıksız
+    # sıçrayanlar atlanır → CSV temiz kalır).
+    all_products = _apply_plausibility_filter(all_products)
 
     with open(csv_path, "w", newline="", encoding="utf-8-sig") as f:
         writer = csv.DictWriter(f, fieldnames=fieldnames)
