@@ -897,53 +897,50 @@ def _compute_metrics(
     df_current: pd.DataFrame,
     df_past: pd.DataFrame,
 ) -> tuple[pd.DataFrame, float | None, float | None, float | None]:
-    """
-    Merge current and past deduplicated pools and compute the three metrics.
+    if df_past.empty:
+        return pd.DataFrame(), None, None, None
 
-    Matching is done on (product_key, tuik_category, sector) — the deduplicated
-    canonical name plus category.
-
-    Returns
-    -------
-    merged              : DataFrame with basic_inflation per product
-    basic_index         : float | None
-    avg_inflation       : float | None
-    tuik_weighted       : float | None
-    """
-    merge_keys = ["product_key", "tuik_category", "sector"]
+    merge_keys = ["store", "canonical_key", "tuik_category", "sector"]
     past_sub = df_past[merge_keys + ["price"]].rename(columns={"price": "past_price"})
-    merged = df_current.merge(past_sub, on=merge_keys, how="left")
+    matched = df_current.merge(past_sub, on=merge_keys, how="inner")
 
-    # 1) Per-product basic inflation
-    merged["basic_inflation"] = (
-        (merged["price"] - merged["past_price"]) / merged["past_price"]
-    ) * 100
-    merged["basic_inflation"] = merged["basic_inflation"].replace(
-        [float("inf"), float("-inf")], pd.NA
+    if matched.empty:
+        return pd.DataFrame(), None, None, None
+
+    # Relative change per (store, product): percentage form
+    matched["relative"] = (matched["price"] / matched["past_price"] - 1) * 100
+    matched["relative"] = matched["relative"].replace([float("inf"), float("-inf")], pd.NA)
+
+    # Average relative across stores → one row per (canonical_key, tuik_category)
+    product_rel = (
+        matched
+        .groupby(["canonical_key", "tuik_category", "sector"], as_index=False)
+        .agg(
+            product_key=("product_key", "first"),
+            store=("store", lambda s: ",".join(sorted(s.unique()))),
+            relative=("relative", "mean"),
+        )
     )
 
-    # 2) Average inflation — arithmetic mean of per-product rates
-    avg_inflation = merged["basic_inflation"].mean()
-    avg_inflation = float(avg_inflation) if pd.notna(avg_inflation) else None
+    # basic_index: basket-level sum ratio on matched pairs
+    sum_cur = matched["price"].sum()
+    sum_past = matched["past_price"].sum()
+    basic_index = float((sum_cur / sum_past - 1) * 100) if sum_past else None
 
-    # 3) Basic inflation index — basket-level sum ratio
-    valid = merged.dropna(subset=["price", "past_price"])
-    sum_current = valid["price"].sum()
-    sum_past = valid["past_price"].sum()
-    basic_index = float((sum_current - sum_past) / sum_past * 100) if sum_past else None
+    # avg_inflation: arithmetic mean of per-product relatives
+    valid_rel = product_rel["relative"].dropna()
+    avg_inflation = float(valid_rel.mean()) if not valid_rel.empty else None
 
-    # 4) TUIK-weighted average (product categories only; rent handled separately)
-    cat_avg = merged.groupby("tuik_category")["basic_inflation"].mean()
-    present_codes = list(cat_avg.dropna().index)
+    # tuik_weighted: category-level TUIK-weighted average
+    cat_rel = product_rel.groupby("tuik_category")["relative"].mean()
+    present_codes = list(cat_rel.dropna().index)
     norm_w = normalised_weights(present_codes)
-    tuik_weighted = sum(
-        cat_avg[c] * norm_w[c] / 100.0
-        for c in norm_w
-        if c in cat_avg.index and pd.notna(cat_avg[c])
+    tuik_weighted = (
+        float(sum(cat_rel[c] * norm_w[c] / 100.0 for c in norm_w if pd.notna(cat_rel.get(c))))
+        if norm_w else None
     )
-    tuik_weighted = float(tuik_weighted) if norm_w else None
 
-    return merged, basic_index, avg_inflation, tuik_weighted
+    return product_rel, basic_index, avg_inflation, tuik_weighted
 
 
 # ── Per-sector breakdown ──────────────────────────────────────────────────────

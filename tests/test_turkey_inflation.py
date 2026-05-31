@@ -166,3 +166,80 @@ def test_load_all_stores_deduplicates_within_store(tmp_path, monkeypatch):
     elma_rows = df[(df["store"] == "StoreA") & (df["canonical_key"] == "elma")]
     assert len(elma_rows) == 1
     assert abs(elma_rows["price"].iloc[0] - 11.0) < 0.01  # averaged
+
+
+from turkey_inflation import _compute_metrics
+
+
+def _pool(*rows):
+    return pd.DataFrame(
+        rows,
+        columns=["store", "canonical_key", "tuik_category", "sector", "product_key", "price"],
+    )
+
+
+def test_compute_metrics_both_stores_same_change():
+    cur = _pool(
+        ("Migros", "elma", "01", "market", "Elma", 110.0),
+        ("A101",   "elma", "01", "market", "Elma", 220.0),
+    )
+    past = _pool(
+        ("Migros", "elma", "01", "market", "Elma", 100.0),
+        ("A101",   "elma", "01", "market", "Elma", 200.0),
+    )
+    product_rel, basic_idx, avg_inf, _ = _compute_metrics(cur, past)
+    assert abs(avg_inf - 10.0) < 0.01
+    assert abs(basic_idx - 10.0) < 0.01
+
+
+def test_compute_metrics_excludes_new_store_in_current():
+    # A101 only appears in current — must be excluded from relative calc
+    cur = _pool(
+        ("Migros", "elma", "01", "market", "Elma", 110.0),
+        ("A101",   "elma", "01", "market", "Elma", 220.0),
+    )
+    past = _pool(
+        ("Migros", "elma", "01", "market", "Elma", 100.0),
+    )
+    _, _, avg_inf, _ = _compute_metrics(cur, past)
+    # Only Migros row matched; 10% change
+    assert abs(avg_inf - 10.0) < 0.01
+
+
+def test_compute_metrics_averages_relative_not_price():
+    # Migros: 10% change. A101: 20% change. Average = 15%, not price-level average
+    cur = _pool(
+        ("Migros", "elma", "01", "market", "Elma", 110.0),
+        ("A101",   "elma", "01", "market", "Elma", 240.0),
+    )
+    past = _pool(
+        ("Migros", "elma", "01", "market", "Elma", 100.0),
+        ("A101",   "elma", "01", "market", "Elma", 200.0),
+    )
+    product_rel, _, avg_inf, _ = _compute_metrics(cur, past)
+    assert abs(avg_inf - 15.0) < 0.01
+    assert len(product_rel) == 1  # one unique product
+
+
+def test_compute_metrics_empty_past_returns_nones():
+    cur = _pool(("Migros", "elma", "01", "market", "Elma", 110.0))
+    past = pd.DataFrame(columns=["store", "canonical_key", "tuik_category", "sector", "product_key", "price"])
+    _, basic_idx, avg_inf, tuik_w = _compute_metrics(cur, past)
+    assert basic_idx is None
+    assert avg_inf is None
+    assert tuik_w is None
+
+
+def test_compute_metrics_product_rel_has_one_row_per_product():
+    cur = _pool(
+        ("Migros", "elma", "01", "market", "Elma", 110.0),
+        ("A101",   "elma", "01", "market", "Elma", 220.0),
+        ("Migros", "armut", "01", "market", "Armut", 55.0),
+    )
+    past = _pool(
+        ("Migros", "elma",  "01", "market", "Elma",  100.0),
+        ("A101",   "elma",  "01", "market", "Elma",  200.0),
+        ("Migros", "armut", "01", "market", "Armut",  50.0),
+    )
+    product_rel, _, _, _ = _compute_metrics(cur, past)
+    assert len(product_rel) == 2  # elma and armut
