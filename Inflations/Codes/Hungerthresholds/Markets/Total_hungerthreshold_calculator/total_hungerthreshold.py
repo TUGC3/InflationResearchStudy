@@ -13,17 +13,16 @@ Logic:
         (N/A markets excluded)
   4. Avg unit price × basket quantity → monthly cost
   5. All items summed → hunger threshold for that month
-
-Input:
-  - 13 market detail CSV (hunger_threshold_*_detail.csv)
+     ⚠ If any required basket item has no price in any market for that month,
+       the threshold is NOT computed — the month is skipped with a warning.
 
 Output:
   - aggregate_detail.csv   : per-product monthly average price and cost
-  - aggregate_summary.csv  : monthly total hunger threshold
-  - Console: detailed table
+  - aggregate_summary.csv  : monthly total hunger threshold (only complete months)
 """
 
 import pandas as pd
+import re
 import os
 from pathlib import Path
 
@@ -49,60 +48,78 @@ DETAIL_FILES = {
 OUTPUT_DETAIL  = f"{BASE_DIR}/aggregate_detail.csv"
 OUTPUT_SUMMARY = f"{BASE_DIR}/aggregate_summary.csv"
 
-# ── 2. DATE → CANONICAL MONTH MAPPING ───────────────────
-# Multiple snapshot dates within the same month are averaged.
-MONTH_MAP = {
-    # February 2026
-    "Feb 2026":    "Feb 2026",
-    "Feb-20 2026": "Feb 2026",
-    "Feb-21 2026": "Feb 2026",
-    "Feb-23 2026": "Feb 2026",
-    "Feb-24 2026": "Feb 2026",
-    "Feb-26 2026": "Feb 2026",
-    "Feb-27 2026": "Feb 2026",
-    "Feb-28 2026": "Feb 2026",
-    # March 2026
-    "Mar 2026":    "Mar 2026",
-    "Mar-01 2026": "Mar 2026",
-    "Mar-30 2026": "Mar 2026",
-    # April 2026
-    "Apr 2026":    "Apr 2026",
-    "Apr2 2026":   "Apr 2026",
-    # May 2026
-    "May 2026":    "May 2026",
+MONTH_ORDER = ["Feb 2026", "Mar 2026", "Apr 2026", "May 2026"]
+
+# ── 2. ROBUST DATE → CANONICAL MONTH ────────────────────
+# Handles any date format a market script might produce.
+# Strategy:
+#   a) Try pandas date parse on the raw string → strftime("%b %Y")
+#   b) Fallback: regex extract "Mon[-]?DD? YYYY" or "Mon YYYY" patterns
+#   c) Hard-coded aliases for known non-standard labels (e.g. "Apr2 2026")
+
+MONTH_ALIASES = {
+    "Apr2 2026": "Apr 2026",   # Arden's second April snapshot
 }
 
-MONTH_ORDER = ["Feb 2026", "Mar 2026", "Apr 2026", "May 2026"]
+def to_canon_month(date_str: str) -> str | None:
+    """Convert any date string to 'Mon YYYY' canonical form, or None if unrecognisable."""
+    s = str(date_str).strip()
+
+    # 1. Check aliases first
+    if s in MONTH_ALIASES:
+        return MONTH_ALIASES[s]
+
+    # 2. Try pandas parse (handles ISO dates, "Feb-20 2026", "Feb 2026", etc.)
+    try:
+        parsed = pd.to_datetime(s, dayfirst=False, errors="raise")
+        canon = parsed.strftime("%b %Y")
+        if canon in MONTH_ORDER or True:   # accept any valid month
+            return canon
+    except Exception:
+        pass
+
+    # 3. Regex fallback: "MMM[-]?DD? YYYY" or "MMM YYYY"
+    m = re.match(
+        r"^(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)"
+        r"(?:-\d{1,2})?\s+(\d{4})$",
+        s, re.IGNORECASE
+    )
+    if m:
+        return f"{m.group(1).capitalize()} {m.group(2)}"
+
+    return None   # unrecognisable — row will be dropped with a warning
+
 
 # ── 3. FOOD BASKET (qty per month) ──────────────────────
 FOOD_BASKET = [
-    # ── Dairy Products ──────────────────────────
-    ("Dairy Products",      "Yogurt",                             "Kg",      59.7),
-    ("Dairy Products",      "White Cheese",                       "Kg",      5.3),
-    # ── Meat and Protein ────────────────────────
-    ("Meat and Protein",      "Cubed Meat / Lamb Meat",             "Kg",      3.3),
-    ("Meat and Protein",      "Chicken",                            "Kg",      7.0),
-    ("Meat and Protein",      "Fish",                               "Kg",      5.1),
-    ("Meat and Protein",      "Eggs",                               "Piece",   60.0),
-    # ── Legumes ─────────────────────────────────
-    ("Legumes",      "Chickpeas",                          "Kg",      5.6),
-    # ── Nuts and Seeds ──────────────────────────
-    ("Nuts and Seeds",      "Walnut / Hazelnut / Peanut",         "Kg",      2.7),
-    # ── Grains ──────────────────────────────────
-    ("Grains",      "Bread",                              "Kg",      18.0),
-    # ── Fruits ──────────────────────────────────
-    ("Fruits",      "Banana",                             "Kg",      16.7),
-    ("Fruits",      "Seasonal Fruit",                     "Kg",      12.9),
-    # ── Vegetables ──────────────────────────────
-    ("Vegetables",      "Onion",                              "Kg",      18.0),
-    ("Vegetables",      "Eggplant / Zucchini",                "Kg",      34.7),
-    ("Vegetables",      "Other Vegetables",                   "Kg",      14.8),
-    # ── Oils ────────────────────────────────────
-    ("Oils",      "Olive Oil",                          "Liter",   1.0),
+    # ── Dairy Products ──────────────────────────────────
+    ("Dairy Products",   "Yogurt",                       "Kg",    59.7),
+    ("Dairy Products",   "White Cheese",                 "Kg",     5.3),
+    # ── Meat and Protein ────────────────────────────────
+    ("Meat and Protein", "Cubed Meat / Lamb Meat",       "Kg",     3.3),
+    ("Meat and Protein", "Chicken",                      "Kg",     7.0),
+    ("Meat and Protein", "Fish",                         "Kg",     5.1),
+    ("Meat and Protein", "Eggs",                         "Piece", 60.0),
+    # ── Legumes ─────────────────────────────────────────
+    ("Legumes",          "Chickpeas",                    "Kg",     5.6),
+    # ── Nuts and Seeds ──────────────────────────────────
+    ("Nuts and Seeds",   "Walnut / Hazelnut / Peanut",   "Kg",     2.7),
+    # ── Grains ──────────────────────────────────────────
+    ("Grains",           "Bread",                        "Kg",    18.0),
+    # ── Fruits ──────────────────────────────────────────
+    ("Fruits",           "Banana",                       "Kg",    16.7),
+    ("Fruits",           "Seasonal Fruit",               "Kg",    12.9),
+    # ── Vegetables ──────────────────────────────────────
+    ("Vegetables",       "Onion",                        "Kg",    18.0),
+    ("Vegetables",       "Eggplant / Zucchini",          "Kg",    34.7),
+    ("Vegetables",       "Other Vegetables",             "Kg",    14.8),
+    # ── Oils ────────────────────────────────────────────
+    ("Oils",             "Olive Oil",                    "Liter",  1.0),
 ]
 
-BASKET_QTY = {product: qty for _, product, _, qty in FOOD_BASKET}
-BASKET_CAT = {product: cat  for cat, product, _, _ in FOOD_BASKET}
+BASKET_QTY      = {p: qty for _, p, _, qty in FOOD_BASKET}
+BASKET_CAT      = {p: cat for cat, p, _, _  in FOOD_BASKET}
+REQUIRED_ITEMS  = set(BASKET_QTY.keys())          # all 15 items are required
 
 # ── 4. LOAD & NORMALISE ALL DETAIL CSVs ─────────────────
 def load_market(market_name: str, csv_path: str) -> pd.DataFrame | None:
@@ -110,16 +127,27 @@ def load_market(market_name: str, csv_path: str) -> pd.DataFrame | None:
         print(f"  ⚠  File not found: {csv_path}")
         return None
     df = pd.read_csv(csv_path)
-    df["market"]      = market_name
-    df["canon_month"] = df["date"].map(MONTH_MAP)
-    df = df[df["canon_month"].notna()].copy()
+    df["market"] = market_name
+
+    # Robust date mapping
+    df["canon_month"] = df["date"].apply(to_canon_month)
+
+    dropped = df["canon_month"].isna().sum()
+    if dropped:
+        bad = df.loc[df["canon_month"].isna(), "date"].unique()
+        print(f"  ⚠  {market_name}: {dropped} rows dropped — unrecognised dates: {bad}")
+
+    df = df[df["canon_month"].isin(MONTH_ORDER)].copy()
     return df
 
 frames = []
 for mkt, path in DETAIL_FILES.items():
     df = load_market(mkt, path)
-    if df is not None:
+    if df is not None and len(df):
         frames.append(df)
+
+if not frames:
+    raise RuntimeError("No market data loaded — check DETAIL_FILES paths.")
 
 all_df = pd.concat(frames, ignore_index=True)
 
@@ -141,54 +169,99 @@ agg = (
     .groupby(["canon_month", "product"])
     .agg(
         avg_unit_price_TRY=("unit_price", "mean"),
-        n_markets         =("unit_price", "count"),
-        market_list       =("market",     lambda x: ", ".join(sorted(x))),
+        n_markets          =("unit_price", "count"),
+        market_list        =("market",     lambda x: ", ".join(sorted(x))),
     )
     .reset_index()
 )
 
 # ── 7. COMPUTE MONTHLY COST ──────────────────────────────
-agg["category"]        = agg["product"].map(BASKET_CAT)
-agg["monthly_qty"]     = agg["product"].map(BASKET_QTY)
-agg["monthly_cost_TRY"]= agg["avg_unit_price_TRY"] * agg["monthly_qty"]
+agg["category"]         = agg["product"].map(BASKET_CAT)
+agg["monthly_qty"]      = agg["product"].map(BASKET_QTY)
+agg["monthly_cost_TRY"] = agg["avg_unit_price_TRY"] * agg["monthly_qty"]
 
-# ── 8. MONTHLY TOTALS ────────────────────────────────────
-monthly_totals = (
-    agg
-    .groupby("canon_month")["monthly_cost_TRY"]
-    .sum()
-    .reindex(MONTH_ORDER)
-    .dropna()
-    .reset_index()
-    .rename(columns={"canon_month": "month", "monthly_cost_TRY": "hunger_threshold_TRY"})
-)
+# ── 8. COVERAGE CHECK — DO NOT SUM INCOMPLETE MONTHS ────
+#
+# For each month, check whether every required basket item has a price.
+# pandas .sum() silently skips NaN — so if an item is missing, the total
+# is underreported without any warning. We fix this by:
+#   - computing per-month coverage stats
+#   - only including months where ALL required items are priced
+#   - printing a clear warning (and recording in the summary CSV) when a
+#     month is incomplete
 
-# ── 9. PRINT RESULTS ─────────────────────────────────────
+def coverage_for_month(month: str) -> dict:
+    """Return coverage stats for one canonical month."""
+    priced = set(
+        agg.loc[
+            (agg["canon_month"] == month) &
+            agg["avg_unit_price_TRY"].notna(),
+            "product"
+        ]
+    )
+    available = REQUIRED_ITEMS & priced
+    missing   = REQUIRED_ITEMS - priced
+    return {
+        "n_required":  len(REQUIRED_ITEMS),
+        "n_available": len(available),
+        "n_missing":   len(missing),
+        "missing":     sorted(missing),
+        "coverage":    len(available) / len(REQUIRED_ITEMS),
+        "complete":    len(missing) == 0,
+    }
+
+coverage = {m: coverage_for_month(m) for m in MONTH_ORDER}
+
+# ── 9. MONTHLY TOTALS (complete months only) ─────────────
+summary_rows = []
+for month in MONTH_ORDER:
+    cov = coverage[month]
+    month_data = agg[agg["canon_month"] == month]
+    if month_data.empty:
+        continue
+
+    if not cov["complete"]:
+        threshold = None   # refuse to compute a misleading total
+    else:
+        threshold = month_data["monthly_cost_TRY"].sum()
+
+    summary_rows.append({
+        "month":                month,
+        "hunger_threshold_TRY": round(threshold, 2) if threshold is not None else None,
+        "n_required_items":     cov["n_required"],
+        "n_available_items":    cov["n_available"],
+        "n_missing_items":      cov["n_missing"],
+        "missing_items":        "; ".join(cov["missing"]) if cov["missing"] else "",
+        "coverage_rate":        round(cov["coverage"] * 100, 1),
+    })
+
+monthly_totals = pd.DataFrame(summary_rows)
+
+# ── 10. PRINT RESULTS ────────────────────────────────────
 print("\n" + "="*100)
 print("  PER-PRODUCT AVERAGE PRICES AND MONTHLY COSTS")
 print("="*100)
 
-# Pivot: product × month
 pivot_price = agg.pivot_table(
-    index=["category","product","monthly_qty"],
+    index=["category", "product", "monthly_qty"],
     columns="canon_month",
     values="avg_unit_price_TRY"
 ).reindex(columns=MONTH_ORDER, fill_value=float("nan"))
 
 pivot_cost = agg.pivot_table(
-    index=["category","product","monthly_qty"],
+    index=["category", "product", "monthly_qty"],
     columns="canon_month",
     values="monthly_cost_TRY"
 ).reindex(columns=MONTH_ORDER, fill_value=float("nan"))
 
 pivot_n = agg.pivot_table(
-    index=["category","product"],
+    index=["category", "product"],
     columns="canon_month",
     values="n_markets"
 ).reindex(columns=MONTH_ORDER, fill_value=0)
 
-header = (f"\n  {'Kategori':<22} {'Ürün':<30} {'Adet':>5} | "
-          + " | ".join(f"{'Fiyat':>8} {'Maliyet':>9} {'N':>2}" for _ in MONTH_ORDER))
+header = (f"\n  {'Category':<22} {'Product':<30} {'Qty':>5} | "
+          + " | ".join(f"{'Price':>8} {'Cost':>9} {'N':>2}" for _ in MONTH_ORDER))
 print(header)
 print(f"  {'─'*22} {'─'*30} {'─'*5}-+-"
       + "-+-".join(f"{'─'*8} {'─'*9} {'─'*2}" for _ in MONTH_ORDER))
@@ -202,8 +275,7 @@ for (cat, product, qty), row_p in pivot_price.iterrows():
     for m in MONTH_ORDER:
         price = row_p.get(m, float("nan"))
         try:
-            cost_row = pivot_cost.loc[(cat, product, qty)]
-            cost = cost_row.get(m, float("nan"))
+            cost = pivot_cost.loc[(cat, product, qty)].get(m, float("nan"))
         except KeyError:
             cost = float("nan")
         try:
@@ -214,31 +286,50 @@ for (cat, product, qty), row_p in pivot_price.iterrows():
             months_str += f"  {'N/A':>8} {'N/A':>9}  0 |"
         else:
             months_str += f"  ₺{price:>7,.0f} ₺{cost:>8,.0f} {n:>2} |"
-    print(f"    {'':2}{product:<30} {qty:>5.1f} |{months_str}")
+    print(f"    {product:<30} {qty:>5.1f} |{months_str}")
 
-# Summary
-print("\n\n" + "="*70)
+# Summary with coverage
+print("\n\n" + "="*80)
 print("  MONTHLY HUNGER THRESHOLD — 13-MARKET AVERAGE")
-print("="*70)
-print(f"  {'Month':<14} {'Threshold (₺)':>18}  {'Change':>8}")
+print("="*80)
+print(f"  {'Month':<14} {'Threshold (₺)':>16}  {'Change':>8}  {'Coverage':>10}  {'Missing'}")
+print(f"  {'─'*14} {'─'*16}  {'─'*8}  {'─'*10}  {'─'*30}")
+
 prev = None
 for _, row in monthly_totals.iterrows():
-    diff = f"{(row['hunger_threshold_TRY']-prev)/prev*100:+.1f}%" if prev else "—"
-    print(f"  {row['month']:<14} ₺{row['hunger_threshold_TRY']:>16,.2f}  {diff:>8}")
-    prev = row['hunger_threshold_TRY']
+    thresh = row["hunger_threshold_TRY"]
+    if pd.isna(thresh):
+        thresh_str = f"  {'INCOMPLETE':>16}"
+        diff_str   = "       —"
+    else:
+        thresh_str = f"  ₺{thresh:>14,.2f}"
+        diff_str   = f"{(thresh-prev)/prev*100:+.1f}%" if prev is not None else "       —"
+        prev = thresh
 
-# ── 10. SAVE ─────────────────────────────────────────────
-# Detailed output
-detail_out = agg[["canon_month","category","product","monthly_qty",
-                   "avg_unit_price_TRY","monthly_cost_TRY","n_markets","market_list"]].copy()
-detail_out = detail_out.rename(columns={"canon_month":"month"})
+    cov_str     = f"{row['coverage_rate']:.1f}% ({row['n_available_items']}/{row['n_required_items']})"
+    missing_str = row["missing_items"] if row["missing_items"] else "—"
+    print(f"  {row['month']:<14}{thresh_str}  {diff_str:>8}  {cov_str:>10}  {missing_str}")
+
+# Warn loudly if any month is incomplete
+incomplete = monthly_totals[monthly_totals["hunger_threshold_TRY"].isna()]
+if len(incomplete):
+    print("\n  ⚠  WARNING — threshold NOT computed for incomplete months:")
+    for _, row in incomplete.iterrows():
+        print(f"     {row['month']}: missing → {row['missing_items']}")
+    print("     Add market data or accept N/A for these months.\n")
+
+# ── 11. SAVE ─────────────────────────────────────────────
+detail_out = agg[[
+    "canon_month", "category", "product", "monthly_qty",
+    "avg_unit_price_TRY", "monthly_cost_TRY", "n_markets", "market_list"
+]].copy()
+detail_out = detail_out.rename(columns={"canon_month": "month"})
 detail_out["avg_unit_price_TRY"] = detail_out["avg_unit_price_TRY"].round(2)
 detail_out["monthly_cost_TRY"]   = detail_out["monthly_cost_TRY"].round(2)
-detail_out.sort_values(["month","category","product"], inplace=True)
-detail_out.to_csv(OUTPUT_DETAIL,  index=False)
+detail_out.sort_values(["month", "category", "product"], inplace=True)
+detail_out.to_csv(OUTPUT_DETAIL, index=False)
 
-monthly_totals["hunger_threshold_TRY"] = monthly_totals["hunger_threshold_TRY"].round(2)
 monthly_totals.to_csv(OUTPUT_SUMMARY, index=False)
 
-print(f"\nDetay   → {OUTPUT_DETAIL}")
+print(f"Detail  → {OUTPUT_DETAIL}")
 print(f"Summary → {OUTPUT_SUMMARY}")
