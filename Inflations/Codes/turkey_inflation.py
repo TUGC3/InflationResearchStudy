@@ -144,6 +144,16 @@ def _has_standard_header(fpath: Path) -> bool:
         return False
 
 
+def _find_date_csv(store_dir: Path, date_token: str) -> Path | None:
+    for f in store_dir.rglob(f"*{date_token}*.csv"):
+        rel_parts = f.relative_to(store_dir).parts[:-1]
+        if any(p in _SKIP_SUBDIRS for p in rel_parts):
+            continue
+        if _has_standard_header(f):
+            return f
+    return None
+
+
 # ── TUIK category mappers (inlined from per-store configs) ────────────────────
 
 def _migros_to_tuik(cat: str) -> str:
