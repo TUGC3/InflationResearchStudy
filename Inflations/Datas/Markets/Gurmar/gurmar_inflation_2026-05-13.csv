@@ -1,4 +1,4 @@
-id,category,product_id,shown_price,tuik_category,basic_inflation_1d,basic_inflation_7d,basic_inflation_15d,basic_inflation_30d
+﻿id,category,product_id,shown_price,tuik_category,basic_inflation_1d,basic_inflation_7d,basic_inflation_15d,basic_inflation_30d
 Avokado İthal Adet,Meyve ve Sebze,6487,84.9,01,0.0,0.0,0.0,
 Biber Kırmızı - 500 Gr.,Meyve ve Sebze,8087,112.45,01,-13.466717968449393,-10.004001600640255,4.653327128897161,-8.166598611678236
 Biber Kırmızı Şili Acı - 500 Gr.,Meyve ve Sebze,9815,99.95,01,0.0,0.0,-33.34444814938312,

@@ -1,4 +1,4 @@
-id,category,product_id,shown_price,tuik_category,basic_inflation_1d,basic_inflation_7d,basic_inflation_15d,basic_inflation_30d
+﻿id,category,product_id,shown_price,tuik_category,basic_inflation_1d,basic_inflation_7d,basic_inflation_15d,basic_inflation_30d
 Avokado İthal Adet,Meyve ve Sebze,6487,84.9,01,0.0,0.0,,
 Bezelye - 500 Gr.,Meyve ve Sebze,704,37.95,01,-10.600706713780918,,,
 Biber Dolmalık - 500 Gr.,Meyve ve Sebze,5029,24.95,01,0.0,,,-73.7230121116377
