@@ -309,16 +309,16 @@ def _coverage_report(present_codes: list[str]) -> tuple[float, str]:
 def _compute_metrics(
     df_current: pd.DataFrame,
     df_past: pd.DataFrame,
-) -> tuple[pd.DataFrame, float | None, float | None, float | None]:
+) -> tuple[pd.DataFrame, float | None, float | None, float | None, dict]:
     if df_past.empty:
-        return pd.DataFrame(), None, None, None
+        return pd.DataFrame(), None, None, None, {}
 
     merge_keys = ["store", "canonical_key", "tuik_category", "sector"]
     past_sub = df_past[merge_keys + ["price"]].rename(columns={"price": "past_price"})
     matched = df_current.merge(past_sub, on=merge_keys, how="inner")
 
     if matched.empty:
-        return pd.DataFrame(), None, None, None
+        return pd.DataFrame(), None, None, None, {}
 
     # Relative change per (store, product): percentage form
     matched["relative"] = (matched["price"] / matched["past_price"] - 1) * 100
@@ -353,7 +353,17 @@ def _compute_metrics(
         if norm_w else None
     )
 
-    return product_rel, basic_index, avg_inflation, tuik_weighted
+    # Per-sector metrics: basic_index and avg_inflation per tuik_category
+    sector_metrics: dict[str, dict] = {}
+    for code, grp in matched.groupby("tuik_category"):
+        s_cur = grp["price"].sum()
+        s_past = grp["past_price"].sum()
+        s_basic = float((s_cur / s_past - 1) * 100) if s_past else None
+        s_rel = product_rel.loc[product_rel["tuik_category"] == code, "relative"].dropna()
+        s_avg = float(s_rel.mean()) if not s_rel.empty else None
+        sector_metrics[str(code)] = {"basic_index": s_basic, "avg_inflation": s_avg}
+
+    return product_rel, basic_index, avg_inflation, tuik_weighted, sector_metrics
 
 
 # ── Main calculate function ───────────────────────────────────────────────────
@@ -433,7 +443,7 @@ def calculate_turkey_inflation(
                 summary_row[f"{key}_{label}"] = None
             continue
 
-        product_rel, basic_idx, avg_inf, tuik_w_products = _compute_metrics(df_current, df_past)
+        product_rel, basic_idx, avg_inf, tuik_w_products, sector_metrics = _compute_metrics(df_current, df_past)
 
         # Attach per-product relative to detail frame
         if not product_rel.empty:
@@ -463,6 +473,13 @@ def calculate_turkey_inflation(
         else:
             tuik_w_full = tuik_w_products
         summary_row[f"tuik_weighted_full_{label}"] = tuik_w_full
+
+        # Per-sector breakdown
+        for code, m in sector_metrics.items():
+            summary_row[f"avg_inflation_{code}_{label}"] = m["avg_inflation"]
+            summary_row[f"basic_index_{code}_{label}"] = m["basic_index"]
+        if rent_inf is not None:
+            summary_row[f"avg_inflation_04_{label}"] = rent_inf
 
         logger.info(
             "  [%s] basic_index=%s  avg=%s  tuik_products=%s  tuik_full=%s",
