@@ -408,6 +408,7 @@ def calculate_turkey_inflation(
     )
 
     category_store_counts = df_current.groupby("tuik_category")["store"].nunique()
+    category_product_counts = df_current.groupby("tuik_category")["canonical_key"].nunique()
     rent_cities = _rent_city_prices(today_str)
 
     summary_row: dict = {
@@ -421,6 +422,8 @@ def calculate_turkey_inflation(
         summary_row[f"n_stores_{code}"] = int(cnt)
     if rent_cities:
         summary_row["n_stores_04"] = len(rent_cities)
+    for code, cnt in category_product_counts.items():
+        summary_row[f"n_products_{code}"] = int(cnt)
 
     # Detail base: one row per unique (canonical_key, tuik_category) at current date
     detail_base = (
