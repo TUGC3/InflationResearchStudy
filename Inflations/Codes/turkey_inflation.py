@@ -381,6 +381,8 @@ def calculate_turkey_inflation(
     )
 
     present_codes = list(df_current["tuik_category"].unique())
+    if _rent_city_prices(today_str):
+        present_codes = list(set(present_codes) | {"04"})
     coverage_pct, coverage_str = _coverage_report(present_codes)
     logger.info("\n%s", coverage_str)
 
@@ -395,6 +397,9 @@ def calculate_turkey_inflation(
         }
     )
 
+    category_store_counts = df_current.groupby("tuik_category")["store"].nunique()
+    rent_cities = _rent_city_prices(today_str)
+
     summary_row: dict = {
         "date": today_str,
         "n_stores": len(stores_today),
@@ -402,6 +407,10 @@ def calculate_turkey_inflation(
         "n_products_deduped": len(df_current),
         "basket_coverage_pct": round(coverage_pct, 2),
     }
+    for code, cnt in category_store_counts.items():
+        summary_row[f"n_stores_{code}"] = int(cnt)
+    if rent_cities:
+        summary_row["n_stores_04"] = len(rent_cities)
 
     # Detail base: one row per unique (canonical_key, tuik_category) at current date
     detail_base = (
