@@ -3,8 +3,10 @@ englishhome_inflation.py — English Home Daily Price Inflation Calculator
 
 Computes three inflation metrics for English Home products:
   1. Per-Item Inflation    – per-product percentage price change
-  2. Average Inflation     – arithmetic mean of all per-product inflation rates
-  3. TUIK Weighted Average – weighted average using TUIK 2026 CPI basket weights
+  2. Store Inflation       – MEDIAN of all per-product inflation rates (robust;
+                             the mean is unsafe here — see _compute_metrics)
+  3. TUIK Weighted Average – TUIK-weighted across categories; single store code
+                             "05" → equals the median store inflation
 
 Ürün anahtarı: product_name
 (Yeni CSV formatı yalnızca product_name,price sütunlarını içerir.)
@@ -108,11 +110,19 @@ def _compute_metrics(df_current: pd.DataFrame, df_past: pd.DataFrame):
     n_excluded = int((merged["per_item_inflation"].notna() & ~is_valid).sum())
     clean = merged.loc[is_valid]
 
-    # 2) Average inflation (cleaned set)
-    avg_inflation = clean["per_item_inflation"].mean()
+    # 2) Store-level inflation — MEDIAN of per-item changes (cleaned set).
+    #    English Home intermittently serves wrong/variant prices that land
+    #    INSIDE the [1/4, 4] guard band (typically 1.5x–2x jumps on a minority
+    #    of cologne/towel/perfume cards). The arithmetic mean is hijacked by that
+    #    right tail (e.g. 2026-06-05: 1d mean +7.87% vs median 0.00%), so we
+    #    report the median — the change of the TYPICAL product — which is immune
+    #    to the tail by construction (standard median-CPI / trimmed-mean practice).
+    avg_inflation = clean["per_item_inflation"].median()
 
-    # 3) TUIK weighted average (cleaned set)
-    cat_avg = clean.groupby("tuik_category")["per_item_inflation"].mean()
+    # 3) TUIK weighted average (cleaned set) — median per category.
+    #    Single store → single TUIK code "05", so this equals avg_inflation;
+    #    kept for schema/report compatibility (run_all.py reads tuik_weighted_*).
+    cat_avg = clean.groupby("tuik_category")["per_item_inflation"].median()
     present_codes = list(cat_avg.dropna().index)
     norm_w = normalised_weights(present_codes)
     tuik_weighted = sum(
