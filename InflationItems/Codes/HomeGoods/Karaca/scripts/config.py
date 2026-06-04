@@ -57,8 +57,8 @@ MAIN_CATEGORY_PRIORITY = {
 }
 
 CSV_FIELDNAMES = [
-    "Product Name",
-    "Product Cost",
+    "product_name",
+    "price",
     "Product Original Cost",
     "Discount Amount",
     "Discount Rate",

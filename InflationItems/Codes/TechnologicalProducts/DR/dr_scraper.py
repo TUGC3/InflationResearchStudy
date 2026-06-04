@@ -80,8 +80,8 @@ PAGE_DELAY = 0.25
 DEFAULT_WORKERS = 4
 
 CSV_COLUMNS = [
-    "Product Name",
-    "Product Cost",
+    "product_name",
+    "price",
     "Product Original Cost",
     "Currency",
     "Product ID",
@@ -369,8 +369,8 @@ def _parse_card(card: Any, category: Category) -> dict[str, Any] | None:
         return None
 
     return {
-        "Product Name": product_name,
-        "Product Cost": current_price,
+        "product_name": product_name,
+        "price": current_price,
         "Product Original Cost": original_price if original_price is not None else current_price,
         "Currency": _normalise_text(str(gtm.get("currency", "TRY"))) or "TRY",
         "Product ID": product_id,
@@ -451,7 +451,7 @@ def _deduplicate(products: list[dict[str, Any]]) -> list[dict[str, Any]]:
     merged: dict[str, dict[str, Any]] = {}
 
     for product in products:
-        key = str(product.get("Product ID") or product.get("Product URL") or product.get("Product Name"))
+        key = str(product.get("Product ID") or product.get("Product URL") or product.get("product_name"))
         if key not in merged:
             merged[key] = product
             continue
@@ -471,7 +471,7 @@ def _deduplicate(products: list[dict[str, Any]]) -> list[dict[str, Any]]:
         if not existing.get("Image URL") and product.get("Image URL"):
             existing["Image URL"] = product["Image URL"]
 
-    return sorted(merged.values(), key=lambda row: (str(row["Source Category"]), str(row["Product Name"])))
+    return sorted(merged.values(), key=lambda row: (str(row["Source Category"]), str(row["product_name"])))
 
 
 def _write_csv(rows: list[dict[str, Any]], output_path: Path) -> None:

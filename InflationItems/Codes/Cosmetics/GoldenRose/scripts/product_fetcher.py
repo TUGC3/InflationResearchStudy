@@ -192,7 +192,7 @@ def _build_product_url(raw: dict) -> str:
 def _looks_like_wrong_product_name(record: dict) -> bool:
     slug = urlparse(record.get("Product URL", "")).path.strip("/").split("/")[-1]
     slug_tokens = _significant_slug_tokens(slug)
-    name_tokens = _significant_slug_tokens(record.get("Product Name", ""))
+    name_tokens = _significant_slug_tokens(record.get("product_name", ""))
     model_tokens = _significant_slug_tokens(record.get("Model", ""))
     return bool(slug_tokens) and bool(slug_tokens & model_tokens) and not (slug_tokens & name_tokens)
 
@@ -242,17 +242,17 @@ def _repair_product_name(record: dict) -> dict:
         separator = " - " if remainder_tokens[0].isdigit() else " "
         repaired_name = f"{record['Model']}{separator}{suffix}"
 
-    if repaired_name == record.get("Product Name", ""):
+    if repaired_name == record.get("product_name", ""):
         return record
 
     logger.warning(
         "Corrected suspicious Golden Rose product name for ID %s: %r -> %r",
         record.get("Product ID", ""),
-        record.get("Product Name", ""),
+        record.get("product_name", ""),
         repaired_name,
     )
     updated = dict(record)
-    updated["Product Name"] = repaired_name
+    updated["product_name"] = repaired_name
     return updated
 
 
@@ -304,8 +304,8 @@ def normalize_product_record(raw: dict, source_category: dict) -> dict:
         full_category_parts.append(leaf_category)
 
     record = {
-        "Product Name": _clean_text(raw.get("name") or ""),
-        "Product Cost": shown_price,
+        "product_name": _clean_text(raw.get("name") or ""),
+        "price": shown_price,
         "Product Original Cost": regular_price,
         "Discount Amount": discount_amount,
         "Discount Rate": discount_rate,

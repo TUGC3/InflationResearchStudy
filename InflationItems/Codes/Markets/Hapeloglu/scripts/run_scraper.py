@@ -39,9 +39,9 @@ def main():
     df["scrape_date"] = timestamp.strftime("%Y-%m-%d")
     df["scrape_timestamp"] = timestamp.isoformat()
 
-    # Standardize columns: Product Name first, Product Cost second
-    df = df.rename(columns={"name": "Product Name", "current_price": "Product Cost"})
-    cols = ["Product Name", "Product Cost"] + [c for c in df.columns if c not in ("Product Name", "Product Cost")]
+    # Standardize columns: product_name first, price second
+    df = df.rename(columns={"name": "product_name", "current_price": "price"})
+    cols = ["product_name", "price"] + [c for c in df.columns if c not in ("product_name", "price")]
     df = df[cols]
 
     os.makedirs(OUTPUT_DIR, exist_ok=True)

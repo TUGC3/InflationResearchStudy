@@ -26,6 +26,11 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
+LEGACY_HEADER_MAP = {
+    "Product Name": "product_name",
+    "Product Cost": "price",
+}
+
 
 def _make_session() -> requests.Session:
     session = requests.Session()
@@ -68,6 +73,14 @@ def _save_checkpoint(checkpoint: dict) -> None:
     )
 
 
+def _normalize_row(row: dict) -> dict:
+    normalized = dict(row)
+    for legacy_key, normalized_key in LEGACY_HEADER_MAP.items():
+        if normalized.get(normalized_key) in ("", None) and normalized.get(legacy_key) not in ("", None):
+            normalized[normalized_key] = normalized[legacy_key]
+    return normalized
+
+
 def _load_existing_rows() -> dict[str, dict]:
     if not config.CSV_OUTPUT_FILE.exists():
         return {}
@@ -76,6 +89,7 @@ def _load_existing_rows() -> dict[str, dict]:
     with config.CSV_OUTPUT_FILE.open("r", encoding="utf-8-sig", newline="") as handle:
         reader = csv.DictReader(handle)
         for row in reader:
+            row = _normalize_row(row)
             product_id = row.get("Product ID", "").strip()
             if product_id:
                 rows[product_id] = row
@@ -100,6 +114,7 @@ def _coalesce(existing: dict, new_record: dict) -> dict:
 
 def _merge_products(existing_rows: dict[str, dict], new_rows: list[dict]) -> None:
     for row in new_rows:
+        row = _normalize_row(row)
         product_id = row.get("Product ID", "").strip()
         if not product_id:
             continue
@@ -117,7 +132,7 @@ def _write_snapshot(rows: dict[str, dict]) -> None:
             config.MAIN_CATEGORY_PRIORITY.get(row.get("Main Category", ""), 999),
             row.get("Main Category", ""),
             row.get("Top Category", ""),
-            row.get("Product Name", ""),
+            row.get("product_name", ""),
         ),
     )
 

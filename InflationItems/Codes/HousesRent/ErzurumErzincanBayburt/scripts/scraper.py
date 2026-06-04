@@ -144,7 +144,7 @@ def _parse_listings(
                 rooms = "N/A"
 
             if price and _is_valid_location(city_url_slug, district):
-                records.append({"Product Name": district, "Product Cost": _clean_price(price), "Rooms": rooms})
+                records.append({"product_name": district, "price": _clean_price(price), "Rooms": rooms})
         except Exception as exc:
             logger.debug("Row parse error: %s", exc)
 
@@ -332,9 +332,25 @@ def save_incremental(city_name: str, data_batch: list[dict]) -> None:
 
     os.makedirs(output_dir, exist_ok=True)
     file_exists = os.path.isfile(csv_path)
+    if file_exists:
+        with open(csv_path, newline="", encoding="utf-8") as f:
+            reader = csv.DictReader(f)
+            if reader.fieldnames == ["Product Name", "Product Cost", "Rooms"]:
+                rows = [
+                    {
+                        "product_name": row.get("Product Name", ""),
+                        "price": row.get("Product Cost", ""),
+                        "Rooms": row.get("Rooms", ""),
+                    }
+                    for row in reader
+                ]
+                with open(csv_path, mode="w", newline="", encoding="utf-8") as migrated:
+                    writer = csv.DictWriter(migrated, fieldnames=["product_name", "price", "Rooms"])
+                    writer.writeheader()
+                    writer.writerows(rows)
 
     with open(csv_path, mode="a", newline="", encoding="utf-8") as f:
-        writer = csv.DictWriter(f, fieldnames=["Product Name", "Product Cost", "Rooms"])
+        writer = csv.DictWriter(f, fieldnames=["product_name", "price", "Rooms"])
         if not file_exists:
             writer.writeheader()
         writer.writerows(data_batch)

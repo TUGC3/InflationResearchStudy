@@ -165,7 +165,7 @@ def parse_card_fallbacks_from_html(html: str) -> dict[str, dict]:
         )
 
         fallbacks[product_id] = {
-            "Product Name": name,
+            "product_name": name,
             "Product URL": href or data_url,
             "Image URL": image_url,
             "Stock Quantity": _clean_text(link.get("data-stock") or ""),
@@ -253,7 +253,7 @@ def normalize_product_record(
     main_category = source_category.get("main_category", "")
     top_category = source_category.get("name", "")
     category_path = " > ".join(part for part in (main_category, top_category) if part)
-    product_name = _clean_text(raw.get("name") or fallback.get("Product Name") or "")
+    product_name = _clean_text(raw.get("name") or fallback.get("product_name") or "")
     product_url = _normalise_product_url(raw.get("url") or "")
     if not product_url:
         product_url = _normalise_product_url(fallback.get("Product URL") or "")
@@ -262,8 +262,8 @@ def normalize_product_record(
         image_url = _clean_text(fallback.get("Image URL") or image_url)
 
     return {
-        "Product Name": product_name,
-        "Product Cost": shown_price,
+        "product_name": product_name,
+        "price": shown_price,
         "Product Original Cost": regular_price,
         "Discount Amount": discount_amount,
         "Discount Rate": discount_rate,
@@ -286,7 +286,7 @@ def normalize_product_record(
 
 def _is_valid_product_record(record: dict) -> bool:
     product_id = _clean_text(record.get("Product ID") or "")
-    product_name = _clean_text(record.get("Product Name") or "")
+    product_name = _clean_text(record.get("product_name") or "")
     product_url = _clean_text(record.get("Product URL") or "")
     if not product_id or not product_name or not product_url:
         return False
@@ -325,7 +325,7 @@ def parse_product_records_from_html(
                 "Dropping malformed Karaca product row in '%s': id=%s name=%r url=%r",
                 source_category.get("name", ""),
                 record.get("Product ID", ""),
-                record.get("Product Name", ""),
+                record.get("product_name", ""),
                 record.get("Product URL", ""),
             )
             continue

@@ -197,8 +197,8 @@ def extract_product_record(product: dict, category_name: str) -> Optional[dict]:
         discount_pct = round((1 - sale_price / regular_price) * 100, 2)
 
     return {
-        "Product Name":  name,
-        "Product Cost":  round(sale_price, 2),
+        "product_name":  name,
+        "price":         round(sale_price, 2),
         "product_id":    product_id,
         "brand":         "Bershka",
         "category":      category_name,
@@ -256,7 +256,7 @@ def fetch_products_for_category(
         if record is None:
             continue
         # Deduplicate by product_id within this category
-        pid = record["product_id"] or record["name"]
+        pid = record["product_id"] or record["product_name"]
         if pid in seen_ids:
             continue
         seen_ids.add(pid)

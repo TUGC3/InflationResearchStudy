@@ -19,6 +19,20 @@ from src.config import OUTPUT_DIR
 
 RAW_DIR = OUTPUT_DIR
 PROCESSED_DIR = "data/processed"
+LEGACY_HEADER_MAP = {
+    "name": "product_name",
+    "current_price": "price",
+}
+
+
+def _normalize_columns(df: pd.DataFrame) -> pd.DataFrame:
+    renamed = {}
+    for legacy_key, normalized_key in LEGACY_HEADER_MAP.items():
+        if normalized_key not in df.columns and legacy_key in df.columns:
+            renamed[legacy_key] = normalized_key
+    if renamed:
+        df = df.rename(columns=renamed)
+    return df
 
 
 def load_all_days() -> pd.DataFrame:
@@ -28,7 +42,7 @@ def load_all_days() -> pd.DataFrame:
         return pd.DataFrame()
 
     print(f"Found {len(files)} daily snapshot(s)")
-    dfs = [pd.read_csv(f) for f in files]
+    dfs = [_normalize_columns(pd.read_csv(f)) for f in files]
     df = pd.concat(dfs, ignore_index=True)
     df["scrape_date"] = pd.to_datetime(df["scrape_date"])
     print(f"Combined: {len(df)} rows, {df['product_id'].nunique()} products, "
@@ -42,23 +56,23 @@ def price_changes(df: pd.DataFrame) -> pd.DataFrame:
         return pd.DataFrame()
 
     df = df.sort_values(["product_id", "scrape_date"])
-    df["prev_price"] = df.groupby("product_id")["current_price"].shift(1)
-    df["price_change"] = df["current_price"] - df["prev_price"]
+    df["prev_price"] = df.groupby("product_id")["price"].shift(1)
+    df["price_change"] = df["price"] - df["prev_price"]
     df["price_change_pct"] = (df["price_change"] / df["prev_price"] * 100).round(2)
 
     changes = df[df["price_change"] != 0].dropna(subset=["price_change"])
-    return changes[["product_id", "name", "category", "scrape_date",
-                     "prev_price", "current_price", "price_change", "price_change_pct"]]
+    return changes[["product_id", "product_name", "category", "scrape_date",
+                     "prev_price", "price", "price_change", "price_change_pct"]]
 
 
 def category_summary(df: pd.DataFrame) -> pd.DataFrame:
     latest = df[df["scrape_date"] == df["scrape_date"].max()]
     return latest.groupby("category").agg(
         products=("product_id", "count"),
-        avg_price=("current_price", "mean"),
-        median_price=("current_price", "median"),
-        min_price=("current_price", "min"),
-        max_price=("current_price", "max"),
+        avg_price=("price", "mean"),
+        median_price=("price", "median"),
+        min_price=("price", "min"),
+        max_price=("price", "max"),
     ).round(2).sort_values("products", ascending=False)
 
 
