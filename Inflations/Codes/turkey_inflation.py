@@ -136,11 +136,16 @@ _SKIP_SUBDIRS = {"InflationData", "output", "reports", "archive"}
 _STANDARD_COLS = ["canonical_key", "product_key", "price", "store", "sector", "tuik_category"]
 
 
+_NAME_ALIASES  = {"product_name", "product name", "isim"}
+_PRICE_ALIASES = {"price", "product cost", "fiyat"}
+
+
 def _has_standard_header(fpath: Path) -> bool:
     try:
         with fpath.open(encoding="utf-8", errors="ignore") as fh:
             first = fh.readline().strip().lstrip("﻿")
-        return first == "product_name,price"
+        cols = {c.strip().lower() for c in first.split(",")}
+        return bool(cols & _NAME_ALIASES) and bool(cols & _PRICE_ALIASES)
     except Exception:
         return False
 
@@ -159,6 +164,20 @@ def _load_store_csv(fpath: Path, store: str, sector: str, tuik_code: str) -> pd.
     try:
         df = pd.read_csv(fpath, dtype=str, on_bad_lines="skip")
         df.columns = [c.lstrip("﻿").strip() for c in df.columns]
+        col_lower = {c.lower(): c for c in df.columns}
+        col_map = {}
+        if "product_name" not in df.columns:
+            for alias in ("product name", "isim"):
+                if alias in col_lower:
+                    col_map[col_lower[alias]] = "product_name"
+                    break
+        if "price" not in df.columns:
+            for alias in ("product cost", "fiyat"):
+                if alias in col_lower:
+                    col_map[col_lower[alias]] = "price"
+                    break
+        if col_map:
+            df = df.rename(columns=col_map)
         if "product_name" not in df.columns or "price" not in df.columns:
             return None
         out = pd.DataFrame()
@@ -179,19 +198,23 @@ def _load_store_csv(fpath: Path, store: str, sector: str, tuik_code: str) -> pd.
         return None
 
 
+# Stores permanently excluded from inflation calculation (volatile/unreliable pricing)
+_SKIP_STORES: set[str] = {"EnglishHome"}
+
 # ── Sector-based auto-discovery registry ─────────────────────────────────────
 
 # Maps sector directory name → (tuik_code, sector_label, date_granularity)
 # date_granularity: "daily" matches *YYYY-MM-DD*, "monthly" matches *YYYY-MM*
 _SECTOR_CONFIG: dict[str, tuple[str, str, str]] = {
-    "Markets":                     ("01", "market",       "daily"),
-    "ClothingStores":              ("03", "clothing",     "daily"),
-    "HomeGoods":                   ("05", "homegoods",    "daily"),
-    "ConstructionSuppliesMarkets": ("05", "construction", "daily"),
-    "Health":                      ("06", "health",       "monthly"),
-    "TechnologicalProducts":       ("08", "tech",         "daily"),
-    "TravelTourism":               ("11", "tourism",      "daily"),
-    "Cosmetics":                   ("13", "cosmetics",    "daily"),
+    "Markets":                                ("01", "market",       "daily"),
+    "ClothingStores":                         ("03", "clothing",     "daily"),
+    "HomeGoods":                              ("05", "homegoods",    "daily"),
+    "ConstructionSuppliesMarkets":            ("05", "construction", "daily"),
+    "Health":                                 ("06", "health",       "monthly"),
+    "TechnologicalProducts":                  ("08", "tech",         "daily"),
+    "TravelTourism":                          ("11", "tourism",      "daily"),
+    "RestaurantMealPricesVenueHallRentalFees": ("11", "restaurant",  "flat_daily"),
+    "Cosmetics":                              ("13", "cosmetics",    "daily"),
 }
 
 
@@ -207,10 +230,35 @@ def _load_sector(
     for store_dir in sorted(sector_dir.iterdir()):
         if not store_dir.is_dir():
             continue
+        if store_dir.name in _SKIP_STORES:
+            continue
         fpath = _find_date_csv(store_dir, date_token)
         if fpath is None:
             continue
         df = _load_store_csv(fpath, store_dir.name, sector_label, tuik_code)
+        if df is not None and not df.empty:
+            frames.append(df)
+    return frames
+
+
+def _load_flat_sector(
+    sector_dir: Path,
+    date_str: str,
+    tuik_code: str,
+    sector_label: str,
+) -> list[pd.DataFrame]:
+    """Load CSVs that sit directly in sector_dir (no store subdirs).
+
+    Each file's stem (without the date suffix) becomes the store name.
+    """
+    frames = []
+    for fpath in sorted(sector_dir.glob(f"*{date_str}*.csv")):
+        if not fpath.is_file():
+            continue
+        if not _has_standard_header(fpath):
+            continue
+        store_name = fpath.stem.rsplit(f"_{date_str}", 1)[0]
+        df = _load_store_csv(fpath, store_name, sector_label, tuik_code)
         if df is not None and not df.empty:
             frames.append(df)
     return frames
@@ -233,7 +281,10 @@ def _load_all_stores(date_str: str) -> tuple[pd.DataFrame, list[str], int]:
         sector_dir = _DATA_ROOT / sector_name
         if not sector_dir.exists():
             continue
-        frames.extend(_load_sector(sector_dir, date_str, tuik_code, sector_label, date_gran))
+        if date_gran == "flat_daily":
+            frames.extend(_load_flat_sector(sector_dir, date_str, tuik_code, sector_label))
+        else:
+            frames.extend(_load_sector(sector_dir, date_str, tuik_code, sector_label, date_gran))
 
     if not frames:
         return pd.DataFrame(columns=_STANDARD_COLS), [], 0
@@ -324,6 +375,14 @@ def _compute_metrics(
     matched["relative"] = (matched["price"] / matched["past_price"] - 1) * 100
     matched["relative"] = matched["relative"].replace([float("inf"), float("-inf")], pd.NA)
 
+    # Drop outliers likely caused by scraping errors (e.g. prices recorded at 10× scale)
+    _OUTLIER_THRESHOLD = 80.0
+    n_before_outlier = matched["relative"].notna().sum()
+    matched.loc[matched["relative"].abs() > _OUTLIER_THRESHOLD, "relative"] = pd.NA
+    n_dropped = n_before_outlier - matched["relative"].notna().sum()
+    if n_dropped:
+        logger.info("  Outlier filter: dropped %d product-store pairs with |change| > %.0f%%", n_dropped, _OUTLIER_THRESHOLD)
+
     # Average relative across stores → one row per (canonical_key, tuik_category)
     product_rel = (
         matched
@@ -335,9 +394,10 @@ def _compute_metrics(
         )
     )
 
-    # basic_index: basket-level sum ratio on matched pairs
-    sum_cur = matched["price"].sum()
-    sum_past = matched["past_price"].sum()
+    # basic_index: basket-level sum ratio — exclude outlier rows (relative is NA)
+    valid = matched[matched["relative"].notna()]
+    sum_cur = valid["price"].sum()
+    sum_past = valid["past_price"].sum()
     basic_index = float((sum_cur / sum_past - 1) * 100) if sum_past else None
 
     # avg_inflation: arithmetic mean of per-product relatives
@@ -355,7 +415,7 @@ def _compute_metrics(
 
     # Per-sector metrics: basic_index and avg_inflation per tuik_category
     sector_metrics: dict[str, dict] = {}
-    for code, grp in matched.groupby("tuik_category"):
+    for code, grp in matched[matched["relative"].notna()].groupby("tuik_category"):
         s_cur = grp["price"].sum()
         s_past = grp["past_price"].sum()
         s_basic = float((s_cur / s_past - 1) * 100) if s_past else None

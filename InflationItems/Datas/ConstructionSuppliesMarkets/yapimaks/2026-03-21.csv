@@ -1,4 +1,4 @@
-product-name,product-price,product_id,sku,marka_id,stok_durumu,birim,vat_rate,currency,url,scraped_at
+product_name,price,product_id,sku,marka_id,stok_durumu,birim,vat_rate,currency,url,scraped_at
 0.40*86*30*30 TRAPEZ MAHYA GLV.,"144,00",4264,GLV.SAC.040.TMHY,4.0,Yok,2.0,20.0,TRY,https://yapimaks.com/0-40-86-30-30-trapez-mahya-glv-p4264,2026-03-24 09:32:30
 100/100/100 ÇİFT ÇATAL PİS SU PVC KALDE,"178,00",4893,KALDE.5213DBR0M0M45,141.0,Var,2.0,20.0,TRY,https://yapimaks.com/100-100-100-cift-catal-pis-su-pvc-kalde-p4893,2026-03-24 09:33:21
 100/100 ÇATAL PİS SU PVC KALDE,"115,00",4916,KALDE.5213SBR0M0M45,141.0,Var,2.0,20.0,TRY,https://yapimaks.com/100-100-catal-pis-su-pvc-kalde-p4916,2026-03-24 09:33:23

@@ -1,4 +1,4 @@
-﻿Product Name,Product Cost,id,sku,brand,category,regular_price,discount_rate,unit,status
+product_name,price,id,sku,brand,category,regular_price,discount_rate,unit,status
 Polisan X1 Art Multisurface Vişne 500 ml,180.0,15177,15177,Polisan,Hobi Boyaları,199.5,9.77,PIECE,IN_SALE
 "Bianca Stella Sedef 0,25 kg",450.0,14116,14116,Bianca,Hobi Boyaları,616.35,26.99,PIECE,IN_SALE
 "Dyo Dinamik 3310 Luna Otu 7,5 lt",1653.75,12879,12879,Dyo,Silikonlu Boyalar,2021.25,18.18,PIECE,IN_SALE

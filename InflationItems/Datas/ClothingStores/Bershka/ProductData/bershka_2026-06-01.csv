@@ -1,4 +1,4 @@
-﻿Product Name,Product Cost,product_id,brand,category,color,regular_price,discount_pct,currency
+product_name,price,product_id,brand,category,color,regular_price,discount_pct,currency
 Volanlı bol pantolon,2490.0,223440709,Bershka,KADıN > Concert mode,Kirli beyaz,2490.0,0.0,TRY
 Askılı rustik midi elbise,1590.0,222176410,Bershka,KADıN > Concert mode,Krem,1590.0,0.0,TRY
 Rustik halter top,990.0,222197262,Bershka,KADıN > Concert mode,Krem,990.0,0.0,TRY

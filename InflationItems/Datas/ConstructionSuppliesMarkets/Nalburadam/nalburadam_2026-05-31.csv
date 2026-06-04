@@ -1,4 +1,4 @@
-﻿Product Name,Product Cost,id,sku,brand,category,regular_price,discount_rate,unit,status
+product_name,price,id,sku,brand,category,regular_price,discount_rate,unit,status
 "Bosch Exst Daire Testere Bıçak 235x25,40 mm 48 D E",2700.0,14325,14325,Bosch Aksesuar ve El Aletleri,Daire Testereler,3696.0,26.95,PIECE,IN_SALE
 Bosch Parke Kesme 120x22 12+12:24 Diş,2054.43,11089,11089,Bosch Aksesuarlar,Daire Testereler,2282.7,10.0,PIECE,IN_SALE
 Bosch Parke Kesme 120x20 12+12:24 Diş,2054.43,11087,11087,Bosch Aksesuarlar,Daire Testereler,2282.7,10.0,PIECE,IN_SALE

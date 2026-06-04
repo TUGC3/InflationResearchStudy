@@ -1,4 +1,4 @@
-﻿Product Name,Product Cost,product_id,brand,category,color,regular_price,discount_pct,currency
+product_name,price,product_id,brand,category,color,regular_price,discount_pct,currency
 ED HARDY X BERSHKA baskılı kapüşonlu sweatshirt,2490.0,226926995,Bershka,KADıN > ED HARDY X BERSHKA,Kirli beyaz,2490.0,0.0,TRY
 ED HARDY X BERSHKA denim şort,2690.0,228296995,Bershka,KADıN > ED HARDY X BERSHKA,Mavi,2690.0,0.0,TRY
 ED HARDY X BERSHKA halter mini elbise,1990.0,226931509,Bershka,KADıN > ED HARDY X BERSHKA,Koyu gri,1990.0,0.0,TRY
