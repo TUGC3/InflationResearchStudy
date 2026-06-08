@@ -8,9 +8,8 @@ from bs4 import BeautifulSoup
 import csv
 from datetime import date
 
-# Setup Edge
 options = webdriver.EdgeOptions()
-options.add_argument("--headless=new")    # run without window
+options.add_argument("--headless=new")    
 options.add_argument("--disable-gpu")
 options.add_argument("window-size=1920,1080")
 options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36...")
@@ -23,8 +22,6 @@ driver = webdriver.Edge(
 URL = "https://www.ido.com.tr/tr/tarife/ucret-tarifesi"
 print("Loading page...")
 driver.get(URL)
-
-# Wait for tables to appear
 try:
     WebDriverWait(driver, 20).until(
         EC.presence_of_element_located((By.TAG_NAME, "table"))
