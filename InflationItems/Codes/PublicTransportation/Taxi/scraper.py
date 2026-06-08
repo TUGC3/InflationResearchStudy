@@ -85,7 +85,6 @@ def scrape_routes(soup, hidden, vehicle_type):
         soup_resp = BeautifulSoup(resp.text, "html.parser")
         hidden = get_hidden_fields(soup_resp)
 
-        # Extract price table
         table = soup_resp.find("table", {"id": lambda x: x and "GridView1" in x})
         if not table:
             tables = soup_resp.find_all("table")
