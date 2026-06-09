@@ -1,76 +1,65 @@
 date,category,product,unit,monthly_qty,avg_unit_price_TRY,monthly_cost_TRY,n_matched,matched_products
-Feb-24 2026,Dairy Products,Yogurt,Kg,59.7,,,0,N/A
-Feb-24 2026,Dairy Products,White Cheese,Kg,5.3,,,0,N/A
-Feb-24 2026,Meat and Protein,Cubed Meat / Lamb Meat,Kg,3.3,,,0,N/A
-Feb-24 2026,Meat and Protein,Chicken,Kg,7.0,,,0,N/A
-Feb-24 2026,Meat and Protein,Fish,Kg,5.1,,,0,N/A
-Feb-24 2026,Meat and Protein,Eggs,Piece,60.0,,,0,N/A
-Feb-24 2026,Legumes,Chickpeas,Kg,5.6,186.24,1042.94,4,Damla Koçbaşı Nohut 2 Kg; Damla İspanyol Nohut 1 Kg; Damla Koçbaşı Nohut 9 Mm 5 Kg; Damla Koçbaşı Nohut 1 Kg
-Feb-24 2026,Nuts and Seeds,Walnut / Hazelnut / Peanut,Kg,2.7,,,0,N/A
-Feb-24 2026,Grains,Bread,Kg,18.0,,,0,N/A
-Feb-24 2026,Fruits,Banana,Kg,16.7,,,0,N/A
-Feb-24 2026,Fruits,Seasonal Fruit,Kg,12.9,,,0,N/A
-Feb-24 2026,Vegetables,Onion,Kg,18.0,,,0,N/A
-Feb-24 2026,Vegetables,Eggplant / Zucchini,Kg,34.7,,,0,N/A
-Feb-24 2026,Vegetables,Other Vegetables,Kg,14.8,,,0,N/A
-Feb-24 2026,Oils,Olive Oil,Liter,1.0,565.67,565.67,18,Komili Yemeklik Riviera Zeytinyağı 5 lt x 4 A…; Komili Yemeklik Riviera Zeytinyağı 5 lt x 1 A…; Komili Natürel Sızma Zeytinyağı Yumuşak Lezze…; Yudum Egemden Naturel Sızma Zeytinyağı Yumuşa…; Marmarabirlik Sızma Zeytinyağı Cam 1 Lt; Marmarabirlik Sızma Zeytinyağı Pet 1 Lt; Yudum Riviera Zeytinyağı 2 Lt; Kristal Dolgun Güçlü Sızma Zeytinyağı Cam 1 L…; Komili Sızma Zeytinyağı 2 Lt Pet; Yudum Egemden Naturel Sızma Zeytinyağı Yumuşa…; Komili Riviera Zeytinyağı 1 Lt; Komili Naturel Sızma Zeytinyağı Yumuşak Lezze…; Komili Sızma Zeytinyağı 500 Ml Pet; Komili Riviera Zeytinyağı 2 Lt; Tariş Kuzey Sızma Zeytinyağı 500 Ml; Tariş Kuzey Sızma Zeytinyağı 2 Lt; Tariş Kuzey Sızma Zeytinyağı 1 Lt; Tariş Riviera Zeytinyağı Teneke 2 Lt
-Feb-28 2026,Dairy Products,Yogurt,Kg,59.7,,,0,N/A
-Feb-28 2026,Dairy Products,White Cheese,Kg,5.3,,,0,N/A
-Feb-28 2026,Meat and Protein,Cubed Meat / Lamb Meat,Kg,3.3,,,0,N/A
-Feb-28 2026,Meat and Protein,Chicken,Kg,7.0,,,0,N/A
-Feb-28 2026,Meat and Protein,Fish,Kg,5.1,,,0,N/A
-Feb-28 2026,Meat and Protein,Eggs,Piece,60.0,,,0,N/A
-Feb-28 2026,Legumes,Chickpeas,Kg,5.6,186.24,1042.94,4,Damla İspanyol Nohut 1 Kg; Damla Koçbaşı Nohut 1 Kg; Damla Koçbaşı Nohut 2 Kg; Damla Koçbaşı Nohut 9 Mm 5 Kg
-Feb-28 2026,Nuts and Seeds,Walnut / Hazelnut / Peanut,Kg,2.7,,,0,N/A
-Feb-28 2026,Grains,Bread,Kg,18.0,,,0,N/A
-Feb-28 2026,Fruits,Banana,Kg,16.7,,,0,N/A
-Feb-28 2026,Fruits,Seasonal Fruit,Kg,12.9,,,0,N/A
-Feb-28 2026,Vegetables,Onion,Kg,18.0,,,0,N/A
-Feb-28 2026,Vegetables,Eggplant / Zucchini,Kg,34.7,,,0,N/A
-Feb-28 2026,Vegetables,Other Vegetables,Kg,14.8,,,0,N/A
-Feb-28 2026,Oils,Olive Oil,Liter,1.0,565.67,565.67,18,Komili Naturel Sızma Zeytinyağı Yumuşak Lezze…; Komili Natürel Sızma Zeytinyağı Yumuşak Lezze…; Komili Riviera Zeytinyağı 1 Lt; Komili Riviera Zeytinyağı 2 Lt; Komili Sızma Zeytinyağı 2 Lt Pet; Komili Sızma Zeytinyağı 500 Ml Pet; Komili Yemeklik Riviera Zeytinyağı 5 lt x 1 A…; Komili Yemeklik Riviera Zeytinyağı 5 lt x 4 A…; Kristal Dolgun Güçlü Sızma Zeytinyağı Cam 1 L…; Marmarabirlik Sızma Zeytinyağı Cam 1 Lt; Marmarabirlik Sızma Zeytinyağı Pet 1 Lt; Tariş Kuzey Sızma Zeytinyağı 1 Lt; Tariş Kuzey Sızma Zeytinyağı 2 Lt; Tariş Kuzey Sızma Zeytinyağı 500 Ml; Tariş Riviera Zeytinyağı Teneke 2 Lt; Yudum Egemden Naturel Sızma Zeytinyağı Yumuşa…; Yudum Egemden Naturel Sızma Zeytinyağı Yumuşa…; Yudum Riviera Zeytinyağı 2 Lt
-Mar 2026,Dairy Products,Yogurt,Kg,59.7,,,0,N/A
-Mar 2026,Dairy Products,White Cheese,Kg,5.3,,,0,N/A
-Mar 2026,Meat and Protein,Cubed Meat / Lamb Meat,Kg,3.3,,,0,N/A
-Mar 2026,Meat and Protein,Chicken,Kg,7.0,,,0,N/A
-Mar 2026,Meat and Protein,Fish,Kg,5.1,,,0,N/A
-Mar 2026,Meat and Protein,Eggs,Piece,60.0,,,0,N/A
-Mar 2026,Legumes,Chickpeas,Kg,5.6,185.62,1039.47,4,Damla İspanyol Nohut 1 Kg; Damla Koçbaşı Nohut 1 Kg; Damla Koçbaşı Nohut 2 Kg; Damla Koçbaşı Nohut 9 Mm 5 Kg
-Mar 2026,Nuts and Seeds,Walnut / Hazelnut / Peanut,Kg,2.7,,,0,N/A
-Mar 2026,Grains,Bread,Kg,18.0,,,0,N/A
-Mar 2026,Fruits,Banana,Kg,16.7,,,0,N/A
-Mar 2026,Fruits,Seasonal Fruit,Kg,12.9,,,0,N/A
-Mar 2026,Vegetables,Onion,Kg,18.0,,,0,N/A
-Mar 2026,Vegetables,Eggplant / Zucchini,Kg,34.7,,,0,N/A
-Mar 2026,Vegetables,Other Vegetables,Kg,14.8,,,0,N/A
-Mar 2026,Oils,Olive Oil,Liter,1.0,584.68,584.68,19,Komili Naturel Sızma Zeytinyağı Yumuşak Lezze…; Komili Natürel Sızma Zeytinyağı Yumuşak Lezze…; Komili Riviera Zeytinyağı 1 Lt; Komili Riviera Zeytinyağı 2 Lt; Komili Sızma Zeytinyağı 2 Lt Pet; Komili Sızma Zeytinyağı 500 Ml Pet; Komili Yemeklik Riviera Zeytinyağı 5 lt x 1 A…; Komili Yemeklik Riviera Zeytinyağı 5 lt x 4 A…; Kristal Dolgun Güçlü Sızma Zeytinyağı Cam 1 L…; Kristal Naturel Sızma Yumuşak Doğal Zeytinyağ…; Marmarabirlik Sızma Zeytinyağı Cam 1 Lt; Marmarabirlik Sızma Zeytinyağı Pet 1 Lt; Tariş Kuzey Sızma Zeytinyağı 1 Lt; Tariş Kuzey Sızma Zeytinyağı 2 Lt; Tariş Kuzey Sızma Zeytinyağı 500 Ml; Tariş Riviera Zeytinyağı Teneke 2 Lt; Yudum Egemden Naturel Sızma Zeytinyağı Yumuşa…; Yudum Egemden Naturel Sızma Zeytinyağı Yumuşa…; Yudum Riviera Zeytinyağı 2 Lt
-Apr 2026,Dairy Products,Yogurt,Kg,59.7,,,0,N/A
-Apr 2026,Dairy Products,White Cheese,Kg,5.3,,,0,N/A
-Apr 2026,Meat and Protein,Cubed Meat / Lamb Meat,Kg,3.3,,,0,N/A
-Apr 2026,Meat and Protein,Chicken,Kg,7.0,,,0,N/A
-Apr 2026,Meat and Protein,Fish,Kg,5.1,,,0,N/A
-Apr 2026,Meat and Protein,Eggs,Piece,60.0,,,0,N/A
-Apr 2026,Legumes,Chickpeas,Kg,5.6,160.08,896.45,8,Damla İspanyol Nohut 1 Kg; Damla Koçbaşı Nohut 1 Kg; Damla Koçbaşı Nohut 2 Kg; Damla Koçbaşı Nohut 9 Mm 5 Kg; Koçbaşı Nohut 25 Kg (Çuval); Nohut 1 Kg; Koçbaşı Nohut 1 Kg; Nohut 25 Kg (Çuval)
-Apr 2026,Nuts and Seeds,Walnut / Hazelnut / Peanut,Kg,2.7,,,0,N/A
-Apr 2026,Grains,Bread,Kg,18.0,,,0,N/A
-Apr 2026,Fruits,Banana,Kg,16.7,,,0,N/A
-Apr 2026,Fruits,Seasonal Fruit,Kg,12.9,,,0,N/A
-Apr 2026,Vegetables,Onion,Kg,18.0,,,0,N/A
-Apr 2026,Vegetables,Eggplant / Zucchini,Kg,34.7,,,0,N/A
-Apr 2026,Vegetables,Other Vegetables,Kg,14.8,,,0,N/A
-Apr 2026,Oils,Olive Oil,Liter,1.0,602.68,602.68,17,Komili Naturel Sızma Zeytinyağı Yumuşak Lezze…; Komili Natürel Sızma Zeytinyağı Yumuşak Lezze…; Komili Riviera Zeytinyağı 1 Lt; Komili Riviera Zeytinyağı 2 Lt; Komili Sızma Zeytinyağı 2 Lt Pet; Komili Sızma Zeytinyağı 500 Ml Pet; Komili Yemeklik Riviera Zeytinyağı 5 lt x 1 A…; Komili Yemeklik Riviera Zeytinyağı 5 lt x 4 A…; Kristal Dolgun Güçlü Sızma Zeytinyağı Cam 1 L…; Kristal Naturel Sızma Yumuşak Doğal Zeytinyağ…; Marmarabirlik Sızma Zeytinyağı Cam 1 Lt; Marmarabirlik Sızma Zeytinyağı Pet 1 Lt; Tariş Kuzey Sızma Zeytinyağı 1 Lt; Tariş Kuzey Sızma Zeytinyağı 2 Lt; Tariş Kuzey Sızma Zeytinyağı 500 Ml; Tariş Riviera Zeytinyağı Teneke 2 Lt; Yudum Egemden Naturel Sızma Zeytinyağı Yumuşa…
-May 2026,Dairy Products,Yogurt,Kg,59.7,,,0,N/A
-May 2026,Dairy Products,White Cheese,Kg,5.3,,,0,N/A
-May 2026,Meat and Protein,Cubed Meat / Lamb Meat,Kg,3.3,,,0,N/A
-May 2026,Meat and Protein,Chicken,Kg,7.0,,,0,N/A
-May 2026,Meat and Protein,Fish,Kg,5.1,,,0,N/A
-May 2026,Meat and Protein,Eggs,Piece,60.0,,,0,N/A
-May 2026,Legumes,Chickpeas,Kg,5.6,160.08,896.45,8,Nohut 25 Kg (Çuval); Nohut 1 Kg; Koçbaşı Nohut 1 Kg; Koçbaşı Nohut 25 Kg (Çuval); Damla Koçbaşı Nohut 2 Kg; Damla Koçbaşı Nohut 9 Mm 5 Kg; Damla İspanyol Nohut 1 Kg; Damla Koçbaşı Nohut 1 Kg
-May 2026,Nuts and Seeds,Walnut / Hazelnut / Peanut,Kg,2.7,,,0,N/A
-May 2026,Grains,Bread,Kg,18.0,,,0,N/A
-May 2026,Fruits,Banana,Kg,16.7,,,0,N/A
-May 2026,Fruits,Seasonal Fruit,Kg,12.9,,,0,N/A
-May 2026,Vegetables,Onion,Kg,18.0,,,0,N/A
-May 2026,Vegetables,Eggplant / Zucchini,Kg,34.7,,,0,N/A
-May 2026,Vegetables,Other Vegetables,Kg,14.8,,,0,N/A
-May 2026,Oils,Olive Oil,Liter,1.0,588.12,588.12,21,Komili Yemeklik Riviera Zeytinyağı 5 lt x 4 A…; Komili Yemeklik Riviera Zeytinyağı 5 lt x 1 A…; Komili Natürel Sızma Zeytinyağı Yumuşak Lezze…; Yudum Egemden Naturel Sızma Zeytinyağı Yumuşa…; Marmarabirlik Sızma Zeytinyağı Cam 1 Lt; Marmarabirlik Sızma Zeytinyağı Pet 1 Lt; Yudum Riviera Zeytinyağı 2 Lt; Kristal Dolgun Güçlü Sızma Zeytinyağı Cam 1 L…; Komili Sızma Zeytinyağı 2 Lt Pet; Tariş Güney Ege Sızma Zeytinyağı 1 Lt; Yudum Egemden Naturel Sızma Zeytinyağı Yumuşa…; Kristal Naturel Sızma Yumuşak Doğal Zeytinyağ…; Komili Riviera Zeytinyağı 1 Lt; Komili Naturel Sızma Zeytinyağı Yumuşak Lezze…; Komili Sızma Zeytinyağı 500 Ml Pet; Komili Riviera Zeytinyağı 2 Lt; Tariş Kuzey Sızma Zeytinyağı 500 Ml; Tariş Kuzey Sızma Zeytinyağı 2 Lt; Tariş Kuzey Sızma Zeytinyağı 1 Lt; Tariş Riviera Zeytinyağı Cam 500 Ml; Tariş Riviera Zeytinyağı Teneke 2 Lt
+Feb 2026,Dairy Products,Yogurt,Kg,59.7,,,0,—
+Feb 2026,Dairy Products,White Cheese,Kg,5.7,,,0,—
+Feb 2026,Meat and Protein,Cubed Meat / Lamb Meat,Kg,4.6,,,0,—
+Feb 2026,Meat and Protein,Chicken,Kg,10.3,,,0,—
+Feb 2026,Meat and Protein,Fish,Kg,6.9,,,0,—
+Feb 2026,Meat and Protein,Eggs,Piece,120.0,,,0,—
+Feb 2026,Legumes,Chickpeas,Kg,1.8,186.24,335.23,4,Damla İspanyol Nohut 1 Kg; Damla Koçbaşı Nohut 1 Kg; Damla Koçbaşı Nohut 2 Kg; Damla Koçbaşı Nohut 9 Mm 5 Kg
+Feb 2026,Nuts and Seeds,Walnut / Hazelnut / Peanut,Kg,2.7,,,0,—
+Feb 2026,Grains,Bread,Kg,18.0,,,0,—
+Feb 2026,Fruits,Banana,Kg,16.7,,,0,—
+Feb 2026,Fruits,Seasonal Fruit,Kg,12.9,,,0,—
+Feb 2026,Vegetables,Onion,Kg,18.0,,,0,—
+Feb 2026,Vegetables,Eggplant / Zucchini,Kg,23.1,,,0,—
+Feb 2026,Vegetables,Other Vegetables,Kg,11.8,,,0,—
+Feb 2026,Oils,Olive Oil,Liter,1.1,565.67,622.24,18,Komili Naturel Sızma Zeytinyağı Yumuşak Lezze…; Komili Natürel Sızma Zeytinyağı Yumuşak Lezze…; Komili Riviera Zeytinyağı 1 Lt; Komili Riviera Zeytinyağı 2 Lt; Komili Sızma Zeytinyağı 2 Lt Pet; Komili Sızma Zeytinyağı 500 Ml Pet; Komili Yemeklik Riviera Zeytinyağı 5 lt x 1 A…; Komili Yemeklik Riviera Zeytinyağı 5 lt x 4 A…; Kristal Dolgun Güçlü Sızma Zeytinyağı Cam 1 L…; Marmarabirlik Sızma Zeytinyağı Cam 1 Lt; Marmarabirlik Sızma Zeytinyağı Pet 1 Lt; Tariş Kuzey Sızma Zeytinyağı 1 Lt; Tariş Kuzey Sızma Zeytinyağı 2 Lt; Tariş Kuzey Sızma Zeytinyağı 500 Ml; Tariş Riviera Zeytinyağı Teneke 2 Lt; Yudum Egemden Naturel Sızma Zeytinyağı Yumuşa…; Yudum Egemden Naturel Sızma Zeytinyağı Yumuşa…; Yudum Riviera Zeytinyağı 2 Lt
+Feb 2026,Other Food Products,Grissini,Kg,2.1,642.0,1348.2,2,Ülker Altınbaşak Grissini 125 Gr; Ülker Altınbaşak Kepekli Grissini 125 Gr
+Mar 2026,Dairy Products,Yogurt,Kg,59.7,,,0,—
+Mar 2026,Dairy Products,White Cheese,Kg,5.7,,,0,—
+Mar 2026,Meat and Protein,Cubed Meat / Lamb Meat,Kg,4.6,,,0,—
+Mar 2026,Meat and Protein,Chicken,Kg,10.3,,,0,—
+Mar 2026,Meat and Protein,Fish,Kg,6.9,,,0,—
+Mar 2026,Meat and Protein,Eggs,Piece,120.0,,,0,—
+Mar 2026,Legumes,Chickpeas,Kg,1.8,185.62,334.12,4,Damla İspanyol Nohut 1 Kg; Damla Koçbaşı Nohut 1 Kg; Damla Koçbaşı Nohut 2 Kg; Damla Koçbaşı Nohut 9 Mm 5 Kg
+Mar 2026,Nuts and Seeds,Walnut / Hazelnut / Peanut,Kg,2.7,,,0,—
+Mar 2026,Grains,Bread,Kg,18.0,,,0,—
+Mar 2026,Fruits,Banana,Kg,16.7,,,0,—
+Mar 2026,Fruits,Seasonal Fruit,Kg,12.9,,,0,—
+Mar 2026,Vegetables,Onion,Kg,18.0,,,0,—
+Mar 2026,Vegetables,Eggplant / Zucchini,Kg,23.1,,,0,—
+Mar 2026,Vegetables,Other Vegetables,Kg,11.8,,,0,—
+Mar 2026,Oils,Olive Oil,Liter,1.1,584.68,643.15,19,Komili Naturel Sızma Zeytinyağı Yumuşak Lezze…; Komili Natürel Sızma Zeytinyağı Yumuşak Lezze…; Komili Riviera Zeytinyağı 1 Lt; Komili Riviera Zeytinyağı 2 Lt; Komili Sızma Zeytinyağı 2 Lt Pet; Komili Sızma Zeytinyağı 500 Ml Pet; Komili Yemeklik Riviera Zeytinyağı 5 lt x 1 A…; Komili Yemeklik Riviera Zeytinyağı 5 lt x 4 A…; Kristal Dolgun Güçlü Sızma Zeytinyağı Cam 1 L…; Kristal Naturel Sızma Yumuşak Doğal Zeytinyağ…; Marmarabirlik Sızma Zeytinyağı Cam 1 Lt; Marmarabirlik Sızma Zeytinyağı Pet 1 Lt; Tariş Kuzey Sızma Zeytinyağı 1 Lt; Tariş Kuzey Sızma Zeytinyağı 2 Lt; Tariş Kuzey Sızma Zeytinyağı 500 Ml; Tariş Riviera Zeytinyağı Teneke 2 Lt; Yudum Egemden Naturel Sızma Zeytinyağı Yumuşa…; Yudum Egemden Naturel Sızma Zeytinyağı Yumuşa…; Yudum Riviera Zeytinyağı 2 Lt
+Mar 2026,Other Food Products,Grissini,Kg,2.1,646.0,1356.6,2,Ülker Altınbaşak Grissini 125 Gr; Ülker Altınbaşak Kepekli Grissini 125 Gr
+Apr 2026,Dairy Products,Yogurt,Kg,59.7,,,0,—
+Apr 2026,Dairy Products,White Cheese,Kg,5.7,,,0,—
+Apr 2026,Meat and Protein,Cubed Meat / Lamb Meat,Kg,4.6,,,0,—
+Apr 2026,Meat and Protein,Chicken,Kg,10.3,,,0,—
+Apr 2026,Meat and Protein,Fish,Kg,6.9,,,0,—
+Apr 2026,Meat and Protein,Eggs,Piece,120.0,,,0,—
+Apr 2026,Legumes,Chickpeas,Kg,1.8,160.08,288.14,8,Damla İspanyol Nohut 1 Kg; Damla Koçbaşı Nohut 1 Kg; Damla Koçbaşı Nohut 2 Kg; Damla Koçbaşı Nohut 9 Mm 5 Kg; Koçbaşı Nohut 25 Kg (Çuval); Nohut 1 Kg; Koçbaşı Nohut 1 Kg; Nohut 25 Kg (Çuval)
+Apr 2026,Nuts and Seeds,Walnut / Hazelnut / Peanut,Kg,2.7,1369.53,3697.73,5,Ceviz İçi Lüx 1 Kg; Çiğ Fındık 1000 Gr; Çiğ Fındık 250 Gr; Çiğ Fındık 500 Gr; Çiğ Fındık 750 Gr
+Apr 2026,Grains,Bread,Kg,18.0,,,0,—
+Apr 2026,Fruits,Banana,Kg,16.7,,,0,—
+Apr 2026,Fruits,Seasonal Fruit,Kg,12.9,584.0,7533.6,2,Keçemen Üzüm 1 Kg; Üzüm Siyah Çekirdeksiz 1 Kg
+Apr 2026,Vegetables,Onion,Kg,18.0,,,0,—
+Apr 2026,Vegetables,Eggplant / Zucchini,Kg,23.1,,,0,—
+Apr 2026,Vegetables,Other Vegetables,Kg,11.8,,,0,—
+Apr 2026,Oils,Olive Oil,Liter,1.1,602.68,662.95,17,Komili Naturel Sızma Zeytinyağı Yumuşak Lezze…; Komili Natürel Sızma Zeytinyağı Yumuşak Lezze…; Komili Riviera Zeytinyağı 1 Lt; Komili Riviera Zeytinyağı 2 Lt; Komili Sızma Zeytinyağı 2 Lt Pet; Komili Sızma Zeytinyağı 500 Ml Pet; Komili Yemeklik Riviera Zeytinyağı 5 lt x 1 A…; Komili Yemeklik Riviera Zeytinyağı 5 lt x 4 A…; Kristal Dolgun Güçlü Sızma Zeytinyağı Cam 1 L…; Kristal Naturel Sızma Yumuşak Doğal Zeytinyağ…; Marmarabirlik Sızma Zeytinyağı Cam 1 Lt; Marmarabirlik Sızma Zeytinyağı Pet 1 Lt; Tariş Kuzey Sızma Zeytinyağı 1 Lt; Tariş Kuzey Sızma Zeytinyağı 2 Lt; Tariş Kuzey Sızma Zeytinyağı 500 Ml; Tariş Riviera Zeytinyağı Teneke 2 Lt; Yudum Egemden Naturel Sızma Zeytinyağı Yumuşa…
+Apr 2026,Other Food Products,Grissini,Kg,2.1,648.0,1360.8,1,Ülker Altınbaşak Kepekli Grissini 125 Gr
+May 2026,Dairy Products,Yogurt,Kg,59.7,,,0,—
+May 2026,Dairy Products,White Cheese,Kg,5.7,,,0,—
+May 2026,Meat and Protein,Cubed Meat / Lamb Meat,Kg,4.6,,,0,—
+May 2026,Meat and Protein,Chicken,Kg,10.3,,,0,—
+May 2026,Meat and Protein,Fish,Kg,6.9,,,0,—
+May 2026,Meat and Protein,Eggs,Piece,120.0,,,0,—
+May 2026,Legumes,Chickpeas,Kg,1.8,160.08,288.14,8,Nohut 25 Kg (Çuval); Nohut 1 Kg; Koçbaşı Nohut 1 Kg; Koçbaşı Nohut 25 Kg (Çuval); Damla Koçbaşı Nohut 2 Kg; Damla Koçbaşı Nohut 9 Mm 5 Kg; Damla İspanyol Nohut 1 Kg; Damla Koçbaşı Nohut 1 Kg
+May 2026,Nuts and Seeds,Walnut / Hazelnut / Peanut,Kg,2.7,956.0,2581.2,1,Ceviz İçi Lüx 1 Kg
+May 2026,Grains,Bread,Kg,18.0,,,0,—
+May 2026,Fruits,Banana,Kg,16.7,,,0,—
+May 2026,Fruits,Seasonal Fruit,Kg,12.9,632.0,8152.8,3,Keçemen Üzüm 1 Kg; Üzüm Siyah Çekirdeksiz 1 Kg; Mılupa Seftalı Elma 125Gr
+May 2026,Vegetables,Onion,Kg,18.0,,,0,—
+May 2026,Vegetables,Eggplant / Zucchini,Kg,23.1,,,0,—
+May 2026,Vegetables,Other Vegetables,Kg,11.8,,,0,—
+May 2026,Oils,Olive Oil,Liter,1.1,588.12,646.93,21,Komili Yemeklik Riviera Zeytinyağı 5 lt x 4 A…; Komili Yemeklik Riviera Zeytinyağı 5 lt x 1 A…; Komili Natürel Sızma Zeytinyağı Yumuşak Lezze…; Yudum Egemden Naturel Sızma Zeytinyağı Yumuşa…; Marmarabirlik Sızma Zeytinyağı Cam 1 Lt; Marmarabirlik Sızma Zeytinyağı Pet 1 Lt; Yudum Riviera Zeytinyağı 2 Lt; Kristal Dolgun Güçlü Sızma Zeytinyağı Cam 1 L…; Komili Sızma Zeytinyağı 2 Lt Pet; Tariş Güney Ege Sızma Zeytinyağı 1 Lt; Yudum Egemden Naturel Sızma Zeytinyağı Yumuşa…; Kristal Naturel Sızma Yumuşak Doğal Zeytinyağ…; Komili Riviera Zeytinyağı 1 Lt; Komili Naturel Sızma Zeytinyağı Yumuşak Lezze…; Komili Sızma Zeytinyağı 500 Ml Pet; Komili Riviera Zeytinyağı 2 Lt; Tariş Kuzey Sızma Zeytinyağı 500 Ml; Tariş Kuzey Sızma Zeytinyağı 2 Lt; Tariş Kuzey Sızma Zeytinyağı 1 Lt; Tariş Riviera Zeytinyağı Cam 500 Ml; Tariş Riviera Zeytinyağı Teneke 2 Lt
+May 2026,Other Food Products,Grissini,Kg,2.1,646.0,1356.6,2,Ülker Altınbaşak Kepekli Grissini 125 Gr; Ülker Altınbaşak Grissini 125 Gr
