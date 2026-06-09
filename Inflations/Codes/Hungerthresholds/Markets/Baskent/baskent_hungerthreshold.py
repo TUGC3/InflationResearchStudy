@@ -1,225 +1,200 @@
-"""
-NOT AVAILABLE AT BASKENT (N/A for all months):
-  Milk, Yogurt, White Cheese, Kashar, Minced Meat, Cubed Meat,
-  Chicken, Fish, Eggs, Bread, Flour (standard wheat), Semolina,
-  Apple, Orange/Mandarin, Banana, Seasonal Fruit,
-  Potato, Onion, Tomato, Cucumber, Pepper, Eggplant/Zucchini,
-  Carrot, Greens, Other Vegetables,
-  Sunflower Oil, Butter, Margarine, Sugar, Honey (standalone)
-
-AVAILABLE (Feb only, Mart+ has very limited stock):
-  Red/Green Lentils, Chickpeas, Dried Beans, Bulgur, Rice, Pasta,
-  Olive Oil, Olives, Tea, Tomato Paste, Jam, Molasses, Salt,
-  Average Spices, Linden/Herbal Tea, Nuts, Honey (Feb has honey)
-"""
-
 import pandas as pd
 import re
 from pathlib import Path
 
 # ─────────────────────────────────────────────────────
-# 1.  PATHS  ←  edit BASE_DIR to your folder
+# 1.  PATHS
 # ─────────────────────────────────────────────────────
 BASE_DIR = "/Users/efeyildirim/Downloads/Marketler/Baskent"
 
 FILES = {
-    "Feb-24 2026": f"{BASE_DIR}/baskent_2026-02-24.csv",
-    "Feb-28 2026": f"{BASE_DIR}/baskent_2026-02-28.csv",
-    "Mar 2026":    f"{BASE_DIR}/baskent_2026-03-31.csv",
-    "Apr 2026":    f"{BASE_DIR}/baskent_2026-04-30.csv",
-    "May 2026":    f"{BASE_DIR}/baskent_2026-05-27.csv",
+    "Feb 2026": f"{BASE_DIR}/baskent_2026-02-28.csv",
+    "Mar 2026": f"{BASE_DIR}/baskent_2026-03-31.csv",
+    "Apr 2026": f"{BASE_DIR}/baskent_2026-04-30.csv",
+    "May 2026": f"{BASE_DIR}/baskent_2026-05-31.csv",
 }
 
 OUTPUT_DETAIL  = f"{BASE_DIR}/hunger_threshold_detail.csv"
 OUTPUT_SUMMARY = f"{BASE_DIR}/hunger_threshold_summary.csv"
 
 # ─────────────────────────────────────────────────────
-# 2.  FOOD BASKET  
+# 2.  FOOD BASKET
 # ─────────────────────────────────────────────────────
 FOOD_BASKET = [
-    # ── Dairy Products ──────────────────────────
-    ("Dairy Products",      "Yogurt",                             "Kg",      59.7),
-    ("Dairy Products",      "White Cheese",                       "Kg",      5.3),
-    # ── Meat and Protein ────────────────────────
-    ("Meat and Protein",      "Cubed Meat / Lamb Meat",             "Kg",      3.3),
-    ("Meat and Protein",      "Chicken",                            "Kg",      7.0),
-    ("Meat and Protein",      "Fish",                               "Kg",      5.1),
-    ("Meat and Protein",      "Eggs",                               "Piece",   60.0),
-    # ── Legumes ─────────────────────────────────
-    ("Legumes",      "Chickpeas",                          "Kg",      5.6),
-    # ── Nuts and Seeds ──────────────────────────
-    ("Nuts and Seeds",      "Walnut / Hazelnut / Peanut",         "Kg",      2.7),
-    # ── Grains ──────────────────────────────────
-    ("Grains",      "Bread",                              "Kg",      18.0),
-    # ── Fruits ──────────────────────────────────
-    ("Fruits",      "Banana",                             "Kg",      16.7),
-    ("Fruits",      "Seasonal Fruit",                     "Kg",      12.9),
-    # ── Vegetables ──────────────────────────────
-    ("Vegetables",      "Onion",                              "Kg",      18.0),
-    ("Vegetables",      "Eggplant / Zucchini",                "Kg",      34.7),
-    ("Vegetables",      "Other Vegetables",                   "Kg",      14.8),
-    # ── Oils ────────────────────────────────────
-    ("Oils",      "Olive Oil",                          "Liter",   1.0),
+    ("Dairy Products",      "Yogurt",                         "Kg",      59.7),
+    ("Dairy Products",      "White Cheese",                   "Kg",       5.7),
+    ("Meat and Protein",    "Cubed Meat / Lamb Meat",         "Kg",       4.6),
+    ("Meat and Protein",    "Chicken",                        "Kg",      10.3),
+    ("Meat and Protein",    "Fish",                           "Kg",       6.9),
+    ("Meat and Protein",    "Eggs",                           "Piece",  120.0),
+    ("Legumes",             "Chickpeas",                      "Kg",       1.8),
+    ("Nuts and Seeds",      "Walnut / Hazelnut / Peanut",     "Kg",       2.7),
+    ("Grains",              "Bread",                          "Kg",      18.0),
+    ("Fruits",              "Banana",                         "Kg",      16.7),
+    ("Fruits",              "Seasonal Fruit",                 "Kg",      12.9),
+    ("Vegetables",          "Onion",                          "Kg",      18.0),
+    ("Vegetables",          "Eggplant / Zucchini",            "Kg",      23.1),
+    ("Vegetables",          "Other Vegetables",               "Kg",      11.8),
+    ("Oils",                "Olive Oil",                      "Liter",    1.1),
+    ("Other Food Products", "Grissini",                       "Kg",       2.1),
 ]
 
 # ─────────────────────────────────────────────────────
 # 3.  MATCH RULES
 # ─────────────────────────────────────────────────────
-# kw=[] means not stocked → N/A
 MATCH_RULES = {
-    # ── Not available ──────────────────────────────────
-    "Milk":                       {"kw": [], "ex": [], "unit": "ml_or_L"},
-    "Yogurt":                     {"kw": [], "ex": [], "unit": "kg"},
-    "White Cheese":               {"kw": [], "ex": [], "unit": "kg"},
-    "Kashar / Other Cheese":      {"kw": [], "ex": [], "unit": "kg"},
-    "Minced Meat":                {"kw": [], "ex": [], "unit": "kg"},
-    "Cubed Meat / Lamb Meat":     {"kw": [], "ex": [], "unit": "kg"},
-    "Chicken":                    {"kw": [], "ex": [], "unit": "kg"},
-    "Fish":                       {"kw": [], "ex": [], "unit": "kg"},
-    "Eggs":                       {"kw": [], "ex": [], "unit": "piece"},
-    "Bread": {
-        "kw":  ["Ekmek"],
-        "ex":  ["Hamburger","Sandviç","Tost","Lavaş","Tortilla","Gevrek",
-                "Kızarmış","Etimek","Grissini","Fıstıklı","Sütlü","Patatesli",
-                "Fındıklı","Üzümlü","Çikolata"],
+    "Yogurt": {
+        "keywords": ["Yoğurt"],
+        "exclude": ["Meyveli", "Organik", "Kaymaklı", "Süzme", "Çırpılmış", "Probiyotik",
+                    "Laktozsuz", "Çilek", "Aromalı", "Quark", "Tava", "Cipsi", "Kedi",
+                    "Köpek", "Puding", "Mix", "Dip", "Cips", "Meze", "Mama",
+                    "Yoğurtlu", "Yoğurt Sütü", "Lay", "Patates", "Çömlek", "Meyve",
+                    "Şeftali", "Knorr", "Danone", "Activia"],
         "unit": "kg",
-        "min_price_per_kg": 50,
     },
-    "Flour":                      {"kw": [], "ex": [], "unit": "kg"},
-    "Semolina":                   {"kw": [], "ex": [], "unit": "kg"},
-    "Apple":                      {"kw": [], "ex": [], "unit": "kg"},
-    "Orange / Mandarin":          {"kw": [], "ex": [], "unit": "kg"},
-    "Banana":                     {"kw": [], "ex": [], "unit": "kg"},
-    "Seasonal Fruit":             {"kw": [], "ex": [], "unit": "kg"},
-    "Potato":                     {"kw": [], "ex": [], "unit": "kg"},
-    "Onion":                      {"kw": [], "ex": [], "unit": "kg"},
-    "Tomato":                     {"kw": [], "ex": [], "unit": "kg"},
-    "Cucumber":                   {"kw": [], "ex": [], "unit": "kg"},
-    "Pepper":                     {"kw": [], "ex": [], "unit": "kg"},
-    "Eggplant / Zucchini":        {"kw": [], "ex": [], "unit": "kg"},
-    "Carrot":                     {"kw": [], "ex": [], "unit": "kg"},
-    "Greens / Lettuce / Parsley": {"kw": [], "ex": [], "unit": "piece"},
-    "Other Vegetables":           {"kw": [], "ex": [], "unit": "kg"},
-    "Sunflower Oil":              {"kw": [], "ex": [], "unit": "ml_or_L"},
-    "Butter":                     {"kw": [], "ex": [], "unit": "kg"},
-    "Margarine":                  {"kw": [], "ex": [], "unit": "kg"},
-    "Sugar":                      {"kw": [], "ex": [], "unit": "kg"},
-    # ── Available ──────────────────────────────────────
-    "Dried Beans": {
-        "kw":  ["Kuru Fasulye","Fasulye"],
-        "ex":  ["Konserve","Haşlanmış","Turşu","Un","Çorba"],
+    "White Cheese": {
+        "keywords": ["Beyaz Peynir", "Taze Peynir", "Klasik Peynir"],
+        "exclude": ["Misto", "Laktozsuz", "Sürülebilir", "Ezine", "Kaşar", "Lor",
+                    "Tulum", "Çerkez", "Keçi", "Koyun"],
         "unit": "kg",
+    },
+    "Cubed Meat / Lamb Meat": {
+        "keywords": ["Kuşbaşı"],
+        "exclude": ["Döner", "Köfte", "Kedi", "Köpek", "Kıyma", "Hazır", "Kavurma",
+                    "Pastırma", "Sucuk", "Sosis", "Dondurulmuş"],
+        "unit": "kg",
+    },
+    "Chicken": {
+        "keywords": ["Tavuk", "Piliç"],
+        "exclude": ["Döner", "Nugget", "Şinitzel", "Sarma", "Köfte", "Kroket", "Çıtır",
+                    "Kebap", "Lokma", "Parmak Bonfile", "Jumbo Fileto", "Izgara Dilimli",
+                    "Soslu Kanat", "Kedi", "Köpek", "Mama", "Sucuk", "Sosis", "Füme",
+                    "Taşlık", "Ciğer", "Yürek", "Karaciğer", "Tavukgöğsü", "Noodle",
+                    "Bulyon", "Salam", "Pilav", "Cips", "Çeşni", "Baharat", "Çorba",
+                    "Jambon", "Çabuk", "Yumurta", "Tavuk Göğsü", "Püre", "Pouch",
+                    "Ödül", "Izgara", "Pane", "Harcı"],
+        "unit": "kg",
+    },
+    "Fish": {
+        "keywords": ["Hamsi", "Levrek", "Somon", "Balık"],
+        "exclude": ["Füme", "Konserve", "Kedi", "Köpek", "Maması", "Sosu", "Soslu",
+                    "Kraker", "Çikolata", "Şeker", "Mama", "Tava", "Hayvan", "Biftek",
+                    "Pouch", "Piliç", "Zeytinyağlı", "Çıtır", "Ton", "Maşa", "Izgara"],
+        "unit": "kg",
+    },
+    "Eggs": {
+        "keywords": ["Yumurta"],
+        "exclude": ["Organik", "Bıldırcın", "Toz", "Akı", "Sarısı", "Şeker", "Haribo",
+                    "Çikolata", "Sürpriz", "Süpriz", "Fırça", "Ozibox", "Elvan",
+                    "Yumurtalı", "Ozmo", "Ülker"],
+        "unit": "piece",
     },
     "Chickpeas": {
-        "kw":  ["Nohut"],
-        "ex":  ["Konserve","Haşlanmış","Un","Çorba"],
-        "unit": "kg",
-    },
-    "Red Lentils": {
-        "kw":  ["Kırmızı Mercimek"],
-        "ex":  ["Un","Çorba"],
-        "unit": "kg",
-    },
-    "Green Lentils": {
-        "kw":  ["Yeşil Mercimek"],
-        "ex":  ["Un","Çorba"],
+        "keywords": ["Nohut"],
+        "exclude": ["Konserve", "Cipsi", "Çerez", "Pilav", "Cips", "Haşlanmış"],
         "unit": "kg",
     },
     "Walnut / Hazelnut / Peanut": {
-        "kw":  ["Yer Fıstığı","Fındık","Ceviz"],
-        "ex":  ["Ezmesi","Kreması","Çikolata","Aromalı","Reçel","Kek","Baklava",
-                "Kurabiye","Tuzlu Fıstık Ezmesi","Kids","Vitamini","Keçiboynu"],
+        "keywords": ["Yer Fıstığı", "Fındık İçi", "Çiğ Fındık", "Kavrulmuş Fındık",
+                     "İç Ceviz", "Ceviz İçi", "Antep Fıstığı İçi", "İç Fıstık"],
+        "exclude": ["Ezmesi", "Kreması", "Bitter", "Çikolata", "Cips", "Soslu", "Aromalı",
+                    "Susamlı", "Dolgulu", "Kaplı", "Draje", "Salam", "Helva", "Granola",
+                    "Müsli", "Puding", "Gofret", "Bisküvi", "Bar", "Pasta", "SürMix",
+                    "Quark", "Lokum", "Kek", "Kurabiye", "Kakaolu", "Ballı",
+                    "Parçacıklı", "Hindistan", "Tütsülenmiş", "Dolmalık"],
         "unit": "kg",
     },
-    "Rice": {
-        "kw":  ["Pirinç"],
-        "ex":  ["Kırık","Basmati","Un","Çorba","Pilav Yemeğe"],
+    "Bread": {
+        "keywords": ["Ekmek"],
+        "exclude": ["Hamburger", "Sandviç", "Tost", "Lavaş", "Tortilla", "Yufka",
+                    "Wasa", "Gevrek", "Margarin", "Üstü", "Kırıntı", "Çubuk", "Yer",
+                    "Şekersiz", "Kızarmış", "Form", "Grissini"],
         "unit": "kg",
     },
-    "Bulgur": {
-        "kw":  ["Bulgur"],
-        "ex":  ["Un"],
+    "Banana": {
+        "keywords": ["Muz"],
+        "exclude": ["Cipsi", "Kurutulmuş", "Çikolata", "Süt", "Puding", "Gofret",
+                    "Bisküvi", "Kek", "Bar", "Milkshake", "İçecek", "Kefir", "Kahve",
+                    "Kremalı", "Aromalı", "Maması", "Helva", "Frappe", "Granola",
+                    "Grissini", "Krema", "Püresi", "Sıkma", "Muzlu", "Püre", "Dovido",
+                    "Mixmey", "Kavanoz", "Dimes", "Kent"],
         "unit": "kg",
     },
-    "Pasta": {
-        "kw":  ["Makarna"],
-        "ex":  ["Knorr","Tortellini","Lazanya","Glutensiz","Organik"],
+    "Seasonal Fruit": {
+        "keywords": ["Çilek", "Kiraz", "Vişne", "Kayısı", "Şeftali", "Erik", "İncir",
+                     "Üzüm", "Nar", "Kivi", "Kavun", "Karpuz", "Elma", "Portakal",
+                     "Mandalina"],
+        "exclude": ["Muz", "Limon", "Avokado", "Suyu", "File", "Paket", "Kutu",
+                    "Dondurulmuş", "Püre", "Konserve", "Şeker", "Atıştırmalık",
+                    "Çikolata", "Aromalı", "Sakız", "Salam", "Reçel", "Gofret",
+                    "Pekmez", "Kurabiye", "İçecek", "Çay", "Şölen", "Ülker", "Lolipop",
+                    "Kefir", "Süt", "Peynir", "Milkshake", "Deterjan", "Sabun",
+                    "Şampuan", "Freedo", "Un", "Kek", "Cips", "Sosis", "Elseve",
+                    "Garnier", "Elidor", "Aroma", "Draje", "Pınar", "Nektarı",
+                    "Bisküvi", "Narbaharat", "Sirke", "Kuruyemiş", "Sleepy", "Sprey",
+                    "Merhem", "Sek", "Activia", "Kemal", "Kuru", "Sos", "Gevrek",
+                    "Parçacıklı", "Fanta", "Temizlik", "Mama", "Bar", "Kreması",
+                    "Protein", "Kuş", "Kağıt", "Pestil", "İçeceği", "Topu", "Kahve",
+                    "Algida", "Krem", "Yağı", "Bi", "Gazoz", "Narenciye", "Tada",
+                    "Brillant", "Somon", "Tsuyoi", "Kuru"],
+        "unit": "kg",
+    },
+    "Onion": {
+        "keywords": ["Soğan"],
+        "exclude": ["Taze", "Pırasa", "Toz", "Pul", "Sarımsak", "Halkası", "Cips",
+                    "Çerezza", "Eti", "Tatlı", "Ülker", "Cheetos", "Halka", "Kızartılmış"],
+        "unit": "kg",
+    },
+    "Eggplant / Zucchini": {
+        "keywords": ["Patlıcan", "Kabak"],
+        "exclude": ["Konserve", "Turşu", "Tatlısı", "Dondurulmuş", "Çekirdeği",
+                    "Çekirdek", "Dolma", "Salatası", "Börek", "Sabun", "Yağı",
+                    "Maması", "Granola", "Bar", "Liflı", "Köz", "Kuru", "Kurutulmuş",
+                    "Cekirdek", "Kızartma"],
+        "unit": "kg",
+    },
+    "Other Vegetables": {
+        "keywords": ["Taze Fasulye"],
+        "exclude": ["Konserve", "Dondurulmuş", "Zeytinyağ"],
         "unit": "kg",
     },
     "Olive Oil": {
-        "kw":  ["Zeytinyağı","Zeytinyağ"],
-        "ex":  ["Sabun","Şampuan","Sprey","Sirke","Zeytin "],
+        "keywords": ["Zeytinyağı", "Zeytinyağ"],
+        "exclude": ["Spreyı", "Sprey", "Zeytinyağlı", "Sabun", "Krem", "Sleepy",
+                    "Saç", "Şampuan"],
         "unit": "ml_or_L",
     },
-    "Olives": {
-        "kw":  ["Zeytin"],
-        "ex":  ["Yağ","Ezmesi","Sabun","Şampuan","Zeytinyağ"],
+    "Grissini": {
+        "keywords": ["Grissini"],
+        "exclude": ["Çikolatalı", "Dolgulu", "Çilek", "Muz", "Krema", "Kakaolu"],
         "unit": "kg",
-    },
-    "Tea": {
-        "kw":  ["Çay"],
-        "ex":  ["Bitki","Meyve","Ihlamur","Papatya","'lü","'li",
-                "Rahatlama","Kış","Poşet","Aromalı"],
-        "unit": "kg",
-        "require_weight": True,
-    },
-    "Tomato Paste": {
-        "kw":  ["Domates Salçası","Domates Salça"],
-        "ex":  ["Biber"],
-        "unit": "kg",
-    },
-    "Jam": {
-        "kw":  ["Reçel"],
-        "ex":  ["Diabetik","Ceviz Reçeli","Biber Reçeli","Havuç Reçeli"],
-        "unit": "kg",
-    },
-    "Honey": {
-        "kw":  ["Bal"],
-        "ex":  ["Pekmez","Sucuk","Yarma","Un","Mercimek","Mısır","Nohut",
-                "Balsamik","Kitir","Çorbalık","Koop . Yarma"],
-        "unit": "kg",
-    },
-    "Molasses": {
-        "kw":  ["Pekmez"],
-        "ex":  ["Sucuk","Tahin"],
-        "unit": "kg",
-    },
-    "Salt": {
-        "kw":  ["Tuz"],
-        "ex":  ["Tuzlu","Fıstık","Kurabiye","Ekmek","Zeytin","Bisküvi",
-                "Bulaşık","Salamura"],
-        "unit": "kg",
-    },
-    "Average Spices": {
-        "kw":  ["Baharat","Karabiber","Pul Biber"],
-        "ex":  ["Kurabiye","Bisküvi","Kraker","Cipsi","Tuzlu","Cips",
-                "Çerez","Patlak","Popcorn","Mısır","Kedi","Köpek"],
-        "unit": "kg",
-        "require_weight": True,
-        "max_price_per_kg": 2500,
-    },
-    "Linden / Herbal Tea": {
-        "kw":  ["Ihlamur","Papatya","Rahatlama","Kış Çayı","Bitki Çay"],
-        "ex":  ["Meyve"],
-        "unit": "piece",
     },
 }
 
 # ─────────────────────────────────────────────────────
-# 4.  UTILITIES
+# 5.  BASKENT-SPECIFIC EXTRA EXCLUDES
 # ─────────────────────────────────────────────────────
-
+BASKENT_EXTRA_EXCLUDE = {
+    "Fish": ["Çorbalık", "Tutmaç", "Çorba"],
+    "Chickpeas": ["Unu", "Unlu"],
+    "Eggplant / Zucchini": ["Ezme", "Marine", "Salamura"],
+    "Seasonal Fruit": ["Ekşisi", "Enginar", "Marmelat", "Kurutulmuş",
+                       "Üzüm", "Marine", "Pestil", "Tatlısı", "Hoşaf"],
+}
+def tr_lower(s: str) -> str:
+    return (s.replace("İ", "i").replace("I", "ı")
+             .replace("Ğ", "ğ").replace("Ü", "ü")
+             .replace("Ş", "ş").replace("Ö", "ö")
+             .replace("Ç", "ç").lower())
 def parse_price(s: str) -> float:
-    # Format: "1.234,00 TL"
-    s = str(s).replace("TL","").replace(".","").replace(",",".").strip()
+    s = str(s).replace("TL", "").replace(".", "").replace(",", ".").strip()
     try:    return float(s)
     except: return float("nan")
 
 def extract_weight_g(name: str):
-    # Baskent uses "GR" instead of standard "G"
     m = re.search(r"(\d+[,.]?\d*)\s*(KG|GR|G)\b", name.upper())
     if m:
-        v = float(m.group(1).replace(",","."))
+        v = float(m.group(1).replace(",", "."))
         return v * 1000 if m.group(2) == "KG" else v
     return None
 
@@ -227,11 +202,12 @@ def extract_volume_ml(name: str):
     n = re.sub(r"\blt\b", "L", name, flags=re.IGNORECASE).upper()
     mp = re.search(r"(\d+)\s*[xX]\s*(\d+[,.]?\d*)\s*(ML|L)\b", n)
     if mp:
-        count = int(mp.group(1)); each = float(mp.group(2).replace(",","."))
+        count = int(mp.group(1))
+        each  = float(mp.group(2).replace(",", "."))
         return count * each * (1000 if mp.group(3) == "L" else 1)
     m = re.search(r"(\d+[,.]?\d*)\s*(ML|L)\b", n)
     if m:
-        v = float(m.group(1).replace(",","."))
+        v = float(m.group(1).replace(",", "."))
         return v * 1000 if m.group(2) == "L" else v
     return None
 
@@ -240,50 +216,55 @@ def extract_piece_count(name: str):
     return int(m.group(1)) if m else None
 
 def shorten(name: str, max_len: int = 45) -> str:
-    return name if len(name) <= max_len else name[:max_len-1] + "…"
+    return name if len(name) <= max_len else name[:max_len - 1] + "…"
 
 # ─────────────────────────────────────────────────────
 # 5.  COMPUTE UNIT PRICE FOR ONE BASKET ITEM
 # ─────────────────────────────────────────────────────
-
 def get_unit_price(df: pd.DataFrame, product_label: str) -> dict:
     rule = MATCH_RULES[product_label]
 
-    if not rule["kw"]:
+    if not rule["keywords"]:
         return {"product_label": product_label, "unit": rule["unit"],
                 "unit_price": float("nan"), "n_products": 0, "matched_names": "N/A"}
 
-    sub  = df.copy()
-    kw_m = sub["Product Name"].apply(
-        lambda x: any(k.lower() in str(x).lower() for k in rule["kw"])
+    kw_mask = df["product_name"].apply(
+        lambda x: any(tr_lower(k) in tr_lower(str(x)) for k in rule["keywords"])
     )
-    sub  = sub[kw_m]
-    for exc in rule["ex"]:
-        sub = sub[~sub["Product Name"].str.contains(exc, case=False, na=False)]
+    sub = df[kw_mask].copy()
+
+    for exc in rule.get("exclude", []):
+        if sub.empty:
+            break
+        mask = sub["product_name"].apply(lambda x: tr_lower(exc) in tr_lower(str(x)))
+        sub = sub[~mask].reset_index(drop=True)
+
+    for exc in BASKENT_EXTRA_EXCLUDE.get(product_label, []):
+        if sub.empty:
+            break
+        mask = sub["product_name"].apply(lambda x: tr_lower(exc) in tr_lower(str(x)))
+        sub = sub[~mask].reset_index(drop=True)
 
     if sub.empty:
         return {"product_label": product_label, "unit": rule["unit"],
                 "unit_price": float("nan"), "n_products": 0, "matched_names": "—"}
 
-    sub  = sub.copy()
-    sub["price"] = sub["Price"].apply(parse_price)
-    sub  = sub.dropna(subset=["price"])
+    sub = sub.copy()
+    sub["_price"] = sub["price"].apply(parse_price)
+    sub = sub.dropna(subset=["_price"])
 
-    unit            = rule["unit"]
-    req_weight      = rule.get("require_weight", False)
-    min_price_per_u = rule.get("min_price_per_kg", 0)
-    prices = []
+    unit               = rule["unit"]
+    min_price_per_unit = rule.get("require_min_price_per_kg", rule.get("min_price_per_kg", 0))
+    prices             = []
 
     for _, row in sub.iterrows():
-        name  = str(row["Product Name"])
-        price = row["price"]
+        name  = str(row["product_name"])
+        price = row["_price"]
 
         if unit == "kg":
-            w = extract_weight_g(name)
-            if req_weight and not w:
-                continue
+            w     = extract_weight_g(name)
             per_u = price / (w / 1000) if w and w > 0 else price
-            if per_u < min_price_per_u:
+            if per_u < min_price_per_unit:
                 continue
             prices.append(per_u)
 
@@ -295,14 +276,12 @@ def get_unit_price(df: pd.DataFrame, product_label: str) -> dict:
             cnt = extract_piece_count(name)
             if cnt and cnt > 0:
                 prices.append(price / cnt)
-            elif product_label == "Linden / Herbal Tea":
-                cnt2 = extract_piece_count(name) or 20
-                prices.append((price / cnt2) / 0.002)
             else:
                 prices.append(price)
 
     avg   = sum(prices) / len(prices) if prices else float("nan")
-    names = "; ".join(shorten(n) for n in sub["Product Name"].tolist())
+    names = "; ".join(shorten(n) for n in sub["product_name"].tolist())
+
     return {"product_label": product_label, "unit": unit,
             "unit_price": round(avg, 2), "n_products": len(prices),
             "matched_names": names}
@@ -310,18 +289,13 @@ def get_unit_price(df: pd.DataFrame, product_label: str) -> dict:
 # ─────────────────────────────────────────────────────
 # 6.  COMPUTE ONE MONTH
 # ─────────────────────────────────────────────────────
-
 def compute_hunger_threshold(csv_path: str, date_label: str) -> pd.DataFrame:
-    df   = pd.read_csv(csv_path)
-    rows = []
+    df = pd.read_csv(csv_path, sep=",")
+    df.columns = ["product_name", "price"]
 
+    rows = []
     for category, product_label, unit_label, monthly_qty in FOOD_BASKET:
-        # Seasonal Fruit: not available at Baskent
-        if product_label == "Seasonal Fruit":
-            info = {"product_label": "Seasonal Fruit", "unit": "kg",
-                    "unit_price": float("nan"), "n_products": 0, "matched_names": "N/A"}
-        else:
-            info = get_unit_price(df, product_label)
+        info = get_unit_price(df, product_label)
 
         unit_price   = info["unit_price"]
         monthly_cost = unit_price * monthly_qty
@@ -345,7 +319,6 @@ def compute_hunger_threshold(csv_path: str, date_label: str) -> pd.DataFrame:
 # ─────────────────────────────────────────────────────
 # 7.  MAIN
 # ─────────────────────────────────────────────────────
-
 all_results  = []
 summary_rows = []
 
@@ -353,26 +326,25 @@ for date_label, path in FILES.items():
     df_month = compute_hunger_threshold(path, date_label)
     all_results.append(df_month)
 
-    total    = df_month["monthly_cost_TRY"].sum()
-    n_na     = df_month["avg_unit_price_TRY"].isna().sum()
+    total = df_month["monthly_cost_TRY"].sum()
+    n_na  = df_month["avg_unit_price_TRY"].isna().sum()
     summary_rows.append({
-        "date":               date_label,
+        "date":                 date_label,
         "hunger_threshold_TRY": round(total, 2),
-        "n_na_items":         int(n_na),
+        "n_na_items":           int(n_na),
     })
 
     print(f"\n{'='*100}")
-    print(f"  {date_label}  —  Partial Threshold (available items only): ₺{total:,.2f}  "
-          f"  [{n_na} items N/A]")
+    print(f"  {date_label}  —  Partial Threshold (available items only): ₺{total:,.2f}  [{n_na} items N/A]")
     print(f"{'='*100}")
     print(f"  {'Category':<22} {'Product':<30} {'Qty':>6} {'Unit Price':>12} {'Monthly Cost':>14}  "
           f"{'N':>4}  Matched Products")
     print(f"  {'-'*22} {'-'*30} {'-'*6} {'-'*12} {'-'*14}  {'-'*4}  {'-'*40}")
     for _, r in df_month.iterrows():
         names_preview = str(r["matched_products"])
-        names_preview = names_preview[:60]+"…" if len(names_preview) > 60 else names_preview
-        price_str = f"₺{r['avg_unit_price_TRY']:>9,.2f}" if pd.notna(r['avg_unit_price_TRY']) else "       N/A"
-        cost_str  = f"₺{r['monthly_cost_TRY']:>11,.2f}" if pd.notna(r['monthly_cost_TRY']) else "         N/A"
+        names_preview = names_preview[:60] + "…" if len(names_preview) > 60 else names_preview
+        price_str = f"₺{r['avg_unit_price_TRY']:>9,.2f}" if pd.notna(r["avg_unit_price_TRY"]) else "       N/A"
+        cost_str  = f"₺{r['monthly_cost_TRY']:>11,.2f}"  if pd.notna(r["monthly_cost_TRY"])  else "         N/A"
         print(f"  {r['category']:<22} {r['product']:<30} {r['monthly_qty']:>6.1f} "
               f"  {price_str}   {cost_str}  "
               f"{r['n_matched']:>4}  {names_preview}")
@@ -387,7 +359,7 @@ print(f"  {'Date':<14} {'Partial Threshold':>18}  {'N/A Items':>10}  {'MoM Chang
 print(f"  {'-'*14} {'-'*18}  {'-'*10}  {'-'*12}")
 prev = None
 for _, r in summary_df.iterrows():
-    mom = f"{(r['hunger_threshold_TRY']-prev)/prev*100:+.1f}%" if prev else "—"
+    mom = f"{(r['hunger_threshold_TRY'] - prev) / prev * 100:+.1f}%" if prev else "—"
     print(f"  {r['date']:<14} ₺{r['hunger_threshold_TRY']:>16,.2f}  "
           f"{r['n_na_items']:>10}  {mom:>12}")
     prev = r["hunger_threshold_TRY"]
