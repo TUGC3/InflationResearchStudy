@@ -1,26 +1,3 @@
-"""
-Hunger Threshold — Multi-Market Aggregation Calculator
-====================================================
-
-Computes the canonical monthly hunger threshold by averaging
-prices across all markets for each basket item.
-
-Logic:
-  1. Each market × each product → monthly avg unit price (from each market's detail CSV)
-  2. For markets with multiple snapshots in the same month, snapshots are averaged
-        (e.g. Kale: Mar-01 + Mar-30 → single "Mar 2026" value)
-  3. Each product × each month → average unit price across markets that stock it
-        (N/A markets excluded)
-  4. Avg unit price × basket quantity → monthly cost
-  5. All items summed → hunger threshold for that month
-     ⚠ If any required basket item has no price in any market for that month,
-       the threshold is NOT computed — the month is skipped with a warning.
-
-Output:
-  - aggregate_detail.csv   : per-product monthly average price and cost
-  - aggregate_summary.csv  : monthly total hunger threshold (only complete months)
-"""
-
 import pandas as pd
 import re
 import os
@@ -92,29 +69,31 @@ def to_canon_month(date_str: str) -> str | None:
 
 # ── 3. FOOD BASKET (qty per month) ──────────────────────
 FOOD_BASKET = [
-    # ── Dairy Products ──────────────────────────────────
-    ("Dairy Products",   "Yogurt",                       "Kg",    59.7),
-    ("Dairy Products",   "White Cheese",                 "Kg",     5.3),
-    # ── Meat and Protein ────────────────────────────────
-    ("Meat and Protein", "Cubed Meat / Lamb Meat",       "Kg",     3.3),
-    ("Meat and Protein", "Chicken",                      "Kg",     7.0),
-    ("Meat and Protein", "Fish",                         "Kg",     5.1),
-    ("Meat and Protein", "Eggs",                         "Piece", 60.0),
-    # ── Legumes ─────────────────────────────────────────
-    ("Legumes",          "Chickpeas",                    "Kg",     5.6),
-    # ── Nuts and Seeds ──────────────────────────────────
-    ("Nuts and Seeds",   "Walnut / Hazelnut / Peanut",   "Kg",     2.7),
-    # ── Grains ──────────────────────────────────────────
-    ("Grains",           "Bread",                        "Kg",    18.0),
-    # ── Fruits ──────────────────────────────────────────
-    ("Fruits",           "Banana",                       "Kg",    16.7),
-    ("Fruits",           "Seasonal Fruit",               "Kg",    12.9),
-    # ── Vegetables ──────────────────────────────────────
-    ("Vegetables",       "Onion",                        "Kg",    18.0),
-    ("Vegetables",       "Eggplant / Zucchini",          "Kg",    34.7),
-    ("Vegetables",       "Other Vegetables",             "Kg",    14.8),
-    # ── Oils ────────────────────────────────────────────
-    ("Oils",             "Olive Oil",                    "Liter",  1.0),
+    # ── Dairy Products ──────────────────────────
+    ("Dairy Products",      "Yogurt",                             "Kg",      59.7),
+    ("Dairy Products",      "White Cheese",                       "Kg",      5.7),
+    # ── Meat and Protein ────────────────────────
+    ("Meat and Protein",      "Cubed Meat / Lamb Meat",             "Kg",      4.6),
+    ("Meat and Protein",      "Chicken",                            "Kg",      10.3),
+    ("Meat and Protein",      "Fish",                               "Kg",      6.9),
+    ("Meat and Protein",      "Eggs",                               "Piece",   120.0),
+    # ── Legumes ─────────────────────────────────
+    ("Legumes",      "Chickpeas",                          "Kg",      1.8),
+    # ── Nuts and Seeds ──────────────────────────
+    ("Nuts and Seeds",      "Walnut / Hazelnut / Peanut",         "Kg",      2.7),
+    # ── Grains ──────────────────────────────────
+    ("Grains",      "Bread",                              "Kg",      18.0),
+    # ── Fruits ──────────────────────────────────
+    ("Fruits",      "Banana",                             "Kg",      16.7),
+    ("Fruits",      "Seasonal Fruit",                     "Kg",      12.9),
+    # ── Vegetables ──────────────────────────────
+    ("Vegetables",      "Onion",                              "Kg",      18.0),
+    ("Vegetables",      "Eggplant / Zucchini",                "Kg",      23.1),
+    ("Vegetables",      "Other Vegetables",                   "Kg",      11.8),
+    # ── Oils ────────────────────────────────────
+    ("Oils",      "Olive Oil",                          "Liter",   1.1),
+    # ── Grissini ────────────────────────────────────
+    ("Other Food Products", "Grissini", "Kg", 2.1),
 ]
 
 BASKET_QTY      = {p: qty for _, p, _, qty in FOOD_BASKET}
