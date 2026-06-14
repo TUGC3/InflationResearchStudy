@@ -475,7 +475,7 @@ def calculate_turkey_inflation(
         "date": today_str,
         "n_stores": len(stores_today),
         "n_products_raw": n_before,
-        "n_products_deduped": len(df_current),
+        "n_products_deduped": int(df_current[["canonical_key", "tuik_category"]].drop_duplicates().shape[0]),
         "basket_coverage_pct": round(coverage_pct, 2),
     }
     for code, cnt in category_store_counts.items():
