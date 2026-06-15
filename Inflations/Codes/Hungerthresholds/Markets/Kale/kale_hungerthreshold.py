@@ -67,7 +67,8 @@ MATCH_RULES = {
                     "Bulyon", "Salam", "Pilav", "Cips", "Çeşni", "Baharat", "Çorba",
                     "Jambon", "Çabuk", "Yumurta", "Tavuk Göğsü", "Püre", "Pouch",
                     "Ödül", "Izgara", "Pane", "Harcı", "Tavuk Göğüsü", "Ördeği",
-                    "Oyuncak", "Hipp", "Suyu", "Mr", "Burcu", "Mister", "Köri", "Teriyaki","Bonisa","Harçı","Schnitzel"],
+                    "Oyuncak", "Hipp", "Suyu", "Mr", "Burcu", "Mister", "Köri",
+                    "Teriyaki", "Bonisa", "Harçı", "Schnitzel"],
         "unit": "kg",
     },
     "Fish": {
@@ -76,7 +77,8 @@ MATCH_RULES = {
                     "Kraker", "Çikolata", "Şeker", "Mama", "Tava", "Hayvan", "Biftek",
                     "Pouch", "Piliç", "Zeytinyağlı", "Çıtır", "Ton", "Maşa", "Izgara",
                     "Dardanel", "Kaşık", "Köfte", "Whiskas", "Dreamies", "Ödül",
-                    "Onigiri", "Sushida", "Fish Finger", "Mister No", "Yem", "Kolonya","Bonisa"],
+                    "Onigiri", "Sushida", "Fish Finger", "Mister No", "Yem", "Kolonya",
+                    "Bonisa"],
         "unit": "kg",
     },
     "Eggs": {
@@ -107,7 +109,7 @@ MATCH_RULES = {
         "exclude": ["Hamburger", "Sandviç", "Tost", "Lavaş", "Tortilla", "Yufka",
                     "Wasa", "Gevrek", "Margarin", "Üstü", "Kırıntı", "Çubuk", "Yer",
                     "Şekersiz", "Kızarmış", "Form", "Grissini", "Ekmekli", "Kızartma",
-                    "Makine", "Makina","Un","Unu"],
+                    "Makine", "Makina", "Un", "Unu"],
         "unit": "kg",
     },
     "Banana": {
@@ -131,22 +133,21 @@ MATCH_RULES = {
             "Suyu", "Nektar", "Gazoz", "İçecek", "İçeceği", "Çay", "Kahve", "Kefir",
             "Ml", "Lt", "Litre", "Meysu", "Fanta", "Dimes", "Yedigün", "Erikli",
             "Süt", "Yoğurt", "Peynir", "Danone", "Activia", "Dr.Oetker", "Dr. Oetker",
-            "Pınar", "Salam", "Sucuk", "Köfte", "Füme", "Sosis","Falım","Şölen","Karışık","Sleepy",
-            "Çikolata", "Şeker", "Reçel", "Gofret", "Bisküvi", "Büskivi", "Kurabiye","Papilla",
-            "Kek", "Bar", "Kreması", "Puding", "Dondurma", "Helva", "Lokum", "Draje",
-            "Sakız", "Pestil", "Protein", "Granola", "Gevrek", "Nestle", "Oreo", "Ülker",
-            "Mayonez", "Ketçap", "Sos", "Sirke", "Salça", "Baharat", "Aroma", "Aromalı",
-            "Börek", "Mantı", "Un", "Nişasta",
-            "Deterjan", "Sabun", "Şampuan", "Torbası", "Çöp", "Temizlik", "Sprey",
-            "Jeli", "Serum", "Fırçası", "Çamaşır", "Garnier", "Sensodyne", "Koroplast",
-            "Ernet", "L'Oreal",
-            "Mama", "Maması", "Bebek", "Kedi", "Köpek", "Evcil", "Ödül", "Pouch",
-            "Dondurulmuş", "Konserve", "Kutu", "Paket",
-            "Kuru", "Kurutulmuş", "Bağdat", "İçim",
-            "Verita", "Fersan", "Öncü", "Züber", "Lipton", "Jacobs", "Helmann",
-            "Superfresh", "Master Farm", "Yer Elması", "Enginar", "Avokado", "Limon",
-            "Muz", "File", "Püre", "Pekmez", "Kraker", "Merhem", "Organik", "Krem", "Ozmo",
-            "Eti", "Orsev", "Domestos", "Torku", "Parex", "Çınar", "Bonisa", "Çiçek",
+            "Pınar", "Salam", "Sucuk", "Köfte", "Füme", "Sosis", "Falım", "Şölen",
+            "Karışık", "Sleepy", "Çikolata", "Şeker", "Reçel", "Gofret", "Bisküvi",
+            "Büskivi", "Kurabiye", "Papilla", "Kek", "Bar", "Kreması", "Puding",
+            "Dondurma", "Helva", "Lokum", "Draje", "Sakız", "Pestil", "Protein",
+            "Granola", "Gevrek", "Nestle", "Oreo", "Ülker", "Mayonez", "Ketçap",
+            "Sos", "Sirke", "Salça", "Baharat", "Aroma", "Aromalı", "Börek", "Mantı",
+            "Un", "Nişasta", "Deterjan", "Sabun", "Şampuan", "Torbası", "Çöp",
+            "Temizlik", "Sprey", "Jeli", "Serum", "Fırçası", "Çamaşır", "Garnier",
+            "Sensodyne", "Koroplast", "Ernet", "L'Oreal", "Mama", "Maması", "Bebek",
+            "Kedi", "Köpek", "Evcil", "Ödül", "Pouch", "Dondurulmuş", "Konserve",
+            "Kutu", "Paket", "Kuru", "Kurutulmuş", "Bağdat", "İçim", "Verita",
+            "Fersan", "Öncü", "Züber", "Lipton", "Jacobs", "Helmann", "Superfresh",
+            "Master Farm", "Yer Elması", "Enginar", "Avokado", "Limon", "Muz", "File",
+            "Püre", "Pekmez", "Kraker", "Merhem", "Organik", "Krem", "Ozmo", "Eti",
+            "Orsev", "Domestos", "Torku", "Parex", "Çınar", "Bonisa", "Çiçek",
             "Çiçeği", "Zeytin", "First", "Islak", "Kokulu", "Özü", "Yayla", "Kent",
             "Perwoll", "Meze", "Su", "Sap", "Uludağ", "Turşu", "Kuş", "Ezici",
             "Koleston", "Diş", "Kız", "Cappy", "Köme",
@@ -159,7 +160,7 @@ MATCH_RULES = {
                     "Halka", "Kızartılmış", "Frenk", "Kurutulmuş", "Aromalı", "Kraker",
                     "Küp", "Bebek", "Çerez", "Kaplamalı", "Kuru", "Tozu", "Dondurulmuş",
                     "Kroket", "Lahmacun", "Superfresh", "Peynir", "Ruffles", "Ruflles",
-                    "Nutzz", "Çizi", "Baharat", "Cipsi", "Eti Crax", "Tadım","Krema"],
+                    "Nutzz", "Çizi", "Baharat", "Cipsi", "Eti Crax", "Tadım", "Krema"],
         "unit": "kg",
     },
     "Eggplant / Zucchini": {
@@ -169,7 +170,7 @@ MATCH_RULES = {
                     "Maması", "Granola", "Bar", "Liflı", "Köz", "Kuru", "Kurutulmuş",
                     "Kızartma", "Ezme", "Salata", "Boya", "Çorba", "Meze",
                     "Loofah", "Lifi", "Banyo", "Vücut", "Eldiven", "Karışımı",
-                    "İç Kabak", "Peyman", "Koleston","Nohut"],
+                    "İç Kabak", "Peyman", "Koleston", "Nohut"],
         "unit": "kg",
     },
     "Other Vegetables": {
@@ -226,7 +227,7 @@ def extract_weight_g(name: str):
     if m:
         v = float(m.group(1) + m.group(2))
         return v * 1000 if m.group(3).lower() == 'kg' else v
-    # 2) Decimal comma for KG: "1,5 kg", "2,5 kg"
+    # 2) Decimal comma for KG: "1,5 kg"
     m = re.search(r'(\d+),(\d{1,2})\s*(kg|Kg|KG)\b', name)
     if m:
         return float(m.group(1) + '.' + m.group(2)) * 1000
@@ -266,7 +267,8 @@ def get_unit_price(df: pd.DataFrame, product_label: str) -> dict:
     rule = MATCH_RULES[product_label]
 
     if not rule['keywords']:
-        return {'unit_price': float('nan'), 'n_products': 0, 'matched_names': 'N/A'}
+        return {'avg_unit_price': float('nan'), 'median_unit_price': float('nan'),
+                'n_products': 0, 'matched_names': 'N/A'}
 
     mask = df['name'].apply(
         lambda x: any(k.lower() in str(x).lower() for k in rule['keywords'])
@@ -277,7 +279,8 @@ def get_unit_price(df: pd.DataFrame, product_label: str) -> dict:
         sub = sub[~sub['name'].str.contains(re.escape(exc), case=False, na=False)]
 
     if sub.empty:
-        return {'unit_price': float('nan'), 'n_products': 0, 'matched_names': '—'}
+        return {'avg_unit_price': float('nan'), 'median_unit_price': float('nan'),
+                'n_products': 0, 'matched_names': '—'}
 
     unit  = rule['unit']
     min_p = rule.get('min_price_per_kg', 0)
@@ -315,10 +318,12 @@ def get_unit_price(df: pd.DataFrame, product_label: str) -> dict:
             else:
                 prices.append(price)
 
-    avg   = sum(prices) / len(prices) if prices else float('nan')
-    names = '; '.join(str(r['name'])[:45] + ('…' if len(str(r['name'])) > 45 else '')
-                      for _, r in sub.iterrows())
-    return {'unit_price': round(avg, 2), 'n_products': len(prices), 'matched_names': names}
+    avg    = sum(prices) / len(prices) if prices else float('nan')
+    median = float(pd.Series(prices).median()) if prices else float('nan')
+    names  = '; '.join(str(r['name'])[:45] + ('…' if len(str(r['name'])) > 45 else '')
+                       for _, r in sub.iterrows())
+    return {'avg_unit_price': round(avg, 2), 'median_unit_price': round(median, 2),
+            'n_products': len(prices), 'matched_names': names}
 
 # ── 7. MONTHLY COMPUTATION ──────────────────────────────
 def compute_hunger_threshold(csv_path: str, date_label: str) -> pd.DataFrame:
@@ -326,18 +331,20 @@ def compute_hunger_threshold(csv_path: str, date_label: str) -> pd.DataFrame:
     rows = []
     for category, product_label, unit_label, monthly_qty in FOOD_BASKET:
         info         = get_unit_price(df, product_label)
-        unit_price   = info['unit_price']
-        monthly_cost = unit_price * monthly_qty
+        avg_price    = info['avg_unit_price']
+        median_price = info['median_unit_price']
         rows.append({
-            'date':               date_label,
-            'category':           category,
-            'product':            product_label,
-            'unit':               unit_label,
-            'monthly_qty':        monthly_qty,
-            'avg_unit_price_TRY': unit_price,
-            'monthly_cost_TRY':   round(monthly_cost, 2) if pd.notna(unit_price) else float('nan'),
-            'n_matched':          info['n_products'],
-            'matched_products':   info['matched_names'],
+            'date':                    date_label,
+            'category':                category,
+            'product':                 product_label,
+            'unit':                    unit_label,
+            'monthly_qty':             monthly_qty,
+            'avg_unit_price_TRY':      avg_price,
+            'avg_monthly_cost_TRY':    round(avg_price    * monthly_qty, 2) if pd.notna(avg_price)    else float('nan'),
+            'median_unit_price_TRY':   median_price,
+            'median_monthly_cost_TRY': round(median_price * monthly_qty, 2) if pd.notna(median_price) else float('nan'),
+            'n_matched':               info['n_products'],
+            'matched_products':        info['matched_names'],
         })
     return pd.DataFrame(rows)
 
@@ -351,22 +358,29 @@ for date_label, path in FILES.items():
         continue
 
     df_month = compute_hunger_threshold(path, date_label)
-    total    = df_month['monthly_cost_TRY'].sum()
-    n_na     = df_month['avg_unit_price_TRY'].isna().sum()
+    avg_total    = df_month['avg_monthly_cost_TRY'].sum()
+    median_total = df_month['median_monthly_cost_TRY'].sum()
+    n_na         = df_month['avg_unit_price_TRY'].isna().sum()
     all_results.append(df_month)
-    summary_rows.append({'date': date_label, 'hunger_threshold_TRY': round(total, 2), 'n_na': int(n_na)})
+    summary_rows.append({
+        'date':                        date_label,
+        'avg_hunger_threshold_TRY':    round(avg_total,    2),
+        'median_hunger_threshold_TRY': round(median_total, 2),
+        'n_na':                        int(n_na),
+    })
 
     na_note = f'  [{n_na} items N/A — not in catalog]' if n_na else ''
     print(f"\n{'='*100}")
-    print(f"  {date_label}  —  Hunger Threshold: ₺{total:,.2f}{na_note}")
+    print(f"  {date_label}  —  Avg: ₺{avg_total:,.2f}  |  Median: ₺{median_total:,.2f}{na_note}")
     print(f"{'='*100}")
-    print(f"  {'Category':<22} {'Product':<30} {'Qty':>5} {'Unit Price':>12} {'Monthly Cost':>14}  {'N':>4}  Matched Products")
-    print(f"  {'-'*22} {'-'*30} {'-'*5} {'-'*12} {'-'*14}  {'-'*4}  {'-'*40}")
+    print(f"  {'Category':<22} {'Product':<30} {'Qty':>5} {'Avg Price':>11} {'Avg Cost':>12} {'Med Price':>11} {'Med Cost':>12}  {'N':>4}")
+    print(f"  {'-'*22} {'-'*30} {'-'*5} {'-'*11} {'-'*12} {'-'*11} {'-'*12}  {'-'*4}")
     for _, r in df_month.iterrows():
-        preview   = str(r['matched_products'])[:60]
-        price_str = f"₺{r['avg_unit_price_TRY']:>9,.2f}" if pd.notna(r['avg_unit_price_TRY']) else '       N/A'
-        cost_str  = f"₺{r['monthly_cost_TRY']:>11,.2f}"  if pd.notna(r['monthly_cost_TRY'])  else '         N/A'
-        print(f"  {r['category']:<22} {r['product']:<30} {r['monthly_qty']:>5.1f}   {price_str}   {cost_str}  {r['n_matched']:>4}  {preview}")
+        ap = f"₺{r['avg_unit_price_TRY']:>8,.2f}"      if pd.notna(r['avg_unit_price_TRY'])     else "       N/A"
+        ac = f"₺{r['avg_monthly_cost_TRY']:>9,.2f}"    if pd.notna(r['avg_monthly_cost_TRY'])   else "        N/A"
+        mp = f"₺{r['median_unit_price_TRY']:>8,.2f}"   if pd.notna(r['median_unit_price_TRY'])  else "       N/A"
+        mc = f"₺{r['median_monthly_cost_TRY']:>9,.2f}" if pd.notna(r['median_monthly_cost_TRY']) else "        N/A"
+        print(f"  {r['category']:<22} {r['product']:<30} {r['monthly_qty']:>5.1f}  {ap}  {ac}  {mp}  {mc}  {r['n_matched']:>4}")
 
 if not all_results:
     print("No data to summarise.")
@@ -374,17 +388,19 @@ else:
     all_df     = pd.concat(all_results, ignore_index=True)
     summary_df = pd.DataFrame(summary_rows)
 
-    print('\n\n' + '='*55)
+    print('\n\n' + '='*65)
     print('  MONTHLY HUNGER THRESHOLD SUMMARY')
-    print('='*55)
-    print(f"  {'Date':<14} {'Threshold (₺)':>16}  {'MoM':>8}  {'N/A':>5}")
-    print(f"  {'-'*14} {'-'*16}  {'-'*8}  {'-'*5}")
-    prev = None
+    print('='*65)
+    print(f"  {'Date':<14} {'Avg (₺)':>16}  {'Median (₺)':>16}  {'MoM Avg':>8}  {'MoM Median':>10}  {'N/A':>5}")
+    print(f"  {'-'*14} {'-'*16}  {'-'*16}  {'-'*8}  {'-'*10}  {'-'*5}")
+    prev_avg = prev_med = None
     for _, r in summary_df.iterrows():
-        mom = f"{(r['hunger_threshold_TRY']-prev)/prev*100:+.1f}%" if prev else '—'
-        na  = f"[{r['n_na']} N/A]" if r['n_na'] else ''
-        print(f"  {r['date']:<14} ₺{r['hunger_threshold_TRY']:>14,.2f}  {mom:>8}  {na}")
-        prev = r['hunger_threshold_TRY']
+        mom_avg = f"{(r['avg_hunger_threshold_TRY']    - prev_avg) / prev_avg * 100:+.1f}%" if prev_avg else '—'
+        mom_med = f"{(r['median_hunger_threshold_TRY'] - prev_med) / prev_med * 100:+.1f}%" if prev_med else '—'
+        na      = f"[{r['n_na']} N/A]" if r['n_na'] else ''
+        print(f"  {r['date']:<14} ₺{r['avg_hunger_threshold_TRY']:>14,.2f}  ₺{r['median_hunger_threshold_TRY']:>14,.2f}  {mom_avg:>8}  {mom_med:>10}  {na}")
+        prev_avg = r['avg_hunger_threshold_TRY']
+        prev_med = r['median_hunger_threshold_TRY']
 
     all_df.to_csv(OUTPUT_DETAIL,  index=False)
     summary_df.to_csv(OUTPUT_SUMMARY, index=False)
