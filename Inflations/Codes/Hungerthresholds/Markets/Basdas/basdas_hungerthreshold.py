@@ -9,9 +9,9 @@ BASE_DIR = "/Users/efeyildirim/Downloads/Marketler/Basdas"
 
 FILES = {
     "Feb 2026": f"{BASE_DIR}/basdas_2026-02-28.csv",
-    "Mar 2026":    f"{BASE_DIR}/basdas_2026-03-31.csv",
-    "Apr 2026":    f"{BASE_DIR}/basdas_2026-04-29.csv",
-    "May 2026":    f"{BASE_DIR}/basdas_2026-05-31.csv",
+    "Mar 2026": f"{BASE_DIR}/basdas_2026-03-31.csv",
+    "Apr 2026": f"{BASE_DIR}/basdas_2026-04-29.csv",
+    "May 2026": f"{BASE_DIR}/basdas_2026-05-31.csv",
 }
 
 OUTPUT_DETAIL  = f"{BASE_DIR}/hunger_threshold_detail.csv"
@@ -142,7 +142,7 @@ MATCH_RULES = {
     "Onion": {
         "keywords": ["Soğan"],
         "exclude": ["Taze", "Pırasa", "Toz", "Pul", "Sarımsak", "Halkası", "Cips",
-                    "Çerezza", "Eti", "Tatlı", "Ülker", "Cheetos","Halka","Kızartılmış"],
+                    "Çerezza", "Eti", "Tatlı", "Ülker", "Cheetos", "Halka", "Kızartılmış"],
         "unit": "kg",
     },
     "Eggplant / Zucchini": {
@@ -198,7 +198,6 @@ FRUIT_NAMES    = ["Üzüm","Armut","Kiraz","Erik","Şeftali","Kayısı","İncir"
 # 5.  UTILITIES
 # ─────────────────────────────────────────────────────
 def parse_price(s) -> float:
-
     try:
         return float(s)
     except:
@@ -237,9 +236,10 @@ def shorten(name: str, max_len: int = 38) -> str:
 def get_unit_price(df: pd.DataFrame, product_label: str) -> dict:
     rule = MATCH_RULES[product_label]
 
-    if not rule["keywords"]:   # not stocked
+    if not rule["keywords"]:
         return {"product_label": product_label, "unit": rule["unit"],
-                "unit_price": float("nan"), "n_products": 0, "matched_names": "N/A"}
+                "avg_unit_price": float("nan"), "median_unit_price": float("nan"),
+                "n_products": 0, "matched_names": "N/A"}
 
     kw_mask = df["product_name"].apply(
         lambda x: any(k.lower() in str(x).lower() for k in rule["keywords"])
@@ -251,7 +251,8 @@ def get_unit_price(df: pd.DataFrame, product_label: str) -> dict:
 
     if sub.empty:
         return {"product_label": product_label, "unit": rule["unit"],
-                "unit_price": float("nan"), "n_products": 0, "matched_names": "—"}
+                "avg_unit_price": float("nan"), "median_unit_price": float("nan"),
+                "n_products": 0, "matched_names": "—"}
 
     sub = sub.copy()
     sub["_price"] = sub["price"].apply(parse_price)
@@ -283,12 +284,13 @@ def get_unit_price(df: pd.DataFrame, product_label: str) -> dict:
             else:
                 prices.append(price)
 
-    avg   = sum(prices) / len(prices) if prices else float("nan")
-    names = "; ".join(shorten(n) for n in sub["product_name"].tolist())
+    avg    = sum(prices) / len(prices) if prices else float("nan")
+    median = float(pd.Series(prices).median()) if prices else float("nan")
+    names  = "; ".join(shorten(n) for n in sub["product_name"].tolist())
 
     return {"product_label": product_label, "unit": unit,
-            "unit_price": round(avg, 2), "n_products": len(prices),
-            "matched_names": names}
+            "avg_unit_price": round(avg, 2), "median_unit_price": round(median, 2),
+            "n_products": len(prices), "matched_names": names}
 
 
 def get_seasonal_fruit_price(df: pd.DataFrame) -> dict:
@@ -308,11 +310,13 @@ def get_seasonal_fruit_price(df: pd.DataFrame) -> dict:
         w = extract_weight_g(str(row["product_name"]))
         prices.append(row["_price"] / (w / 1000) if w and w > 0 else row["_price"])
 
-    avg   = sum(prices) / len(prices) if prices else float("nan")
-    names = "; ".join(shorten(n) for n in sub["product_name"].tolist())
+    avg    = sum(prices) / len(prices) if prices else float("nan")
+    median = float(pd.Series(prices).median()) if prices else float("nan")
+    names  = "; ".join(shorten(n) for n in sub["product_name"].tolist())
+
     return {"product_label": "Seasonal Fruit", "unit": "kg",
-            "unit_price": round(avg, 2), "n_products": len(prices),
-            "matched_names": names}
+            "avg_unit_price": round(avg, 2), "median_unit_price": round(median, 2),
+            "n_products": len(prices), "matched_names": names}
 
 # ─────────────────────────────────────────────────────
 # 7.  COMPUTE ONE MONTH
@@ -328,23 +332,26 @@ def compute_hunger_threshold(csv_path: str, date_label: str) -> pd.DataFrame:
         else:
             info = get_unit_price(df, product_label)
 
-        unit_price   = info["unit_price"]
-        monthly_cost = unit_price * monthly_qty
+        avg_price    = info["avg_unit_price"]
+        median_price = info["median_unit_price"]
 
         rows.append({
-            "date":               date_label,
-            "category":           category,
-            "product":            product_label,
-            "unit":               unit_label,
-            "monthly_qty":        monthly_qty,
-            "avg_unit_price_TRY": unit_price,
-            "monthly_cost_TRY":   round(monthly_cost, 2),
-            "n_matched":          info["n_products"],
-            "matched_products":   info["matched_names"],
+            "date":                    date_label,
+            "category":                category,
+            "product":                 product_label,
+            "unit":                    unit_label,
+            "monthly_qty":             monthly_qty,
+            "avg_unit_price_TRY":      avg_price,
+            "avg_monthly_cost_TRY":    round(avg_price    * monthly_qty, 2) if pd.notna(avg_price)    else float("nan"),
+            "median_unit_price_TRY":   median_price,
+            "median_monthly_cost_TRY": round(median_price * monthly_qty, 2) if pd.notna(median_price) else float("nan"),
+            "n_matched":               info["n_products"],
+            "matched_products":        info["matched_names"],
         })
 
     result = pd.DataFrame(rows)
-    result["monthly_cost_TRY"] = pd.to_numeric(result["monthly_cost_TRY"], errors="coerce")
+    result["avg_monthly_cost_TRY"]    = pd.to_numeric(result["avg_monthly_cost_TRY"],    errors="coerce")
+    result["median_monthly_cost_TRY"] = pd.to_numeric(result["median_monthly_cost_TRY"], errors="coerce")
     return result
 
 # ─────────────────────────────────────────────────────
@@ -356,37 +363,42 @@ summary_rows = []
 for date_label, path in FILES.items():
     df_month = compute_hunger_threshold(path, date_label)
     all_results.append(df_month)
-    total = df_month["monthly_cost_TRY"].sum()
-    summary_rows.append({"date": date_label, "hunger_threshold_TRY": round(total, 2)})
+
+    avg_total    = df_month["avg_monthly_cost_TRY"].sum()
+    median_total = df_month["median_monthly_cost_TRY"].sum()
+    summary_rows.append({
+        "date":                        date_label,
+        "avg_hunger_threshold_TRY":    round(avg_total,    2),
+        "median_hunger_threshold_TRY": round(median_total, 2),
+    })
 
     print(f"\n{'='*100}")
-    print(f"  {date_label}  —  Hunger Threshold: ₺{total:,.2f}")
+    print(f"  {date_label}  —  Avg: ₺{avg_total:,.2f}  |  Median: ₺{median_total:,.2f}")
     print(f"{'='*100}")
-    print(f"  {'Category':<22} {'Product':<30} {'Qty':>6} {'Unit Price':>12} {'Monthly Cost':>14}  "
-          f"{'N':>4}  Matched Products")
-    print(f"  {'-'*22} {'-'*30} {'-'*6} {'-'*12} {'-'*14}  {'-'*4}  {'-'*40}")
+    print(f"  {'Category':<22} {'Product':<30} {'Qty':>6} {'Avg Price':>11} {'Avg Cost':>12} {'Med Price':>11} {'Med Cost':>12}  {'N':>4}")
+    print(f"  {'-'*22} {'-'*30} {'-'*6} {'-'*11} {'-'*12} {'-'*11} {'-'*12}  {'-'*4}")
     for _, r in df_month.iterrows():
-        names_preview = str(r["matched_products"])
-        names_preview = names_preview[:60] + "…" if len(names_preview) > 60 else names_preview
-        price_str = f"₺{r['avg_unit_price_TRY']:>9,.2f}" if pd.notna(r["avg_unit_price_TRY"]) else "       N/A"
-        cost_str  = f"₺{r['monthly_cost_TRY']:>11,.2f}"  if pd.notna(r["monthly_cost_TRY"])  else "         N/A"
-        print(f"  {r['category']:<22} {r['product']:<30} {r['monthly_qty']:>6.1f} "
-              f"  {price_str}   {cost_str}  "
-              f"{r['n_matched']:>4}  {names_preview}")
+        ap = f"₺{r['avg_unit_price_TRY']:>8,.2f}"      if pd.notna(r['avg_unit_price_TRY'])     else "       N/A"
+        ac = f"₺{r['avg_monthly_cost_TRY']:>9,.2f}"    if pd.notna(r['avg_monthly_cost_TRY'])   else "        N/A"
+        mp = f"₺{r['median_unit_price_TRY']:>8,.2f}"   if pd.notna(r['median_unit_price_TRY'])  else "       N/A"
+        mc = f"₺{r['median_monthly_cost_TRY']:>9,.2f}" if pd.notna(r['median_monthly_cost_TRY']) else "        N/A"
+        print(f"  {r['category']:<22} {r['product']:<30} {r['monthly_qty']:>6.1f}  {ap}  {ac}  {mp}  {mc}  {r['n_matched']:>4}")
 
 all_df     = pd.concat(all_results, ignore_index=True)
 summary_df = pd.DataFrame(summary_rows)
 
-print("\n\n" + "="*55)
+print("\n\n" + "="*65)
 print("  MONTHLY HUNGER THRESHOLD SUMMARY")
-print("="*55)
-print(f"  {'Date':<14} {'Threshold (₺)':>16}  {'MoM Change':>12}")
-print(f"  {'-'*14} {'-'*16}  {'-'*12}")
-prev = None
+print("="*65)
+print(f"  {'Date':<14} {'Avg (₺)':>16}  {'Median (₺)':>16}  {'MoM Avg':>8}  {'MoM Median':>10}")
+print(f"  {'-'*14} {'-'*16}  {'-'*16}  {'-'*8}  {'-'*10}")
+prev_avg = prev_med = None
 for _, r in summary_df.iterrows():
-    mom = f"{(r['hunger_threshold_TRY'] - prev) / prev * 100:+.1f}%" if prev else "—"
-    print(f"  {r['date']:<14} ₺{r['hunger_threshold_TRY']:>14,.2f}  {mom:>12}")
-    prev = r["hunger_threshold_TRY"]
+    mom_avg = f"{(r['avg_hunger_threshold_TRY']    - prev_avg) / prev_avg * 100:+.1f}%" if prev_avg else "—"
+    mom_med = f"{(r['median_hunger_threshold_TRY'] - prev_med) / prev_med * 100:+.1f}%" if prev_med else "—"
+    print(f"  {r['date']:<14} ₺{r['avg_hunger_threshold_TRY']:>14,.2f}  ₺{r['median_hunger_threshold_TRY']:>14,.2f}  {mom_avg:>8}  {mom_med:>10}")
+    prev_avg = r["avg_hunger_threshold_TRY"]
+    prev_med = r["median_hunger_threshold_TRY"]
 
 all_df.to_csv(OUTPUT_DETAIL,  index=False)
 summary_df.to_csv(OUTPUT_SUMMARY, index=False)
