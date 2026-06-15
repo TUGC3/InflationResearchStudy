@@ -2,13 +2,20 @@
 turkey_inflation.py — Turkey-Wide Daily Inflation Calculator
 
 Aggregates all tracked data sources in the InflationResearchStudy codebase across
-six sectors and computes three inflation metrics identical to those in Migros/inflation.py:
+nine sectors and computes the following inflation metrics:
 
   1. Basic Inflation   – basket-level price index change (%)
                         (sum_current / sum_past - 1) × 100
   2. Average Inflation – arithmetic mean of per-product percentage changes
   3. TUIK Weighted Avg – weighted average using TÜİK 2026 COICOP basket weights,
                          normalised to the TUIK categories present in the data
+  4. Median Inflation  – median of per-product percentage changes
+                         (typically 0% — most products show no price change
+                         between snapshots). Also reported:
+                           - median_inflation_nonzero: median among products
+                             that actually repriced
+                           - pct_increased / pct_decreased / pct_unchanged:
+                             share of products in each direction
 
 Sectors and TUIK groups covered:
   Grocery markets  → group 01  (Gıda ve alkolsüz içecekler)
@@ -16,7 +23,10 @@ Sectors and TUIK groups covered:
   Rent / housing   → group 04  (Konut, su, elektrik, gaz)
   HomeGoods +
   Construction     → group 05  (Mobilya, ev aletleri)
+  Health           → group 06  (Sağlık, monthly)
   Tech products    → group 08  (Bilgi ve iletişim)
+  Travel/Tourism +
+  Restaurants      → group 11  (Lokantalar ve konaklama hizmetleri)
   Cosmetics        → group 13  (Kişisel bakım)
 
 Deduplication:
@@ -328,12 +338,20 @@ def _rent_city_prices(date_str: str) -> dict[str, float]:
     return {k: sum(v) / len(v) for k, v in city_prices.items()}
 
 
+_RENT_MIN_COMMON_CITIES = 3
+
+
 def _rent_relative(current_str: str, past_str: str) -> float | None:
     cur_city = _rent_city_prices(current_str)
     past_city = _rent_city_prices(past_str)
     common = set(cur_city) & set(past_city)
     if not common:
         return None
+    if len(common) < _RENT_MIN_COMMON_CITIES:
+        logger.warning(
+            "rent_inflation (%s vs %s) based on only %d common city/cities: %s — result may not be representative",
+            current_str, past_str, len(common), sorted(common),
+        )
     mean_cur  = sum(cur_city[c]  for c in common) / len(common)
     mean_past = sum(past_city[c] for c in common) / len(common)
     if mean_past == 0:
@@ -357,19 +375,37 @@ def _coverage_report(present_codes: list[str]) -> tuple[float, str]:
 
 # ── Core metric computation ───────────────────────────────────────────────────
 
+def _dist_stats(rel: pd.Series) -> dict:
+    """Distribution stats for a series of per-product percentage changes.
+
+    median_nonzero captures the typical magnitude of change among products
+    that actually repriced, since most products show 0% change between
+    snapshots and dominate the plain median.
+    """
+    if rel.empty:
+        return {"median_nonzero": None, "pct_increased": None, "pct_decreased": None, "pct_unchanged": None}
+    nonzero = rel[rel != 0]
+    return {
+        "median_nonzero": float(nonzero.median()) if not nonzero.empty else None,
+        "pct_increased": float((rel > 0).mean() * 100),
+        "pct_decreased": float((rel < 0).mean() * 100),
+        "pct_unchanged": float((rel == 0).mean() * 100),
+    }
+
+
 def _compute_metrics(
     df_current: pd.DataFrame,
     df_past: pd.DataFrame,
-) -> tuple[pd.DataFrame, float | None, float | None, float | None, dict]:
+) -> tuple[pd.DataFrame, float | None, float | None, float | None, float | None, dict, dict]:
     if df_past.empty:
-        return pd.DataFrame(), None, None, None, {}
+        return pd.DataFrame(), None, None, None, None, {}, {}
 
     merge_keys = ["store", "canonical_key", "tuik_category", "sector"]
     past_sub = df_past[merge_keys + ["price"]].rename(columns={"price": "past_price"})
     matched = df_current.merge(past_sub, on=merge_keys, how="inner")
 
     if matched.empty:
-        return pd.DataFrame(), None, None, None, {}
+        return pd.DataFrame(), None, None, None, None, {}, {}
 
     # Relative change per (store, product): percentage form
     matched["relative"] = (matched["price"] / matched["past_price"] - 1) * 100
@@ -404,6 +440,12 @@ def _compute_metrics(
     valid_rel = product_rel["relative"].dropna()
     avg_inflation = float(valid_rel.mean()) if not valid_rel.empty else None
 
+    # median_inflation: median of per-product relatives
+    median_inflation = float(valid_rel.median()) if not valid_rel.empty else None
+
+    # Distribution stats: nonzero median + share increased/decreased/unchanged
+    dist_stats = _dist_stats(valid_rel)
+
     # tuik_weighted: category-level TUIK-weighted average
     cat_rel = product_rel.groupby("tuik_category")["relative"].mean()
     present_codes = list(cat_rel.dropna().index)
@@ -421,9 +463,16 @@ def _compute_metrics(
         s_basic = float((s_cur / s_past - 1) * 100) if s_past else None
         s_rel = product_rel.loc[product_rel["tuik_category"] == code, "relative"].dropna()
         s_avg = float(s_rel.mean()) if not s_rel.empty else None
-        sector_metrics[str(code)] = {"basic_index": s_basic, "avg_inflation": s_avg}
+        s_median = float(s_rel.median()) if not s_rel.empty else None
+        s_median_nonzero = _dist_stats(s_rel)["median_nonzero"]
+        sector_metrics[str(code)] = {
+            "basic_index": s_basic,
+            "avg_inflation": s_avg,
+            "median_inflation": s_median,
+            "median_inflation_nonzero": s_median_nonzero,
+        }
 
-    return product_rel, basic_index, avg_inflation, tuik_weighted, sector_metrics
+    return product_rel, basic_index, avg_inflation, median_inflation, tuik_weighted, sector_metrics, dist_stats
 
 
 # ── Main calculate function ───────────────────────────────────────────────────
@@ -459,7 +508,7 @@ def calculate_turkey_inflation(
     _OUT_DIR.mkdir(parents=True, exist_ok=True)
 
     intervals = (
-        {compare_date: compare_date}
+        {"compare": compare_date}
         if compare_date
         else {
             f"{days}d": (base_date - timedelta(days=days)).strftime("%Y-%m-%d")
@@ -473,6 +522,7 @@ def calculate_turkey_inflation(
 
     summary_row: dict = {
         "date": today_str,
+        "compare_date": compare_date,
         "n_stores": len(stores_today),
         "n_products_raw": n_before,
         "n_products_deduped": int(df_current[["canonical_key", "tuik_category"]].drop_duplicates().shape[0]),
@@ -501,12 +551,14 @@ def calculate_turkey_inflation(
 
         if df_past.empty:
             logger.info("  No past data for %s — skipping interval %s.", past_str, label)
-            for key in ["avg_inflation", "basic_index", "tuik_weighted_products",
+            for key in ["avg_inflation", "median_inflation", "median_inflation_nonzero",
+                        "pct_increased", "pct_decreased", "pct_unchanged",
+                        "basic_index", "tuik_weighted_products",
                         "tuik_weighted_full", "rent_inflation"]:
                 summary_row[f"{key}_{label}"] = None
             continue
 
-        product_rel, basic_idx, avg_inf, tuik_w_products, sector_metrics = _compute_metrics(df_current, df_past)
+        product_rel, basic_idx, avg_inf, median_inf, tuik_w_products, sector_metrics, dist_stats = _compute_metrics(df_current, df_past)
 
         # Attach per-product relative to detail frame
         if not product_rel.empty:
@@ -516,6 +568,11 @@ def calculate_turkey_inflation(
             detail_base = detail_base.merge(rel_col, on=["canonical_key", "tuik_category"], how="left")
 
         summary_row[f"avg_inflation_{label}"] = avg_inf
+        summary_row[f"median_inflation_{label}"] = median_inf
+        summary_row[f"median_inflation_nonzero_{label}"] = dist_stats.get("median_nonzero")
+        summary_row[f"pct_increased_{label}"] = dist_stats.get("pct_increased")
+        summary_row[f"pct_decreased_{label}"] = dist_stats.get("pct_decreased")
+        summary_row[f"pct_unchanged_{label}"] = dist_stats.get("pct_unchanged")
         summary_row[f"basic_index_{label}"] = basic_idx
         summary_row[f"tuik_weighted_products_{label}"] = tuik_w_products
 
@@ -540,6 +597,8 @@ def calculate_turkey_inflation(
         # Per-sector breakdown
         for code, m in sector_metrics.items():
             summary_row[f"avg_inflation_{code}_{label}"] = m["avg_inflation"]
+            summary_row[f"median_inflation_{code}_{label}"] = m["median_inflation"]
+            summary_row[f"median_inflation_nonzero_{code}_{label}"] = m["median_inflation_nonzero"]
             summary_row[f"basic_index_{code}_{label}"] = m["basic_index"]
         if rent_inf is not None:
             summary_row[f"avg_inflation_04_{label}"] = rent_inf
@@ -564,6 +623,7 @@ def calculate_turkey_inflation(
             df_existing = pd.read_csv(summary_file)
             df_existing = df_existing[df_existing["date"] != today_str]
             df_final = pd.concat([df_existing, df_new], ignore_index=True)
+            df_final = df_final.sort_values("date").reset_index(drop=True)
             df_final.to_csv(summary_file, index=False, encoding="utf-8")
         else:
             df_new.to_csv(summary_file, index=False, encoding="utf-8")
