@@ -1,65 +1,65 @@
-date,category,product,unit,monthly_qty,avg_unit_price_TRY,avg_monthly_cost_TRY,median_unit_price_TRY,median_monthly_cost_TRY,n_matched,matched_products
-Feb 2026,Dairy Products,Yogurt,Kg,59.7,71.21,4251.24,71.21,4251.24,2,Torku Yarım Yağlı Yoğurt 2 Kg; Torku Yarım Yağlı Yoğurt 750 Ml
-Feb 2026,Dairy Products,White Cheese,Kg,5.7,394.95,2251.22,399.95,2279.72,4,Tahsildaroğlu Lüx Klasik Beyaz Peynir…; Binnur Klasik Beyaz Peynir Kg; Sütaş Klasik Beyaz Peynir 3 Dilim 450…; Binnur Klasik Beyaz Peynir Kg
-Feb 2026,Meat and Protein,Cubed Meat / Lamb Meat,Kg,4.6,890.0,4094.0,890.0,4094.0,1,Dana Az Yağlı Kuşbaşı Kg
-Feb 2026,Meat and Protein,Chicken,Kg,10.3,110.0,1133.0,110.0,1133.0,2,Şenpiliç Kalçalı But Kg; Şenpiliç Piliç Bütün Poşet Kg
-Feb 2026,Meat and Protein,Fish,Kg,6.9,,,,,0,—
-Feb 2026,Meat and Protein,Eggs,Piece,120.0,10.0,1200.0,10.0,1200.0,1,Sarı Efe Çiftliği Gezen Tavuk Yumurta…
-Feb 2026,Legumes,Chickpeas,Kg,1.8,,,,,0,—
-Feb 2026,Nuts and Seeds,Walnut / Hazelnut / Peanut,Kg,2.7,,,,,0,—
-Feb 2026,Grains,Bread,Kg,18.0,,,,,0,—
-Feb 2026,Fruits,Banana,Kg,16.7,144.9,2419.83,144.9,2419.83,1,Muz İthal Kg
-Feb 2026,Fruits,Seasonal Fruit,Kg,12.9,171.17,2208.09,159.9,2062.71,8,Çilek Kg; Kavun Kg; Armut Santamaria Kg; Çilek Kg; Kivi Kg; Kavun Kg; Mayhoş Nar Kg; Armut Santamaria Kg
-Feb 2026,Vegetables,Onion,Kg,18.0,64.95,1169.1,64.95,1169.1,2,Soğan Yahnilik Adet; Soğan Beyaz Kg
-Feb 2026,Vegetables,Eggplant / Zucchini,Kg,23.1,133.28,3078.77,132.44,3059.36,6,Patlıcan Kg; Kabak Kg; Patlıcan Topan Kg; Patlıcan Kg; Patlıcan Topan Kg; Patlıcan Kg
-Feb 2026,Vegetables,Other Vegetables,Kg,11.8,,,,,0,—
-Feb 2026,Oils,Olive Oil,Liter,1.1,,,,,0,—
-Feb 2026,Other Food Products,Grissini,Kg,2.1,,,,,0,—
-Mar 2026,Dairy Products,Yogurt,Kg,59.7,67.46,4027.36,67.46,4027.36,2,Torku Yarım Yağlı Yoğurt 2 Kg; Torku Yarım Yağlı Yoğurt 750 Ml
-Mar 2026,Dairy Products,White Cheese,Kg,5.7,359.12,2046.98,399.95,2279.72,6,Tahsildaroğlu Asos Klasik Beyaz Peyni…; Tahsildaroğlu Lüx Klasik Beyaz Peynir…; Binnur Klasik Beyaz Peynir Kg; Sütaş Klasik Beyaz Peynir 3 Dilim 450…; Binnur Klasik Beyaz Peynir Kg; Sütaş Beyaz Peynir 500 Gr
-Mar 2026,Meat and Protein,Cubed Meat / Lamb Meat,Kg,4.6,890.0,4094.0,890.0,4094.0,1,Dana Az Yağlı Kuşbaşı Kg
-Mar 2026,Meat and Protein,Chicken,Kg,10.3,166.33,1713.2,115.0,1184.5,3,Şenpiliç Bonfile Kg; Şenpiliç Kalçalı But Kg; Şenpiliç Piliç Bütün Poşet Kg
-Mar 2026,Meat and Protein,Fish,Kg,6.9,,,,,0,—
-Mar 2026,Meat and Protein,Eggs,Piece,120.0,10.0,1200.0,10.0,1200.0,1,Sarı Efe Çiftliği Gezen Tavuk Yumurta…
-Mar 2026,Legumes,Chickpeas,Kg,1.8,,,,,0,—
-Mar 2026,Nuts and Seeds,Walnut / Hazelnut / Peanut,Kg,2.7,,,,,0,—
-Mar 2026,Grains,Bread,Kg,18.0,,,,,0,—
-Mar 2026,Fruits,Banana,Kg,16.7,164.9,2753.83,164.9,2753.83,1,Muz İthal Kg
-Mar 2026,Fruits,Seasonal Fruit,Kg,12.9,170.4,2198.16,164.9,2127.21,10,Çilek Kg; Çilek Kg; Kavun Kg; Armut Santamaria Kg; Çilek Kg; Kivi Kg; Armut Deveci Kg; Kavun Kg; Mayhoş Nar Kg; Armut Santamaria Kg
-Mar 2026,Vegetables,Onion,Kg,18.0,64.9,1168.2,64.9,1168.2,2,Soğan Yahnilik Adet; Soğan Beyaz Kg
-Mar 2026,Vegetables,Eggplant / Zucchini,Kg,23.1,105.73,2442.36,109.9,2538.69,6,Patlıcan Kg; Kabak Kg; Patlıcan Topan Kg; Patlıcan Kg; Patlıcan Topan Kg; Patlıcan Kg
-Mar 2026,Vegetables,Other Vegetables,Kg,11.8,,,,,0,—
-Mar 2026,Oils,Olive Oil,Liter,1.1,,,,,0,—
-Mar 2026,Other Food Products,Grissini,Kg,2.1,,,,,0,—
-Apr 2026,Dairy Products,Yogurt,Kg,59.7,69.95,4176.02,69.95,4176.02,1,Torku Yarım Yağlı Yoğurt 750 Ml
-Apr 2026,Dairy Products,White Cheese,Kg,5.7,318.7,1816.59,349.95,1994.71,4,Binnur Klasik Beyaz Peynir Kg; Sütaş Tam Yağlı Beyaz Peynir 900 Gr; Binnur Klasik Beyaz Peynir Kg; Sütaş Beyaz Peynir 500 Gr
-Apr 2026,Meat and Protein,Cubed Meat / Lamb Meat,Kg,4.6,879.95,4047.77,879.95,4047.77,1,Dana Az Yağlı Kuşbaşı Kg
-Apr 2026,Meat and Protein,Chicken,Kg,10.3,179.67,1850.6,125.0,1287.5,3,Şenpiliç Bonfile Kg; Şenpiliç Kalçalı But Kg; Şenpiliç Piliç Bütün Poşet Kg
-Apr 2026,Meat and Protein,Fish,Kg,6.9,,,,,0,—
-Apr 2026,Meat and Protein,Eggs,Piece,120.0,8.0,960.0,8.0,960.0,1,Sarı Efe Çiftliği Gezen Tavuk Yumurta…
-Apr 2026,Legumes,Chickpeas,Kg,1.8,,,,,0,—
-Apr 2026,Nuts and Seeds,Walnut / Hazelnut / Peanut,Kg,2.7,,,,,0,—
-Apr 2026,Grains,Bread,Kg,18.0,,,,,0,—
-Apr 2026,Fruits,Banana,Kg,16.7,,,,,0,—
-Apr 2026,Fruits,Seasonal Fruit,Kg,12.9,202.06,2606.57,174.9,2256.21,7,Şeftali Kg; Kayısı Kg; Kivi Kg; Armut Deveci Kg; Üzüm Red Globe Kg; Mayhoş Nar Kg; Armut Santamaria Kg
-Apr 2026,Vegetables,Onion,Kg,18.0,10.0,180.0,10.0,180.0,1,Soğan Beyaz Kg
-Apr 2026,Vegetables,Eggplant / Zucchini,Kg,23.1,39.9,921.69,39.9,921.69,2,Patlıcan Topan Kg; Patlıcan Topan Kg
-Apr 2026,Vegetables,Other Vegetables,Kg,11.8,,,,,0,—
-Apr 2026,Oils,Olive Oil,Liter,1.1,347.6,382.36,339.9,373.89,5,Poyraz Rivera Zeytinyağı Cam 1 Lt; Poyraz Rivera Zeytinyağı Cam 500 Ml; Poyraz Sızma Zeytinyağı Cam 500 Ml; Poyraz Sızma Zeytinyağı Cam 1 Lt; Poyraz Sızma Zeytinyağı Teneke 3 Lt
-Apr 2026,Other Food Products,Grissini,Kg,2.1,,,,,0,—
-May 2026,Dairy Products,Yogurt,Kg,59.7,67.46,4027.36,67.46,4027.36,2,Torku Yarım Yağlı Yoğurt 2 Kg; Torku Yarım Yağlı Yoğurt 750 Ml
-May 2026,Dairy Products,White Cheese,Kg,5.7,358.7,2044.59,404.95,2308.22,4,Binnur Klasik Beyaz Peynir Kg; Sütaş Klasik Beyaz Peynir 3 Dilim 450…; Binnur Klasik Beyaz Peynir Kg; Sütaş Beyaz Peynir 500 Gr
-May 2026,Meat and Protein,Cubed Meat / Lamb Meat,Kg,4.6,879.95,4047.77,879.95,4047.77,1,Dana Az Yağlı Kuşbaşı Kg
-May 2026,Meat and Protein,Chicken,Kg,10.3,99.99,1029.9,99.99,1029.9,2,Şenpiliç Kalçalı But Kg; Şenpiliç Piliç Bütün Poşet Kg
-May 2026,Meat and Protein,Fish,Kg,6.9,,,,,0,—
-May 2026,Meat and Protein,Eggs,Piece,120.0,10.0,1200.0,10.0,1200.0,1,Sarı Efe Çiftliği Gezen Tavuk Yumurta…
-May 2026,Legumes,Chickpeas,Kg,1.8,,,,,0,—
-May 2026,Nuts and Seeds,Walnut / Hazelnut / Peanut,Kg,2.7,,,,,0,—
-May 2026,Grains,Bread,Kg,18.0,,,,,0,—
-May 2026,Fruits,Banana,Kg,16.7,118.23,1974.44,109.9,1835.33,6,Muz Yerli Kg; Muz Yerli Kg; Muz Yerli Kg; Muz Yerli Kg; Muz Yerli Kg; Muz İthal Kg
-May 2026,Fruits,Seasonal Fruit,Kg,12.9,122.84,1584.64,112.43,1450.35,12,Karpuz Kg; Kiraz Kg; Erik Papaz Kg; Kavun Kg; Şeftali Kg; Kayısı Kg; Kivi Kg; Armut Deveci Kg; Kavun Kg; Üzüm Red Globe Kg; Mayhoş Nar Kg; Armut Santamaria Kg
-May 2026,Vegetables,Onion,Kg,18.0,10.0,180.0,10.0,180.0,1,Soğan Beyaz Kg
-May 2026,Vegetables,Eggplant / Zucchini,Kg,23.1,42.9,990.99,39.9,921.69,5,Patlıcan Kg; Kabak Kg; Patlıcan Topan Kg; Patlıcan Topan Kg; Patlıcan Kg
-May 2026,Vegetables,Other Vegetables,Kg,11.8,,,,,0,—
-May 2026,Oils,Olive Oil,Liter,1.1,,,,,0,—
-May 2026,Other Food Products,Grissini,Kg,2.1,,,,,0,—
+date,category,product,unit,monthly_qty,avg_unit_price_TRY,avg_monthly_cost_TRY,median_unit_price_TRY,median_monthly_cost_TRY,min_unit_price_TRY,min_monthly_cost_TRY,n_matched,matched_products
+Feb 2026,Dairy Products,Yogurt,Kg,59.7,71.21,4251.24,71.21,4251.24,69.95,4176.02,2,Torku Yarım Yağlı Yoğurt 2 Kg; Torku Yarım Yağlı Yoğurt 750 Ml
+Feb 2026,Dairy Products,White Cheese,Kg,5.7,394.95,2251.22,399.95,2279.72,279.95,1595.71,4,Tahsildaroğlu Lüx Klasik Beyaz Peynir…; Binnur Klasik Beyaz Peynir Kg; Sütaş Klasik Beyaz Peynir 3 Dilim 450…; Binnur Klasik Beyaz Peynir Kg
+Feb 2026,Meat and Protein,Cubed Meat / Lamb Meat,Kg,4.6,890.0,4094.0,890.0,4094.0,890.0,4094.0,1,Dana Az Yağlı Kuşbaşı Kg
+Feb 2026,Meat and Protein,Chicken,Kg,10.3,110.0,1133.0,110.0,1133.0,105.0,1081.5,2,Şenpiliç Kalçalı But Kg; Şenpiliç Piliç Bütün Poşet Kg
+Feb 2026,Meat and Protein,Fish,Kg,6.9,,,,,,,0,—
+Feb 2026,Meat and Protein,Eggs,Piece,120.0,10.0,1200.0,10.0,1200.0,10.0,1200.0,1,Sarı Efe Çiftliği Gezen Tavuk Yumurta…
+Feb 2026,Legumes,Chickpeas,Kg,1.8,,,,,,,0,—
+Feb 2026,Nuts and Seeds,Walnut / Hazelnut / Peanut,Kg,2.7,,,,,,,0,—
+Feb 2026,Grains,Bread,Kg,18.0,,,,,,,0,—
+Feb 2026,Fruits,Banana,Kg,16.7,144.9,2419.83,144.9,2419.83,144.9,2419.83,1,Muz İthal Kg
+Feb 2026,Fruits,Seasonal Fruit,Kg,12.9,171.17,2208.09,159.9,2062.71,49.99,644.87,8,Çilek Kg; Kavun Kg; Armut Santamaria Kg; Çilek Kg; Kivi Kg; Kavun Kg; Mayhoş Nar Kg; Armut Santamaria Kg
+Feb 2026,Vegetables,Onion,Kg,18.0,64.95,1169.1,64.95,1169.1,64.95,1169.1,2,Soğan Yahnilik Adet; Soğan Beyaz Kg
+Feb 2026,Vegetables,Eggplant / Zucchini,Kg,23.1,133.28,3078.77,132.44,3059.36,124.99,2887.27,6,Patlıcan Kg; Kabak Kg; Patlıcan Topan Kg; Patlıcan Kg; Patlıcan Topan Kg; Patlıcan Kg
+Feb 2026,Vegetables,Other Vegetables,Kg,11.8,,,,,,,0,—
+Feb 2026,Oils,Olive Oil,Liter,1.1,,,,,,,0,—
+Feb 2026,Other Food Products,Grissini,Kg,2.1,,,,,,,0,—
+Mar 2026,Dairy Products,Yogurt,Kg,59.7,67.46,4027.36,67.46,4027.36,64.97,3878.71,2,Torku Yarım Yağlı Yoğurt 2 Kg; Torku Yarım Yağlı Yoğurt 750 Ml
+Mar 2026,Dairy Products,White Cheese,Kg,5.7,359.12,2046.98,399.95,2279.72,174.95,997.21,6,Tahsildaroğlu Asos Klasik Beyaz Peyni…; Tahsildaroğlu Lüx Klasik Beyaz Peynir…; Binnur Klasik Beyaz Peynir Kg; Sütaş Klasik Beyaz Peynir 3 Dilim 450…; Binnur Klasik Beyaz Peynir Kg; Sütaş Beyaz Peynir 500 Gr
+Mar 2026,Meat and Protein,Cubed Meat / Lamb Meat,Kg,4.6,890.0,4094.0,890.0,4094.0,890.0,4094.0,1,Dana Az Yağlı Kuşbaşı Kg
+Mar 2026,Meat and Protein,Chicken,Kg,10.3,166.33,1713.2,115.0,1184.5,115.0,1184.5,3,Şenpiliç Bonfile Kg; Şenpiliç Kalçalı But Kg; Şenpiliç Piliç Bütün Poşet Kg
+Mar 2026,Meat and Protein,Fish,Kg,6.9,,,,,,,0,—
+Mar 2026,Meat and Protein,Eggs,Piece,120.0,10.0,1200.0,10.0,1200.0,10.0,1200.0,1,Sarı Efe Çiftliği Gezen Tavuk Yumurta…
+Mar 2026,Legumes,Chickpeas,Kg,1.8,,,,,,,0,—
+Mar 2026,Nuts and Seeds,Walnut / Hazelnut / Peanut,Kg,2.7,,,,,,,0,—
+Mar 2026,Grains,Bread,Kg,18.0,,,,,,,0,—
+Mar 2026,Fruits,Banana,Kg,16.7,164.9,2753.83,164.9,2753.83,164.9,2753.83,1,Muz İthal Kg
+Mar 2026,Fruits,Seasonal Fruit,Kg,12.9,170.4,2198.16,164.9,2127.21,129.9,1675.71,10,Çilek Kg; Çilek Kg; Kavun Kg; Armut Santamaria Kg; Çilek Kg; Kivi Kg; Armut Deveci Kg; Kavun Kg; Mayhoş Nar Kg; Armut Santamaria Kg
+Mar 2026,Vegetables,Onion,Kg,18.0,64.9,1168.2,64.9,1168.2,64.9,1168.2,2,Soğan Yahnilik Adet; Soğan Beyaz Kg
+Mar 2026,Vegetables,Eggplant / Zucchini,Kg,23.1,105.73,2442.36,109.9,2538.69,64.9,1499.19,6,Patlıcan Kg; Kabak Kg; Patlıcan Topan Kg; Patlıcan Kg; Patlıcan Topan Kg; Patlıcan Kg
+Mar 2026,Vegetables,Other Vegetables,Kg,11.8,,,,,,,0,—
+Mar 2026,Oils,Olive Oil,Liter,1.1,,,,,,,0,—
+Mar 2026,Other Food Products,Grissini,Kg,2.1,,,,,,,0,—
+Apr 2026,Dairy Products,Yogurt,Kg,59.7,69.95,4176.02,69.95,4176.02,69.95,4176.02,1,Torku Yarım Yağlı Yoğurt 750 Ml
+Apr 2026,Dairy Products,White Cheese,Kg,5.7,318.7,1816.59,349.95,1994.71,174.95,997.21,4,Binnur Klasik Beyaz Peynir Kg; Sütaş Tam Yağlı Beyaz Peynir 900 Gr; Binnur Klasik Beyaz Peynir Kg; Sütaş Beyaz Peynir 500 Gr
+Apr 2026,Meat and Protein,Cubed Meat / Lamb Meat,Kg,4.6,879.95,4047.77,879.95,4047.77,879.95,4047.77,1,Dana Az Yağlı Kuşbaşı Kg
+Apr 2026,Meat and Protein,Chicken,Kg,10.3,179.67,1850.6,125.0,1287.5,125.0,1287.5,3,Şenpiliç Bonfile Kg; Şenpiliç Kalçalı But Kg; Şenpiliç Piliç Bütün Poşet Kg
+Apr 2026,Meat and Protein,Fish,Kg,6.9,,,,,,,0,—
+Apr 2026,Meat and Protein,Eggs,Piece,120.0,8.0,960.0,8.0,960.0,8.0,960.0,1,Sarı Efe Çiftliği Gezen Tavuk Yumurta…
+Apr 2026,Legumes,Chickpeas,Kg,1.8,,,,,,,0,—
+Apr 2026,Nuts and Seeds,Walnut / Hazelnut / Peanut,Kg,2.7,,,,,,,0,—
+Apr 2026,Grains,Bread,Kg,18.0,,,,,,,0,—
+Apr 2026,Fruits,Banana,Kg,16.7,,,,,,,0,—
+Apr 2026,Fruits,Seasonal Fruit,Kg,12.9,202.06,2606.57,174.9,2256.21,29.99,386.87,7,Şeftali Kg; Kayısı Kg; Kivi Kg; Armut Deveci Kg; Üzüm Red Globe Kg; Mayhoş Nar Kg; Armut Santamaria Kg
+Apr 2026,Vegetables,Onion,Kg,18.0,10.0,180.0,10.0,180.0,10.0,180.0,1,Soğan Beyaz Kg
+Apr 2026,Vegetables,Eggplant / Zucchini,Kg,23.1,39.9,921.69,39.9,921.69,39.9,921.69,2,Patlıcan Topan Kg; Patlıcan Topan Kg
+Apr 2026,Vegetables,Other Vegetables,Kg,11.8,,,,,,,0,—
+Apr 2026,Oils,Olive Oil,Liter,1.1,347.6,382.36,339.9,373.89,324.95,357.44,5,Poyraz Rivera Zeytinyağı Cam 1 Lt; Poyraz Rivera Zeytinyağı Cam 500 Ml; Poyraz Sızma Zeytinyağı Cam 500 Ml; Poyraz Sızma Zeytinyağı Cam 1 Lt; Poyraz Sızma Zeytinyağı Teneke 3 Lt
+Apr 2026,Other Food Products,Grissini,Kg,2.1,,,,,,,0,—
+May 2026,Dairy Products,Yogurt,Kg,59.7,67.46,4027.36,67.46,4027.36,64.97,3878.71,2,Torku Yarım Yağlı Yoğurt 2 Kg; Torku Yarım Yağlı Yoğurt 750 Ml
+May 2026,Dairy Products,White Cheese,Kg,5.7,358.7,2044.59,404.95,2308.22,174.95,997.21,4,Binnur Klasik Beyaz Peynir Kg; Sütaş Klasik Beyaz Peynir 3 Dilim 450…; Binnur Klasik Beyaz Peynir Kg; Sütaş Beyaz Peynir 500 Gr
+May 2026,Meat and Protein,Cubed Meat / Lamb Meat,Kg,4.6,879.95,4047.77,879.95,4047.77,879.95,4047.77,1,Dana Az Yağlı Kuşbaşı Kg
+May 2026,Meat and Protein,Chicken,Kg,10.3,99.99,1029.9,99.99,1029.9,99.99,1029.9,2,Şenpiliç Kalçalı But Kg; Şenpiliç Piliç Bütün Poşet Kg
+May 2026,Meat and Protein,Fish,Kg,6.9,,,,,,,0,—
+May 2026,Meat and Protein,Eggs,Piece,120.0,10.0,1200.0,10.0,1200.0,10.0,1200.0,1,Sarı Efe Çiftliği Gezen Tavuk Yumurta…
+May 2026,Legumes,Chickpeas,Kg,1.8,,,,,,,0,—
+May 2026,Nuts and Seeds,Walnut / Hazelnut / Peanut,Kg,2.7,,,,,,,0,—
+May 2026,Grains,Bread,Kg,18.0,,,,,,,0,—
+May 2026,Fruits,Banana,Kg,16.7,118.23,1974.44,109.9,1835.33,109.9,1835.33,6,Muz Yerli Kg; Muz Yerli Kg; Muz Yerli Kg; Muz Yerli Kg; Muz Yerli Kg; Muz İthal Kg
+May 2026,Fruits,Seasonal Fruit,Kg,12.9,122.84,1584.64,112.43,1450.35,29.99,386.87,12,Karpuz Kg; Kiraz Kg; Erik Papaz Kg; Kavun Kg; Şeftali Kg; Kayısı Kg; Kivi Kg; Armut Deveci Kg; Kavun Kg; Üzüm Red Globe Kg; Mayhoş Nar Kg; Armut Santamaria Kg
+May 2026,Vegetables,Onion,Kg,18.0,10.0,180.0,10.0,180.0,10.0,180.0,1,Soğan Beyaz Kg
+May 2026,Vegetables,Eggplant / Zucchini,Kg,23.1,42.9,990.99,39.9,921.69,34.9,806.19,5,Patlıcan Kg; Kabak Kg; Patlıcan Topan Kg; Patlıcan Topan Kg; Patlıcan Kg
+May 2026,Vegetables,Other Vegetables,Kg,11.8,,,,,,,0,—
+May 2026,Oils,Olive Oil,Liter,1.1,,,,,,,0,—
+May 2026,Other Food Products,Grissini,Kg,2.1,,,,,,,0,—

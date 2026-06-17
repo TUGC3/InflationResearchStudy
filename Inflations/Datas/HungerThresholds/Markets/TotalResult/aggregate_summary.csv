@@ -1,5 +1,5 @@
-month,avg_hunger_threshold_TRY,median_hunger_threshold_TRY,n_required_items,n_available_items,n_missing_items,missing_items,coverage_rate
-Feb 2026,48962.17,39970.5,16,16,0,,100.0
-Mar 2026,47099.12,38942.54,16,16,0,,100.0
-Apr 2026,46644.12,38797.97,16,16,0,,100.0
-May 2026,51562.74,42844.47,16,16,0,,100.0
+month,avg_hunger_threshold_TRY,median_hunger_threshold_TRY,min_hunger_threshold_TRY,n_required_items,n_available_items,n_missing_items,missing_items,coverage_rate
+Feb 2026,48962.17,39970.5,25809.26,16,16,0,,100.0
+Mar 2026,47099.12,38942.54,23915.06,16,16,0,,100.0
+Apr 2026,46644.12,38797.97,22777.97,16,16,0,,100.0
+May 2026,51562.74,42844.47,25868.89,16,16,0,,100.0

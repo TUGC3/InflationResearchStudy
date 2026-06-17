@@ -1,5 +1,5 @@
-date,avg_hunger_threshold_TRY,median_hunger_threshold_TRY,n_na
-Feb 2026,75927.99,55417.03,0
-Mar 2026,81739.65,62138.37,0
-Apr 2026,79349.5,66911.49,0
-May 2026,99077.41,87120.57,0
+date,avg_hunger_threshold_TRY,median_hunger_threshold_TRY,min_hunger_threshold_TRY,n_na
+Feb 2026,75927.99,55417.03,32505.99,0
+Mar 2026,81739.65,62138.37,28546.27,0
+Apr 2026,79349.5,66911.49,32356.49,0
+May 2026,99077.41,87120.57,50473.33,0
