@@ -252,11 +252,11 @@ Daily scrape frequency.
 
 Rent data is **not** processed through the standard product pipeline. Instead:
 
-1. For each run date, mean rent prices are computed per city/district from scraped listing data.
+1. For each run date, the mean rent listing price is computed per city/district from all scraped files matching that date.
 2. The same is done for the comparison date.
-3. Rent inflation = mean price change across all cities common to both dates. If fewer than **3** cities are common to both dates, a warning is logged noting the result may not be representative, but the figure is still computed.
-4. This single figure is injected into the **TÜİK Weighted (Full)** metric as group 04.
-5. Rent does **not** appear in Basic Inflation or Average Inflation (which are product-level only).
+3. Rent inflation is computed as the **Carli index across cities**: arithmetic mean of `(mean_rent_city_t / mean_rent_city_0 − 1) × 100` over all cities present in both snapshots. Each city receives equal weight regardless of population or market size. If fewer than **3** cities are common to both dates, a warning is logged noting the result may not be representative, but the figure is still computed.
+4. This single figure is injected into the **TÜİK Weighted (Full)** metric as group 04. Weights are re-normalised to include group 04 alongside the tracked product categories.
+5. Rent does **not** appear in Basic Inflation, Average Inflation, or TÜİK Weighted (Products), which are product-level metrics only.
 
 **44 city/district coverage:**
 
@@ -276,21 +276,32 @@ _load_store_csv()          — parse prices, normalise Turkish characters
 _load_sector() / _load_flat_sector()   — discover files by date token
         │
         ▼
-_load_all_stores()         — concat all sectors, deduplicate within store
+_load_all_stores()         — concat all sectors; Stage 1 dedup: average
+                              duplicate rows within each (store, product, sector)
         │
         ▼
 merge(current, past)       — inner join on (store, canonical_key, tuik_category, sector)
         │
         ▼
-Outlier filter             — drop |price change| > 80% (scraping anomalies)
+Outlier filter             — nullify relative AND prices for |change| > 80%
         │
         ▼
-_compute_metrics()         — basic_index, avg_inflation, median_inflation,
-                              median_inflation_nonzero, pct_increased/decreased/unchanged,
-                              tuik_weighted
+Stage 2 dedup (cross-store) — average prices and relatives across stores for
+                              each (canonical_key, tuik_category, sector)
         │
         ▼
-_rent_relative()           — city-level rent change injected as group 04
+Stage 3 dedup (cross-sector) — collapse same canonical_key × tuik_category
+                              across sectors (e.g. HomeGoods + Construction → 05)
+        │
+        ▼
+_compute_metrics()         — basic_index (Dutot), avg_inflation (Carli),
+                              median_inflation, median_inflation_nonzero,
+                              pct_increased/decreased/unchanged,
+                              tuik_weighted_products
+        │
+        ▼
+_rent_relative()           — Carli across cities; injected as group 04
+                              → tuik_weighted_full
         │
         ▼
 Output CSVs
@@ -300,15 +311,21 @@ Output CSVs
 
 ## Deduplication
 
-Products appearing in **multiple stores** within the same TUIK category are matched by normalised name (Turkish diacritics stripped, lowercased, whitespace collapsed). Their current and past prices are averaged across stores before the basket calculation, preventing any product from carrying excess weight.
+Deduplication runs in three stages, all keyed on the normalised product name (Turkish diacritics stripped, lowercased, whitespace collapsed):
 
-Products appearing **twice in the same store file** are averaged within that store before cross-store deduplication.
+**Stage 1 — within store:** Duplicate rows for the same product in one store's CSV are collapsed to a single row by averaging prices.
+
+**Stage 2 — cross-store:** After matching current and past snapshots, products appearing in multiple stores within the same sector are averaged across stores (equal store weight). This produces one price and one relative per `(canonical_key, tuik_category, sector)` triplet.
+
+**Stage 3 — cross-sector:** Some sectors share a TUIK category (HomeGoods and ConstructionSupplies both map to group 05). After stage 2, rows are further collapsed across sectors within the same `(canonical_key, tuik_category)` pair, again by simple averaging. This prevents the same physical product from being counted twice in the basket sum or the weighted index.
 
 ---
 
 ## Outlier Filter
 
-Price changes with `|relative change| > 80%` within a single comparison interval are excluded before metric computation. This filters out scraping errors (e.g. prices recorded at 10× scale on a given date) without affecting genuine large but plausible price movements. Excluded pair counts are logged per run.
+Price changes with `|relative change| > 80%` within a single comparison interval are excluded before metric computation. This filters out scraping errors (e.g. prices recorded at 10× scale on a given date) without affecting genuine large but plausible price movements. Both the relative and the underlying current/past prices are nullified for excluded rows, so outlier products do not bias the Dutot (basket-sum) index either. Excluded pair counts are logged per run.
+
+The threshold is defined as `_OUTLIER_THRESHOLD = 80.0` at module level for reproducibility. Sensitivity analyses can be run by adjusting this constant (±20 pp).
 
 ---
 
@@ -316,7 +333,7 @@ Price changes with `|relative change| > 80%` within a single comparison interval
 
 ### `turkey_inflation_{YYYY-MM-DD}.csv`
 
-One row per unique `(canonical_key, tuik_category)` pair found on the target date.
+One row per unique `(canonical_key, tuik_category, sector)` triplet found on the target date.
 
 | Column          | Description                                               |
 | --------------- | --------------------------------------------------------- |
@@ -324,22 +341,22 @@ One row per unique `(canonical_key, tuik_category)` pair found on the target dat
 | `product_key`   | Original product name                                     |
 | `tuik_category` | COICOP 2-digit code                                       |
 | `sector`        | Internal sector label                                     |
-| `store`         | Store name(s), comma-separated if matched across multiple |
-| `relative_{label}` | % price change vs the comparison date for that interval. `{label}` is `15d`/`30d` in default mode, or `compare` when run with `--compare` |
+| `store`         | All store names carrying this product on the current date, comma-separated |
+| `relative_{label}` | Cross-sector-averaged % price change vs the comparison date. `{label}` is `15d`/`30d` in default mode, or `compare` when run with `--compare`. NaN if the product had no match on the comparison date. |
 
 ### `turkey_inflation_summary.csv`
 
-Append-only time series, sorted by `date`. One row per run date. When a row for the same `date` is re-computed, it replaces the existing row (the file is re-sorted on each write, so insertion order doesn't matter).
+Time series, sorted by `date`. One row per `(date, compare_date)` pair. When a row with the same `(date, compare_date)` is re-computed, it replaces the existing row; runs with the same target date but a different comparison date produce separate rows.
 
 Interval-suffixed columns use `{label}` = `15d`/`30d` in default mode, or `compare` when run with `--compare` (with the actual comparison date recorded in `compare_date`).
 
 | Column Group                    | Columns                                                                                                              |
 | ------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
-| **Date & coverage**             | `date`, `compare_date`, `n_stores`, `n_products_raw`, `n_products_deduped`, `basket_coverage_pct`                    |
+| **Date & coverage**             | `date`, `compare_date`, `n_stores`, `n_products_raw`, `n_products_deduped`, `basket_coverage_pct`, `basket_coverage_full_pct` |
 | **Store counts per category**   | `n_stores_01`, `n_stores_03`, `n_stores_04`, …                                                                       |
 | **Product counts per category** | `n_products_01`, `n_products_03`, …                                                                                  |
-| **Overall metrics per interval** | `avg_inflation_{label}`, `median_inflation_{label}`, `median_inflation_nonzero_{label}`, `pct_increased_{label}`, `pct_decreased_{label}`, `pct_unchanged_{label}`, `basic_index_{label}`, `tuik_weighted_products_{label}`, `tuik_weighted_full_{label}`, `rent_inflation_{label}` |
-| **Per-category metrics**        | `avg_inflation_{code}_{label}`, `median_inflation_{code}_{label}`, `median_inflation_nonzero_{code}_{label}`, `basic_index_{code}_{label}` for each covered TÜİK code |
+| **Overall metrics per interval** | `avg_inflation_{label}`, `median_inflation_{label}`, `median_inflation_nonzero_{label}`, `pct_increased_{label}`, `pct_decreased_{label}`, `pct_unchanged_{label}`, `basic_index_{label}`, `tuik_weighted_products_{label}`, `tuik_weighted_full_{label}`, `n_products_matched_{label}` |
+| **Per-category metrics**        | `avg_inflation_{code}_{label}`, `median_inflation_{code}_{label}`, `median_inflation_nonzero_{code}_{label}`, `basic_index_{code}_{label}` for each covered TÜİK code; `rent_inflation_04_{label}` when rent data is available |
 
 ---
 
@@ -362,7 +379,7 @@ python turkey_inflation.py --date 2026-05-01 --compare 2026-04-01
 
 | Limitation                                                     | Impact                                                                         |
 | -------------------------------------------------------------- | ------------------------------------------------------------------------------ |
-| Groups 02, 07, 09, 10, 12 not covered                          | Max basket coverage ~73%; TÜİK weighted metric re-normalises to covered groups |
+| Groups 02, 07, 09, 10, 12 not covered                          | Max basket coverage ~73% (`basket_coverage_full_pct`); TÜİK weighted metric re-normalises to covered groups. `basket_coverage_pct` reports product-only coverage (excludes group 04 rent); `basket_coverage_full_pct` includes group 04 when city-level rent data is present |
 | EnglishHome excluded (flash-sale volatility)                   | HomeGoods sector coverage reduced                                              |
 | Rent covers listing prices only, not actual transaction prices | Group 04 is an approximation                                                   |
 | Health data is monthly, not daily                              | Group 06 may lag by up to 30 days                                              |
