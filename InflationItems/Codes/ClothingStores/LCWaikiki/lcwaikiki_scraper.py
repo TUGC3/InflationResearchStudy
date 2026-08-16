@@ -19,7 +19,7 @@ SEARCH_TARGETS = {
 }
 
 TARGET_COUNT   = 3000    # stop after this many unique products per category
-OUTPUT_FILE    = f"LCWaikiki_{datetime.now().strftime("%Y-%m-%d")}.csv"
+OUTPUT_FILE    = f"LCWaikiki_{datetime.now().strftime('%Y-%m-%d')}.csv"
 
 PAGE_LOAD_WAIT = 12      # seconds to wait for first product card
 SCROLL_PAUSE   = 2.5     # seconds between scroll steps
