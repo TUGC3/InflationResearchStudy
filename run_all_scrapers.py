@@ -1,3 +1,4 @@
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 import argparse
 import subprocess
@@ -219,8 +220,15 @@ def _has_real_data(path):
 
 def snapshot_csvs(script_path, category, source):
     roots = [
+        REPO_ROOT,
         script_path.parent,
         REPO_ROOT / "InflationItems" / "Datas" / category / source,
+        REPO_ROOT / "Datas" / category / source,
+        REPO_ROOT / "Datas",
+        REPO_ROOT / "data",
+        script_path.parent / "Datas",
+        script_path.parent / "data",
+        script_path.parent / "InflationItems" / "Datas",
     ]
 
     snapshot = {}
@@ -229,7 +237,15 @@ def snapshot_csvs(script_path, category, source):
         if not root.exists():
             continue
 
-        for csv_file in root.rglob("*.csv"):
+        # Repo root: only scan CSV files directly in the root.
+        # Do NOT recurse through the whole repo because parallel workers
+        # could see each other's output files.
+        if root.resolve() == REPO_ROOT.resolve():
+            csv_files = root.glob("*.csv")
+        else:
+            csv_files = root.rglob("*.csv")
+
+        for csv_file in csv_files:
             try:
                 snapshot[csv_file.resolve()] = _csv_meta(csv_file)
             except Exception:
@@ -370,49 +386,68 @@ def main():
         }
     results = []
 
+    # Flatten selected scrapers into one queue
+    jobs = []
     for category, entries in selected.items():
-        print(f"\n{'=' * 70}")
-        print(f"CATEGORY: {category}")
-        print("=" * 70)
-
         for store, script in entries:
-            before_csvs = snapshot_csvs(script, category, store)
-            process_success, elapsed, returncode = run_scraper(
-                store,
-                script,
-            )
+            jobs.append((category, store, script))
 
-            data_ok = move_new_csvs(
-                script,
-                category,
-                store,
-                before_csvs,
-            )
+    MAX_WORKERS = 2
+    print(f"\n[PARALLEL] Running {len(jobs)} scraper(s) with {MAX_WORKERS} workers")
 
-            success = data_ok
+    def run_one(job):
+        category, store, script = job
 
-            if not process_success:
-                print(
-                    f"[PROCESS_ERROR] {store} "
-                    f"(exit={returncode})"
-                )
-            results.append(
-                (
-                    category,
-                    store,
-                    script,
-                    success,
-                    elapsed,
-                    returncode,
-                )
-            )
+        print(f"\n[RUNNING] {category} / {store}")
 
-            status = "DATA_OK" if success else "NO_DATA"
+        before_csvs = snapshot_csvs(script, category, store)
 
+        process_success, elapsed, returncode = run_scraper(
+            store,
+            script,
+        )
+
+        data_ok = move_new_csvs(
+            script,
+            category,
+            store,
+            before_csvs,
+        )
+
+        success = data_ok
+
+        if not process_success:
             print(
-                f"[{status}] {store} "
-                f"({elapsed:.1f}s)"
+                f"[PROCESS_ERROR] {store} "
+                f"(exit={returncode})"
             )
+
+        status = "DATA_OK" if success else "NO_DATA"
+        print(
+            f"[{status}] {category} / {store} "
+            f"({elapsed:.1f}s)"
+        )
+
+        return (
+            category,
+            store,
+            script,
+            success,
+            elapsed,
+            returncode,
+        )
+
+    with ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
+        futures = [
+            executor.submit(run_one, job)
+            for job in jobs
+        ]
+
+        for future in as_completed(futures):
+            try:
+                results.append(future.result())
+            except Exception as exc:
+                print(f"[WORKER_EXCEPTION] {exc}")
 
     print("\n" + "=" * 70)
     print("FINAL SUMMARY")
