@@ -28,5 +28,5 @@ HEADERS = {
 if COOKIE:
     HEADERS["Cookie"] = COOKIE
 
-OUTPUT_FILE = "../Datas/ClothingStores/PullandBear/pullandbear_prices.csv"
+OUTPUT_FILE = "/root/InflationResearchStudy/InflationItems/Datas/ClothingStores/PullandBear/pullandbear_prices.csv"
 BATCH_SIZE = 20
