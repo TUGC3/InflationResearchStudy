@@ -139,19 +139,26 @@ def discover_scrapers():
     return discovered
 
 
-def run_scraper(name, script_path):
+def run_scraper(name, script_path, log_path=None):
     start = time.time()
 
     print(f"\n[RUNNING] {name}")
     print(f"          {script_path.relative_to(REPO_ROOT)}")
-
+    if log_path is not None:
+        log_path.parent.mkdir(parents=True, exist_ok=True)
+        fh = open(log_path, "w", encoding="utf-8", errors="replace")
+    else:
+        fh = None
     try:
         result = subprocess.run(
             [sys.executable, str(script_path)],
             cwd=str(REPO_ROOT),
 	    timeout=7200,
+            stdout=fh,
+            stderr=subprocess.STDOUT if fh else None,
         )
 
+        if fh: fh.close()
         elapsed = time.time() - start
 
         return (
@@ -402,9 +409,12 @@ def main():
 
         before_csvs = snapshot_csvs(script, category, store)
 
+        safe = "".join(c if c.isalnum() or c in "-_" else "_" for c in f"{category}__{store}")
+        log_path = REPO_ROOT / "logs" / time.strftime("%Y-%m-%d") / f"{safe}.log"
         process_success, elapsed, returncode = run_scraper(
             store,
             script,
+            log_path,
         )
 
         data_ok = move_new_csvs(

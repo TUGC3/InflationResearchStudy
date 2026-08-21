@@ -99,3 +99,5 @@ NoDriverProfile*/
 # Sahibinden scraper checkpoint dosyalari
 checkpoint_*.json
 **/checkpoint_*.json
+logs/
+*.bak
