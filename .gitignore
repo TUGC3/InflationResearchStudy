@@ -101,3 +101,5 @@ checkpoint_*.json
 **/checkpoint_*.json
 logs/
 *.bak
+logs/
+*.bak
