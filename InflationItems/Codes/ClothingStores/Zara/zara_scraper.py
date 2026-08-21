@@ -44,11 +44,14 @@ MAX_ITEMS_PER_CATEGORY = None
 
 def setup_driver():
     options = uc.ChromeOptions()
+    options.add_argument("--headless=new")
+    options.add_argument("--no-sandbox")
+    options.add_argument("--disable-dev-shm-usage")
     profile_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "SeleniumProfile")
     if RESET_SELENIUM_PROFILE and os.path.exists(profile_path):
         shutil.rmtree(profile_path, ignore_errors=True)
     options.add_argument(f"--user-data-dir={profile_path}")
-    driver = uc.Chrome(options=options, version_main=145)
+    driver = uc.Chrome(options=options, version_main=151)
     return driver
 
 

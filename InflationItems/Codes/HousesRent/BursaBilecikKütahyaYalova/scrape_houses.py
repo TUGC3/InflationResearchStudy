@@ -53,13 +53,16 @@ MAX_RETRIES = 2  # how many times to retry a page before giving up
 def setup_driver():
     """Sets up an undetected Chrome driver with a persistent profile."""
     options = uc.ChromeOptions()
+    options.add_argument("--headless=new")
+    options.add_argument("--no-sandbox")
+    options.add_argument("--disable-dev-shm-usage")
     profile_path = os.path.join(SCRIPT_DIR, "SeleniumProfile")
     options.add_argument(f"--user-data-dir={profile_path}")
     # Slightly faster page loads — we control the wait ourselves
     options.add_argument("--disable-extensions")
     options.add_argument("--disable-gpu")
     options.page_load_strategy = "eager"   # don't wait for images/fonts
-    driver = uc.Chrome(options=options, version_main=145)
+    driver = uc.Chrome(options=options, version_main=151)
     driver.set_page_load_timeout(30)
     return driver
 

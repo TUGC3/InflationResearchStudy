@@ -37,6 +37,9 @@ def elapsed():
 
 def make_driver():
     opts = uc.ChromeOptions()
+    opts.add_argument("--headless=new")
+    opts.add_argument("--no-sandbox")
+    opts.add_argument("--disable-dev-shm-usage")
     opts.add_argument("--window-size=1280,800")
     opts.add_argument("--blink-settings=imagesEnabled=false")
     opts.add_argument("--disable-extensions")
@@ -49,7 +52,7 @@ def make_driver():
         "profile.managed_default_content_settings.images": 2,
         "profile.managed_default_content_settings.stylesheets": 2,
     })
-    return uc.Chrome(options=opts, use_subprocess=True, version_main=148)
+    return uc.Chrome(options=opts, use_subprocess=True, version_main=151)
 
 def get_total_pages(driver):
     try:

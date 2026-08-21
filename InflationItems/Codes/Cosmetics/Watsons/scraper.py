@@ -8,7 +8,7 @@ from curl_cffi import requests
 from camoufox.sync_api import Camoufox
 
 # --- DOSYA YOLLARI ---
-DATAS_DIR = r"C:\Users\arhan\PycharmProjects\inflationstudymirror\Datas\Cosmetics\Watson"
+DATAS_DIR = os.path.join(os.path.dirname(__file__), "data")
 MASTER_DB_PATH = os.path.join(DATAS_DIR, "watsons_master_db.json")
 SITEMAP_CACHE_PATH = os.path.join(DATAS_DIR, "sitemap_cache.json")
 
