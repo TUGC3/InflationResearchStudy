@@ -44,7 +44,10 @@ def scroll_to_bottom(driver):
         last_height = new_height
 
 options = uc.ChromeOptions()
-driver = uc.Chrome(options=options)
+
+options.add_argument("--no-sandbox")
+options.add_argument("--disable-dev-shm-usage")
+driver = uc.Chrome(options=options, version_main=151)
 
 data_dir = "InflationItems/Datas/Markets/CarrefourSA"
 os.makedirs(data_dir, exist_ok=True)

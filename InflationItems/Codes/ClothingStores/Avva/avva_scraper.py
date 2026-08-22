@@ -38,8 +38,10 @@ file_path = os.path.join(DATA_DIR, f"avva_{current_date}.csv")
 def scrape_avva():
     # Initialize Undetected Chromedriver
     options = uc.ChromeOptions()
-    options.add_argument("--headless") # Run without window for automation
-    driver = uc.Chrome(options=options)
+    options.add_argument("--headless=new")
+    options.add_argument("--no-sandbox")
+    options.add_argument("--disable-dev-shm-usage")
+    driver = uc.Chrome(options=options, version_main=151)
     
     all_products = []
 
