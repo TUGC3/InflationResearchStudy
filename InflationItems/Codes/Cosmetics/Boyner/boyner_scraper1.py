@@ -215,6 +215,7 @@ def scroll_and_collect(driver, category_name, brand_expected=None):
 def create_driver():
     options = uc.ChromeOptions()
     options.add_argument("--no-sandbox")
+    options.add_argument("--headless=new")
     options.add_argument("--disable-dev-shm-usage")
 
     # --- Prevent Chrome from sleeping when out of focus ---
@@ -223,7 +224,7 @@ def create_driver():
     options.add_argument("--disable-renderer-backgrounding")
     # ------------------------------------------------------
 
-    return uc.Chrome(options=options, version_main=147)
+    return uc.Chrome(options=options, version_main=151)
 
 
 def run_boyner_scraper():
