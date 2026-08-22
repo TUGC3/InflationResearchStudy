@@ -1,20 +1,23 @@
 from selenium import webdriver
-from selenium.webdriver.edge.service import Service as EdgeService
+from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from webdriver_manager.microsoft import EdgeChromiumDriverManager
+from webdriver_manager.chrome import ChromeDriverManager
 from bs4 import BeautifulSoup
 import csv
 from datetime import date
-options = webdriver.EdgeOptions()
+options = webdriver.ChromeOptions()
+options.add_argument("--headless=new")
+options.add_argument("--no-sandbox")
+options.add_argument("--disable-dev-shm-usage")
 options.add_argument("--headless=new")
 options.add_argument("--disable-gpu")
 options.add_argument("window-size=1920,1080")
 options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36...")
 
-driver = webdriver.Edge(
-    service=EdgeService(EdgeChromiumDriverManager().install()),
+driver = webdriver.Chrome(
+    service=ChromeService(ChromeDriverManager().install()),
     options=options
 )
 
@@ -58,7 +61,7 @@ for table in tables:
             all_rows.append([col1, col2])
 
 if all_rows:
-    filename = f"Datas\sehirhatlari_fares_{date.today().month}-{date.today().day}.csv"
+    filename = f"InflationItems/Datas/PublicTransportation/Boat/sehirhatlari_fares_{date.today().month}-{date.today().day}.csv"
     with open(filename, "w", newline="", encoding="utf-8-sig") as f:
         writer = csv.writer(f)
         writer.writerows(all_rows)
