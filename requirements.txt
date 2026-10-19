@@ -20,7 +20,7 @@ seleniumbase>=4.56.2
 undetected-chromedriver>=3.5.5
 webdriver-manager>=4.1.2
 DrissionPage>=4.1.1.4
-playwright>=1.64.0          # run `playwright install chromium` once after installing
+playwright>=1.62.0,<1.63     # camoufox needs <1.63; run `playwright install chromium` once after installing
 camoufox>=0.5.8
 scrapling>=0.5
 cloudscraper>=1.2.71
@@ -36,7 +36,9 @@ seaborn>=0.13.2
 python-dotenv>=1.2.4
 regex>=2026.9.29
 schedule>=1.2.2
-supabase>=2.33.0
+# supabase (only used by InflationItems/Codes/Markets/Ideal/ideal_scraper.py) is not listed:
+# every supabase release needs websockets<16, but seleniumbase>=4.56.2 needs websockets>=16.1.1.
+# Install it in a separate environment to run that scraper: pip install "supabase>=2.33.0"
 packaging>=26.3
 setuptools>=84.0.0
 typing_extensions>=4.16.0
