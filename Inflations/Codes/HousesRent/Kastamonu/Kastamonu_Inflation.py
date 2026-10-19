@@ -167,9 +167,11 @@ def generate_kastamonu_inflation_reports(input_dir, output_dir):
 
 
 if __name__ == "__main__":
-    INPUT_DIRECTORY = r"/Users/efeyildirim/PycharmProjects/PythonProject/temizlenmis_csvler/Rents/Kastamonu"
+    REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "..", ".."))
 
-    OUTPUT_DIRECTORY = r"/Users/efeyildirim/PycharmProjects/PythonProject/inflation_reports/Rents/Kastamonu"
+    INPUT_DIRECTORY = os.path.join(REPO_ROOT, "InflationItems", "Datas", "HousesRent", "Kastamonu")
+
+    OUTPUT_DIRECTORY = os.path.join(REPO_ROOT, "Inflations", "Datas", "HousesRent", "Kastamonu")
 
     generate_kastamonu_inflation_reports(
         input_dir=INPUT_DIRECTORY,
