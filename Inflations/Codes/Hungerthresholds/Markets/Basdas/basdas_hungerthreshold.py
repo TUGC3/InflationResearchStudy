@@ -5,7 +5,9 @@ from pathlib import Path
 # ─────────────────────────────────────────────────────
 # 1.  PATHS
 # ─────────────────────────────────────────────────────
-BASE_DIR = "/Users/efeyildirim/Downloads/Marketler/Basdas"
+REPO_ROOT = Path(__file__).resolve().parents[5]
+BASE_DIR = REPO_ROOT / "InflationItems" / "Datas" / "Markets" / "Basdas"
+OUTPUT_DIR = REPO_ROOT / "Inflations" / "Datas" / "HungerThresholds" / "Markets" / "Basdas"
 
 FILES = {
     "Feb 2026": f"{BASE_DIR}/basdas_2026-02-28.csv",
@@ -14,8 +16,8 @@ FILES = {
     "May 2026": f"{BASE_DIR}/basdas_2026-05-31.csv",
 }
 
-OUTPUT_DETAIL  = f"{BASE_DIR}/hunger_threshold_detail.csv"
-OUTPUT_SUMMARY = f"{BASE_DIR}/hunger_threshold_summary.csv"
+OUTPUT_DETAIL  = f"{OUTPUT_DIR}/hunger_threshold_detail.csv"
+OUTPUT_SUMMARY = f"{OUTPUT_DIR}/hunger_threshold_summary.csv"
 
 # ─────────────────────────────────────────────────────
 # 2.  FOOD BASKET

@@ -3,15 +3,17 @@ import pandas as pd
 from pathlib import Path
 
 # ── 1. PATHS ────────────────────────────────────────────
-BASE_DIR = "/Users/efeyildirim/Downloads/Marketler/Sozsanal"
+REPO_ROOT = Path(__file__).resolve().parents[5]
+BASE_DIR = REPO_ROOT / "InflationItems" / "Datas" / "Markets" / "SozSanal"
+OUTPUT_DIR = REPO_ROOT / "Inflations" / "Datas" / "HungerThresholds" / "Markets" / "SozSanal"
 
 FILES = {
     "Feb 2026": f"{BASE_DIR}/soz_2026-02-28.csv",
     "Mar 2026": f"{BASE_DIR}/soz_2026-03-31.csv",
 }
 
-OUTPUT_DETAIL  = f"{BASE_DIR}/hunger_threshold_detail.csv"
-OUTPUT_SUMMARY = f"{BASE_DIR}/hunger_threshold_summary.csv"
+OUTPUT_DETAIL  = f"{OUTPUT_DIR}/hunger_threshold_detail.csv"
+OUTPUT_SUMMARY = f"{OUTPUT_DIR}/hunger_threshold_summary.csv"
 
 # ── 2. FOOD BASKET ──────────────────────────────────────
 FOOD_BASKET = [
