@@ -167,9 +167,11 @@ def generate_sirnak_inflation_reports(input_dir, output_dir):
 
 
 if __name__ == "__main__":
-    INPUT_DIRECTORY = r"/Users/efeyildirim/PycharmProjects/PythonProject/temizlenmis_csvler/Rents/Şırnak"
+    REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "..", ".."))
 
-    OUTPUT_DIRECTORY = r"/Users/efeyildirim/PycharmProjects/PythonProject/inflation_reports/Rents/Şırnak"
+    INPUT_DIRECTORY = os.path.join(REPO_ROOT, "InflationItems", "Datas", "HousesRent", "Şırnak")
+
+    OUTPUT_DIRECTORY = os.path.join(REPO_ROOT, "Inflations", "Datas", "HousesRent", "Şırnak")
 
     generate_sirnak_inflation_reports(
         input_dir=INPUT_DIRECTORY,

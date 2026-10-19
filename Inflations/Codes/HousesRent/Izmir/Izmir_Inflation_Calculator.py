@@ -145,10 +145,12 @@ if __name__ == "__main__":
     # --- DEFINE EXACT PATHS HERE ---
 
     # Where the scraper SAVES the raw CSV data:
-    INPUT_DIRECTORY = r"C:\Users\onurk\PycharmProjects\InflationResearchStudy\InflationItems\Datas\HousesRent\Izmir"
+    REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "..", ".."))
+
+    INPUT_DIRECTORY = os.path.join(REPO_ROOT, "InflationItems", "Datas", "HousesRent", "Izmir")
 
     # Where the calculator should SAVE the final inflation reports:
-    OUTPUT_DIRECTORY = r"C:\Users\onurk\PycharmProjects\InflationResearchStudy\Inflations\Datas\HousesRent\Izmir"
+    OUTPUT_DIRECTORY = os.path.join(REPO_ROOT, "Inflations", "Datas", "HousesRent", "Izmir")
 
     # Run the pipeline
     generate_inflation_reports(input_dir=INPUT_DIRECTORY, output_dir=OUTPUT_DIRECTORY)

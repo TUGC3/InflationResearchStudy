@@ -167,9 +167,11 @@ def generate_agri_inflation_reports(input_dir, output_dir):
 
 
 if __name__ == "__main__":
-    INPUT_DIRECTORY = r"/Users/efeyildirim/PycharmProjects/PythonProject/temizlenmis_csvler/Rents/Ağrı"
+    REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "..", ".."))
 
-    OUTPUT_DIRECTORY = r"/Users/efeyildirim/PycharmProjects/PythonProject/inflation_reports/Rents/Ağrı"
+    INPUT_DIRECTORY = os.path.join(REPO_ROOT, "InflationItems", "Datas", "HousesRent", "Ağrı")
+
+    OUTPUT_DIRECTORY = os.path.join(REPO_ROOT, "Inflations", "Datas", "HousesRent", "Ağrı")
 
     generate_agri_inflation_reports(
         input_dir=INPUT_DIRECTORY,

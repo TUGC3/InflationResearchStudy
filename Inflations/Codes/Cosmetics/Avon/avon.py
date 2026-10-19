@@ -11,7 +11,10 @@ import pandas as pd
 
 project_root = os.path.dirname(os.path.abspath(__file__))
 
+repo_root = os.path.abspath(os.path.join(project_root, "..", "..", "..", ".."))
+
 possible_input_dirs = [
+    os.path.join(repo_root, "InflationItems", "Datas", "Cosmetics", "Avon"),
     os.path.join(project_root, "avon_isim_fiyat_cleaned"),
     os.path.join(project_root, "Avon - datas updated"),
     os.path.join(project_root, "avon"),
@@ -70,7 +73,7 @@ def read_csv_safely(file_path):
 
     for encoding in encodings:
         try:
-            return pd.read_csv(file_path, sep=";", encoding=encoding)
+            return pd.read_csv(file_path, sep=None, engine="python", encoding=encoding)
         except Exception as e:
             last_error = e
 
@@ -259,6 +262,7 @@ for file_path in sorted(all_csv_files):
         df = read_csv_safely(file_path)
 
         df.columns = [str(col).strip().lower() for col in df.columns]
+        df = df.rename(columns={"product_name": "isim", "price": "fiyat"})
 
         if "isim" not in df.columns or "fiyat" not in df.columns:
             skipped_rows.append({
