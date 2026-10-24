@@ -454,6 +454,8 @@ def main() -> None:
         )
 
     unique_rows = _dedupe_products(rows)
+    if not unique_rows:
+        raise SystemExit("No Nezih products collected; CSV not written.")
     output_path = args.output or _default_output_path()
     _write_rows(unique_rows, output_path)
     logging.info("Saved %d unique products to %s", len(unique_rows), output_path)

@@ -5,7 +5,7 @@ Description: Automated pipeline designed to extract official private
              registries. Converts string currency to normalized integers.
 """
 
-import os
+from pathlib import Path
 import re
 import requests
 from bs4 import BeautifulSoup
@@ -32,10 +32,10 @@ def scrape_university_doctor_fees():
         response = requests.get(url, headers=headers, timeout=15)
         if response.status_code != 200:
             print(f"-> Execution anomaly: Received Status Code {response.status_code}. Terminating batch.")
-            return
+            raise SystemExit(1)
     except requests.exceptions.RequestException as e:
         print(f"-> Network request failed: {e}. Terminating pipeline.")
-        return
+        raise SystemExit(1)
 
     soup = BeautifulSoup(response.content, "html.parser")
     print("Step 2: Parsing DOM Structures for Medical Branches...")
@@ -68,7 +68,7 @@ def scrape_university_doctor_fees():
 
     if not scraped_data:
         print("Pipeline Status: Operations complete. No tabular data matched the extraction criteria.")
-        return
+        raise SystemExit(1)
 
     print(f"-> Extraction complete. Captured {processed_count} medical branches.")
 
@@ -77,10 +77,10 @@ def scrape_university_doctor_fees():
 
     # Establish relative pipeline storage pathways inside project structures
     current_date = datetime.now().strftime("%Y-%m-%d")
-    output_dir = os.path.join("..", "..", "..", "Datas", "Health", "Doctor")
-    os.makedirs(output_dir, exist_ok=True)
+    output_dir = Path(__file__).resolve().parents[3] / "Datas" / "Health" / "Doctor"
+    output_dir.mkdir(parents=True, exist_ok=True)
 
-    output_file = os.path.join(output_dir, f"adu_hospital_{current_date}.csv")
+    output_file = output_dir / f"adu_hospital_{current_date}.csv"
 
     # Save formatted dataset utilizing UTF-8 with BOM to safely preserve local characters
     df.to_csv(output_file, index=False, encoding="utf-8-sig")
