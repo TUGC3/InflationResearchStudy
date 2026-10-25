@@ -4,7 +4,8 @@ import os
 from pathlib import Path
 
 # ── 1. PATHS ────────────────────────────────────────────
-BASE_DIR = "/Users/efeyildirim/Downloads/Marketler"
+REPO_ROOT = Path(__file__).resolve().parents[5]
+BASE_DIR = REPO_ROOT / "Inflations" / "Datas" / "HungerThresholds" / "Markets"
 
 DETAIL_FILES = {
     "A101":         f"{BASE_DIR}/A101/hunger_threshold_detail.csv",
@@ -19,11 +20,11 @@ DETAIL_FILES = {
     "Macrocenter":  f"{BASE_DIR}/Macrocenter/hunger_threshold_detail.csv",
     "Marketzade":   f"{BASE_DIR}/Marketzade/hunger_threshold_detail.csv",
     "Migros":       f"{BASE_DIR}/Migros/hunger_threshold_detail.csv",
-    "Sozsanal":     f"{BASE_DIR}/Sozsanal/hunger_threshold_detail.csv",
+    "Sozsanal":     f"{BASE_DIR}/SozSanal/hunger_threshold_detail.csv",
 }
 
-OUTPUT_DETAIL  = f"{BASE_DIR}/aggregate_detail.csv"
-OUTPUT_SUMMARY = f"{BASE_DIR}/aggregate_summary.csv"
+OUTPUT_DETAIL  = f"{BASE_DIR}/TotalResult/aggregate_detail.csv"
+OUTPUT_SUMMARY = f"{BASE_DIR}/TotalResult/aggregate_summary.csv"
 
 MONTH_ORDER = ["Feb 2026", "Mar 2026", "Apr 2026", "May 2026"]
 

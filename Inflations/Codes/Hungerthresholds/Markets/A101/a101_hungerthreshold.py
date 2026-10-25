@@ -1,10 +1,13 @@
+from pathlib import Path
 import pandas as pd
 import re
 
 # ─────────────────────────────────────────────────────
 # 1.  PATHS
 # ─────────────────────────────────────────────────────
-BASE_DIR = "/Users/efeyildirim/Downloads/Marketler/A101"
+REPO_ROOT = Path(__file__).resolve().parents[5]
+BASE_DIR = REPO_ROOT / "InflationItems" / "Datas" / "Markets" / "A101"
+OUTPUT_DIR = REPO_ROOT / "Inflations" / "Datas" / "HungerThresholds" / "Markets" / "A101"
 
 FILES = {
     "Mar 2026": f"{BASE_DIR}/a101_kapida_2026-03-31.csv",
@@ -12,8 +15,8 @@ FILES = {
     "May 2026": f"{BASE_DIR}/a101_kapida_2026-05-29.csv",
 }
 
-OUTPUT_DETAIL  = f"{BASE_DIR}/hunger_threshold_detail.csv"
-OUTPUT_SUMMARY = f"{BASE_DIR}/hunger_threshold_summary.csv"
+OUTPUT_DETAIL  = f"{OUTPUT_DIR}/hunger_threshold_detail.csv"
+OUTPUT_SUMMARY = f"{OUTPUT_DIR}/hunger_threshold_summary.csv"
 
 # ─────────────────────────────────────────────────────
 # 2.  FOOD BASKET

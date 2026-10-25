@@ -5,7 +5,7 @@ Description: Automated pipeline designed to parse accordion-style DOM
              standardized procedure costs and dynamic pricing ranges.
 """
 
-import os
+from pathlib import Path
 import requests
 from bs4 import BeautifulSoup
 import pandas as pd
@@ -30,10 +30,10 @@ def scrape_dentgroup():
         response = requests.get(url, headers=headers, timeout=15)
         if response.status_code != 200:
             print(f"-> Execution anomaly: Received Status Code {response.status_code}. Terminating batch.")
-            return
+            raise SystemExit(1)
     except requests.exceptions.RequestException as e:
         print(f"-> Network request failed: {e}. Terminating pipeline.")
-        return
+        raise SystemExit(1)
 
     soup = BeautifulSoup(response.content, "html.parser")
     current_date = datetime.now().strftime("%Y-%m-%d")
@@ -74,7 +74,7 @@ def scrape_dentgroup():
     if not scraped_data:
         print("Pipeline Status: Operations complete. No tabular data matched the extraction criteria.")
         print("Please verify if the target website's DOM layout has been updated.")
-        return
+        raise SystemExit(1)
 
     print(f"-> Extraction complete. Captured {cards_processed} dental service items.")
 
@@ -82,10 +82,10 @@ def scrape_dentgroup():
     df = pd.DataFrame(scraped_data)
 
     # Establish relative pipeline storage pathways inside project structures
-    output_dir = os.path.join("..", "..", "..", "Datas", "Health", "Dentist")
-    os.makedirs(output_dir, exist_ok=True)
+    output_dir = Path(__file__).resolve().parents[3] / "Datas" / "Health" / "Dentist"
+    output_dir.mkdir(parents=True, exist_ok=True)
 
-    output_file = os.path.join(output_dir, f"dentgroup_{current_date}.csv")
+    output_file = output_dir / f"dentgroup_{current_date}.csv"
 
     # Save formatted dataset utilizing UTF-8 with BOM to safely preserve local characters
     df.to_csv(output_file, index=False, encoding="utf-8-sig")

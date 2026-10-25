@@ -25,10 +25,10 @@ try:
         print("✅ Canlı siteye başarıyla bağlanıldı. Veriler işleniyor...")
     else:
         print(f"❌ HATA: Canlı siteye ulaşılamadı. Durum Kodu: {response.status_code}")
-        exit()
+        raise SystemExit(1)
 except Exception as e:
     print(f"❌ Bağlantı hatası oluştu: {e}")
-    exit()
+    raise SystemExit(1)
 
 # ==========================================
 # 2. AŞAMA: REHBER HTML YAPISINA GÖRE PARS ETME
@@ -77,7 +77,7 @@ if tablo:
             })
 else:
     print("❌ HATA: Canlı sayfada beklenen fiyat tablosu bulunamadı!")
-    exit()
+    raise SystemExit(1)
 
 # ==========================================
 # 3. AŞAMA: VAKKO'DAN KOPYALANAN YOL AYARLARI VE KAYIT

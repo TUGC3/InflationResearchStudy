@@ -30,7 +30,6 @@ HEADERS = {
 _SCRIPT_DIR = Path(__file__).resolve().parent
 _INFLATION_ITEMS = _SCRIPT_DIR.parents[2]   # InflationItems/Codes/Health/MGL/ → [0]=Health [1]=Codes [2]=InflationItems
 OUTPUT_DIR = _INFLATION_ITEMS / "Datas" / "Health" / "Medicine_Glasses_Lenses"
-OUTPUT_PATH = OUTPUT_DIR / "health_prices_3months.csv"
 
 
 def _parse_price(text: str) -> float | None:
@@ -227,72 +226,28 @@ def fetch_sgk_optical_prices() -> pd.DataFrame:
     return pd.DataFrame(rows)
 
 
-def save_consolidated(
-    medicines_df: pd.DataFrame,
-    optical_df: pd.DataFrame,
-    output_path: Path | None = None,
-) -> None:
-    if output_path is None:
-        output_path = OUTPUT_PATH
-
-    frames = [df for df in (medicines_df, optical_df) if not df.empty]
-    if not frames:
-        print("❌ No data collected — output file not written.")
-        return
-
-    combined = pd.concat(frames, ignore_index=True)
-    combined = combined[["product-name", "product-price"]]
-    combined = combined.dropna(subset=["product-price"])
-
-    OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
-    combined.to_csv(output_path, index=False, encoding="utf-8-sig")
-    print(f"\n✅ {len(combined):,} rows saved → {output_path}")
-
-
-def _month_start(months_back: int) -> date:
-    """Return the first day of the month `months_back` months before today."""
-    today = date.today()
-    m = today.month - months_back
-    y = today.year
-    while m <= 0:
-        m += 12
-        y -= 1
-    return date(y, m, 1)
+def save_source_prices(frame: pd.DataFrame, source_name: str) -> Path | None:
+    """Save a source-specific collection without manufacturing historical months."""
+    if frame.empty:
+        return None
+    output_path = OUTPUT_DIR / f"{source_name}_{date.today():%Y-%m-%d}.csv"
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    frame.to_csv(output_path, index=False, encoding="utf-8-sig")
+    print(f"Saved {len(frame):,} rows → {output_path}")
+    return output_path
 
 
 def main() -> None:
-    print("=" * 55)
-    print("HEALTH PRICES SCRAPER")
-    print("=" * 55)
-
-    print("\n💊 Fetching medicine prices from TİTCK...")
     medicine_frames = fetch_titck_medicine_prices()
-
-    print("\n👓 Fetching optical prices from SGK...")
     optical_df = fetch_sgk_optical_prices()
 
-    n = len(medicine_frames)
-    if n == 0:
-        print("❌ No medicine data — cannot save monthly files.")
-        return
-
-    # Assign months oldest-first: frame[0] → n months ago, frame[n-1] → 1 month ago
-    for i, med_df in enumerate(medicine_frames):
-        months_back = n - 1 - i  # e.g. for n=3: 2, 1, 0 → oldest=2 months ago, newest=current
-        month_date = _month_start(months_back)
-        month_str = month_date.strftime("%Y-%m")     # e.g. "2026-03"
-        date_str = month_date.strftime("%Y-%m-%d")   # e.g. "2026-03-01"
-
-        med = med_df.copy()
-        med["date"] = date_str
-
-        opt = optical_df.copy() if not optical_df.empty else pd.DataFrame()
-        if not opt.empty:
-            opt["date"] = date_str
-
-        output_path = OUTPUT_DIR / f"health_prices_{month_str}.csv"
-        print(f"\n📅 {month_str}")
-        save_consolidated(med, opt, output_path)
+    # Keep each source's dates and provenance. Collection date belongs in the
+    # filename; fetched snapshots must never be assigned to invented months.
+    medicines = pd.concat(medicine_frames, ignore_index=True) if medicine_frames else pd.DataFrame()
+    save_source_prices(medicines, "titck")
+    save_source_prices(optical_df, "sgk")
+    if medicines.empty or optical_df.empty:
+        raise SystemExit("Incomplete collection: TİTCK or SGK returned no prices.")
 
 
 if __name__ == "__main__":

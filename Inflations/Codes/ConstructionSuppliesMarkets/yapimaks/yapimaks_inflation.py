@@ -7,12 +7,12 @@ from datetime import datetime, timedelta
 
 # --- RELATIVE PATH SETUP ---
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-# Target: inflationstudymirror root (Up 4 levels from Inflations/Codes/ConstructionMarkets/yapimaks)
+# Target: inflationstudymirror root (Up 4 levels from Inflations/Codes/ConstructionSuppliesMarkets/yapimaks)
 PROJECT_ROOT = os.path.abspath(os.path.join(SCRIPT_DIR, "..", "..", "..", ".."))
 
 DATA_DIR = os.path.join(PROJECT_ROOT, "Datas", "yapimaks")
 OUT_DIR = os.path.join(PROJECT_ROOT, "Inflations", "Datas", "ConstructionSuppliesMarkets", "Yapimaks")
-JSON_PATH = os.path.join(PROJECT_ROOT, "Inflations", "Codes", "ConstructionMarkets", "yapimaks", "Category", "kategori_haritasi.json")
+JSON_PATH = os.path.join(PROJECT_ROOT, "Inflations", "Codes", "ConstructionSuppliesMarkets", "yapimaks", "Category", "kategori_haritasi.json")
 
 # Ensure output directory exists
 os.makedirs(OUT_DIR, exist_ok=True)

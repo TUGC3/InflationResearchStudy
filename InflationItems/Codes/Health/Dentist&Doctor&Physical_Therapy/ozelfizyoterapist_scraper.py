@@ -5,7 +5,7 @@ Description: Automated pipeline designed to dynamically map, paginate, and extra
              filtering by engagement criteria (user reviews).
 """
 
-import os
+from pathlib import Path
 import re
 import requests
 from bs4 import BeautifulSoup
@@ -59,10 +59,10 @@ def scrape_physical_therapy():
             response = requests.get(url, headers=headers, timeout=15)
             if response.status_code != 200:
                 print(f"-> Execution anomaly: Received Status Code {response.status_code}. Terminating batch.")
-                break
+                raise SystemExit(1)
         except requests.exceptions.RequestException as e:
             print(f"-> Network request failed: {e}. Skipping block framework.")
-            break
+            raise SystemExit(1)
 
         soup = BeautifulSoup(response.content, "html.parser")
 
@@ -118,17 +118,17 @@ def scrape_physical_therapy():
 
     if not scraped_data:
         print("Pipeline Status: Operations complete. Resulting matrix contains empty dimensions.")
-        return
+        raise SystemExit(1)
 
     # Process and map matrix into standardized tabular structures
     df = pd.DataFrame(scraped_data)
 
     # Establish relative pipeline storage pathways inside project structures
     current_date = datetime.now().strftime("%Y-%m-%d")
-    output_dir = os.path.join("..", "..", "..", "Datas", "Health", "Physical_Therapy")
-    os.makedirs(output_dir, exist_ok=True)
+    output_dir = Path(__file__).resolve().parents[3] / "Datas" / "Health" / "Physical_Therapy"
+    output_dir.mkdir(parents=True, exist_ok=True)
 
-    output_file = os.path.join(output_dir, f"physical_therapy_{current_date}.csv")
+    output_file = output_dir / f"ozelfizyoterapist_{current_date}.csv"
 
     # Save formatted dataset utilizing UTF-8 with BOM to safely preserve local characters (Turkish letters)
     df.to_csv(output_file, index=False, encoding="utf-8-sig")
